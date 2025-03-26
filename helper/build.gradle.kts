@@ -31,6 +31,7 @@ tasks.withType<JavaCompile> {
 
 tasks {
     shadowJar {
+        archiveClassifier = ""
         archiveFileName = "${rootProject.name}-${projectVersion}.jar"
         destinationDirectory.set(file("$rootDir/target"))
     }
