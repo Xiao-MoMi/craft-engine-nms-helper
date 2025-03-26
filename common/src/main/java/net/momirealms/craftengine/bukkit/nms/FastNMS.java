@@ -2,6 +2,8 @@ package net.momirealms.craftengine.bukkit.nms;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,4 +65,14 @@ public abstract class FastNMS {
     public abstract Object method$ServerChunkCache$getChunkAtIfLoadedMainThread(Object serverChunkCache, int x, int z);
 
     public abstract Object field$LevelChunkSection$states(Object section);
+
+    public abstract Object[] method$ChunkAccess$getSections(Object chunk);
+
+    public abstract Object field$ChunkAccess$blockEntities(Object chunkAccess);
+
+    public abstract Object field$CraftWorld$ServerLevel(World world);
+
+    public abstract Block method$CraftBlock$at(Object world, Object blockPos);
+
+    public abstract Object field$AbstractFurnaceBlockEntity$recipeType(Object furnaceBlockEntity);
 }

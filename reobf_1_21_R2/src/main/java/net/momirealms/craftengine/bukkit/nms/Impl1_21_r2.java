@@ -1,14 +1,23 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftChunk;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
@@ -86,5 +95,33 @@ public class Impl1_21_r2 extends FastNMS {
     public Object field$LevelChunkSection$states(Object section) {
         LevelChunkSection levelChunkSection = (LevelChunkSection) section;
         return levelChunkSection.states;
+    }
+
+    @Override
+    public Object[] method$ChunkAccess$getSections(Object chunk) {
+        LevelChunk levelChunk = (LevelChunk) chunk;
+        return levelChunk.getSections();
+    }
+
+    @Override
+    public Object field$ChunkAccess$blockEntities(Object chunkAccess) {
+        ChunkAccess access = (ChunkAccess) chunkAccess;
+        return access.blockEntities;
+    }
+
+    @Override
+    public Object field$CraftWorld$ServerLevel(World world) {
+        CraftWorld craftWorld = (CraftWorld) world;
+        return craftWorld.getHandle();
+    }
+
+    @Override
+    public Block method$CraftBlock$at(Object world, Object blockPos) {
+        return CraftBlock.at((LevelAccessor) world, (BlockPos) blockPos);
+    }
+
+    @Override
+    public Object field$AbstractFurnaceBlockEntity$recipeType(Object furnaceBlockEntity) {
+        return ((AbstractFurnaceBlockEntity) furnaceBlockEntity).recipeType;
     }
 }
