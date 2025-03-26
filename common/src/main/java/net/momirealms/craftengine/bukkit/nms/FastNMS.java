@@ -1,6 +1,8 @@
 package net.momirealms.craftengine.bukkit.nms;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -37,4 +39,28 @@ public abstract class FastNMS {
     }
 
     public abstract Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState);
+
+    public abstract BlockData method$CraftBlockData$fromData(Object blockState);
+
+    public abstract int method$IdMapper$getId(Object idMapper, Object t);
+
+    public abstract Object method$IdMapper$byId(Object idMapper, int id);
+
+    public abstract Object method$CraftBlockData$getState(BlockData blockData);
+
+    public abstract int method$BlockStateBase$getLightEmission(Object blockState);
+
+    public abstract boolean method$BlockStateBase$canOcclude(Object blockState);
+
+    public abstract void method$LevelChunkSection$setBlockState(Object section, int x, int y, int z, Object blockState, boolean lock);
+
+    public abstract Object method$LevelChunkSection$getBlockState(Object section, int x, int y, int z);
+
+    public abstract Object field$CraftChunk$worldServer(Chunk chunk);
+
+    public abstract Object method$ServerLevel$getChunkSource(Object serverLevel);
+
+    public abstract Object method$ServerChunkCache$getChunkAtIfLoadedMainThread(Object serverChunkCache, int x, int z);
+
+    public abstract Object field$LevelChunkSection$states(Object section);
 }
