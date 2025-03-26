@@ -5,9 +5,11 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
+import java.util.Optional;
 
 public abstract class FastNMS {
     public static final FastNMS INSTANCE = instance();
@@ -75,4 +77,10 @@ public abstract class FastNMS {
     public abstract Block method$CraftBlock$at(Object world, Object blockPos);
 
     public abstract Object field$AbstractFurnaceBlockEntity$recipeType(Object furnaceBlockEntity);
+
+    public abstract ItemStack method$CraftItemStack$asCraftMirror(Object itemStack);
+
+    public abstract Object field$ResourceKey$location(Object resourceKey);
+
+    public abstract Object field$RecipeHolder$id(Object recipeHolder);
 }

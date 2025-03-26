@@ -2,8 +2,11 @@ package net.momirealms.craftengine.bukkit.nms;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,6 +22,10 @@ import org.bukkit.craftbukkit.CraftChunk;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Optional;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class Impl1_21_r3 extends FastNMS {
@@ -123,5 +130,20 @@ public class Impl1_21_r3 extends FastNMS {
     @Override
     public Object field$AbstractFurnaceBlockEntity$recipeType(Object furnaceBlockEntity) {
         return ((AbstractFurnaceBlockEntity) furnaceBlockEntity).recipeType;
+    }
+
+    @Override
+    public ItemStack method$CraftItemStack$asCraftMirror(Object itemStack) {
+        return CraftItemStack.asCraftMirror((net.minecraft.world.item.ItemStack) itemStack);
+    }
+
+    @Override
+    public Object field$ResourceKey$location(Object resourceKey) {
+        return ((ResourceKey) resourceKey).location();
+    }
+
+    @Override
+    public Object field$RecipeHolder$id(Object recipeHolder) {
+        return ((RecipeHolder) recipeHolder).id();
     }
 }

@@ -2,8 +2,10 @@ package net.momirealms.craftengine.bukkit.nms;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.inventory.RecipeHolder;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,6 +21,8 @@ import org.bukkit.craftbukkit.v1_20_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class Impl1_20_r1 extends FastNMS {
@@ -123,5 +127,21 @@ public class Impl1_20_r1 extends FastNMS {
     @Override
     public Object field$AbstractFurnaceBlockEntity$recipeType(Object furnaceBlockEntity) {
         return ((AbstractFurnaceBlockEntity) furnaceBlockEntity).recipeType;
+    }
+
+    @Override
+    public ItemStack method$CraftItemStack$asCraftMirror(Object itemStack) {
+        return CraftItemStack.asCraftMirror((net.minecraft.world.item.ItemStack) itemStack);
+    }
+
+    @Override
+    public Object field$ResourceKey$location(Object resourceKey) {
+        return ((ResourceKey) resourceKey).location();
+    }
+
+    @Override
+    public Object field$RecipeHolder$id(Object recipeHolder) {
+        LevelChunkSection section;
+        throw new UnsupportedVersionException();
     }
 }
