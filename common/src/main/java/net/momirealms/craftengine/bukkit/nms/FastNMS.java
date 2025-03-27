@@ -85,4 +85,20 @@ public abstract class FastNMS {
     public abstract Object field$RecipeHolder$id(Object recipeHolder);
 
     public abstract World method$Level$getCraftWorld(Object level);
+
+    public abstract boolean method$Level$removeBlock(Object level, Object blockPos, boolean move);
+
+    public abstract int field$Vec3i$x(Object vec3i);
+
+    public abstract int field$Vec3i$y(Object vec3i);
+
+    public abstract int field$Vec3i$z(Object vec3i);
+
+    public abstract double field$Vec3$x(Object vec3);
+
+    public abstract double field$Vec3$y(Object vec3);
+
+    public abstract double field$Vec3$z(Object vec3);
+
+    public abstract Object constructor$BlockPos(int x, int y, int z);
 }

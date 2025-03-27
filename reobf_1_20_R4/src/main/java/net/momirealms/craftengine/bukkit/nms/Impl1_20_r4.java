@@ -2,6 +2,7 @@ package net.momirealms.craftengine.bukkit.nms;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -148,5 +150,45 @@ public class Impl1_20_r4 extends FastNMS {
     @Override
     public World method$Level$getCraftWorld(Object level) {
         return ((Level) level).getWorld();
+    }
+
+    @Override
+    public boolean method$Level$removeBlock(Object level, Object blockPos, boolean move) {
+        return ((Level) level).removeBlock((BlockPos) blockPos, move);
+    }
+
+    @Override
+    public int field$Vec3i$x(Object vec3i) {
+        return ((Vec3i) vec3i).getX();
+    }
+
+    @Override
+    public int field$Vec3i$y(Object vec3i) {
+        return ((Vec3i) vec3i).getY();
+    }
+
+    @Override
+    public int field$Vec3i$z(Object vec3i) {
+        return ((Vec3i) vec3i).getZ();
+    }
+
+    @Override
+    public double field$Vec3$x(Object vec3) {
+        return ((Vec3) vec3).x();
+    }
+
+    @Override
+    public double field$Vec3$y(Object vec3) {
+        return ((Vec3) vec3).y();
+    }
+
+    @Override
+    public double field$Vec3$z(Object vec3) {
+        return ((Vec3) vec3).z();
+    }
+
+    @Override
+    public Object constructor$BlockPos(int x, int y, int z) {
+        return new BlockPos(x, y, z);
     }
 }
