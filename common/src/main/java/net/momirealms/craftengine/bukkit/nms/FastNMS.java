@@ -31,6 +31,7 @@ public abstract class FastNMS {
         String bukkitVersion = Bukkit.getServer().getBukkitVersion().split("-")[0];
         String classSuffix;
         switch (bukkitVersion) {
+            case "1.21.5" -> classSuffix = "1_21_r4";
             case "1.21.4" -> classSuffix = "1_21_r3";
             case "1.21.2", "1.21.3" -> classSuffix = "1_21_r2";
             case "1.21", "1.21.1" -> classSuffix = "1_21_r1";
