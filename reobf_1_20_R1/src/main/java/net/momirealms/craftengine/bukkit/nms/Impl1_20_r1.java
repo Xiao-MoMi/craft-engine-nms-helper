@@ -5,7 +5,6 @@ import net.minecraft.core.IdMapper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.inventory.RecipeHolder;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +23,7 @@ import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class Impl1_20_r1 extends FastNMS {
 
     @Override

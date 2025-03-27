@@ -24,7 +24,7 @@ import org.bukkit.craftbukkit.v1_20_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class Impl1_20_r2 extends FastNMS {
 
     @Override
