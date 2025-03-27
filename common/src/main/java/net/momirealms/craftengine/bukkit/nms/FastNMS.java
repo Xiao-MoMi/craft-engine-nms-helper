@@ -5,6 +5,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -101,4 +102,8 @@ public abstract class FastNMS {
     public abstract double field$Vec3$z(Object vec3);
 
     public abstract Object constructor$BlockPos(int x, int y, int z);
+
+    public abstract Object method$BlockGetter$getBlockState(Object blockGetter, Object blockPos);
+
+    public abstract Object method$CraftPlayer$getHandle(Player player);
 }

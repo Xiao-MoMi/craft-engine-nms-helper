@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -24,7 +25,9 @@ import org.bukkit.craftbukkit.CraftChunk;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -190,5 +193,17 @@ public class Impl1_21_r2 extends FastNMS {
     @Override
     public Object constructor$BlockPos(int x, int y, int z) {
         return new BlockPos(x, y, z);
+    }
+
+    @Override
+    public Object method$BlockGetter$getBlockState(Object blockGetter, Object blockPos) {
+        BlockGetter blockGetterImpl = (BlockGetter) blockGetter;
+        return blockGetterImpl.getBlockState((BlockPos) blockPos);
+    }
+
+    @Override
+    public Object method$CraftPlayer$getHandle(Player player) {
+        CraftPlayer playerImpl = (CraftPlayer) player;
+        return playerImpl.getHandle();
     }
 }
