@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
-import java.util.Optional;
 
+@SuppressWarnings("unused")
 public abstract class FastNMS {
     public static final FastNMS INSTANCE = instance();
 
