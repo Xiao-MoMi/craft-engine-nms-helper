@@ -83,4 +83,6 @@ public abstract class FastNMS {
     public abstract Object field$ResourceKey$location(Object resourceKey);
 
     public abstract Object field$RecipeHolder$id(Object recipeHolder);
+
+    public abstract World method$Level$getCraftWorld(Object level);
 }

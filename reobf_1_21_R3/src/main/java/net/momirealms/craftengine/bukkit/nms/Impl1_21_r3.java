@@ -25,8 +25,6 @@ import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Optional;
-
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class Impl1_21_r3 extends FastNMS {
 
@@ -145,5 +143,10 @@ public class Impl1_21_r3 extends FastNMS {
     @Override
     public Object field$RecipeHolder$id(Object recipeHolder) {
         return ((RecipeHolder) recipeHolder).id();
+    }
+
+    @Override
+    public World method$Level$getCraftWorld(Object level) {
+        return ((Level) level).getWorld();
     }
 }

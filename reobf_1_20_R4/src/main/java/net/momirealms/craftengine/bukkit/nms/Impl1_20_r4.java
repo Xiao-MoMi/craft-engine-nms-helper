@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -142,5 +143,10 @@ public class Impl1_20_r4 extends FastNMS {
     @Override
     public Object field$RecipeHolder$id(Object recipeHolder) {
         return ((RecipeHolder) recipeHolder).id();
+    }
+
+    @Override
+    public World method$Level$getCraftWorld(Object level) {
+        return ((Level) level).getWorld();
     }
 }
