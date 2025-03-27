@@ -3,6 +3,7 @@ val projectGroup : String by project
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(mapOf("path" to ":reobf_1_21_R4", "configuration" to "reobf")))
     implementation(project(mapOf("path" to ":reobf_1_21_R3", "configuration" to "reobf")))
     implementation(project(mapOf("path" to ":reobf_1_21_R2", "configuration" to "reobf")))
     implementation(project(mapOf("path" to ":reobf_1_21_R1", "configuration" to "reobf")))
