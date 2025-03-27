@@ -1,11 +1,9 @@
 plugins {
-//    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16"
 }
 
 dependencies {
-//    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.21.5-R0.1-SNAPSHOT")
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly(files("lib/paper-1.21.5.jar"))
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.21.5-no-moonrise-SNAPSHOT")
     compileOnly(project(":common"))
 }
 
@@ -22,4 +20,4 @@ java {
     }
 }
 
-//paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION
+paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION
