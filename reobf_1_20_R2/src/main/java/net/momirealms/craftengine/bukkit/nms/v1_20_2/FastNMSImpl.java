@@ -31,6 +31,7 @@ import org.bukkit.craftbukkit.v1_20_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_20_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -234,5 +235,11 @@ public class FastNMSImpl extends FastNMS {
     public void method$LevelWriter$addFreshEntity(Object level, Object entity) {
         LevelWriter levelWriter = (LevelWriter) level;
         levelWriter.addFreshEntity((Entity) entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    }
+
+    @Override
+    public Object method$CraftEntity$getHandle(Object entity) {
+        CraftEntity craftEntity = (CraftEntity) entity;
+        return craftEntity.getHandle();
     }
 }

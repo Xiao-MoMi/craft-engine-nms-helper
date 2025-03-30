@@ -117,4 +117,6 @@ public abstract class FastNMS {
     public abstract void method$Entity$setBoundingBox(Object entity, Object aabb);
 
     public abstract void method$LevelWriter$addFreshEntity(Object level, Object entity);
+
+    public abstract Object method$CraftEntity$getHandle(Object entity);
 }
