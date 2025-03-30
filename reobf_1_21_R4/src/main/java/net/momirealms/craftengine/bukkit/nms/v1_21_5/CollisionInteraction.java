@@ -45,6 +45,6 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
 
     @Override
     public boolean canBeCollidedWith() {
-        return this.hardCollision;
+        return true;
     }
 }
