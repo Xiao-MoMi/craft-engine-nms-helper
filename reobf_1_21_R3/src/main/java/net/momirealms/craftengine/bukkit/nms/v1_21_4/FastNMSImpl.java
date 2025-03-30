@@ -12,6 +12,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -33,6 +34,7 @@ import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
@@ -226,5 +228,11 @@ public class FastNMSImpl extends FastNMS {
     public void method$Entity$setBoundingBox(Object entity, Object aabb) {
         Entity e = (Entity) entity;
         e.setBoundingBox((AABB) aabb);
+    }
+
+    @Override
+    public void method$LevelWriter$addFreshEntity(Object entity, Object level) {
+        LevelWriter levelWriter = (LevelWriter) level;
+        levelWriter.addFreshEntity((Entity) entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 }
