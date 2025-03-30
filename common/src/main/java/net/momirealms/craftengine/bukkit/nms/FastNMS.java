@@ -16,9 +16,9 @@ public abstract class FastNMS {
     public static final FastNMS INSTANCE = instance();
 
     private static FastNMS instance() {
-        String classSuffix = getImplSuffix();
+        String path = getImplPath();
         try {
-            Class<?> clazz = Class.forName("net.momirealms.craftengine.bukkit.nms.Impl" + classSuffix);
+            Class<?> clazz = Class.forName("net.momirealms.craftengine.bukkit.nms." + path + ".FastNMSImpl");
             Constructor<?> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
             return (FastNMS) constructor.newInstance();
@@ -27,22 +27,24 @@ public abstract class FastNMS {
         }
     }
 
-    private static @NotNull String getImplSuffix() {
+    private static @NotNull String getImplPath() {
         String bukkitVersion = Bukkit.getServer().getBukkitVersion().split("-")[0];
         String classSuffix;
         switch (bukkitVersion) {
-            case "1.21.5" -> classSuffix = "1_21_r4";
-            case "1.21.4" -> classSuffix = "1_21_r3";
-            case "1.21.2", "1.21.3" -> classSuffix = "1_21_r2";
-            case "1.21", "1.21.1" -> classSuffix = "1_21_r1";
-            case "1.20.5", "1.20.6" -> classSuffix = "1_20_r4";
-            case "1.20.3", "1.20.4" -> classSuffix = "1_20_r3";
-            case "1.20.2" -> classSuffix = "1_20_r2";
-            case "1.20", "1.20.1" -> classSuffix = "1_20_r1";
+            case "1.21.5" -> classSuffix = "v1_21_5";
+            case "1.21.4" -> classSuffix = "v1_21_4";
+            case "1.21.2", "1.21.3" -> classSuffix = "v1_21_2";
+            case "1.21", "1.21.1" -> classSuffix = "v1_21";
+            case "1.20.5", "1.20.6" -> classSuffix = "v1_20_5";
+            case "1.20.3", "1.20.4" -> classSuffix = "v1_20_3";
+            case "1.20.2" -> classSuffix = "v1_20_2";
+            case "1.20", "1.20.1" -> classSuffix = "v1_20";
             default -> throw new UnsupportedVersionException();
         }
         return classSuffix;
     }
+
+    public abstract CollisionEntity createCollisionEntity(Object world, Object aabb, boolean hardCollision, boolean canProjectileHit);
 
     public abstract Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState);
 
@@ -107,4 +109,8 @@ public abstract class FastNMS {
     public abstract Object method$BlockGetter$getBlockState(Object blockGetter, Object blockPos);
 
     public abstract Object method$CraftPlayer$getHandle(Player player);
+
+    public abstract Object constructor$AABB(double x1, double y1, double z1, double x2, double y2, double z2);
+
+    public abstract void method$Entity$setBoundingBox(Object entity, Object aabb);
 }

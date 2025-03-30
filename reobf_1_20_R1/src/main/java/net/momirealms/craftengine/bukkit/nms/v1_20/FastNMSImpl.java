@@ -1,4 +1,4 @@
-package net.momirealms.craftengine.bukkit.nms;
+package net.momirealms.craftengine.bukkit.nms.v1_20;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
@@ -6,7 +6,8 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -16,22 +17,31 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
+import net.momirealms.craftengine.bukkit.nms.FastNMS;
+import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.CraftChunk;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.block.CraftBlock;
-import org.bukkit.craftbukkit.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.CraftChunk;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-@SuppressWarnings({"unchecked", "rawtypes", "unused"})
-public class Impl1_21_r1 extends FastNMS {
+@SuppressWarnings({"unchecked", "rawtypes"})
+public class FastNMSImpl extends FastNMS {
+
+    @Override
+    public CollisionEntity createCollisionEntity(Object world, Object aabb, boolean hardCollision, boolean canProjectileHit) {
+        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, (AABB) aabb, hardCollision, canProjectileHit);
+    }
 
     @Override
     public Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState) {
@@ -98,7 +108,7 @@ public class Impl1_21_r1 extends FastNMS {
     @Override
     public Object method$ServerChunkCache$getChunkAtIfLoadedMainThread(Object serverChunkCache, int x, int z) {
         ServerChunkCache chunkCache = (ServerChunkCache) serverChunkCache;
-        return chunkCache.getChunkAtIfCachedImmediately(x, z);
+        return chunkCache.getChunkAtIfLoadedMainThread(x, z);
     }
 
     @Override
@@ -147,7 +157,7 @@ public class Impl1_21_r1 extends FastNMS {
 
     @Override
     public Object field$RecipeHolder$id(Object recipeHolder) {
-        return ((RecipeHolder) recipeHolder).id();
+        throw new UnsupportedVersionException();
     }
 
     @Override
@@ -205,5 +215,16 @@ public class Impl1_21_r1 extends FastNMS {
     public Object method$CraftPlayer$getHandle(Player player) {
         CraftPlayer playerImpl = (CraftPlayer) player;
         return playerImpl.getHandle();
+    }
+
+    @Override
+    public Object constructor$AABB(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return new AABB(x1, y1, z1, x2, y2, z2);
+    };
+
+    @Override
+    public void method$Entity$setBoundingBox(Object entity, Object aabb) {
+        Entity e = (Entity) entity;
+        e.setBoundingBox((AABB) aabb);
     }
 }

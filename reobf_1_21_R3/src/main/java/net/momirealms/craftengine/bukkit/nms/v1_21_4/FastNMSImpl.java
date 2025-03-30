@@ -1,4 +1,4 @@
-package net.momirealms.craftengine.bukkit.nms;
+package net.momirealms.craftengine.bukkit.nms.v1_21_4;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
@@ -6,7 +6,9 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -16,7 +18,10 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
+import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -31,7 +36,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class Impl1_21_r3 extends FastNMS {
+public class FastNMSImpl extends FastNMS {
+
+    @Override
+    public CollisionEntity createCollisionEntity(Object world, Object aabb, boolean hardCollision, boolean canProjectileHit) {
+        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, (AABB) aabb, hardCollision, canProjectileHit);
+    }
 
     @Override
     public Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState) {
@@ -205,5 +215,16 @@ public class Impl1_21_r3 extends FastNMS {
     public Object method$CraftPlayer$getHandle(Player player) {
         CraftPlayer playerImpl = (CraftPlayer) player;
         return playerImpl.getHandle();
+    }
+
+    @Override
+    public Object constructor$AABB(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return new AABB(x1, y1, z1, x2, y2, z2);
+    };
+
+    @Override
+    public void method$Entity$setBoundingBox(Object entity, Object aabb) {
+        Entity e = (Entity) entity;
+        e.setBoundingBox((AABB) aabb);
     }
 }
