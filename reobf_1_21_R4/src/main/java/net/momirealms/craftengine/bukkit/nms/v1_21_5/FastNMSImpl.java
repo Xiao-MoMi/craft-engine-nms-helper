@@ -41,14 +41,13 @@ import org.bukkit.inventory.ItemStack;
 public class FastNMSImpl extends FastNMS {
 
     @Override
-    public CollisionEntity createCollisionEntity(Object world, Object aabb, boolean hardCollision, boolean canProjectileHit) {
-        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, (AABB) aabb, hardCollision, canProjectileHit);
+    public CollisionEntity createCollisionEntity(Object world, Object aabb, double x, double y, double z, boolean hardCollision, boolean canProjectileHit) {
+        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, hardCollision, canProjectileHit);
     }
 
     @Override
     public Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState) {
         PalettedContainer pc = (PalettedContainer) palettedContainer;
-
         return pc.getAndSet(x, y, z, blockState);
     }
 
@@ -232,7 +231,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$LevelWriter$addFreshEntity(Object entity, Object level) {
+    public void method$LevelWriter$addFreshEntity(Object level, Object entity) {
         LevelWriter levelWriter = (LevelWriter) level;
         levelWriter.addFreshEntity((Entity) entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }

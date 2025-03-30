@@ -44,7 +44,9 @@ public abstract class FastNMS {
         return classSuffix;
     }
 
-    public abstract CollisionEntity createCollisionEntity(Object world, Object aabb, boolean hardCollision, boolean canProjectileHit);
+    public abstract CollisionEntity createCollisionEntity(Object world, Object aabb,
+                                                          double x, double y, double z,
+                                                          boolean hardCollision, boolean canProjectileHit);
 
     public abstract Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState);
 
@@ -114,5 +116,5 @@ public abstract class FastNMS {
 
     public abstract void method$Entity$setBoundingBox(Object entity, Object aabb);
 
-    public abstract void method$LevelWriter$addFreshEntity(Object entity, Object level);
+    public abstract void method$LevelWriter$addFreshEntity(Object level, Object entity);
 }
