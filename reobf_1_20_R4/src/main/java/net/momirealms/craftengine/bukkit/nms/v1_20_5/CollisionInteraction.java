@@ -24,6 +24,12 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
         this.setBoundingBox(aabb);
         this.persist = false;
     }
+
+    @Override
+    public void destroy() {
+        super.remove(RemovalReason.DISCARDED);
+    }
+
     @Override
     public void tick() {
     }

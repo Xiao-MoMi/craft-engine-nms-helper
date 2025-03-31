@@ -26,6 +26,11 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
     }
 
     @Override
+    public void destroy() {
+        super.remove(RemovalReason.DISCARDED);
+    }
+
+    @Override
     public void tick() {
     }
 
