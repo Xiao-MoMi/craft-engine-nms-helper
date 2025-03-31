@@ -22,6 +22,7 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
         this.setInvisible(true);
         this.setPos(new Vec3(x, y, z));
         this.setBoundingBox(aabb);
+        this.persist = false;
     }
 
     @Override

@@ -1,8 +1,11 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20;
 
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -241,5 +244,13 @@ public class FastNMSImpl extends FastNMS {
     public Object method$CraftEntity$getHandle(Object entity) {
         CraftEntity craftEntity = (CraftEntity) entity;
         return craftEntity.getHandle();
+    }
+
+    @Override
+    public Object constructor$ClientboundSetPassengersPacket(int entityId, int... passengers) {
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeVarInt(entityId);
+        byteBuf.writeVarIntArray(passengers);
+        return new ClientboundSetPassengersPacket(byteBuf);
     }
 }

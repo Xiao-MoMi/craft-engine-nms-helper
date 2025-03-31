@@ -119,4 +119,6 @@ public abstract class FastNMS {
     public abstract void method$LevelWriter$addFreshEntity(Object level, Object entity);
 
     public abstract Object method$CraftEntity$getHandle(Object entity);
+
+    public abstract Object constructor$ClientboundSetPassengersPacket(int entityId, int... passengers);
 }
