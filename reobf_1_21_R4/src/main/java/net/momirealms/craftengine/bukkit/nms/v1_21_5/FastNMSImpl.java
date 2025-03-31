@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -22,11 +23,13 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.entity.EntityLookup;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import org.bukkit.Chunk;
+import org.bukkit.EntityEffect;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -252,5 +255,10 @@ public class FastNMSImpl extends FastNMS {
         byteBuf.writeVarInt(entityId);
         byteBuf.writeVarIntArray(passengers);
         return ClientboundSetPassengersPacket.STREAM_CODEC.decode(byteBuf);
+    }
+
+    @Override
+    public boolean isPreventingStatusUpdates(World world, int x, int z) {
+        return false; // TODO moonrise
     }
 }

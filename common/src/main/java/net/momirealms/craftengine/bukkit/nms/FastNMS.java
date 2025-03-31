@@ -121,4 +121,6 @@ public abstract class FastNMS {
     public abstract Object method$CraftEntity$getHandle(Object entity);
 
     public abstract Object constructor$ClientboundSetPassengersPacket(int entityId, int... passengers);
+
+    public abstract boolean isPreventingStatusUpdates(World world, int x, int z);
 }

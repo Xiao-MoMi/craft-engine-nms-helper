@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_5;
 
 import io.netty.buffer.Unpooled;
+import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
@@ -252,5 +253,12 @@ public class FastNMSImpl extends FastNMS {
         byteBuf.writeVarInt(entityId);
         byteBuf.writeVarIntArray(passengers);
         return ClientboundSetPassengersPacket.STREAM_CODEC.decode(byteBuf);
+    }
+
+    @Override
+    public boolean isPreventingStatusUpdates(World world, int x, int z) {
+        ServerLevel serverLevel = ((CraftWorld) world).getHandle();
+        ChunkEntitySlices slices = serverLevel.getEntityLookup().getChunk(x, z);
+        return slices != null && slices.isPreventingStatusUpdates();
     }
 }
