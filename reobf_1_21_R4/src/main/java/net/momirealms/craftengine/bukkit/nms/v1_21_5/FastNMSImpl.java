@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
@@ -260,5 +261,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean isPreventingStatusUpdates(World world, int x, int z) {
         return false; // TODO moonrise
+    }
+
+    @Override
+    public Object field$ClientboundLevelChunkWithLightPacket$chunkData(Object packet) {
+        ClientboundLevelChunkWithLightPacket levelChunkPacket = (ClientboundLevelChunkWithLightPacket) packet;
+        return levelChunkPacket.getChunkData();
     }
 }

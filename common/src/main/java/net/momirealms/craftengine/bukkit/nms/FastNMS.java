@@ -123,4 +123,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ClientboundSetPassengersPacket(int entityId, int... passengers);
 
     public abstract boolean isPreventingStatusUpdates(World world, int x, int z);
+
+    public abstract Object field$ClientboundLevelChunkWithLightPacket$chunkData(Object packet);
 }
