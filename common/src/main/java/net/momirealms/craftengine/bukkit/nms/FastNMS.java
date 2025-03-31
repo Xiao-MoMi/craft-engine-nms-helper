@@ -45,8 +45,7 @@ public abstract class FastNMS {
     }
 
     public abstract CollisionEntity createCollisionEntity(Object world, Object aabb,
-                                                          double x, double y, double z,
-                                                          boolean hardCollision, boolean canProjectileHit);
+                                                          double x, double y, double z, boolean canProjectileHit);
 
     public abstract Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState);
 

@@ -12,7 +12,6 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -24,13 +23,11 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.minecraft.world.level.entity.EntityLookup;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import org.bukkit.Chunk;
-import org.bukkit.EntityEffect;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -49,8 +46,8 @@ import org.bukkit.inventory.ItemStack;
 public class FastNMSImpl extends FastNMS {
 
     @Override
-    public CollisionEntity createCollisionEntity(Object world, Object aabb, double x, double y, double z, boolean hardCollision, boolean canProjectileHit) {
-        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, hardCollision, canProjectileHit);
+    public CollisionEntity createCollisionEntity(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit) {
+        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit);
     }
 
     @Override

@@ -47,8 +47,8 @@ import org.bukkit.inventory.ItemStack;
 public class FastNMSImpl extends FastNMS {
 
     @Override
-    public CollisionEntity createCollisionEntity(Object world, Object aabb, double x, double y, double z, boolean hardCollision, boolean canProjectileHit) {
-        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, hardCollision, canProjectileHit);
+    public CollisionEntity createCollisionEntity(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit) {
+        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit);
     }
 
     @Override

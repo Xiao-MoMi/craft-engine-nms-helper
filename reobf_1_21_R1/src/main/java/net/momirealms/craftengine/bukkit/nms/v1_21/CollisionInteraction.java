@@ -12,13 +12,11 @@ import org.jetbrains.annotations.NotNull;
 public class CollisionInteraction extends Interaction implements CollisionEntity {
     private final AABB aabb;
     private final boolean canProjectileHit;
-    private final boolean hardCollision;
 
-    public CollisionInteraction(EntityType<?> type, Level world, double x, double y, double z, AABB aabb, boolean hardCollision, boolean canProjectileHit) {
+    public CollisionInteraction(EntityType<?> type, Level world, double x, double y, double z, AABB aabb, boolean canProjectileHit) {
         super(type, world);
         this.aabb = aabb;
         this.canProjectileHit = canProjectileHit;
-        this.hardCollision = hardCollision;
         this.setInvisible(true);
         this.setPos(new Vec3(x, y, z));
         this.setBoundingBox(aabb);
