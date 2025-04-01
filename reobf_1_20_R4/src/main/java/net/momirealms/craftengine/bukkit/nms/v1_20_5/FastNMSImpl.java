@@ -52,6 +52,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public CollisionEntity createCollisionShulker(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit) {
+        return new CollisionShulker(EntityType.SHULKER, (Level) world, x, y, z, (AABB) aabb, canProjectileHit);
+    }
+
+
+    @Override
     public Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState) {
         PalettedContainer pc = (PalettedContainer) palettedContainer;
         return pc.getAndSet(x, y, z, blockState);
