@@ -20,6 +20,9 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
         this.setInvisible(true);
         this.setPos(new Vec3(x, y, z));
         this.setBoundingBox(aabb);
+        this.setInvulnerable(true);
+        this.setNoAi(true);
+        this.setSilent(true);
         this.persist = false;
     }
 
