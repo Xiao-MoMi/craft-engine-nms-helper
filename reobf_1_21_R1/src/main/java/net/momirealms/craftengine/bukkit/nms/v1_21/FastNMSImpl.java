@@ -268,4 +268,10 @@ public class FastNMSImpl extends FastNMS {
         ClientboundLevelChunkWithLightPacket levelChunkPacket = (ClientboundLevelChunkWithLightPacket) packet;
         return levelChunkPacket.getChunkData();
     }
+
+    @Override
+    public int method$Entity$getId(Object entity) {
+        Entity entityImpl = (Entity) entity;
+        return entityImpl.getId();
+    }
 }
