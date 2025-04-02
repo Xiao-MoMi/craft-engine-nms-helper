@@ -140,9 +140,15 @@ public abstract class FastNMS {
 
     public abstract Object constructor$ClientboundLightUpdatePacket(Object chunkPos, Object lightEngine, BitSet skyChangedLightSectionFilter, BitSet blockChangedLightSectionFilter);
 
-    public abstract boolean method$ChunkHolder$blockChanged(Object chunkHolder, Object blockPos);
+    public abstract void method$ServerChunkCache$blockChanged(Object chunkCache, Object blockPos);
 
     public abstract void sendPacket(Object player, Object packet);
 
     public abstract List<Object> method$ChunkHolder$getPlayers(Object chunkHolder);
+
+    public abstract Object constructor$ClientboundBundlePacket(List<Object> packets);
+
+    public abstract Object field$Player$connection$connection(Object player);
+
+    public abstract Object field$Player$connection$connection$channel(Object player);
 }

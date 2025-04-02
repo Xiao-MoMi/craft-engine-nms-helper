@@ -1,14 +1,13 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_5;
 
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
-import net.minecraft.network.protocol.game.ClientboundLightUpdatePacket;
-import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
@@ -313,9 +312,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean method$ChunkHolder$blockChanged(Object chunkHolder, Object blockPos) {
-        ChunkHolder chunkHolderImpl = (ChunkHolder) chunkHolder;
-        return chunkHolderImpl.blockChanged((BlockPos) blockPos);
+    public void method$ServerChunkCache$blockChanged(Object chunkCache, Object blockPos) {
+        ServerChunkCache serverChunkCache = (ServerChunkCache) chunkCache;
+        serverChunkCache.blockChanged((BlockPos) blockPos);
     }
 
     @Override
@@ -328,6 +327,24 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public List<Object> method$ChunkHolder$getPlayers(Object chunkHolder) {
         ChunkHolder chunkHolderImpl = (ChunkHolder) chunkHolder;
-        return chunkHolderImpl.playerProvider.getPlayers(chunkHolderImpl.getPos(), true).stream().map(it -> (Object) it).toList();
+        return (List) chunkHolderImpl.playerProvider.getPlayers(chunkHolderImpl.getPos(), false);
+    }
+
+    @Override
+    public Object constructor$ClientboundBundlePacket(List<Object> packets) {
+        Iterable<Packet<? super ClientGamePacketListener>> iterable = (Iterable) packets;
+        return new ClientboundBundlePacket(iterable);
+    }
+
+    @Override
+    public Object field$Player$connection$connection(Object player) {
+        ServerPlayer playerImpl = (ServerPlayer) player;
+        return playerImpl.connection.connection;
+    }
+
+    @Override
+    public Object field$Player$connection$connection$channel(Object player) {
+        ServerPlayer playerImpl = (ServerPlayer) player;
+        return playerImpl.connection.connection.channel;
     }
 }
