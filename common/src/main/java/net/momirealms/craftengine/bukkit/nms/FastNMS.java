@@ -153,4 +153,6 @@ public abstract class FastNMS {
     public abstract Object field$Player$connection$connection$channel(Object player);
 
     public abstract void method$BlockStateBase$onPlace(Object blockState, Object world, Object blockPos, Object oldBlockState, boolean movedByPiston);
+
+    public abstract void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId);
 }

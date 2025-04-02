@@ -354,4 +354,10 @@ public class FastNMSImpl extends FastNMS {
         BlockBehaviour.BlockStateBase blockStateBase = (BlockBehaviour.BlockStateBase) blockState;
         blockStateBase.onPlace((Level) world, (BlockPos) blockPos, (BlockState) oldBlockState, movedByPiston);
     }
+
+    @Override
+    public void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
+        Level levelImpl = (Level) level;
+        levelImpl.levelEvent(eventId, (BlockPos) blockPos, stateId);
+    }
 }
