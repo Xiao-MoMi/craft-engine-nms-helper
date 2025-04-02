@@ -1,7 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_5;
 
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
@@ -346,5 +345,11 @@ public class FastNMSImpl extends FastNMS {
     public Object field$Player$connection$connection$channel(Object player) {
         ServerPlayer playerImpl = (ServerPlayer) player;
         return playerImpl.connection.connection.channel;
+    }
+
+    @Override
+    public void method$BlockStateBase$onPlace(Object blockState, Object world, Object blockPos, Object oldBlockState, boolean movedByPiston) {
+        BlockBehaviour.BlockStateBase blockStateBase = (BlockBehaviour.BlockStateBase) blockState;
+        blockStateBase.onPlace((Level) world, (BlockPos) blockPos, (BlockState) oldBlockState, movedByPiston);
     }
 }
