@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
+import java.util.BitSet;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
@@ -129,4 +131,18 @@ public abstract class FastNMS {
     public abstract Object field$ClientboundLevelChunkWithLightPacket$chunkData(Object packet);
 
     public abstract int method$Entity$getId(Object entity);
+
+    public abstract boolean method$LevelWriter$setBlock(Object level, Object blockPos, Object blockState, int flags);
+
+    public abstract Object method$ServerChunkCache$getVisibleChunkIfPresent(Object chunkSource, long chunkKey);
+
+    public abstract Object constructor$ChunkPos(int x, int z);
+
+    public abstract Object constructor$ClientboundLightUpdatePacket(Object chunkPos, Object lightEngine, BitSet skyChangedLightSectionFilter, BitSet blockChangedLightSectionFilter);
+
+    public abstract boolean method$ChunkHolder$blockChanged(Object chunkHolder, Object blockPos);
+
+    public abstract void sendPacket(Object player, Object packet);
+
+    public abstract List<Object> method$ChunkHolder$getPlayers(Object chunkHolder);
 }

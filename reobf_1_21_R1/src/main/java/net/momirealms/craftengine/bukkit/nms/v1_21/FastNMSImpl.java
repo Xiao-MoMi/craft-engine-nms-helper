@@ -6,24 +6,26 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
+import net.minecraft.network.protocol.game.ClientboundLightUpdatePacket;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelWriter;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
@@ -42,6 +44,9 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.BitSet;
+import java.util.List;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -279,5 +284,51 @@ public class FastNMSImpl extends FastNMS {
     public int method$Entity$getId(Object entity) {
         Entity entityImpl = (Entity) entity;
         return entityImpl.getId();
+    }
+
+    @Override
+    public boolean method$LevelWriter$setBlock(Object level, Object blockPos, Object blockState, int flags) {
+        LevelWriter levelWriter = (LevelWriter) level;
+        return levelWriter.setBlock((BlockPos) blockPos, (BlockState) blockState, flags);
+    }
+
+    @Override
+    public Object method$ServerChunkCache$getVisibleChunkIfPresent(Object chunkSource, long chunkKey) {
+        ServerChunkCache serverChunkCache = (ServerChunkCache) chunkSource;
+        return serverChunkCache.chunkMap.getVisibleChunkIfPresent(chunkKey);
+    }
+
+    @Override
+    public Object constructor$ChunkPos(int x, int z) {
+        return new ChunkPos(x, z);
+    }
+
+    @Override
+    public Object constructor$ClientboundLightUpdatePacket(Object chunkPos, Object lightEngine, BitSet skyChangedLightSectionFilter, BitSet blockChangedLightSectionFilter) {
+        return new ClientboundLightUpdatePacket(
+                (ChunkPos) chunkPos,
+                (LevelLightEngine) lightEngine,
+                skyChangedLightSectionFilter,
+                blockChangedLightSectionFilter
+        );
+    }
+
+    @Override
+    public boolean method$ChunkHolder$blockChanged(Object chunkHolder, Object blockPos) {
+        ChunkHolder chunkHolderImpl = (ChunkHolder) chunkHolder;
+        chunkHolderImpl.blockChanged((BlockPos) blockPos);
+        return true;
+    }
+
+    @Override
+    public void sendPacket(Object player, Object packet) {
+        ServerPlayer playerImpl = (ServerPlayer) player;
+        playerImpl.connection.send((Packet<?>) packet);
+    }
+
+    @Override
+    public List<Object> method$ChunkHolder$getPlayers(Object chunkHolder) {
+        ChunkHolder chunkHolderImpl = (ChunkHolder) chunkHolder;
+        return chunkHolderImpl.moonrise$getPlayers(false).stream().map(it -> (Object) it).toList();
     }
 }
