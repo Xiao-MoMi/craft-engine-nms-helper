@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -163,4 +164,42 @@ public abstract class FastNMS {
     public abstract Object fastConstructor$ClientboundSoundPacket(Object newSoundEvent, Object soundPacket);
 
     public abstract Object method$ResourceLocation$fromNamespaceAndPath(String namespace, String path);
+
+    public abstract Object field$SoundEvent$location(Object soundEvent);
+
+    public abstract int field$ServerboundInteractPacket$entityId(Object packet);
+
+    public abstract IntList field$ClientboundRemoveEntitiesPacket$entityIds(Object packet);
+
+    public abstract Object field$ClientboundAddEntityPacket$type(Object packet);
+
+    public abstract int field$ClientboundAddEntityPacket$entityId(Object packet);
+
+    public abstract int field$ClientboundAddEntityPacket$data(Object packet);
+
+    public abstract Object field$ServerboundSwingPacket$hand(Object packet);
+
+    public abstract Object field$ClientboundLevelParticlesPacket$particle(Object packet);
+
+    public abstract Object field$BlockParticleOption$blockState(Object object);
+
+    public abstract Object field$ServerboundPlayerActionPacket$pos(Object packet);
+
+    public abstract Object field$ServerboundPlayerActionPacket$action(Object packet);
+
+    public abstract Object method$CraftItemStack$asNMSCopy(ItemStack itemStack);
+
+    public abstract Object constructor$RegistryFriendlyByteBuf(Object buf, Object access);
+
+    public abstract List<Object> field$ClientboundSetEntityDataPacket$packedItems(Object packet);
+
+    public abstract int field$SynchedEntityData$DataValue$id(Object data);
+
+    public abstract Object field$SynchedEntityData$DataValue$value(Object data);
+
+    public abstract Object field$SynchedEntityData$DataValue$serializer(Object data);
+
+    public abstract Object constructor$SynchedEntityData$DataValue(int id, Object serializer, Object data);
+
+    public abstract int field$ClientboundSetEntityDataPacket$id(Object packet);
 }

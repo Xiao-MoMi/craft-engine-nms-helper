@@ -1,14 +1,17 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_5;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.world.ChunkEntitySlices;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.IdMapper;
-import net.minecraft.core.Vec3i;
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.core.*;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
@@ -388,5 +391,116 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ResourceLocation$fromNamespaceAndPath(String namespace, String path) {
         return new ResourceLocation(namespace, path);
+    }
+
+    @Override
+    public Object field$SoundEvent$location(Object soundEvent) {
+        SoundEvent event = (SoundEvent) soundEvent;
+        return event.getLocation();
+    }
+
+    @Override
+    public int field$ServerboundInteractPacket$entityId(Object packet) {
+        ServerboundInteractPacket packetImpl = (ServerboundInteractPacket) packet;
+        return packetImpl.getEntityId();
+    }
+
+    @Override
+    public IntList field$ClientboundRemoveEntitiesPacket$entityIds(Object packet) {
+        ClientboundRemoveEntitiesPacket packetImpl = (ClientboundRemoveEntitiesPacket) packet;
+        return packetImpl.getEntityIds();
+    }
+
+    @Override
+    public Object field$ClientboundAddEntityPacket$type(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getType();
+    }
+
+    @Override
+    public int field$ClientboundAddEntityPacket$entityId(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getId();
+    }
+
+    @Override
+    public int field$ClientboundAddEntityPacket$data(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getData();
+    }
+
+    @Override
+    public Object field$ServerboundSwingPacket$hand(Object packet) {
+        ServerboundSwingPacket packetImpl = (ServerboundSwingPacket) packet;
+        return packetImpl.getHand();
+    }
+
+    @Override
+    public Object field$ClientboundLevelParticlesPacket$particle(Object packet) {
+        ClientboundLevelParticlesPacket packetImpl = (ClientboundLevelParticlesPacket) packet;
+        return packetImpl.getParticle();
+    }
+
+    @Override
+    public Object field$BlockParticleOption$blockState(Object object) {
+        BlockParticleOption option = (BlockParticleOption) object;
+        return option.getState();
+    }
+
+    @Override
+    public Object field$ServerboundPlayerActionPacket$pos(Object packet) {
+        ServerboundPlayerActionPacket packetImpl = (ServerboundPlayerActionPacket) packet;
+        return packetImpl.getPos();
+    }
+
+    @Override
+    public Object field$ServerboundPlayerActionPacket$action(Object packet) {
+        ServerboundPlayerActionPacket packetImpl = (ServerboundPlayerActionPacket) packet;
+        return packetImpl.getAction();
+    }
+
+    @Override
+    public Object method$CraftItemStack$asNMSCopy(ItemStack itemStack) {
+        return CraftItemStack.asNMSCopy(itemStack);
+    }
+
+    @Override
+    public Object constructor$RegistryFriendlyByteBuf(Object buf, Object access) {
+        return new RegistryFriendlyByteBuf((ByteBuf) buf, (RegistryAccess) access);
+    }
+
+    @Override
+    public List<Object> field$ClientboundSetEntityDataPacket$packedItems(Object packet) {
+        ClientboundSetEntityDataPacket packetImpl = (ClientboundSetEntityDataPacket) packet;
+        return (List) packetImpl.packedItems();
+    }
+
+    @Override
+    public int field$SynchedEntityData$DataValue$id(Object data) {
+        SynchedEntityData.DataValue synchedEntityData = (SynchedEntityData.DataValue) data;
+        return synchedEntityData.id();
+    }
+
+    @Override
+    public Object field$SynchedEntityData$DataValue$value(Object data) {
+        SynchedEntityData.DataValue synchedEntityData = (SynchedEntityData.DataValue) data;
+        return synchedEntityData.value();
+    }
+
+    @Override
+    public Object field$SynchedEntityData$DataValue$serializer(Object data) {
+        SynchedEntityData.DataValue synchedEntityData = (SynchedEntityData.DataValue) data;
+        return synchedEntityData.serializer();
+    }
+
+    @Override
+    public Object constructor$SynchedEntityData$DataValue(int id, Object serializer, Object data) {
+        return new SynchedEntityData.DataValue<>(id, (EntityDataSerializer) serializer, data);
+    }
+
+    @Override
+    public int field$ClientboundSetEntityDataPacket$id(Object packet) {
+        ClientboundSetEntityDataPacket packetImpl = (ClientboundSetEntityDataPacket) packet;
+        return packetImpl.id();
     }
 }
