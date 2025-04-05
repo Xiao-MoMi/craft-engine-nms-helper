@@ -518,6 +518,16 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public Object method$Component$Serializer$fromJson(String json) {
+        return Component.Serializer.fromJson(json);
+    }
+
+    @Override
+    public String method$Component$Serializer$toJson(Object component) {
+        return Component.Serializer.toJson((Component) component);
+    }
+
+    @Override
     public List<NamespacedKey> getAllVanillaItems() {
         List<NamespacedKey> list = new ArrayList<>();
         for (Item item : BuiltInRegistries.ITEM) {

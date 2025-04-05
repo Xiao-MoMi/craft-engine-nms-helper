@@ -19,6 +19,7 @@ import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -514,6 +515,16 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Component$Serializer$fromJson(JsonElement element) {
         return Component.Serializer.fromJson(element);
+    }
+
+    @Override
+    public Object method$Component$Serializer$fromJson(String json) {
+        return Component.Serializer.fromJson(json);
+    }
+
+    @Override
+    public String method$Component$Serializer$toJson(Object component) {
+        return Component.Serializer.toJson((Component) component);
     }
 
     @Override

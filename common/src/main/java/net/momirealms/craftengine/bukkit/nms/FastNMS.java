@@ -207,5 +207,9 @@ public abstract class FastNMS {
 
     public abstract Object method$Component$Serializer$fromJson(JsonElement element);
 
+    public abstract Object method$Component$Serializer$fromJson(String json);
+
+    public abstract String method$Component$Serializer$toJson(Object component);
+
     public abstract List<NamespacedKey> getAllVanillaItems();
 }

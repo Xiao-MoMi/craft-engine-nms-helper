@@ -61,6 +61,7 @@ import java.util.List;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class FastNMSImpl extends FastNMS {
+    private static final RegistryAccess REGISTRY_ACCESS = MinecraftServer.getServer().registryAccess();
 
     @Override
     public CollisionEntity createCollisionEntity(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit) {
@@ -513,6 +514,16 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Component$Serializer$fromJson(JsonElement element) {
         return Component.Serializer.fromJson(element, MinecraftServer.getServer().registryAccess());
+    }
+
+    @Override
+    public Object method$Component$Serializer$fromJson(String json) {
+        return Component.Serializer.fromJson(json, REGISTRY_ACCESS);
+    }
+
+    @Override
+    public String method$Component$Serializer$toJson(Object component) {
+        return Component.Serializer.toJson((Component) component, REGISTRY_ACCESS);
     }
 
     @Override
