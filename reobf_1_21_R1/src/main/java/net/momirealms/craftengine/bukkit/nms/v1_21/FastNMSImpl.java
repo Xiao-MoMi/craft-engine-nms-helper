@@ -1,19 +1,23 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
+import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +25,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -36,6 +41,7 @@ import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import org.bukkit.Chunk;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -50,6 +56,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
@@ -503,5 +510,20 @@ public class FastNMSImpl extends FastNMS {
     public int field$ClientboundSetEntityDataPacket$id(Object packet) {
         ClientboundSetEntityDataPacket packetImpl = (ClientboundSetEntityDataPacket) packet;
         return packetImpl.id();
+    }
+
+    @Override
+    public Object method$Component$Serializer$fromJson(JsonElement element) {
+        return Component.Serializer.fromJson(element, MinecraftServer.getServer().registryAccess());
+    }
+
+    @Override
+    public List<NamespacedKey> getAllVanillaItems() {
+        List<NamespacedKey> list = new ArrayList<>();
+        for (Item item : BuiltInRegistries.ITEM) {
+            ResourceLocation location = BuiltInRegistries.ITEM.getKey(item);
+            list.add(new NamespacedKey(location.getNamespace(), location.getPath()));
+        }
+        return list;
     }
 }

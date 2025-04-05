@@ -1,8 +1,10 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -202,4 +204,8 @@ public abstract class FastNMS {
     public abstract Object constructor$SynchedEntityData$DataValue(int id, Object serializer, Object data);
 
     public abstract int field$ClientboundSetEntityDataPacket$id(Object packet);
+
+    public abstract Object method$Component$Serializer$fromJson(JsonElement element);
+
+    public abstract List<NamespacedKey> getAllVanillaItems();
 }
