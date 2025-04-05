@@ -376,9 +376,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public List<Object> method$ClientboundBundlePacket$subPackets(Object packet){
+    public Iterable<Object> method$ClientboundBundlePacket$subPackets(Object packet){
         ClientboundBundlePacket packetImpl = (ClientboundBundlePacket) packet;
-        return (List) packetImpl.subPackets();
+        return (Iterable) packetImpl.subPackets();
     }
 
     @Override

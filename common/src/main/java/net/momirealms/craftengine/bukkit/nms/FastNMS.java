@@ -159,7 +159,7 @@ public abstract class FastNMS {
 
     public abstract void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId);
 
-    public abstract List<Object> method$ClientboundBundlePacket$subPackets(Object packet);
+    public abstract Iterable<Object> method$ClientboundBundlePacket$subPackets(Object packet);
 
     public abstract Object field$ClientboundSoundPacket$soundEvent(Object packet);
 

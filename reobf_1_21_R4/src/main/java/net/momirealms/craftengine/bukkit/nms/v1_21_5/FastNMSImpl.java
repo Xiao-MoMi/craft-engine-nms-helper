@@ -57,6 +57,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -372,9 +373,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public List<Object> method$ClientboundBundlePacket$subPackets(Object packet){
+    public Iterable<Object> method$ClientboundBundlePacket$subPackets(Object packet){
         ClientboundBundlePacket packetImpl = (ClientboundBundlePacket) packet;
-        return (List) packetImpl.subPackets();
+        return (Iterable) packetImpl.subPackets();
     }
 
     @Override
