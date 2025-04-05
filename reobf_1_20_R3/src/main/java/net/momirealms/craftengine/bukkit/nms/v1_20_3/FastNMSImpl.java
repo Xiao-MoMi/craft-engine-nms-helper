@@ -3,16 +3,19 @@ package net.momirealms.craftengine.bukkit.nms.v1_20_3;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -358,5 +361,32 @@ public class FastNMSImpl extends FastNMS {
     public void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
         Level levelImpl = (Level) level;
         levelImpl.levelEvent(eventId, (BlockPos) blockPos, stateId);
+    }
+
+    @Override
+    public List<Object> method$ClientboundBundlePacket$subPackets(Object packet){
+        ClientboundBundlePacket packetImpl = (ClientboundBundlePacket) packet;
+        return (List) packetImpl.subPackets();
+    }
+
+    @Override
+    public Object field$ClientboundSoundPacket$soundEvent(Object packet) {
+        ClientboundSoundPacket packetImpl = (ClientboundSoundPacket) packet;
+        return packetImpl.getSound().value();
+    }
+
+    @Override
+    public Object fastConstructor$ClientboundSoundPacket(Object newSoundEvent, Object soundPacket) {
+        SoundEvent event = (SoundEvent) newSoundEvent;
+        ClientboundSoundPacket soundPacketImpl = (ClientboundSoundPacket) soundPacket;
+        return new ClientboundSoundPacket(Holder.direct(event),
+                soundPacketImpl.getSource(),
+                soundPacketImpl.getX() / 8, soundPacketImpl.getY() / 8, soundPacketImpl.getZ() / 8,
+                soundPacketImpl.getVolume(), soundPacketImpl.getPitch(), soundPacketImpl.getSeed());
+    }
+
+    @Override
+    public Object method$ResourceLocation$fromNamespaceAndPath(String namespace, String path) {
+        return new ResourceLocation(namespace, path);
     }
 }

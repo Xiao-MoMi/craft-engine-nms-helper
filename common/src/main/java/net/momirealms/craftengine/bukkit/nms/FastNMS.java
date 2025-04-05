@@ -155,4 +155,12 @@ public abstract class FastNMS {
     public abstract void method$BlockStateBase$onPlace(Object blockState, Object world, Object blockPos, Object oldBlockState, boolean movedByPiston);
 
     public abstract void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId);
+
+    public abstract List<Object> method$ClientboundBundlePacket$subPackets(Object packet);
+
+    public abstract Object field$ClientboundSoundPacket$soundEvent(Object packet);
+
+    public abstract Object fastConstructor$ClientboundSoundPacket(Object newSoundEvent, Object soundPacket);
+
+    public abstract Object method$ResourceLocation$fromNamespaceAndPath(String namespace, String path);
 }
