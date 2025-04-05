@@ -392,7 +392,7 @@ public class FastNMSImpl extends FastNMS {
         ClientboundSoundPacket soundPacketImpl = (ClientboundSoundPacket) soundPacket;
         return new ClientboundSoundPacket(Holder.direct(event),
                 soundPacketImpl.getSource(),
-                soundPacketImpl.getX() / 8, soundPacketImpl.getY() / 8, soundPacketImpl.getZ() / 8,
+                soundPacketImpl.getX(), soundPacketImpl.getY(), soundPacketImpl.getZ(),
                 soundPacketImpl.getVolume(), soundPacketImpl.getPitch(), soundPacketImpl.getSeed());
     }
 
