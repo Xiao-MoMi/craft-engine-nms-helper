@@ -10,6 +10,7 @@ import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class CollisionShulker extends Shulker implements CollisionEntity {
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final AABB aabb;
     private final boolean canProjectileHit;
 

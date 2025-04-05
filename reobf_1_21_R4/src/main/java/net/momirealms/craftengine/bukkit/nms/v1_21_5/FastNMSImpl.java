@@ -59,7 +59,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
     private static final RegistryAccess REGISTRY_ACCESS = MinecraftServer.getServer().registryAccess();
 
@@ -70,14 +70,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public CollisionEntity createCollisionShulker(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit) {
-        BlockBehaviour blockBehaviour;
         return new CollisionShulker(EntityType.SHULKER, (Level) world, x, y, z, (AABB) aabb, canProjectileHit);
     }
 
     @Override
     public Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState) {
         PalettedContainer pc = (PalettedContainer) palettedContainer;
-        BlockState blockState1;
         return pc.getAndSet(x, y, z, blockState);
     }
 
@@ -252,7 +250,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$AABB(double x1, double y1, double z1, double x2, double y2, double z2) {
         return new AABB(x1, y1, z1, x2, y2, z2);
-    };
+    }
 
     @Override
     public void method$Entity$setBoundingBox(Object entity, Object aabb) {

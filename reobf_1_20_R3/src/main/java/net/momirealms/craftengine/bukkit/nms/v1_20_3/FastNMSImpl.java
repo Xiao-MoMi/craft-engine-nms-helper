@@ -5,7 +5,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.world.ChunkEntitySlices;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.IdMapper;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,7 +19,6 @@ import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -250,7 +252,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$AABB(double x1, double y1, double z1, double x2, double y2, double z2) {
         return new AABB(x1, y1, z1, x2, y2, z2);
-    };
+    }
 
     @Override
     public void method$Entity$setBoundingBox(Object entity, Object aabb) {
