@@ -57,7 +57,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -533,5 +532,11 @@ public class FastNMSImpl extends FastNMS {
             list.add(new NamespacedKey(location.getNamespace(), location.getPath()));
         }
         return list;
+    }
+
+    @Override
+    public org.bukkit.entity.Entity method$Entity$getBukkitEntity(Object entity) {
+        Entity entityImpl = (Entity) entity;
+        return entityImpl.getBukkitEntity();
     }
 }

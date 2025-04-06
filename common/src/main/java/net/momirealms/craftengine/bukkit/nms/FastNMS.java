@@ -212,4 +212,6 @@ public abstract class FastNMS {
     public abstract String method$Component$Serializer$toJson(Object component);
 
     public abstract List<NamespacedKey> getAllVanillaItems();
+
+    public abstract org.bukkit.entity.Entity method$Entity$getBukkitEntity(Object entity);
 }

@@ -535,4 +535,10 @@ public class FastNMSImpl extends FastNMS {
         }
         return list;
     }
+
+    @Override
+    public org.bukkit.entity.Entity method$Entity$getBukkitEntity(Object entity) {
+        Entity entityImpl = (Entity) entity;
+        return entityImpl.getBukkitEntity();
+    }
 }
