@@ -28,6 +28,16 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
     }
 
     @Override
+    public boolean shouldDropExperience() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldDropLoot() {
+        return false;
+    }
+
+    @Override
     public void destroy() {
         super.remove(RemovalReason.DISCARDED);
     }
