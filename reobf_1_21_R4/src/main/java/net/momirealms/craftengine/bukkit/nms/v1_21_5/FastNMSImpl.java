@@ -541,4 +541,9 @@ public class FastNMSImpl extends FastNMS {
         Entity entityImpl = (Entity) entity;
         return entityImpl.getBukkitEntity();
     }
+
+    @Override
+    public int method$ClientboundEntityPositionSyncPacket$id(Object packet) {
+        return ((ClientboundEntityPositionSyncPacket) packet).id();
+    }
 }

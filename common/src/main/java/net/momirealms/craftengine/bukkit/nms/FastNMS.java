@@ -216,4 +216,6 @@ public abstract class FastNMS {
     public abstract List<NamespacedKey> getAllVanillaItems();
 
     public abstract org.bukkit.entity.Entity method$Entity$getBukkitEntity(Object entity);
+
+    public abstract int method$ClientboundEntityPositionSyncPacket$id(Object packet);
 }
