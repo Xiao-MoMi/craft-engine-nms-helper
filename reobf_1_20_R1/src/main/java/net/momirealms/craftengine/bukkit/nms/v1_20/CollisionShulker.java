@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Shulker;
@@ -28,12 +29,25 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
     }
 
     @Override
+    public boolean save(@NotNull CompoundTag tag) {
+        String s = this.getEncodeId();
+        if (s != null) {
+            tag.putString("id", s);
+            this.saveWithoutId(tag);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public boolean shouldDropExperience() {
         return false;
     }
 
     @Override
     protected boolean shouldDropLoot() {
+
         return false;
     }
 
