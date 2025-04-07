@@ -9,6 +9,8 @@ import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import org.jetbrains.annotations.NotNull;
 
+// 以后简化代码的时候可以移除
+@Deprecated
 public class CollisionInteraction extends Interaction implements CollisionEntity {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final AABB aabb;

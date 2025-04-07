@@ -49,6 +49,8 @@ public abstract class FastNMS {
         return classSuffix;
     }
 
+    // 以后简化代码的时候可以移除
+    @Deprecated
     public abstract CollisionEntity createCollisionEntity(Object world, Object aabb,
                                                           double x, double y, double z, boolean canProjectileHit);
 
