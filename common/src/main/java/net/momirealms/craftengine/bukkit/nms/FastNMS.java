@@ -228,6 +228,8 @@ public abstract class FastNMS {
 
     public abstract Map<String, Map<String, Integer>> method$getGamePacketIdsByName();
 
+    public abstract List<NamespacedKey> getAllVanillaSounds();
+
     public abstract Object constructor$ClientboundLevelChunkPacketData(Object buffer, int x, int z);
 
     public abstract Object constructor$ClientboundLightUpdatePacketData(Object buffer, int x, int z);

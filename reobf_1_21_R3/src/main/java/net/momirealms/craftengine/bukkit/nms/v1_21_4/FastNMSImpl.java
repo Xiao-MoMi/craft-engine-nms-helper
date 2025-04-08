@@ -587,6 +587,15 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public List<NamespacedKey> getAllVanillaSounds() {
+        List<NamespacedKey> list = new ArrayList<>();
+        for (SoundEvent event : BuiltInRegistries.SOUND_EVENT) {
+            list.add(new NamespacedKey(event.location().getNamespace(), event.location().getPath()));
+        }
+        return list;
+    }
+
+    @Override
     public Object constructor$ClientboundLevelChunkPacketData(Object buffer, int x, int z) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
         return new ClientboundLevelChunkPacketData(buf, x, z);
