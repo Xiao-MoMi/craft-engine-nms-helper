@@ -772,4 +772,26 @@ public class FastNMSImpl extends FastNMS {
 
         return gamePacketIdsByName;
     }
+
+    @Override
+    public Object constructor$ClientboundLevelChunkPacketData(Object buffer, int x, int z) {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
+        return new ClientboundLevelChunkPacketData(buf, x, z);
+    }
+
+    @Override
+    public Object constructor$ClientboundLightUpdatePacketData(Object buffer, int x, int z) {
+        return new ClientboundLightUpdatePacketData((FriendlyByteBuf) buffer, x, z);
+    }
+
+    @Override
+    public void method$ClientboundLevelChunkPacketData$write(Object chunkData, Object buffer) {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
+        ((ClientboundLevelChunkPacketData)chunkData).write(buf);
+    }
+
+    @Override
+    public void method$ClientboundLightUpdatePacketData$write(Object lightData, Object buffer) {
+        ((ClientboundLightUpdatePacketData)lightData).write((FriendlyByteBuf) buffer);
+    }
 }

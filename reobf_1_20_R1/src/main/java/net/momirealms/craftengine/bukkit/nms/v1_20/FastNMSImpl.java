@@ -589,4 +589,24 @@ public class FastNMSImpl extends FastNMS {
     public Map<String, Map<String, Integer>> method$getGamePacketIdsByName() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Object constructor$ClientboundLevelChunkPacketData(Object buffer, int x, int z) {
+        return new ClientboundLevelChunkPacketData(((FriendlyByteBuf) buffer), x, z);
+    }
+
+    @Override
+    public Object constructor$ClientboundLightUpdatePacketData(Object buffer, int x, int z) {
+        return new ClientboundLightUpdatePacketData((FriendlyByteBuf) buffer, x, z);
+    }
+
+    @Override
+    public void method$ClientboundLevelChunkPacketData$write(Object chunkData, Object buffer) {
+        ((ClientboundLevelChunkPacketData)chunkData).write((FriendlyByteBuf) buffer);
+    }
+
+    @Override
+    public void method$ClientboundLightUpdatePacketData$write(Object lightData, Object buffer) {
+        ((ClientboundLightUpdatePacketData)lightData).write((FriendlyByteBuf) buffer);
+    }
 }

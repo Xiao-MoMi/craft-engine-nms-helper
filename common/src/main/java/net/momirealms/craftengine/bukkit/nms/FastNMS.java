@@ -227,4 +227,12 @@ public abstract class FastNMS {
     public abstract Map<String, Map<Class<?>, Integer>> method$getGamePacketIdsByClazz();
 
     public abstract Map<String, Map<String, Integer>> method$getGamePacketIdsByName();
+
+    public abstract Object constructor$ClientboundLevelChunkPacketData(Object buffer, int x, int z);
+
+    public abstract Object constructor$ClientboundLightUpdatePacketData(Object buffer, int x, int z);
+
+    public abstract void method$ClientboundLevelChunkPacketData$write(Object chunkData, Object buffer);
+
+    public abstract void method$ClientboundLightUpdatePacketData$write(Object lightData, Object buffer);
 }
