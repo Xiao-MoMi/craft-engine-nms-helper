@@ -10,6 +10,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
@@ -602,21 +604,42 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object constructor$ClientboundLevelChunkPacketData(Object buffer, int x, int z) {
-        return new ClientboundLevelChunkPacketData(((FriendlyByteBuf) buffer), x, z);
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        return new ClientboundLevelChunkPacketData(buf, x, z);
     }
 
     @Override
     public Object constructor$ClientboundLightUpdatePacketData(Object buffer, int x, int z) {
-        return new ClientboundLightUpdatePacketData((FriendlyByteBuf) buffer, x, z);
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        return new ClientboundLightUpdatePacketData(buf, x, z);
     }
 
     @Override
     public void method$ClientboundLevelChunkPacketData$write(Object chunkData, Object buffer) {
-        ((ClientboundLevelChunkPacketData)chunkData).write((FriendlyByteBuf) buffer);
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        ((ClientboundLevelChunkPacketData)chunkData).write(buf);
     }
 
     @Override
     public void method$ClientboundLightUpdatePacketData$write(Object lightData, Object buffer) {
-        ((ClientboundLightUpdatePacketData)lightData).write((FriendlyByteBuf) buffer);
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        ((ClientboundLightUpdatePacketData)lightData).write(buf);
+    }
+
+    @Override
+    public Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        ParticleType<?> particleType = buf.readById(BuiltInRegistries.PARTICLE_TYPE);
+        return this.readParticle(buf, Objects.requireNonNull(particleType));
+    }
+
+    private <T extends ParticleOptions> T readParticle(FriendlyByteBuf buf, ParticleType<T> type) {
+        return type.getDeserializer().fromNetwork(type, buf);
+    }
+
+    @Override
+    public void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        ((ParticleOptions)particle).writeToNetwork(buf);
     }
 }

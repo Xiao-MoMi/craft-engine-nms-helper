@@ -8,6 +8,8 @@ import io.papermc.paper.util.DataSanitizationUtil;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -601,7 +603,8 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object constructor$ClientboundLightUpdatePacketData(Object buffer, int x, int z) {
-        return new ClientboundLightUpdatePacketData((FriendlyByteBuf) buffer, x, z);
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        return new ClientboundLightUpdatePacketData(buf, x, z);
     }
 
     @Override
@@ -612,6 +615,19 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$ClientboundLightUpdatePacketData$write(Object lightData, Object buffer) {
-        ((ClientboundLightUpdatePacketData)lightData).write((FriendlyByteBuf) buffer);
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        ((ClientboundLightUpdatePacketData)lightData).write(buf);
+    }
+
+    @Override
+    public Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer) {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
+        return ParticleTypes.STREAM_CODEC.decode(buf);
+    }
+
+    @Override
+    public void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle) {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
+        ParticleTypes.STREAM_CODEC.encode(buf, ((ParticleOptions)particle));
     }
 }

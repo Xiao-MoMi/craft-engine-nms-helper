@@ -237,4 +237,8 @@ public abstract class FastNMS {
     public abstract void method$ClientboundLevelChunkPacketData$write(Object chunkData, Object buffer);
 
     public abstract void method$ClientboundLightUpdatePacketData$write(Object lightData, Object buffer);
+
+    public abstract Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer);
+
+    public abstract void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle);
 }
