@@ -227,4 +227,6 @@ public abstract class FastNMS {
     public abstract Map<String, Map<Class<?>, Integer>> method$getGamePacketIdsByClazz();
 
     public abstract Map<String, Map<String, Integer>> method$getGamePacketIdsByName();
+
+    public abstract List<NamespacedKey> getAllVanillaSounds();
 }

@@ -772,4 +772,13 @@ public class FastNMSImpl extends FastNMS {
 
         return gamePacketIdsByName;
     }
+
+    @Override
+    public List<NamespacedKey> getAllVanillaSounds() {
+        List<NamespacedKey> list = new ArrayList<>();
+        for (SoundEvent event : BuiltInRegistries.SOUND_EVENT) {
+            list.add(new NamespacedKey(event.getLocation().getNamespace(), event.getLocation().getPath()));
+        }
+        return list;
+    }
 }
