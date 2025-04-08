@@ -11,9 +11,11 @@ import net.minecraft.core.IdMapper;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -57,9 +59,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -567,5 +567,26 @@ public class FastNMSImpl extends FastNMS {
             list.add(SynchedEntityData.DataValue.read(buf, i));
         }
         return list;
+    }
+
+    @Override
+    public Map<String, Map<Class<?>, Integer>> method$getGamePacketIdsByClazz() {
+        Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz = new HashMap<>();
+        Map<Class<?>, Integer> serverBoundIds = new HashMap<>();
+        Map<Class<?>, Integer> clientBoundIds = new HashMap<>();
+        gamePacketIdsByClazz.put("serverbound", serverBoundIds);
+        gamePacketIdsByClazz.put("clientbound", clientBoundIds);
+        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.SERVERBOUND).forEach((id, packet) -> {
+            serverBoundIds.put(packet, id);
+        });
+        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.CLIENTBOUND).forEach((id, packet) -> {
+            clientBoundIds.put(packet, id);
+        });
+        return gamePacketIdsByClazz;
+    }
+
+    @Override
+    public Map<String, Map<String, Integer>> method$getGamePacketIdsByName() {
+        throw new UnsupportedOperationException();
     }
 }

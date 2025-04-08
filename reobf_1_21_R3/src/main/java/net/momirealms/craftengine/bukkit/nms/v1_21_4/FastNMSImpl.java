@@ -61,6 +61,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -573,5 +574,15 @@ public class FastNMSImpl extends FastNMS {
             list.add(SynchedEntityData.DataValue.read(buf, i));
         }
         return list;
+    }
+
+    @Override
+    public Map<String, Map<Class<?>, Integer>> method$getGamePacketIdsByClazz() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Map<String, Map<String, Integer>> method$getGamePacketIdsByName() {
+        throw new UnsupportedOperationException();
     }
 }

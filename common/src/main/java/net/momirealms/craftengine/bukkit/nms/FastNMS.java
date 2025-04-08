@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Constructor;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
@@ -222,4 +223,8 @@ public abstract class FastNMS {
     public abstract void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf);
 
     public abstract List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf);
+
+    public abstract Map<String, Map<Class<?>, Integer>> method$getGamePacketIdsByClazz();
+
+    public abstract Map<String, Map<String, Integer>> method$getGamePacketIdsByName();
 }
