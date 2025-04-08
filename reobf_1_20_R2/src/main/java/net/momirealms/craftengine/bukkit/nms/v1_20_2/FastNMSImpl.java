@@ -630,7 +630,10 @@ public class FastNMSImpl extends FastNMS {
     public Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer) {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
         ParticleType<?> particleType = buf.readById(BuiltInRegistries.PARTICLE_TYPE);
-        return this.readParticle(buf, Objects.requireNonNull(particleType));
+        if (particleType != null) {
+            return this.readParticle(buf, particleType);
+        }
+        return null;
     }
 
     private <T extends ParticleOptions> T readParticle(FriendlyByteBuf buf, ParticleType<T> type) {
