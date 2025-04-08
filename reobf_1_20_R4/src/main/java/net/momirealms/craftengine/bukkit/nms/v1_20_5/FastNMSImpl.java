@@ -3,6 +3,7 @@ package net.momirealms.craftengine.bukkit.nms.v1_20_5;
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.papermc.paper.util.DataSanitizationUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
@@ -552,8 +553,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, REGISTRY_ACCESS);
-        for(SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>)dataValues)) {
-            dataValue.write(buf);
+        try (DataSanitizationUtil.DataSanitizer ignored = DataSanitizationUtil.start(true)) {
+            for(SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>)dataValues)) {
+                dataValue.write(buf);
+            }
         }
         buf.writeByte(255);
     }

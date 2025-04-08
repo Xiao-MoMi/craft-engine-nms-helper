@@ -4,6 +4,8 @@ import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlic
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.papermc.paper.configuration.GlobalConfiguration;
+import io.papermc.paper.util.ItemObfuscationSession;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -554,8 +556,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, REGISTRY_ACCESS);
-        for(SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>)dataValues)) {
-            dataValue.write(buf);
+        try (ItemObfuscationSession ignored = ItemObfuscationSession.start(GlobalConfiguration.get().anticheat.obfuscation.items.binding.level)) {
+            for(SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>)dataValues)) {
+                dataValue.write(buf);
+            }
         }
         buf.writeByte(255);
     }
