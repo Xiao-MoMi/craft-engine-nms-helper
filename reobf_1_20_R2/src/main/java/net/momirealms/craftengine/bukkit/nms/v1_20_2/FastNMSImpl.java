@@ -642,4 +642,14 @@ public class FastNMSImpl extends FastNMS {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
         ((ParticleOptions)particle).writeToNetwork(buf);
     }
+
+    @Override
+    public Object constructor$BlockParticleOption(Object particleType, Object blockState) {
+        return new BlockParticleOption((ParticleType<BlockParticleOption>) particleType, (BlockState) blockState);
+    }
+
+    @Override
+    public Object method$BlockParticleOption$getType(Object particle) {
+        return ((BlockParticleOption)particle).getType();
+    }
 }

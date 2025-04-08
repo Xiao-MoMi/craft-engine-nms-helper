@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -631,5 +632,15 @@ public class FastNMSImpl extends FastNMS {
     public void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
         ParticleTypes.STREAM_CODEC.encode(buf, ((ParticleOptions)particle));
+    }
+
+    @Override
+    public Object constructor$BlockParticleOption(Object particleType, Object blockState) {
+        return new BlockParticleOption((ParticleType<BlockParticleOption>) particleType, (BlockState) blockState);
+    }
+
+    @Override
+    public Object method$BlockParticleOption$getType(Object particle) {
+        return ((BlockParticleOption)particle).getType();
     }
 }

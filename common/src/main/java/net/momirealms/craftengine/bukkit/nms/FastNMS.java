@@ -241,4 +241,8 @@ public abstract class FastNMS {
     public abstract Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer);
 
     public abstract void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle);
+
+    public abstract Object constructor$BlockParticleOption(Object particleType, Object blockState);
+
+    public abstract Object method$BlockParticleOption$getType(Object particle);
 }
