@@ -218,4 +218,8 @@ public abstract class FastNMS {
     public abstract org.bukkit.entity.Entity method$Entity$getBukkitEntity(Object entity);
 
     public abstract int method$ClientboundEntityPositionSyncPacket$id(Object packet);
+
+    public abstract void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf);
+
+    public abstract List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf);
 }

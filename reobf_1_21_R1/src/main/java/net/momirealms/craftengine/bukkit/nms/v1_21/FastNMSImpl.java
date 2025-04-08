@@ -549,4 +549,24 @@ public class FastNMSImpl extends FastNMS {
     public int method$ClientboundEntityPositionSyncPacket$id(Object packet) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, REGISTRY_ACCESS);
+        for(SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>)dataValues)) {
+            dataValue.write(buf);
+        }
+        buf.writeByte(255);
+    }
+
+    @Override
+    public List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf) {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, REGISTRY_ACCESS);
+        List<Object> list = new ArrayList();
+        int i;
+        while((i = buf.readUnsignedByte()) != 255) {
+            list.add(SynchedEntityData.DataValue.read(buf, i));
+        }
+        return list;
+    }
 }
