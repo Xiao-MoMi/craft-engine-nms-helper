@@ -5,10 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.world.ChunkEntitySlices;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.IdMapper;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -646,14 +643,6 @@ public class FastNMSImpl extends FastNMS {
         return ((BlockParticleOption)particle).getType();
     }
 
-
-    @Override
-    public Object method$FriendlyByteBuf$readById(Object buffer) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        return buf.readById(BuiltInRegistries.PARTICLE_TYPE);
-    }
-
-
     @Override
     public Object method$ClientboundLevelParticlesPacket$readParticle(Object buffer, Object particleType) {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
@@ -664,17 +653,15 @@ public class FastNMSImpl extends FastNMS {
         return type.getDeserializer().fromNetwork(type, buf);
     }
 
-
     @Override
-    public void method$FriendlyByteBuf$PARTICLE_TYPE$writeId(Object buffer, Object particle) {
+    public Object method$FriendlyByteBuf$readById(Object buffer, Object idMap) {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        buf.writeId(BuiltInRegistries.PARTICLE_TYPE, ((ParticleOptions)particle).getType());
+        return buf.readById((IdMap)idMap);
     }
 
-
     @Override
-    public void method$FriendlyByteBuf$BLOCK_STATE_REGISTRY$writeId(Object buffer, Object blockState) {
+    public void method$FriendlyByteBuf$writeId(Object buffer, Object particle, Object idMap) {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        buf.writeId(net.minecraft.world.level.block.Block.BLOCK_STATE_REGISTRY, ((BlockState)blockState));
+        buf.writeId((IdMap)idMap, ((ParticleOptions)particle).getType());
     }
 }
