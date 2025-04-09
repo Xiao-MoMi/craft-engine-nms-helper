@@ -267,6 +267,4 @@ public abstract class FastNMS {
     public abstract Object constructor$SoundEvent(Object location, Object fixedRange);
 
     public abstract void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent);
-
-    public abstract Object method$SoundEvent$decode(Object buffer);
 }

@@ -582,6 +582,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    @SuppressWarnings("UnusedAssignment")
     public Map<String, Map<String, Integer>> method$getGamePacketIdsByName() {
         Map<String, Map<String, Integer>> gamePacketIdsByName = new HashMap<>();
         Map<String, Integer> serverBoundIds = new HashMap<>();
@@ -893,11 +894,5 @@ public class FastNMSImpl extends FastNMS {
     public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
         SoundEvent event = (SoundEvent) soundEvent;
         SoundEvent.DIRECT_STREAM_CODEC.encode(buffer, event);
-    }
-
-    @Override
-    public Object method$SoundEvent$decode(Object buffer) {
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
-        return SoundEvent.STREAM_CODEC.decode(buf);
     }
 }

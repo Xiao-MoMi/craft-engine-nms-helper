@@ -58,7 +58,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -576,12 +575,8 @@ public class FastNMSImpl extends FastNMS {
         Map<Class<?>, Integer> clientBoundIds = new HashMap<>();
         gamePacketIdsByClazz.put("serverbound", serverBoundIds);
         gamePacketIdsByClazz.put("clientbound", clientBoundIds);
-        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.SERVERBOUND).forEach((id, packet) -> {
-            serverBoundIds.put(packet, id);
-        });
-        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.CLIENTBOUND).forEach((id, packet) -> {
-            clientBoundIds.put(packet, id);
-        });
+        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.SERVERBOUND).forEach((id, packet) -> serverBoundIds.put(packet, id));
+        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.CLIENTBOUND).forEach((id, packet) -> clientBoundIds.put(packet, id));
         return gamePacketIdsByClazz;
     }
 
@@ -713,11 +708,5 @@ public class FastNMSImpl extends FastNMS {
     public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
         SoundEvent event = (SoundEvent) soundEvent;
         event.writeToNetwork(new FriendlyByteBuf(buffer));
-    }
-
-    @Override
-    public Object method$SoundEvent$decode(Object buffer) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        return buf.readById(BuiltInRegistries.SOUND_EVENT.asHolderIdMap(), SoundEvent::readFromNetwork);
     }
 }

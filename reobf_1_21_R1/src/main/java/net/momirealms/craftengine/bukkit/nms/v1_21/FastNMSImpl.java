@@ -702,10 +702,4 @@ public class FastNMSImpl extends FastNMS {
         SoundEvent event = (SoundEvent) soundEvent;
         SoundEvent.DIRECT_STREAM_CODEC.encode(buffer, event);
     }
-
-    @Override
-    public Object method$SoundEvent$decode(Object buffer) {
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
-        return SoundEvent.STREAM_CODEC.decode(buf);
-    }
 }
