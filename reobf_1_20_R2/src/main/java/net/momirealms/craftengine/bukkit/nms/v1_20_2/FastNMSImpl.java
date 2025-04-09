@@ -714,4 +714,10 @@ public class FastNMSImpl extends FastNMS {
         SoundEvent event = (SoundEvent) soundEvent;
         event.writeToNetwork(new FriendlyByteBuf(buffer));
     }
+
+    @Override
+    public Object method$SoundEvent$decode(Object buffer) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        return buf.readById(BuiltInRegistries.SOUND_EVENT.asHolderIdMap(), SoundEvent::readFromNetwork);
+    }
 }
