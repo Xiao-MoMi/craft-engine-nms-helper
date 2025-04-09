@@ -9,7 +9,6 @@ import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
@@ -59,6 +58,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -669,5 +669,31 @@ public class FastNMSImpl extends FastNMS {
     public void method$ParticleOptions$writeToNetwork(Object particle, Object buffer) {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
         ((ParticleOptions)particle).writeToNetwork(buf);
+    }
+
+    @Override
+    public Optional<Object> method$BuiltInRegistries$byId(Object registry, int id) {
+        Object object = ((IdMap)registry).byId(id);
+        if (object == null) {
+            return Optional.empty();
+        }
+        return Optional.of(object);
+    }
+
+    @Override
+    public Optional<Integer> method$BuiltInRegistries$getId(Object registry, Object value) {
+        int id = ((IdMap)registry).getId(value);
+        return id == -1 ? Optional.empty() : Optional.of(id);
+    }
+
+    @Override
+    public String[] method$SoundEvent$location(Object soundEvent) {
+        ResourceLocation location = ((SoundEvent)soundEvent).getLocation();
+        return new String[]{location.getNamespace(), location.getPath()};
+    }
+
+    @Override
+    public Object method$SoundEvent$createVariableRangeEvent(Object location) {
+        return SoundEvent.createVariableRangeEvent((ResourceLocation) location);
     }
 }

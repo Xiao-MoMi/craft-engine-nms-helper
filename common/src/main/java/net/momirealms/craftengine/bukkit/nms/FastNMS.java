@@ -16,6 +16,7 @@ import java.lang.reflect.Constructor;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
@@ -253,4 +254,12 @@ public abstract class FastNMS {
     public abstract void method$FriendlyByteBuf$writeId(Object buffer, Object particle, Object idMap);
 
     public abstract void method$ParticleOptions$writeToNetwork(Object particle, Object buffer);
+
+    public abstract Optional<Object> method$BuiltInRegistries$byId(Object registry, int id);
+
+    public abstract Optional<Integer> method$BuiltInRegistries$getId(Object registry, Object value);
+
+    public abstract String[] method$SoundEvent$location(Object soundEvent);
+
+    public abstract Object method$SoundEvent$createVariableRangeEvent(Object location);
 }

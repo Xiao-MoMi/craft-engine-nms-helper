@@ -850,4 +850,30 @@ public class FastNMSImpl extends FastNMS {
     public void method$ParticleOptions$writeToNetwork(Object particle, Object buffer) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Optional<Object> method$BuiltInRegistries$byId(Object registry, int id) {
+        Object object = ((IdMap)registry).byId(id);
+        if (object == null) {
+            return Optional.empty();
+        }
+        return Optional.of(object);
+    }
+
+    @Override
+    public Optional<Integer> method$BuiltInRegistries$getId(Object registry, Object value) {
+        int id = ((IdMap)registry).getId(value);
+        return id == -1 ? Optional.empty() : Optional.of(id);
+    }
+
+    @Override
+    public String[] method$SoundEvent$location(Object soundEvent) {
+        ResourceLocation location = ((SoundEvent)soundEvent).getLocation();
+        return new String[]{location.getNamespace(), location.getPath()};
+    }
+
+    @Override
+    public Object method$SoundEvent$createVariableRangeEvent(Object location) {
+        return SoundEvent.createVariableRangeEvent((ResourceLocation) location);
+    }
 }
