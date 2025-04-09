@@ -681,8 +681,20 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$SoundEvent$createVariableRangeEvent(Object location) {
-        return SoundEvent.createVariableRangeEvent((ResourceLocation) location);
+    public Optional<Float> method$SoundEvent$fixedRange(Object soundEvent) {
+        float range1 = ((SoundEvent)soundEvent).getRange(100.0F);
+        float range2 = ((SoundEvent)soundEvent).getRange(0.0F);
+        if (range1 == 16.0F * 100.0F && range2 == 16.0F) {
+            return Optional.empty();
+        }
+        return Optional.of(range1);
+    }
+
+    @Override
+    public Object constructor$SoundEvent(Object location, Object fixedRange) {
+        ResourceLocation id = (ResourceLocation) location;
+        Optional<Float> distanceToTravel = (Optional)fixedRange;
+        return distanceToTravel.map((float_) -> SoundEvent.createFixedRangeEvent(id, float_)).orElseGet(() -> SoundEvent.createVariableRangeEvent(id));
     }
 
     @Override

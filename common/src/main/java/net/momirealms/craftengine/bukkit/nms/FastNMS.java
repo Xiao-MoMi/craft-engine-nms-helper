@@ -262,7 +262,9 @@ public abstract class FastNMS {
 
     public abstract String[] method$SoundEvent$location(Object soundEvent);
 
-    public abstract Object method$SoundEvent$createVariableRangeEvent(Object location);
+    public abstract Optional<Float> method$SoundEvent$fixedRange(Object soundEvent);
+
+    public abstract Object constructor$SoundEvent(Object location, Object fixedRange);
 
     public abstract void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent);
 }

@@ -679,8 +679,13 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$SoundEvent$createVariableRangeEvent(Object location) {
-        return SoundEvent.createVariableRangeEvent((ResourceLocation) location);
+    public Optional<Float> method$SoundEvent$fixedRange(Object soundEvent) {
+        return ((SoundEvent)soundEvent).fixedRange();
+    }
+
+    @Override
+    public Object constructor$SoundEvent(Object location, Object fixedRange) {
+        return new SoundEvent((ResourceLocation) location, (Optional) fixedRange);
     }
 
     @Override
