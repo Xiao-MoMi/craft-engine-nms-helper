@@ -654,4 +654,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$FriendlyByteBuf$writeId(Object buffer, Object particle, Object idMap) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void method$ParticleOptions$writeToNetwork(Object particle, Object buffer) {
+        throw new UnsupportedOperationException();
+    }
 }

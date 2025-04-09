@@ -664,4 +664,10 @@ public class FastNMSImpl extends FastNMS {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
         buf.writeId((IdMap)idMap, ((ParticleOptions)particle).getType());
     }
+
+    @Override
+    public void method$ParticleOptions$writeToNetwork(Object particle, Object buffer) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        ((ParticleOptions)particle).writeToNetwork(buf);
+    }
 }

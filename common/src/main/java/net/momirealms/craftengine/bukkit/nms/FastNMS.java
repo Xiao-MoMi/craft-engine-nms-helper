@@ -251,4 +251,6 @@ public abstract class FastNMS {
     public abstract Object method$FriendlyByteBuf$readById(Object buffer, Object idMap);
 
     public abstract void method$FriendlyByteBuf$writeId(Object buffer, Object particle, Object idMap);
+
+    public abstract void method$ParticleOptions$writeToNetwork(Object particle, Object buffer);
 }
