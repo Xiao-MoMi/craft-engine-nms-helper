@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms;
 
 import com.google.gson.JsonElement;
+import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -262,4 +263,6 @@ public abstract class FastNMS {
     public abstract String[] method$SoundEvent$location(Object soundEvent);
 
     public abstract Object method$SoundEvent$createVariableRangeEvent(Object location);
+
+    public abstract void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent);
 }

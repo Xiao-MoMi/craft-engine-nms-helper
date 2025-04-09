@@ -686,4 +686,10 @@ public class FastNMSImpl extends FastNMS {
     public Object method$SoundEvent$createVariableRangeEvent(Object location) {
         return SoundEvent.createVariableRangeEvent((ResourceLocation) location);
     }
+
+    @Override
+    public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
+        SoundEvent event = (SoundEvent) soundEvent;
+        SoundEvent.DIRECT_STREAM_CODEC.encode(buffer, event);
+    }
 }
