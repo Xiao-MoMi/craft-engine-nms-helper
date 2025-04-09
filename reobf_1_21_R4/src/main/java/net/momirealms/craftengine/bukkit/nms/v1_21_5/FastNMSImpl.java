@@ -639,4 +639,26 @@ public class FastNMSImpl extends FastNMS {
     public Object method$BlockParticleOption$getType(Object particle) {
         return ((BlockParticleOption)particle).getType();
     }
+
+    @Override
+    public Object method$FriendlyByteBuf$readById(Object buffer) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Object method$ClientboundLevelParticlesPacket$readParticle(Object buffer, Object particleType) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public void method$FriendlyByteBuf$PARTICLE_TYPE$writeId(Object buffer, Object particle) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public void method$FriendlyByteBuf$BLOCK_STATE_REGISTRY$writeId(Object buffer, Object blockState) {
+        throw new UnsupportedOperationException();
+    }
 }

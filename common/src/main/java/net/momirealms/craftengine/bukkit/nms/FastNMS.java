@@ -245,4 +245,12 @@ public abstract class FastNMS {
     public abstract Object constructor$BlockParticleOption(Object particleType, Object blockState);
 
     public abstract Object method$BlockParticleOption$getType(Object particle);
+
+    public abstract Object method$FriendlyByteBuf$readById(Object buffer);
+
+    public abstract Object method$ClientboundLevelParticlesPacket$readParticle(Object buffer, Object particleType);
+
+    public abstract void method$FriendlyByteBuf$PARTICLE_TYPE$writeId(Object buffer, Object particle);
+
+    public abstract void method$FriendlyByteBuf$BLOCK_STATE_REGISTRY$writeId(Object buffer, Object blockState);
 }

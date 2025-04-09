@@ -628,22 +628,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        ParticleType<?> particleType = buf.readById(BuiltInRegistries.PARTICLE_TYPE);
-        if (particleType != null) {
-            return this.readParticle(buf, particleType);
-        }
-        return null;
-    }
-
-    private <T extends ParticleOptions> T readParticle(FriendlyByteBuf buf, ParticleType<T> type) {
-        return type.getDeserializer().fromNetwork(type, buf);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        ((ParticleOptions)particle).writeToNetwork(buf);
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -654,5 +644,37 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$BlockParticleOption$getType(Object particle) {
         return ((BlockParticleOption)particle).getType();
+    }
+
+
+    @Override
+    public Object method$FriendlyByteBuf$readById(Object buffer) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        return buf.readById(BuiltInRegistries.PARTICLE_TYPE);
+    }
+
+
+    @Override
+    public Object method$ClientboundLevelParticlesPacket$readParticle(Object buffer, Object particleType) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        return this.readParticle(buf, (ParticleType) particleType);
+    }
+
+    private <T extends ParticleOptions> T readParticle(FriendlyByteBuf buf, ParticleType<T> type) {
+        return type.getDeserializer().fromNetwork(type, buf);
+    }
+
+
+    @Override
+    public void method$FriendlyByteBuf$PARTICLE_TYPE$writeId(Object buffer, Object particle) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        buf.writeId(BuiltInRegistries.PARTICLE_TYPE, ((ParticleOptions)particle).getType());
+    }
+
+
+    @Override
+    public void method$FriendlyByteBuf$BLOCK_STATE_REGISTRY$writeId(Object buffer, Object blockState) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        buf.writeId(net.minecraft.world.level.block.Block.BLOCK_STATE_REGISTRY, ((BlockState)blockState));
     }
 }
