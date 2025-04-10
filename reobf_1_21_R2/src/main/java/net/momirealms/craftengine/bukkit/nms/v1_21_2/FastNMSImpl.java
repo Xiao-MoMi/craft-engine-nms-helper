@@ -2,6 +2,7 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_2;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
 import com.google.gson.JsonElement;
+import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.util.DataSanitizationUtil;
@@ -694,5 +695,26 @@ public class FastNMSImpl extends FastNMS {
     public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
         SoundEvent event = (SoundEvent) soundEvent;
         SoundEvent.DIRECT_STREAM_CODEC.encode(buffer, event);
+    }
+
+    @Override
+    public List<UUID> method$ChatSuggestions$add(Map<UUID, String> suggestions, Player player) {
+        List<UUID> uuids = new ArrayList<>();
+        EnumSet<ClientboundPlayerInfoUpdatePacket.Action> actions = EnumSet.of(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER);
+        List<ClientboundPlayerInfoUpdatePacket.Entry> entries = new ArrayList<>();
+        for (UUID uuid : suggestions.keySet()) {
+            String suggestion = suggestions.get(uuid);
+            GameProfile profile = new GameProfile(uuid, suggestion);
+            entries.add(new ClientboundPlayerInfoUpdatePacket.Entry(uuid, profile, false, 0, GameType.DEFAULT_MODE, null, 0, null));
+            uuids.add(uuid);
+        }
+        ClientboundPlayerInfoUpdatePacket packet = new ClientboundPlayerInfoUpdatePacket(actions, entries);
+        ((CraftPlayer)player).getHandle().connection.send(packet);
+        return uuids;
+    }
+
+    @Override
+    public void method$ChatSuggestions$remove(Set<UUID> uuids, Player player) {
+        ((CraftPlayer)player).getHandle().connection.send(new ClientboundPlayerInfoRemovePacket(uuids.stream().toList()));
     }
 }

@@ -14,10 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
@@ -267,4 +264,8 @@ public abstract class FastNMS {
     public abstract Object constructor$SoundEvent(Object location, Object fixedRange);
 
     public abstract void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent);
+
+    public abstract List<UUID> method$ChatSuggestions$add(Map<UUID, String> suggestions, Player player);
+
+    public abstract void method$ChatSuggestions$remove(Set<UUID> uuids, Player player);
 }
