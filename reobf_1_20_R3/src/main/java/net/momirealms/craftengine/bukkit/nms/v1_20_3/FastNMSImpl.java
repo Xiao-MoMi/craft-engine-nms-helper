@@ -1,12 +1,13 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_3;
 
 import com.google.gson.JsonElement;
-import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.world.ChunkEntitySlices;
-import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.IdMap;
+import net.minecraft.core.IdMapper;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -43,6 +44,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
+import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -63,13 +65,6 @@ import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
-
-    // 以后简化代码的时候可以移除
-    @Deprecated
-    @Override
-    public CollisionEntity createCollisionEntity(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit) {
-        return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit);
-    }
 
     @Override
     public CollisionEntity createCollisionShulker(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit) {
@@ -257,12 +252,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$Entity$setBoundingBox(Object entity, Object aabb) {
-        Entity e = (Entity) entity;
-        e.setBoundingBox((AABB) aabb);
-    }
-
-    @Override
     public void method$LevelWriter$addFreshEntity(Object level, Object entity) {
         LevelWriter levelWriter = (LevelWriter) level;
         levelWriter.addFreshEntity((Entity) entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -383,22 +372,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$ClientboundSoundPacket$soundEvent(Object packet) {
-        ClientboundSoundPacket packetImpl = (ClientboundSoundPacket) packet;
-        return packetImpl.getSound().value();
-    }
-
-    @Override
-    public Object fastConstructor$ClientboundSoundPacket(Object newSoundEvent, Object soundPacket) {
-        SoundEvent event = (SoundEvent) newSoundEvent;
-        ClientboundSoundPacket soundPacketImpl = (ClientboundSoundPacket) soundPacket;
-        return new ClientboundSoundPacket(Holder.direct(event),
-                soundPacketImpl.getSource(),
-                soundPacketImpl.getX(), soundPacketImpl.getY(), soundPacketImpl.getZ(),
-                soundPacketImpl.getVolume(), soundPacketImpl.getPitch(), soundPacketImpl.getSeed());
-    }
-
-    @Override
     public Object method$ResourceLocation$fromNamespaceAndPath(String namespace, String path) {
         return new ResourceLocation(namespace, path);
     }
@@ -416,12 +389,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public IntList field$ClientboundRemoveEntitiesPacket$entityIds(Object packet) {
-        ClientboundRemoveEntitiesPacket packetImpl = (ClientboundRemoveEntitiesPacket) packet;
-        return packetImpl.getEntityIds();
-    }
-
-    @Override
     public Object field$ClientboundAddEntityPacket$type(Object packet) {
         ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
         return packetImpl.getType();
@@ -434,21 +401,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public int field$ClientboundAddEntityPacket$data(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getData();
-    }
-
-    @Override
     public Object field$ServerboundSwingPacket$hand(Object packet) {
         ServerboundSwingPacket packetImpl = (ServerboundSwingPacket) packet;
         return packetImpl.getHand();
-    }
-
-    @Override
-    public Object field$ClientboundLevelParticlesPacket$particle(Object packet) {
-        ClientboundLevelParticlesPacket packetImpl = (ClientboundLevelParticlesPacket) packet;
-        return packetImpl.getParticle();
     }
 
     @Override
@@ -475,17 +430,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object constructor$RegistryFriendlyByteBuf(Object buf, Object access) {
-        return new FriendlyByteBuf((ByteBuf) buf);
-    }
-
-    @Override
-    public List<Object> field$ClientboundSetEntityDataPacket$packedItems(Object packet) {
-        ClientboundSetEntityDataPacket packetImpl = (ClientboundSetEntityDataPacket) packet;
-        return (List) packetImpl.packedItems();
-    }
-
-    @Override
     public int field$SynchedEntityData$DataValue$id(Object data) {
         SynchedEntityData.DataValue synchedEntityData = (SynchedEntityData.DataValue) data;
         return synchedEntityData.id();
@@ -506,12 +450,6 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$SynchedEntityData$DataValue(int id, Object serializer, Object data) {
         return new SynchedEntityData.DataValue<>(id, (EntityDataSerializer) serializer, data);
-    }
-
-    @Override
-    public int field$ClientboundSetEntityDataPacket$id(Object packet) {
-        ClientboundSetEntityDataPacket packetImpl = (ClientboundSetEntityDataPacket) packet;
-        return packetImpl.id();
     }
 
     @Override
@@ -547,7 +485,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int method$ClientboundEntityPositionSyncPacket$id(Object packet) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedVersionException();
     }
 
     @Override
@@ -584,7 +522,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Map<String, Map<String, Integer>> method$getGamePacketIdsByName() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedVersionException();
     }
 
     @Override
@@ -597,37 +535,13 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object constructor$ClientboundLevelChunkPacketData(Object buffer, int x, int z) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        return new ClientboundLevelChunkPacketData(buf, x, z);
-    }
-
-    @Override
-    public Object constructor$ClientboundLightUpdatePacketData(Object buffer, int x, int z) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        return new ClientboundLightUpdatePacketData(buf, x, z);
-    }
-
-    @Override
-    public void method$ClientboundLevelChunkPacketData$write(Object chunkData, Object buffer) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        ((ClientboundLevelChunkPacketData)chunkData).write(buf);
-    }
-
-    @Override
-    public void method$ClientboundLightUpdatePacketData$write(Object lightData, Object buffer) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        ((ClientboundLightUpdatePacketData)lightData).write(buf);
-    }
-
-    @Override
     public Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedVersionException();
     }
 
     @Override
     public void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedVersionException();
     }
 
     @Override
@@ -710,26 +624,5 @@ public class FastNMSImpl extends FastNMS {
     public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
         SoundEvent event = (SoundEvent) soundEvent;
         event.writeToNetwork(new FriendlyByteBuf(buffer));
-    }
-
-    @Override
-    public List<UUID> method$ChatSuggestions$add(Map<UUID, String> suggestions, Player player) {
-        List<UUID> uuids = new ArrayList<>();
-        EnumSet<ClientboundPlayerInfoUpdatePacket.Action> actions = EnumSet.of(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER);
-        List<ClientboundPlayerInfoUpdatePacket.Entry> entries = new ArrayList<>();
-        for (UUID uuid : suggestions.keySet()) {
-            String suggestion = suggestions.get(uuid);
-            GameProfile profile = new GameProfile(uuid, suggestion);
-            entries.add(new ClientboundPlayerInfoUpdatePacket.Entry(uuid, profile, false, 0, GameType.DEFAULT_MODE, null, null));
-            uuids.add(uuid);
-        }
-        ClientboundPlayerInfoUpdatePacket packet = new ClientboundPlayerInfoUpdatePacket(actions, entries);
-        ((CraftPlayer)player).getHandle().connection.send(packet);
-        return uuids;
-    }
-
-    @Override
-    public void method$ChatSuggestions$remove(Set<UUID> uuids, Player player) {
-        ((CraftPlayer)player).getHandle().connection.send(new ClientboundPlayerInfoRemovePacket(uuids.stream().toList()));
     }
 }

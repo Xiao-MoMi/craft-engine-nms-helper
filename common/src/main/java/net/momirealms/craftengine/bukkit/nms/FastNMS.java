@@ -2,7 +2,6 @@ package net.momirealms.craftengine.bukkit.nms;
 
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
@@ -14,7 +13,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.BitSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
@@ -48,11 +50,6 @@ public abstract class FastNMS {
         }
         return classSuffix;
     }
-
-    // 以后简化代码的时候可以移除
-    @Deprecated
-    public abstract CollisionEntity createCollisionEntity(Object world, Object aabb,
-                                                          double x, double y, double z, boolean canProjectileHit);
 
     public abstract CollisionEntity createCollisionShulker(Object world, Object aabb,
                                                           double x, double y, double z, boolean canProjectileHit);
@@ -123,8 +120,6 @@ public abstract class FastNMS {
 
     public abstract Object constructor$AABB(double x1, double y1, double z1, double x2, double y2, double z2);
 
-    public abstract void method$Entity$setBoundingBox(Object entity, Object aabb);
-
     public abstract void method$LevelWriter$addFreshEntity(Object level, Object entity);
 
     public abstract Object method$CraftEntity$getHandle(Object entity);
@@ -163,27 +158,17 @@ public abstract class FastNMS {
 
     public abstract Iterable<Object> method$ClientboundBundlePacket$subPackets(Object packet);
 
-    public abstract Object field$ClientboundSoundPacket$soundEvent(Object packet);
-
-    public abstract Object fastConstructor$ClientboundSoundPacket(Object newSoundEvent, Object soundPacket);
-
     public abstract Object method$ResourceLocation$fromNamespaceAndPath(String namespace, String path);
 
     public abstract Object field$SoundEvent$location(Object soundEvent);
 
     public abstract int field$ServerboundInteractPacket$entityId(Object packet);
 
-    public abstract IntList field$ClientboundRemoveEntitiesPacket$entityIds(Object packet);
-
     public abstract Object field$ClientboundAddEntityPacket$type(Object packet);
 
     public abstract int field$ClientboundAddEntityPacket$entityId(Object packet);
 
-    public abstract int field$ClientboundAddEntityPacket$data(Object packet);
-
     public abstract Object field$ServerboundSwingPacket$hand(Object packet);
-
-    public abstract Object field$ClientboundLevelParticlesPacket$particle(Object packet);
 
     public abstract Object field$BlockParticleOption$blockState(Object object);
 
@@ -193,10 +178,6 @@ public abstract class FastNMS {
 
     public abstract Object method$CraftItemStack$asNMSCopy(ItemStack itemStack);
 
-    public abstract Object constructor$RegistryFriendlyByteBuf(Object buf, Object access);
-
-    public abstract List<Object> field$ClientboundSetEntityDataPacket$packedItems(Object packet);
-
     public abstract int field$SynchedEntityData$DataValue$id(Object data);
 
     public abstract Object field$SynchedEntityData$DataValue$value(Object data);
@@ -204,8 +185,6 @@ public abstract class FastNMS {
     public abstract Object field$SynchedEntityData$DataValue$serializer(Object data);
 
     public abstract Object constructor$SynchedEntityData$DataValue(int id, Object serializer, Object data);
-
-    public abstract int field$ClientboundSetEntityDataPacket$id(Object packet);
 
     public abstract Object method$Component$Serializer$fromJson(JsonElement element);
 
@@ -228,14 +207,6 @@ public abstract class FastNMS {
     public abstract Map<String, Map<String, Integer>> method$getGamePacketIdsByName();
 
     public abstract List<NamespacedKey> getAllVanillaSounds();
-
-    public abstract Object constructor$ClientboundLevelChunkPacketData(Object buffer, int x, int z);
-
-    public abstract Object constructor$ClientboundLightUpdatePacketData(Object buffer, int x, int z);
-
-    public abstract void method$ClientboundLevelChunkPacketData$write(Object chunkData, Object buffer);
-
-    public abstract void method$ClientboundLightUpdatePacketData$write(Object lightData, Object buffer);
 
     public abstract Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer);
 
@@ -264,8 +235,4 @@ public abstract class FastNMS {
     public abstract Object constructor$SoundEvent(Object location, Object fixedRange);
 
     public abstract void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent);
-
-    public abstract List<UUID> method$ChatSuggestions$add(Map<UUID, String> suggestions, Player player);
-
-    public abstract void method$ChatSuggestions$remove(Set<UUID> uuids, Player player);
 }
