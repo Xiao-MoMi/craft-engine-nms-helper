@@ -239,7 +239,7 @@ public abstract class FastNMS {
 
     public abstract Object constructor$ClientboundPlayerInfoUpdatePacket(EnumSet actions, List entries);
 
-    public abstract Optional<Object> method$RecipeManager$getRecipeFor(Object recipeManager, Object recipeType, Object recipeInput, Object level, Object resourceKeyOrLocation);
+    public abstract Optional method$RecipeManager$getRecipeFor(Object recipeManager, Object recipeType, Object recipeInput, Object level, Object resourceKeyOrLocation);
 
     public abstract Object field$ClientboundPlayerInfoUpdatePacket$Entry$displayName(Object entry);
 
