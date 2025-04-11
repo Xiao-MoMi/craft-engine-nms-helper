@@ -626,7 +626,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Object> method$RecipeManager$getRecipeFor(Object recipeManager, Object recipeType, Object recipeInput, Object level, Object resourceKeyOrLocation) {
+    public Optional method$RecipeManager$getRecipeFor(Object recipeManager, Object recipeType, Object recipeInput, Object level, Object resourceKeyOrLocation) {
         RecipeManager manager = (RecipeManager) recipeManager;
         return manager.getRecipeFor((RecipeType) recipeType, (RecipeInput) recipeInput, (Level) level, (ResourceKey) resourceKeyOrLocation);
     }
