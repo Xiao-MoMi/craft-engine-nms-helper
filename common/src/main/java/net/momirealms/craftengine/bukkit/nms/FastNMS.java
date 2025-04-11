@@ -13,10 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
@@ -235,4 +232,16 @@ public abstract class FastNMS {
     public abstract Object constructor$SoundEvent(Object location, Object fixedRange);
 
     public abstract void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent);
+
+    public abstract List<Object> field$ClientboundPlayerInfoUpdatePacket$entries(Object packet);
+
+    public abstract EnumSet<? extends Enum> field$ClientboundPlayerInfoUpdatePacket$actions(Object packet);
+
+    public abstract Object constructor$ClientboundPlayerInfoUpdatePacket(EnumSet actions, List entries);
+
+    public abstract Optional<Object> method$RecipeManager$getRecipeFor(Object recipeManager, Object recipeType, Object recipeInput, Object level, Object resourceKeyOrLocation);
+
+    public abstract Object field$ClientboundPlayerInfoUpdatePacket$Entry$displayName(Object entry);
+
+    public abstract Object constructor$ClientboundPlayerInfoUpdatePacket$Entry(Object entry, Object newDisplayName);
 }

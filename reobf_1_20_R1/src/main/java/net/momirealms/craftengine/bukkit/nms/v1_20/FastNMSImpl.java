@@ -27,9 +27,12 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -621,5 +624,48 @@ public class FastNMSImpl extends FastNMS {
     public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
         SoundEvent event = (SoundEvent) soundEvent;
         event.writeToNetwork(new FriendlyByteBuf(buffer));
+    }
+
+    @Override
+    public List<Object> field$ClientboundPlayerInfoUpdatePacket$entries(Object packet) {
+        ClientboundPlayerInfoUpdatePacket updatePacket = (ClientboundPlayerInfoUpdatePacket) packet;
+        return (List) updatePacket.entries();
+    }
+
+    @Override
+    public EnumSet<? extends Enum> field$ClientboundPlayerInfoUpdatePacket$actions(Object packet) {
+        ClientboundPlayerInfoUpdatePacket updatePacket = (ClientboundPlayerInfoUpdatePacket) packet;
+        return updatePacket.actions();
+    }
+
+    @Override
+    public Object constructor$ClientboundPlayerInfoUpdatePacket(EnumSet actions, List entries) {
+        return new ClientboundPlayerInfoUpdatePacket((EnumSet<ClientboundPlayerInfoUpdatePacket.Action>) actions, (List<ClientboundPlayerInfoUpdatePacket.Entry>) entries);
+    }
+
+    @Override
+    public Optional<Object> method$RecipeManager$getRecipeFor(Object recipeManager, Object recipeType, Object recipeInput, Object level, Object resourceKeyOrLocation) {
+        RecipeManager manager = (RecipeManager) recipeManager;
+        return manager.getRecipeFor((RecipeType) recipeType, (Container) recipeInput, (Level) level, (ResourceLocation) resourceKeyOrLocation);
+    }
+
+    @Override
+    public Object field$ClientboundPlayerInfoUpdatePacket$Entry$displayName(Object entry) {
+        ClientboundPlayerInfoUpdatePacket.Entry e = (ClientboundPlayerInfoUpdatePacket.Entry) entry;
+        return e.displayName();
+    }
+
+    @Override
+    public Object constructor$ClientboundPlayerInfoUpdatePacket$Entry(Object entry, Object newDisplayName) {
+        ClientboundPlayerInfoUpdatePacket.Entry e = (ClientboundPlayerInfoUpdatePacket.Entry) entry;
+        return new ClientboundPlayerInfoUpdatePacket.Entry(
+                e.profileId(),
+                e.profile(),
+                e.listed(),
+                e.latency(),
+                e.gameMode(),
+                (Component) newDisplayName,
+                e.chatSession()
+        );
     }
 }
