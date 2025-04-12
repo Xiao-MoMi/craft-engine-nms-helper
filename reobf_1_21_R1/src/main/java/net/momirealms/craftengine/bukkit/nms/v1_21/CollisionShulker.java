@@ -25,13 +25,6 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
         this.setInvulnerable(true);
         this.setNoAi(true);
         this.setSilent(true);
-        this.drops.clear();
-        this.expToDrop = 0;
-        this.xpReward = 0;
-        this.skipDropExperience();
-        this.silentDeath = true;
-        this.lootTable = null;
-        this.persist = false;
     }
 
     @Override

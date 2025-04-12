@@ -10,8 +10,6 @@ import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
 public class CollisionShulker extends Shulker implements CollisionEntity {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final AABB aabb;
@@ -27,13 +25,6 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
         this.setInvulnerable(true);
         this.setNoAi(true);
         this.setSilent(true);
-        this.drops.clear();
-        this.expToDrop = 0;
-        this.xpReward = 0;
-        this.skipDropExperience();
-        this.silentDeath = true;
-        this.lootTable = Optional.empty();
-        this.persist = false;
     }
 
     @Override
