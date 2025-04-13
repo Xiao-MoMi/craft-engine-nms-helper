@@ -709,4 +709,9 @@ public class FastNMSImpl extends FastNMS {
     public void setComponent(Object itemStack, Object resourceLocation, Object component) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public void removeComponent(Object itemStack, Object resourceLocation) {
+        throw new UnsupportedVersionException();
+    }
 }

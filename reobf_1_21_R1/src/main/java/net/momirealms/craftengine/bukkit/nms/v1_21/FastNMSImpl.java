@@ -704,4 +704,11 @@ public class FastNMSImpl extends FastNMS {
         DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.get((ResourceLocation) resourceLocation));
         nmsStack.set(type, component);
     }
+
+    @Override
+    public void removeComponent(Object itemStack, Object resourceLocation) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.get((ResourceLocation) resourceLocation));
+        nmsStack.remove(type);
+    }
 }
