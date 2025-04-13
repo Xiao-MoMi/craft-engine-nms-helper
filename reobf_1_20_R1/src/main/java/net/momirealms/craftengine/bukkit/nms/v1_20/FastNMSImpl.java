@@ -668,4 +668,42 @@ public class FastNMSImpl extends FastNMS {
                 e.chatSession()
         );
     }
+
+    @Override
+    public Object field$ClientboundSetCursorItemPacket$item(Object packet) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public List<Object> field$ClientboundContainerSetContentPacket$items(Object packet) {
+        ClientboundContainerSetContentPacket itemPacket = (ClientboundContainerSetContentPacket) packet;
+        return (List) itemPacket.getItems();
+    }
+
+    @Override
+    public Object field$ClientboundContainerSetContentPacket$carriedItem(Object packet) {
+        ClientboundContainerSetContentPacket itemPacket = (ClientboundContainerSetContentPacket) packet;
+        return itemPacket.getCarriedItem();
+    }
+
+    @Override
+    public Object field$ClientboundContainerSetSlotPacket$item(Object packet) {
+        ClientboundContainerSetSlotPacket itemPacket = (ClientboundContainerSetSlotPacket) packet;
+        return itemPacket.getItem();
+    }
+
+    @Override
+    public Object field$ClientboundSetPlayerInventoryPacket$contents(Object packet) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void resetComponent(Object itemStack, Object resourceLocation) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void setComponent(Object itemStack, Object resourceLocation, Object component) {
+        throw new UnsupportedVersionException();
+    }
 }

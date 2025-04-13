@@ -6,6 +6,7 @@ import io.netty.buffer.Unpooled;
 import io.papermc.paper.util.DataSanitizationUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -852,5 +853,48 @@ public class FastNMSImpl extends FastNMS {
                 (Component) newDisplayName,
                 e.chatSession()
         );
+    }
+
+    @Override
+    public Object field$ClientboundSetCursorItemPacket$item(Object packet) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public List<Object> field$ClientboundContainerSetContentPacket$items(Object packet) {
+        ClientboundContainerSetContentPacket itemPacket = (ClientboundContainerSetContentPacket) packet;
+        return (List) itemPacket.getItems();
+    }
+
+    @Override
+    public Object field$ClientboundContainerSetContentPacket$carriedItem(Object packet) {
+        ClientboundContainerSetContentPacket itemPacket = (ClientboundContainerSetContentPacket) packet;
+        return itemPacket.getCarriedItem();
+    }
+
+    @Override
+    public Object field$ClientboundContainerSetSlotPacket$item(Object packet) {
+        ClientboundContainerSetSlotPacket itemPacket = (ClientboundContainerSetSlotPacket) packet;
+        return itemPacket.getItem();
+    }
+
+    @Override
+    public Object field$ClientboundSetPlayerInventoryPacket$contents(Object packet) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void resetComponent(Object itemStack, Object resourceLocation) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.get((ResourceLocation) resourceLocation));
+        Object t = nmsStack.getItem().components().get(type);
+        nmsStack.set(type, t);
+    }
+
+    @Override
+    public void setComponent(Object itemStack, Object resourceLocation, Object component) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.get((ResourceLocation) resourceLocation));
+        nmsStack.set(type, component);
     }
 }

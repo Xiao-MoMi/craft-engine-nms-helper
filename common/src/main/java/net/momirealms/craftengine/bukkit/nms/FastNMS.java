@@ -244,4 +244,18 @@ public abstract class FastNMS {
     public abstract Object field$ClientboundPlayerInfoUpdatePacket$Entry$displayName(Object entry);
 
     public abstract Object constructor$ClientboundPlayerInfoUpdatePacket$Entry(Object entry, Object newDisplayName);
+
+    public abstract Object field$ClientboundSetCursorItemPacket$item(Object packet);
+
+    public abstract List<Object> field$ClientboundContainerSetContentPacket$items(Object packet);
+
+    public abstract Object field$ClientboundContainerSetContentPacket$carriedItem(Object packet);
+
+    public abstract Object field$ClientboundContainerSetSlotPacket$item(Object packet);
+
+    public abstract Object field$ClientboundSetPlayerInventoryPacket$contents(Object packet);
+
+    public abstract void resetComponent(Object itemStack, Object resourceLocation);
+
+    public abstract void setComponent(Object itemStack, Object resourceLocation, Object component);
 }
