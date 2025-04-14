@@ -771,4 +771,9 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundBlockDestructionPacket(int entityId, Object blockPos, int stage) {
         return new ClientboundBlockDestructionPacket(entityId, (BlockPos) blockPos, stage);
     }
+
+    @Override
+    public Object constructor$ClientboundLevelEventPacket(int id, Object blockPos, int data, boolean global) {
+        return new ClientboundLevelEventPacket(id, (BlockPos) blockPos, data, global);
+    }
 }

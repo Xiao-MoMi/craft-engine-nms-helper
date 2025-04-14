@@ -280,4 +280,6 @@ public abstract class FastNMS {
     public abstract boolean method$Player$hasCorrectToolForDrops(Object player, Object state);
 
     public abstract Object constructor$ClientboundBlockDestructionPacket(int entityId, Object blockPos, int stage);
+
+    public abstract Object constructor$ClientboundLevelEventPacket(int id, Object blockPos, int data, boolean global);
 }
