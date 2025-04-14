@@ -753,4 +753,10 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         return nmsStack.isCorrectToolForDrops((BlockState) blockState);
     }
+
+    @Override
+    public boolean method$Player$hasCorrectToolForDrops(Object player, Object state) {
+        net.minecraft.world.entity.player.Player nmsPlayer = (net.minecraft.world.entity.player.Player) player;
+        return nmsPlayer.hasCorrectToolForDrops((BlockState) state);
+    }
 }

@@ -276,4 +276,6 @@ public abstract class FastNMS {
     public abstract float method$BlockStateBase$getDestroyProgress(Object blockState, Object player, Object level, Object blockPos);
 
     public abstract boolean method$ItemStack$isCorrectToolForDrops(Object itemStack, Object blockState);
+
+    public abstract boolean method$Player$hasCorrectToolForDrops(Object player, Object state);
 }
