@@ -23,10 +23,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ServerChunkCache;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.*;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -706,5 +703,11 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getValue((ResourceLocation) resourceLocation));
         nmsStack.remove(type);
+    }
+
+    @Override
+    public Object field$CraftItemStack$handle(ItemStack itemStack) {
+        CraftItemStack stack = (CraftItemStack) itemStack;
+        return stack.handle;
     }
 }

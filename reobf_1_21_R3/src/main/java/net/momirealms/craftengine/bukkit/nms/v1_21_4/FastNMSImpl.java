@@ -709,4 +709,10 @@ public class FastNMSImpl extends FastNMS {
         DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getValue((ResourceLocation) resourceLocation));
         nmsStack.remove(type);
     }
+
+    @Override
+    public Object field$CraftItemStack$handle(ItemStack itemStack) {
+        CraftItemStack stack = (CraftItemStack) itemStack;
+        return stack.handle;
+    }
 }

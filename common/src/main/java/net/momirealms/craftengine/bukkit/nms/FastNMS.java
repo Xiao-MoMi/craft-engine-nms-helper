@@ -260,4 +260,6 @@ public abstract class FastNMS {
     public abstract void setComponent(Object itemStack, Object resourceLocation, Object component);
 
     public abstract void removeComponent(Object itemStack, Object resourceLocation);
+
+    public abstract Object field$CraftItemStack$handle(ItemStack itemStack);
 }

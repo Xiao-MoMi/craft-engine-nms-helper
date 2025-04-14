@@ -711,4 +711,10 @@ public class FastNMSImpl extends FastNMS {
     public void removeComponent(Object itemStack, Object resourceLocation) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public Object field$CraftItemStack$handle(ItemStack itemStack) {
+        CraftItemStack stack = (CraftItemStack) itemStack;
+        return stack.handle;
+    }
 }
