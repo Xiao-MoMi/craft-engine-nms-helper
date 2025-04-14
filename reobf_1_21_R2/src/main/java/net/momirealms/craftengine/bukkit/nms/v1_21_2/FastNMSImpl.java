@@ -762,4 +762,9 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.entity.player.Player nmsPlayer = (net.minecraft.world.entity.player.Player) player;
         return nmsPlayer.hasCorrectToolForDrops((BlockState) state);
     }
+
+    @Override
+    public Object constructor$ClientboundBlockDestructionPacket(int entityId, Object blockPos, int stage) {
+        return new ClientboundBlockDestructionPacket(entityId, (BlockPos) blockPos, stage);
+    }
 }
