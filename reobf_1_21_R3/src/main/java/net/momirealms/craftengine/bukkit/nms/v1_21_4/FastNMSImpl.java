@@ -280,7 +280,6 @@ public class FastNMSImpl extends FastNMS {
     public boolean isPreventingStatusUpdates(World world, int x, int z) {
         ServerLevel serverLevel = ((CraftWorld) world).getHandle();
         ChunkEntitySlices slices = serverLevel.moonrise$getEntityLookup().getChunk(x, z);
-
         return slices != null && slices.isPreventingStatusUpdates();
     }
 

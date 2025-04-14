@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_5;
 
+import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -276,7 +277,9 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean isPreventingStatusUpdates(World world, int x, int z) {
-        return false; // TODO moonrise
+        ServerLevel serverLevel = ((CraftWorld) world).getHandle();
+        ChunkEntitySlices slices = serverLevel.moonrise$getEntityLookup().getChunk(x, z);
+        return slices != null && slices.isPreventingStatusUpdates();
     }
 
     @Override
@@ -330,11 +333,10 @@ public class FastNMSImpl extends FastNMS {
         playerImpl.connection.send((Packet<?>) packet);
     }
 
-    // TODO moonrise
     @Override
     public List<Object> method$ChunkHolder$getPlayers(Object chunkHolder) {
         ChunkHolder chunkHolderImpl = (ChunkHolder) chunkHolder;
-        return (List) chunkHolderImpl.playerProvider.getPlayers(chunkHolderImpl.getPos(), false);
+        return (List) chunkHolderImpl.moonrise$getPlayers(false);
     }
 
     @Override

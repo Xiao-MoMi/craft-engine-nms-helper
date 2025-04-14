@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.21.5-no-moonrise-SNAPSHOT")
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.21.5-R0.1-SNAPSHOT")
     compileOnly(project(":common"))
 }
 
