@@ -29,6 +29,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
@@ -712,5 +714,46 @@ public class FastNMSImpl extends FastNMS {
     public Object field$CraftItemStack$handle(ItemStack itemStack) {
         CraftItemStack stack = (CraftItemStack) itemStack;
         return stack.handle;
+    }
+
+    @Override
+    public Object field$ServerPlayer$gameMode(Object player) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        return serverPlayer.gameMode;
+    }
+
+    @Override
+    public void setMayBuild(Object player, boolean can) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        serverPlayer.getAbilities().mayBuild = can;
+    }
+
+    @Override
+    public boolean mayBuild(Object player) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        return serverPlayer.getAbilities().mayBuild;
+    }
+
+    @Override
+    public double getInteractionRange(Object player) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        return Optional.ofNullable(serverPlayer.getAttribute(Attributes.BLOCK_INTERACTION_RANGE)).map(AttributeInstance::getValue).orElse(4.5d);
+    }
+
+    @Override
+    public int field$MinecraftServer$currentTick() {
+        return MinecraftServer.currentTick;
+    }
+
+    @Override
+    public float method$BlockStateBase$getDestroyProgress(Object blockState, Object player, Object level, Object blockPos) {
+        BlockBehaviour.BlockStateBase state = (BlockBehaviour.BlockStateBase) blockState;
+        return state.getDestroyProgress((ServerPlayer) player, (BlockGetter) level, (BlockPos) blockPos);
+    }
+
+    @Override
+    public boolean method$ItemStack$isCorrectToolForDrops(Object itemStack, Object blockState) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        return nmsStack.isCorrectToolForDrops((BlockState) blockState);
     }
 }

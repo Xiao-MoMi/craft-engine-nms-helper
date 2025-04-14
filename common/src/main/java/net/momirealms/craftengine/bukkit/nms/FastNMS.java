@@ -262,4 +262,18 @@ public abstract class FastNMS {
     public abstract void removeComponent(Object itemStack, Object resourceLocation);
 
     public abstract Object field$CraftItemStack$handle(ItemStack itemStack);
+
+    public abstract Object field$ServerPlayer$gameMode(Object player);
+
+    public abstract void setMayBuild(Object player, boolean can);
+
+    public abstract boolean mayBuild(Object player);
+
+    public abstract double getInteractionRange(Object player);
+
+    public abstract int field$MinecraftServer$currentTick();
+
+    public abstract float method$BlockStateBase$getDestroyProgress(Object blockState, Object player, Object level, Object blockPos);
+
+    public abstract boolean method$ItemStack$isCorrectToolForDrops(Object itemStack, Object blockState);
 }

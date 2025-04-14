@@ -22,6 +22,7 @@ import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -719,5 +720,45 @@ public class FastNMSImpl extends FastNMS {
     public Object field$CraftItemStack$handle(ItemStack itemStack) {
         CraftItemStack stack = (CraftItemStack) itemStack;
         return stack.handle;
+    }
+
+    @Override
+    public Object field$ServerPlayer$gameMode(Object player) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        return serverPlayer.gameMode;
+    }
+
+    @Override
+    public void setMayBuild(Object player, boolean can) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        serverPlayer.getAbilities().mayBuild = can;
+    }
+
+    @Override
+    public boolean mayBuild(Object player) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        return serverPlayer.getAbilities().mayBuild;
+    }
+
+    @Override
+    public double getInteractionRange(Object player) {
+        return 4.5d;
+    }
+
+    @Override
+    public int field$MinecraftServer$currentTick() {
+        return MinecraftServer.currentTick;
+    }
+
+    @Override
+    public float method$BlockStateBase$getDestroyProgress(Object blockState, Object player, Object level, Object blockPos) {
+        BlockBehaviour.BlockStateBase state = (BlockBehaviour.BlockStateBase) blockState;
+        return state.getDestroyProgress((ServerPlayer) player, (BlockGetter) level, (BlockPos) blockPos);
+    }
+
+    @Override
+    public boolean method$ItemStack$isCorrectToolForDrops(Object itemStack, Object blockState) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        return nmsStack.isCorrectToolForDrops((BlockState) blockState);
     }
 }
