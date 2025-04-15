@@ -282,4 +282,10 @@ public abstract class FastNMS {
     public abstract Object constructor$ClientboundBlockDestructionPacket(int entityId, Object blockPos, int stage);
 
     public abstract Object constructor$ClientboundLevelEventPacket(int id, Object blockPos, int data, boolean global);
+
+    public abstract Object constructor$BlockInWorld(Object level, Object blockPos, boolean loadChunk);
+
+    public abstract boolean canBreakInAdventureMode(Object itemStack, Object blockInWorld);
+
+    public abstract boolean canPlaceInAdventureMode(Object itemStack, Object blockInWorld);
 }

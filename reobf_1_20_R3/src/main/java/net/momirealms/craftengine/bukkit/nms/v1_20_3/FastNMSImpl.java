@@ -12,6 +12,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -39,6 +40,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -776,5 +778,22 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundLevelEventPacket(int id, Object blockPos, int data, boolean global) {
         return new ClientboundLevelEventPacket(id, (BlockPos) blockPos, data, global);
+    }
+
+    @Override
+    public Object constructor$BlockInWorld(Object level, Object blockPos, boolean loadChunk) {
+        return new BlockInWorld((LevelReader) level, (BlockPos) blockPos, loadChunk);
+    }
+
+    @Override
+    public boolean canBreakInAdventureMode(Object itemStack, Object blockInWorld) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        return nmsStack.hasAdventureModeBreakTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
+    }
+
+    @Override
+    public boolean canPlaceInAdventureMode(Object itemStack, Object blockInWorld) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        return nmsStack.hasAdventureModePlaceTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
     }
 }
