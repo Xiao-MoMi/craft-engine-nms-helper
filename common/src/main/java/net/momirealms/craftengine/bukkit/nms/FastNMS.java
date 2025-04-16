@@ -288,4 +288,8 @@ public abstract class FastNMS {
     public abstract boolean canBreakInAdventureMode(Object itemStack, Object blockInWorld);
 
     public abstract boolean canPlaceInAdventureMode(Object itemStack, Object blockInWorld);
+
+    public abstract Object method$Direction$getOpposite(Object direction);
+
+    public abstract Object method$BlockPos$relative(Object blockPos, Object direction);
 }

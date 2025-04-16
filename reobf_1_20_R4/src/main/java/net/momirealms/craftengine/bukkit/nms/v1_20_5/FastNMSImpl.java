@@ -987,4 +987,16 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         return nmsStack.canPlaceOnBlockInAdventureMode((BlockInWorld) blockInWorld);
     }
+
+    @Override
+    public Object method$Direction$getOpposite(Object direction) {
+        Direction d = (Direction) direction;
+        return d.getOpposite();
+    }
+
+    @Override
+    public Object method$BlockPos$relative(Object blockPos, Object direction) {
+        BlockPos pos = (BlockPos) blockPos;
+        return pos.relative((Direction) direction);
+    }
 }

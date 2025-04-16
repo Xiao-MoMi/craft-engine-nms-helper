@@ -4,10 +4,7 @@ import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.world.ChunkEntitySlices;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.IdMap;
-import net.minecraft.core.IdMapper;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -794,5 +791,17 @@ public class FastNMSImpl extends FastNMS {
     public boolean canPlaceInAdventureMode(Object itemStack, Object blockInWorld) {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         return nmsStack.hasAdventureModePlaceTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
+    }
+
+    @Override
+    public Object method$Direction$getOpposite(Object direction) {
+        Direction d = (Direction) direction;
+        return d.getOpposite();
+    }
+
+    @Override
+    public Object method$BlockPos$relative(Object blockPos, Object direction) {
+        BlockPos pos = (BlockPos) blockPos;
+        return pos.relative((Direction) direction);
     }
 }
