@@ -292,4 +292,10 @@ public abstract class FastNMS {
     public abstract Object method$Direction$getOpposite(Object direction);
 
     public abstract Object method$BlockPos$relative(Object blockPos, Object direction);
+
+    public abstract String field$ClientboundResourcePackPushPacket$url(Object packet);
+
+    public abstract Object constructor$ClientboundResourcePackPushPacket(UUID uuid, String url, String sha1, boolean kick, Object component);
+
+    public abstract Object constructor$ClientboundResourcePackPopPacket(UUID uuid);
 }

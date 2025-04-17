@@ -16,6 +16,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -801,5 +803,21 @@ public class FastNMSImpl extends FastNMS {
     public Object method$BlockPos$relative(Object blockPos, Object direction) {
         BlockPos pos = (BlockPos) blockPos;
         return pos.relative((Direction) direction);
+    }
+
+    @Override
+    public String field$ClientboundResourcePackPushPacket$url(Object packet) {
+        ClientboundResourcePackPushPacket pack = (ClientboundResourcePackPushPacket) packet;
+        return pack.url();
+    }
+
+    @Override
+    public Object constructor$ClientboundResourcePackPushPacket(UUID uuid, String url, String sha1, boolean kick, Object component) {
+        return new ClientboundResourcePackPushPacket(uuid, url, sha1, kick, Optional.ofNullable((Component) component));
+    }
+
+    @Override
+    public Object constructor$ClientboundResourcePackPopPacket(UUID uuid) {
+        return new ClientboundResourcePackPopPacket(Optional.ofNullable(uuid));
     }
 }

@@ -14,7 +14,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.login.ClientboundHelloPacket;
+import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
@@ -803,5 +806,21 @@ public class FastNMSImpl extends FastNMS {
     public Object method$BlockPos$relative(Object blockPos, Object direction) {
         BlockPos pos = (BlockPos) blockPos;
         return pos.relative((Direction) direction);
+    }
+
+    @Override
+    public String field$ClientboundResourcePackPushPacket$url(Object packet) {
+        ClientboundResourcePackPacket pack = (ClientboundResourcePackPacket) packet;
+        return pack.getUrl();
+    }
+
+    @Override
+    public Object constructor$ClientboundResourcePackPushPacket(UUID uuid, String url, String sha1, boolean kick, Object component) {
+        return new ClientboundResourcePackPacket(url, sha1, kick, (Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundResourcePackPopPacket(UUID uuid) {
+        throw new UnsupportedVersionException();
     }
 }
