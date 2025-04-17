@@ -820,4 +820,14 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundResourcePackPopPacket(UUID uuid) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public UUID field$ClientboundResourcePackPushPacket$uuid(Object packet) {
+        return new UUID(0, 0);
+    }
+
+    @Override
+    public Object constructor$ServerboundResourcePackPacket$SUCCESSFULLY_LOADED(UUID uuid) {
+        return new ServerboundResourcePackPacket(ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED);
+    }
 }

@@ -298,4 +298,8 @@ public abstract class FastNMS {
     public abstract Object constructor$ClientboundResourcePackPushPacket(UUID uuid, String url, String sha1, boolean kick, Object component);
 
     public abstract Object constructor$ClientboundResourcePackPopPacket(UUID uuid);
+
+    public abstract UUID field$ClientboundResourcePackPushPacket$uuid(Object packet);
+
+    public abstract Object constructor$ServerboundResourcePackPacket$SUCCESSFULLY_LOADED(UUID uuid);
 }

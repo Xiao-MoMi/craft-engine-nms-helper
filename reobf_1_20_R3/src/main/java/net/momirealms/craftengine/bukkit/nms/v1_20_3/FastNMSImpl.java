@@ -16,6 +16,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -821,5 +822,16 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundResourcePackPopPacket(UUID uuid) {
         return new ClientboundResourcePackPopPacket(Optional.ofNullable(uuid));
+    }
+
+    @Override
+    public UUID field$ClientboundResourcePackPushPacket$uuid(Object packet) {
+        ClientboundResourcePackPushPacket pack = (ClientboundResourcePackPushPacket) packet;
+        return pack.id();
+    }
+
+    @Override
+    public Object constructor$ServerboundResourcePackPacket$SUCCESSFULLY_LOADED(UUID uuid) {
+        return new ServerboundResourcePackPacket(uuid, ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED);
     }
 }

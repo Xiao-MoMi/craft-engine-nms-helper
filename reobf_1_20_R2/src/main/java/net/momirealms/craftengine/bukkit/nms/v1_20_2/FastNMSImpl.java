@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPacket;
+import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.protocol.login.ClientboundHelloPacket;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
@@ -822,5 +823,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundResourcePackPopPacket(UUID uuid) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public UUID field$ClientboundResourcePackPushPacket$uuid(Object packet) {
+        return new UUID(0, 0);
+    }
+
+    @Override
+    public Object constructor$ServerboundResourcePackPacket$SUCCESSFULLY_LOADED(UUID uuid) {
+        return new ServerboundResourcePackPacket(ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED);
     }
 }
