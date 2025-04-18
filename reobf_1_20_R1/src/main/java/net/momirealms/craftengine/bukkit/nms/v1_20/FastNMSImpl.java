@@ -35,6 +35,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -837,5 +838,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object toNMSEntityType(org.bukkit.entity.EntityType entityType) {
         return BuiltInRegistries.ENTITY_TYPE.get(CraftNamespacedKey.toMinecraft(entityType.getKey()));
+    }
+
+    @Override
+    public boolean method$BonemealableBlock$isValidBonemealTarget(Object block, Object level, Object blockPos, Object state) {
+        BonemealableBlock bonemealableBlock = (BonemealableBlock) block;
+        return bonemealableBlock.isValidBonemealTarget((LevelReader) level, (BlockPos) blockPos, (BlockState) state, true);
     }
 }

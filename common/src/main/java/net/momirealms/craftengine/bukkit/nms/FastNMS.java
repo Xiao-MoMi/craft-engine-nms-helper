@@ -304,4 +304,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ServerboundResourcePackPacket$SUCCESSFULLY_LOADED(UUID uuid);
 
     public abstract Object toNMSEntityType(org.bukkit.entity.EntityType entityType);
+
+    public abstract boolean method$BonemealableBlock$isValidBonemealTarget(Object block, Object level, Object blockPos, Object state);
 }
