@@ -302,4 +302,6 @@ public abstract class FastNMS {
     public abstract UUID field$ClientboundResourcePackPushPacket$uuid(Object packet);
 
     public abstract Object constructor$ServerboundResourcePackPacket$SUCCESSFULLY_LOADED(UUID uuid);
+
+    public abstract Object toNMSEntityType(org.bukkit.entity.EntityType entityType);
 }
