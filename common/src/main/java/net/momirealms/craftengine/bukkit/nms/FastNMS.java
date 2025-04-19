@@ -306,4 +306,14 @@ public abstract class FastNMS {
     public abstract Object toNMSEntityType(org.bukkit.entity.EntityType entityType);
 
     public abstract boolean method$BonemealableBlock$isValidBonemealTarget(Object block, Object level, Object blockPos, Object state);
+
+    public abstract Object constructor$ClientboundSetEntityDataPacket(int entityId, List data);
+
+    public abstract Object constructor$ClientboundAddEntityPacket(int id, UUID uuid,
+                                                                  double x, double y, double z, float xRot, float yRot,
+                                                                  Object type, int data, Object deltaMovement, double yHeadRot);
+
+    public abstract Object method$SynchedEntityData$DataValue$create(Object entityDataAccessor, Object value);
+
+    public abstract Object constructor$EntityDataAccessor(int id, Object serializer);
 }

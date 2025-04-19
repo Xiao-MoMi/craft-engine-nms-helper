@@ -23,6 +23,7 @@ import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.cookie.CookiePacketTypes;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.protocol.ping.PingPacketTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
@@ -1041,5 +1042,27 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$BonemealableBlock$isValidBonemealTarget(Object block, Object level, Object blockPos, Object state) {
         BonemealableBlock bonemealableBlock = (BonemealableBlock) block;
         return bonemealableBlock.isValidBonemealTarget((LevelReader) level, (BlockPos) blockPos, (BlockState) state);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetEntityDataPacket(int entityId, List data) {
+        return new ClientboundSetEntityDataPacket(entityId, data);
+    }
+
+    @Override
+    public Object constructor$ClientboundAddEntityPacket(int id, UUID uuid,
+                                                         double x, double y, double z, float xRot, float yRot,
+                                                         Object type, int data, Object deltaMovement, double yHeadRot) {
+        return new ClientboundAddEntityPacket(id, uuid, x, y, z, xRot, yRot, (EntityType<?>) type, data, (Vec3) deltaMovement, yHeadRot);
+    }
+
+    @Override
+    public Object method$SynchedEntityData$DataValue$create(Object entityDataAccessor, Object value) {
+        return SynchedEntityData.DataValue.create((EntityDataAccessor) entityDataAccessor, value);
+    }
+
+    @Override
+    public Object constructor$EntityDataAccessor(int id, Object serializer) {
+        return new EntityDataAccessor<>(id, (EntityDataSerializer) serializer);
     }
 }
