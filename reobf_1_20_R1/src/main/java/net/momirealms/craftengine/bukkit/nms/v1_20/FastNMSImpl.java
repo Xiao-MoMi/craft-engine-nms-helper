@@ -9,15 +9,12 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.network.protocol.login.ClientboundHelloPacket;
-import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -29,13 +26,16 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -47,6 +47,7 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
@@ -57,7 +58,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_20_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_20_R1.CraftRegistry;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
@@ -867,5 +867,27 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$EntityDataAccessor(int id, Object serializer) {
         return new EntityDataAccessor<>(id, (EntityDataSerializer) serializer);
+    }
+
+    @Override
+    public void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        ServerLevel serverLevel = serverPlayer.serverLevel();
+        BlockPos blockPos = (BlockPos) pos;
+        BlockState previous = serverLevel.getBlockStateIfLoaded(blockPos);
+        if (previous == null) return;
+        if (!previous.isAir()) return;
+        Vec3 vec3 = new Vec3(x, y, z);
+        ServerboundUseItemOnPacket packet = new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND,
+                new BlockHitResult(vec3, (Direction) direction, blockPos, false),
+                0);
+        try {
+            serverLevel.setBlock(blockPos, Blocks.BARRIER.defaultBlockState(), 4);
+            packet.timestamp = System.currentTimeMillis();
+            serverPlayer.connection.handleUseItemOn(packet);
+        } finally {
+            serverLevel.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 4);
+            serverPlayer.connection.send(new ClientboundBlockUpdatePacket(serverLevel, blockPos));
+        }
     }
 }

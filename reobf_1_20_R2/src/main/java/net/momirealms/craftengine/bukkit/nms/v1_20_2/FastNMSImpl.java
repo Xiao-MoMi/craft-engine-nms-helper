@@ -28,7 +28,9 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -36,6 +38,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -47,6 +50,7 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
@@ -867,5 +871,27 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$EntityDataAccessor(int id, Object serializer) {
         return new EntityDataAccessor<>(id, (EntityDataSerializer) serializer);
+    }
+
+    @Override
+    public void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos) {
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        ServerLevel serverLevel = serverPlayer.serverLevel();
+        BlockPos blockPos = (BlockPos) pos;
+        BlockState previous = serverLevel.getBlockStateIfLoaded(blockPos);
+        if (previous == null) return;
+        if (!previous.isAir()) return;
+        Vec3 vec3 = new Vec3(x, y, z);
+        ServerboundUseItemOnPacket packet = new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND,
+                new BlockHitResult(vec3, (Direction) direction, blockPos, false),
+                0);
+        try {
+            serverLevel.setBlock(blockPos, Blocks.BARRIER.defaultBlockState(), 4);
+            packet.timestamp = System.currentTimeMillis();
+            serverPlayer.connection.handleUseItemOn(packet);
+        } finally {
+            serverLevel.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 4);
+            serverPlayer.connection.send(new ClientboundBlockUpdatePacket(serverLevel, blockPos));
+        }
     }
 }

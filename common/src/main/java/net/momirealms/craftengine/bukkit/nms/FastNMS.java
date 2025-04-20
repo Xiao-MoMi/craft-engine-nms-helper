@@ -316,4 +316,6 @@ public abstract class FastNMS {
     public abstract Object method$SynchedEntityData$DataValue$create(Object entityDataAccessor, Object value);
 
     public abstract Object constructor$EntityDataAccessor(int id, Object serializer);
+
+    public abstract void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos);
 }
