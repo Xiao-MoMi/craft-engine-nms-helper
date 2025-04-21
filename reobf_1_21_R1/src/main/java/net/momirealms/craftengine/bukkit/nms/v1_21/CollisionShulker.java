@@ -14,8 +14,9 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final AABB aabb;
     private final boolean canProjectileHit;
+    private final boolean canCollide;
 
-    public CollisionShulker(EntityType<? extends Shulker> type, Level world, double x, double y, double z, AABB aabb, boolean canProjectileHit) {
+    public CollisionShulker(EntityType<? extends Shulker> type, Level world, double x, double y, double z, AABB aabb, boolean canProjectileHit, boolean canCollide, boolean blockBuilding) {
         super(type, world);
         this.aabb = aabb;
         this.canProjectileHit = canProjectileHit;
@@ -25,6 +26,8 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
         this.setInvulnerable(true);
         this.setNoAi(true);
         this.setSilent(true);
+        this.canCollide = canCollide;
+        this.blocksBuilding = blockBuilding;
     }
 
     @Override
@@ -75,16 +78,16 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
 
     @Override
     public boolean canCollideWith(@NotNull Entity other) {
-        return true;
+        return this.canCollide;
     }
 
     @Override
     public boolean canCollideWithBukkit(@NotNull Entity entity) {
-        return true;
+        return this.canCollide;
     }
 
     @Override
     public boolean canBeCollidedWith() {
-        return true;
+        return this.canCollide;
     }
 }
