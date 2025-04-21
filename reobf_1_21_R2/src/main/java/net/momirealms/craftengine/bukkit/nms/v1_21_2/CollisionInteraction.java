@@ -1,22 +1,21 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_4;
+package net.momirealms.craftengine.bukkit.nms.v1_21_2;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.Interaction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class CollisionShulker extends Shulker implements CollisionEntity {
+public class CollisionInteraction extends Interaction implements CollisionEntity {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final AABB aabb;
     private final boolean canProjectileHit;
-    private final boolean canCollide;
 
-    public CollisionShulker(EntityType<? extends Shulker> type, Level world, double x, double y, double z, AABB aabb, boolean canProjectileHit, boolean canCollide, boolean blockBuilding) {
+    public CollisionInteraction(EntityType<? extends Interaction> type, Level world, double x, double y, double z, AABB aabb, boolean canProjectileHit, boolean blockBuilding) {
         super(type, world);
         this.aabb = aabb;
         this.canProjectileHit = canProjectileHit;
@@ -24,25 +23,20 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
         this.setPos(new Vec3(x, y, z));
         this.setBoundingBox(aabb);
         this.setInvulnerable(true);
-        this.setNoAi(true);
         this.setSilent(true);
-        this.canCollide = canCollide;
         this.blocksBuilding = blockBuilding;
     }
 
     @Override
     public boolean save(@NotNull CompoundTag tag) {
-        return super.saveAsPassenger(tag, true, false, true);
-    }
-
-    @Override
-    public boolean shouldDropExperience() {
-        return false;
-    }
-
-    @Override
-    protected boolean shouldDropLoot() {
-        return false;
+        String s = this.getEncodeId();
+        if (s != null) {
+            tag.putString("id", s);
+            this.saveWithoutId(tag, false);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -71,16 +65,16 @@ public class CollisionShulker extends Shulker implements CollisionEntity {
 
     @Override
     public boolean canCollideWith(@NotNull Entity other) {
-        return this.canCollide;
+        return true;
     }
 
     @Override
     public boolean canCollideWithBukkit(@NotNull Entity entity) {
-        return this.canCollide;
+        return true;
     }
 
     @Override
     public boolean canBeCollidedWith() {
-        return this.canCollide;
+        return true;
     }
 }

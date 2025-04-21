@@ -48,8 +48,8 @@ public abstract class FastNMS {
         return classSuffix;
     }
 
-    public abstract CollisionEntity createCollisionShulker(Object world, Object aabb,
-                                                          double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding);
+    public abstract CollisionEntity createCollisionInteraction(Object world, Object aabb,
+                                                               double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding);
 
     public abstract Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState);
 

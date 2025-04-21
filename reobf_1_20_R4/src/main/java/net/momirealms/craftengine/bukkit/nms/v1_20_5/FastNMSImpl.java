@@ -95,8 +95,12 @@ public class FastNMSImpl extends FastNMS {
     private static final RegistryAccess REGISTRY_ACCESS = MinecraftServer.getServer().registryAccess();
 
     @Override
-    public CollisionEntity createCollisionShulker(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding) {
-        return new CollisionShulker(EntityType.SHULKER, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, canCollide, blocksBuilding);
+    public CollisionEntity createCollisionInteraction(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding) {
+        if (canCollide) {
+            return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+        } else {
+            return new NonCollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+        }
     }
 
     @Override
