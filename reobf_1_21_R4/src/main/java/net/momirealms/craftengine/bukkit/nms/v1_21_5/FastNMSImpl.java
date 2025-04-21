@@ -51,6 +51,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.lighting.LevelLightEngine;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -876,7 +877,6 @@ public class FastNMSImpl extends FastNMS {
         BlockPos blockPos = (BlockPos) pos;
         BlockState previous = serverLevel.getBlockStateIfLoaded(blockPos);
         if (previous == null) return;
-        if (!previous.isAir()) return;
         Vec3 vec3 = new Vec3(x, y, z);
         ServerboundUseItemOnPacket packet = new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND,
                 new BlockHitResult(vec3, (Direction) direction, blockPos, false),
@@ -886,7 +886,7 @@ public class FastNMSImpl extends FastNMS {
             packet.timestamp = System.currentTimeMillis();
             serverPlayer.connection.handleUseItemOn(packet);
         } finally {
-            serverLevel.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 4);
+            serverLevel.setBlock(blockPos, previous, 4);
             serverPlayer.connection.send(new ClientboundBlockUpdatePacket(serverLevel, blockPos));
         }
     }
