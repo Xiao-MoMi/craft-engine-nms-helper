@@ -1,9 +1,12 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_2;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.world.ChunkEntitySlices;
+import net.minecraft.advancements.*;
+import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -23,12 +26,13 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -891,6 +895,26 @@ public class FastNMSImpl extends FastNMS {
         } finally {
             serverLevel.setBlock(blockPos, previous, 4);
             serverPlayer.connection.send(new ClientboundBlockUpdatePacket(serverLevel, blockPos));
+        }
+    }
+
+    @Override
+    public void registerAdvancement(String[] key, Object jsonAdvancement) {
+        ResourceLocation location = new ResourceLocation(key[0], key[1]);
+        MinecraftServer server = MinecraftServer.getServer();
+        JsonObject jsonobject = GsonHelper.convertToJsonObject((JsonElement) jsonAdvancement, "advancement");
+        Advancement advancement = Advancement.fromJson(jsonobject, new DeserializationContext(location, server.getLootData()));
+        ServerAdvancementManager serverAdvancementManager = server.getAdvancements();
+        AdvancementHolder holder = new AdvancementHolder(location, advancement);
+        serverAdvancementManager.advancements.put(location, holder);
+        AdvancementTree tree = serverAdvancementManager.tree();
+        tree.addAll(List.of(holder));
+        AdvancementNode node = tree.get(location);
+        if (node != null) {
+            AdvancementNode root = node.root();
+            if (root.holder().value().display().isPresent()) {
+                TreeNodePosition.run(root);
+            }
         }
     }
 }

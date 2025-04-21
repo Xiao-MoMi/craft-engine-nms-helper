@@ -2,10 +2,13 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_5;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
+import net.minecraft.advancements.*;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -24,10 +27,15 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.*;
+import net.minecraft.server.ServerAdvancementManager;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -888,6 +896,28 @@ public class FastNMSImpl extends FastNMS {
         } finally {
             serverLevel.setBlock(blockPos, previous, 4);
             serverPlayer.connection.send(new ClientboundBlockUpdatePacket(serverLevel, blockPos));
+        }
+    }
+
+    @Override
+    public void registerAdvancement(String[] key, Object jsonAdvancement) {
+        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(key[0], key[1]);
+        RegistryOps<JsonElement> ops = REGISTRY_ACCESS.createSerializationContext(JsonOps.INSTANCE);
+        Advancement advancement = Advancement.CODEC.parse(ops, (JsonElement) jsonAdvancement).getOrThrow(JsonParseException::new);
+        if (advancement != null) {
+            MinecraftServer server = MinecraftServer.getServer();
+            ServerAdvancementManager serverAdvancementManager = server.getAdvancements();
+            AdvancementHolder holder = new AdvancementHolder(location, advancement);
+            serverAdvancementManager.advancements.put(location, holder);
+            AdvancementTree tree = serverAdvancementManager.tree();
+            tree.addAll(List.of(holder));
+            AdvancementNode node = tree.get(location);
+            if (node != null) {
+                AdvancementNode root = node.root();
+                if (root.holder().value().display().isPresent()) {
+                    TreeNodePosition.run(root);
+                }
+            }
         }
     }
 }

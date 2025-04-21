@@ -318,4 +318,6 @@ public abstract class FastNMS {
     public abstract Object constructor$EntityDataAccessor(int id, Object serializer);
 
     public abstract void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos);
+
+    public abstract void registerAdvancement(String[] key, Object jsonAdvancement);
 }
