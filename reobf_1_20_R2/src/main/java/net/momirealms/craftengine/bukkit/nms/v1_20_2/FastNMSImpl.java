@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_2;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
@@ -56,6 +57,9 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
@@ -915,5 +919,36 @@ public class FastNMSImpl extends FastNMS {
                 TreeNodePosition.run(root);
             }
         }
+    }
+
+    @Override
+    public final boolean checkEntityCollision(Object level, List<Object> aabbs, double x, double y, double z) {
+        if (aabbs.isEmpty()) return true;
+        ServerLevel serverLevel = (ServerLevel) level;
+        List<VoxelShape> shapes = Lists.newArrayList();
+        for (Object ab : aabbs) {
+            AABB aabb = (AABB) ab;
+            VoxelShape voxelShape = Shapes.create(aabb);
+            shapes.add(voxelShape);
+        }
+        VoxelShape finalShape;
+        if (shapes.size() == 1) {
+            finalShape = shapes.get(0);
+        } else if (shapes.size() == 2) {
+            finalShape = Shapes.or(shapes.get(0), shapes.get(1));
+        } else {
+            finalShape = Shapes.or(shapes.get(0), shapes.subList(1, shapes.size()).toArray(new VoxelShape[0]));
+        }
+        if (finalShape.isEmpty()) return true;
+        if (serverLevel.getBlockCollisions(null, finalShape.bounds()).iterator().hasNext()) {
+            return false;
+        }
+        List<Entity> entities = serverLevel.getEntities(null, finalShape.bounds());
+        for (Entity entity : entities) {
+            if (!entity.isRemoved() && entity.blocksBuilding && Shapes.joinIsNotEmpty(finalShape, Shapes.create(entity.getBoundingBox()), BooleanOp.AND)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

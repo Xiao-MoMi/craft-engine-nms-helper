@@ -320,4 +320,6 @@ public abstract class FastNMS {
     public abstract void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos);
 
     public abstract void registerAdvancement(String[] key, Object jsonAdvancement);
+
+    public abstract boolean checkEntityCollision(Object level, List<Object> aabbs, double x, double y, double z);
 }
