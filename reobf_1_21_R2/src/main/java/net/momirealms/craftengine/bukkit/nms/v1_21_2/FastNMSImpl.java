@@ -722,8 +722,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$CraftItemStack$handle(ItemStack itemStack) {
-        CraftItemStack stack = (CraftItemStack) itemStack;
-        return stack.handle;
+        return CraftItemStack.unwrap(itemStack);
     }
 
     @Override
