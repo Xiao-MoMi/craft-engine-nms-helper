@@ -965,4 +965,19 @@ public class FastNMSImpl extends FastNMS {
         }
         return true;
     }
+
+    @Override
+    public void method$ItemStack$applyComponents(Object itemStack, Object component) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$ItemStack$transmuteCopy(Object itemStack1, Object itemStack2) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$ItemStack$getComponentsPatch(Object itemStack) {
+        throw new UnsupportedVersionException();
+    }
 }

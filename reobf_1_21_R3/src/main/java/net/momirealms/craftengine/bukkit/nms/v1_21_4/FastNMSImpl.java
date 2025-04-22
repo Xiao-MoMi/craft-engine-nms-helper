@@ -11,6 +11,7 @@ import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.util.ItemObfuscationSession;
 import net.minecraft.advancements.*;
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -967,5 +968,24 @@ public class FastNMSImpl extends FastNMS {
             }
         }
         return true;
+    }
+
+    @Override
+    public void method$ItemStack$applyComponents(Object itemStack, Object component) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        nmsStack.applyComponents((DataComponentPatch) component);
+    }
+
+    @Override
+    public Object method$ItemStack$transmuteCopy(Object itemStack1, Object itemStack2) {
+        net.minecraft.world.item.ItemStack nmsStack1 = (net.minecraft.world.item.ItemStack) itemStack1;
+        net.minecraft.world.item.ItemStack nmsStack2 = (net.minecraft.world.item.ItemStack) itemStack2;
+        return nmsStack1.transmuteCopy(nmsStack2.getItem(), 1);
+    }
+
+    @Override
+    public Object method$ItemStack$getComponentsPatch(Object itemStack) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        return nmsStack.getComponentsPatch();
     }
 }

@@ -325,4 +325,10 @@ public abstract class FastNMS {
     public abstract void registerAdvancement(String[] key, Object jsonAdvancement);
 
     public abstract boolean checkEntityCollision(Object level, List<Object> aabbs, double x, double y, double z);
+
+    public abstract void method$ItemStack$applyComponents(Object itemStack, Object component);
+
+    public abstract Object method$ItemStack$transmuteCopy(Object itemStack1, Object itemStack2);
+
+    public abstract Object method$ItemStack$getComponentsPatch(Object itemStack);
 }
