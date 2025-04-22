@@ -1,15 +1,16 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_2;
+package net.momirealms.craftengine.bukkit.nms.v1_20_3;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Interaction;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
-public class NonCollisionInteraction extends CollisionInteraction {
+public class NonCollisionBoat extends CollisionBoat {
 
-    public NonCollisionInteraction(EntityType<? extends Interaction> type, Level world, double x, double y, double z, AABB aabb, boolean canProjectileHit, boolean blockBuilding) {
+    public NonCollisionBoat(EntityType<? extends Boat> type, Level world, double x, double y, double z, AABB aabb, boolean canProjectileHit, boolean blockBuilding) {
         super(type, world, x, y, z, aabb, canProjectileHit, blockBuilding);
     }
 
