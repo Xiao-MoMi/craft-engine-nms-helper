@@ -262,8 +262,6 @@ public abstract class FastNMS {
 
     public abstract void setComponent(Object itemStack, Object resourceLocation, Object component);
 
-    public abstract void removeComponent(Object itemStack, Object resourceLocation);
-
     public abstract Object field$CraftItemStack$handle(ItemStack itemStack);
 
     public abstract Object field$ServerPlayer$gameMode(Object player);
@@ -334,9 +332,9 @@ public abstract class FastNMS {
 
     public abstract Object getComponentType(String namespace, String id);
 
-    public abstract Object method$ItemStack$getComponent(Object itemStack, Object type);
+    public abstract Object getComponent(Object itemStack, Object type);
 
-    public abstract boolean method$ItemStack$hasComponent(Object itemStack, Object type);
+    public abstract boolean hasComponent(Object itemStack, Object type);
 
-    public abstract Object method$ItemStack$removeComponent(Object itemStack, Object type);
+    public abstract Object removeComponent(Object itemStack, Object type);
 }

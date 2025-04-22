@@ -723,28 +723,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void resetComponent(Object itemStack, Object resourceLocation) {
-        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
-        DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getValue((ResourceLocation) resourceLocation));
-        Object t = nmsStack.getItem().components().get(type);
-        nmsStack.set(type, t);
-    }
-
-    @Override
-    public void setComponent(Object itemStack, Object resourceLocation, Object component) {
-        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
-        DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getValue((ResourceLocation) resourceLocation));
-        nmsStack.set(type, component);
-    }
-
-    @Override
-    public void removeComponent(Object itemStack, Object resourceLocation) {
-        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
-        DataComponentType type = Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getValue((ResourceLocation) resourceLocation));
-        nmsStack.remove(type);
-    }
-
-    @Override
     public Object field$CraftItemStack$handle(ItemStack itemStack) {
         CraftItemStack stack = (CraftItemStack) itemStack;
         return stack.handle;
@@ -995,20 +973,35 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$ItemStack$getComponent(Object itemStack, Object type) {
+    public Object getComponent(Object itemStack, Object type) {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         return nmsStack.get((DataComponentType<?>) type);
     }
 
     @Override
-    public boolean method$ItemStack$hasComponent(Object itemStack, Object type) {
+    public boolean hasComponent(Object itemStack, Object type) {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         return nmsStack.has((DataComponentType<?>) type);
     }
 
     @Override
-    public Object method$ItemStack$removeComponent(Object itemStack, Object type) {
+    public Object removeComponent(Object itemStack, Object type) {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         return nmsStack.remove((DataComponentType<?>) type);
+    }
+
+    @Override
+    public void resetComponent(Object itemStack, Object componentType) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        DataComponentType type = (DataComponentType) componentType;
+        Object c = nmsStack.getItem().components().get(type);
+        nmsStack.set(type, c);
+    }
+
+    @Override
+    public void setComponent(Object itemStack, Object componentType, Object component) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        DataComponentType type = (DataComponentType) componentType;
+        nmsStack.set(type, component);
     }
 }
