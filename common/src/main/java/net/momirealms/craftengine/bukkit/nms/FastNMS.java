@@ -331,4 +331,12 @@ public abstract class FastNMS {
     public abstract Object method$ItemStack$transmuteCopy(Object itemStack1, Object itemStack2);
 
     public abstract Object method$ItemStack$getComponentsPatch(Object itemStack);
+
+    public abstract Object getComponentType(String namespace, String id);
+
+    public abstract Object method$ItemStack$getComponent(Object itemStack, Object type);
+
+    public abstract boolean method$ItemStack$hasComponent(Object itemStack, Object type);
+
+    public abstract Object method$ItemStack$removeComponent(Object itemStack, Object type);
 }

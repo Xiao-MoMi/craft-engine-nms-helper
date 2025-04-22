@@ -980,4 +980,24 @@ public class FastNMSImpl extends FastNMS {
     public Object method$ItemStack$getComponentsPatch(Object itemStack) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public Object getComponentType(String namespace, String id) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$ItemStack$getComponent(Object itemStack, Object type) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public boolean method$ItemStack$hasComponent(Object itemStack, Object type) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$ItemStack$removeComponent(Object itemStack, Object type) {
+        throw new UnsupportedVersionException();
+    }
 }

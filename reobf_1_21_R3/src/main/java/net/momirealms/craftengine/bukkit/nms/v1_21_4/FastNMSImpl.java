@@ -988,4 +988,27 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         return nmsStack.getComponentsPatch();
     }
+
+    @Override
+    public Object getComponentType(String namespace, String id) {
+        return BuiltInRegistries.DATA_COMPONENT_TYPE.getValue(ResourceLocation.fromNamespaceAndPath(namespace, id));
+    }
+
+    @Override
+    public Object method$ItemStack$getComponent(Object itemStack, Object type) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        return nmsStack.get((DataComponentType<?>) type);
+    }
+
+    @Override
+    public boolean method$ItemStack$hasComponent(Object itemStack, Object type) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        return nmsStack.has((DataComponentType<?>) type);
+    }
+
+    @Override
+    public Object method$ItemStack$removeComponent(Object itemStack, Object type) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        return nmsStack.remove((DataComponentType<?>) type);
+    }
 }
