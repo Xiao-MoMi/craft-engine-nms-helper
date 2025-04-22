@@ -96,6 +96,15 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public CollisionEntity createCollisionInteraction(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding) {
+        if (canCollide) {
+            return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+        } else {
+            return new NonCollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+        }
+    }
+
+    @Override
     public Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState) {
         PalettedContainer pc = (PalettedContainer) palettedContainer;
         return pc.getAndSet(x, y, z, blockState);
