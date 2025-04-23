@@ -993,4 +993,9 @@ public class FastNMSImpl extends FastNMS {
     public Object removeComponent(Object itemStack, Object type) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public String getCustomItemId(Object itemStack) {
+        throw new UnsupportedVersionException();
+    }
 }

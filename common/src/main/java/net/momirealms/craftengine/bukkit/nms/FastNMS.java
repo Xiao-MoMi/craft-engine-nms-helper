@@ -337,4 +337,6 @@ public abstract class FastNMS {
     public abstract boolean hasComponent(Object itemStack, Object type);
 
     public abstract Object removeComponent(Object itemStack, Object type);
+
+    public abstract String getCustomItemId(Object itemStack);
 }

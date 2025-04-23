@@ -12,11 +12,14 @@ import net.minecraft.advancements.*;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -44,6 +47,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -1000,5 +1004,17 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         DataComponentType type = (DataComponentType) componentType;
         nmsStack.set(type, component);
+    }
+
+    @Override
+    public String getCustomItemId(Object itemStack) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        CustomData customData = nmsStack.get(DataComponents.CUSTOM_DATA);
+        if (customData == null) return null;
+        Tag tag = customData.getUnsafe().get("craftengine:id");
+        if (tag instanceof StringTag tag1) {
+            return tag1.getAsString();
+        }
+        return null;
     }
 }
