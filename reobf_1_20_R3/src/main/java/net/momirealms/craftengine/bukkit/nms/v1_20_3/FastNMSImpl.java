@@ -14,6 +14,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.ConnectionProtocol;
@@ -999,6 +1000,11 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public String getCustomItemId(Object itemStack) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void setCustomItemId(Object itemStack, String id) {
         throw new UnsupportedVersionException();
     }
 }

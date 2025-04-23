@@ -998,4 +998,9 @@ public class FastNMSImpl extends FastNMS {
     public String getCustomItemId(Object itemStack) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public void setCustomItemId(Object itemStack, String id) {
+        throw new UnsupportedVersionException();
+    }
 }

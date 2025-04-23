@@ -19,6 +19,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -1017,5 +1018,20 @@ public class FastNMSImpl extends FastNMS {
             return value;
         }
         return null;
+    }
+
+    @Override
+    public void setCustomItemId(Object itemStack, String id) {
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        CustomData customData = nmsStack.get(DataComponents.CUSTOM_DATA);
+        if (customData == null) {
+            CompoundTag compoundTag = new CompoundTag();
+            compoundTag.putString("craftengine:id", id);
+            nmsStack.set(DataComponents.CUSTOM_DATA, CustomData.of(compoundTag));
+        } else {
+            CompoundTag copied = customData.copyTag();
+            copied.putString("craftengine:id", id);
+            nmsStack.set(DataComponents.CUSTOM_DATA, CustomData.of(copied));
+        }
     }
 }
