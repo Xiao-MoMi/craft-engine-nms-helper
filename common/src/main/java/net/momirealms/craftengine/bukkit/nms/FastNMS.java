@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -344,4 +345,6 @@ public abstract class FastNMS {
     public abstract String getCustomItemId(Object itemStack);
 
     public abstract void setCustomItemId(Object itemStack, String id);
+
+    public abstract Runnable getBukkitTaskRunnable(BukkitTask bukkitTask);
 }

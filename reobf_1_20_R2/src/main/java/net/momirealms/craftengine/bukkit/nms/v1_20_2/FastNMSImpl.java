@@ -78,9 +78,11 @@ import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntityType;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R2.scheduler.CraftTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
@@ -1011,5 +1013,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void setCustomItemId(Object itemStack, String id) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Runnable getBukkitTaskRunnable(BukkitTask bukkitTask) {
+        CraftTask craftTask = (CraftTask) bukkitTask;
+        return craftTask.rTask;
     }
 }

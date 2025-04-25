@@ -89,9 +89,11 @@ import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.scheduler.CraftTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
@@ -1046,5 +1048,11 @@ public class FastNMSImpl extends FastNMS {
             copied.putString("craftengine:id", id);
             nmsStack.set(DataComponents.CUSTOM_DATA, CustomData.of(copied));
         }
+    }
+
+    @Override
+    public Runnable getBukkitTaskRunnable(BukkitTask bukkitTask) {
+        CraftTask craftTask = (CraftTask) bukkitTask;
+        return craftTask.rTask;
     }
 }
