@@ -347,12 +347,10 @@ public abstract class FastNMS {
     public abstract void setCustomItemId(Object itemStack, String id);
 
     public abstract Runnable getBukkitTaskRunnable(BukkitTask bukkitTask);
-    
+
     public abstract Object constructor$ClientboundLevelChunkWithLightPacket(net.momirealms.craftengine.core.util.FriendlyByteBuf buf);
 
     public abstract void method$ClientboundLevelChunkWithLightPacket$write(Object packet, net.momirealms.craftengine.core.util.FriendlyByteBuf buf);
 
     public abstract byte[] field$ClientboundLevelChunkPacketData$buffer(Object chunkData);
-
-    public abstract void field$ClientboundLevelChunkPacketData$buffer(Object chunkData, byte[] buffer);
 }

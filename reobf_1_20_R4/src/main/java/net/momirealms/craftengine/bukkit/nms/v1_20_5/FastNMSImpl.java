@@ -1263,11 +1263,4 @@ public class FastNMSImpl extends FastNMS {
     public byte[] field$ClientboundLevelChunkPacketData$buffer(Object chunkData) {
         return ((ClientboundLevelChunkPacketData) chunkData).getReadBuffer().array();
     }
-
-    @Override
-    public void field$ClientboundLevelChunkPacketData$buffer(Object chunkData, byte[] buffer) {
-        FriendlyByteBuf buf = ((ClientboundLevelChunkPacketData) chunkData).getReadBuffer();
-        buf.clear();
-        buf.writeBytes(buffer);
-    }
 }
