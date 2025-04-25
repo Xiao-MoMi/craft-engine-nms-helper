@@ -67,6 +67,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
+import net.momirealms.craftengine.bukkit.util.Reflections;
+import net.momirealms.craftengine.core.world.chunk.InjectedPalettedContainerHolder;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -88,6 +90,13 @@ import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
+
+    @Override
+    public InjectedPalettedContainerHolder createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
+        InjectedPalettedContainer injectedObject = (InjectedPalettedContainer) Reflections.UNSAFE.allocateInstance(InjectedPalettedContainer.class);
+        injectedObject.setTarget(palettedContainer);
+        return injectedObject;
+    }
 
     @Override
     public CollisionEntity createCollisionBoat(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding) {
