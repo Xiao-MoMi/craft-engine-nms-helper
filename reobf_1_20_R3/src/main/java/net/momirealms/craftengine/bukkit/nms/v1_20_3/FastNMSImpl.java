@@ -1024,4 +1024,26 @@ public class FastNMSImpl extends FastNMS {
         CraftTask craftTask = (CraftTask) bukkitTask;
         return craftTask.rTask;
     }
+
+    @Override
+    public Object constructor$ClientboundLevelChunkWithLightPacket(net.momirealms.craftengine.core.util.FriendlyByteBuf buf) {
+        return new ClientboundLevelChunkWithLightPacket(new FriendlyByteBuf(buf));
+    }
+
+    @Override
+    public void method$ClientboundLevelChunkWithLightPacket$write(Object packet, net.momirealms.craftengine.core.util.FriendlyByteBuf buf) {
+        ((ClientboundLevelChunkWithLightPacket) packet).write(new FriendlyByteBuf(buf));
+    }
+
+    @Override
+    public byte[] field$ClientboundLevelChunkPacketData$buffer(Object chunkData) {
+        return ((ClientboundLevelChunkPacketData) chunkData).getReadBuffer().array();
+    }
+
+    @Override
+    public void field$ClientboundLevelChunkPacketData$buffer(Object chunkData, byte[] buffer) {
+        FriendlyByteBuf buf = ((ClientboundLevelChunkPacketData) chunkData).getReadBuffer();
+        buf.clear();
+        buf.writeBytes(buffer);
+    }
 }
