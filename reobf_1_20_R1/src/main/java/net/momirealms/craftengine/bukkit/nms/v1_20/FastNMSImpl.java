@@ -14,6 +14,8 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -33,6 +35,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -41,6 +44,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -51,6 +55,9 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -62,6 +69,8 @@ import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import net.momirealms.craftengine.bukkit.util.Reflections;
+import net.momirealms.craftengine.core.util.RandomUtils;
+import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedPalettedContainerHolder;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
@@ -1022,5 +1031,63 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public byte[] field$ClientboundLevelChunkPacketData$buffer(Object chunkData) {
         return ((ClientboundLevelChunkPacketData) chunkData).getReadBuffer().array();
+    }
+
+    @Override
+    public boolean method$GrassBlock$isValidBonemealTarget(Object level, Object pos, Object state) {
+        return ((LevelReader) level).getBlockState(((BlockPos) pos).above()).isAir();
+    }
+
+    @Override
+    public void method$GrassBlock$performBoneMeal(Object level, Object random, Object blockPos, Object state, Object thisBlock) {
+        ServerLevel level0 = (ServerLevel) level;
+        RandomSource random0 = (RandomSource) random;
+        BlockPos blockPos0 = ((BlockPos) blockPos).above();
+        BlockState blockState0 = Blocks.GRASS.defaultBlockState();
+        Optional<Holder.Reference<PlacedFeature>> optional = level0.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).get(VegetationPlacements.GRASS_BONEMEAL);
+
+        out : for(int i = 0; i < 128; ++i) {
+            BlockPos blockPos1 = blockPos0;
+
+            for(int i1 = 0; i1 < i / 16; ++i1) {
+                blockPos1 = blockPos1.offset(
+                        random0.nextInt(3) - 1,
+                        (((RandomSource) random).nextInt(3) - 1) * random0.nextInt(3) / 2,
+                        random0.nextInt(3) - 1
+                );
+                Object downBlockPos1 = FastNMS.INSTANCE.method$BlockPos$relative(blockPos1, Reflections.instance$Direction$DOWN);
+                if (!level0.getBlockState(blockPos1.below()).is(((net.minecraft.world.level.block.Block) thisBlock))
+                        || level0.getBlockState(blockPos1).isCollisionShapeFullBlock(level0, blockPos1)) {
+                    continue out;
+                }
+
+                BlockState blockState1 = level0.getBlockState(blockPos1);
+                if (blockState1.is(blockState0.getBlock()) && random0.nextInt(10) == 0) {
+                    BonemealableBlock bonemealableBlock = (BonemealableBlock) blockState0.getBlock();
+                    if (bonemealableBlock.isValidBonemealTarget(level0, blockPos1, blockState1, false)) {
+                        bonemealableBlock.performBonemeal(level0, random0, blockPos1, blockState1);
+                    }
+                }
+
+
+                if (blockState1.isAir()) {
+                    Holder<PlacedFeature> holder;
+                    if (((RandomSource) random).nextInt(8) == 0) {
+                        List<ConfiguredFeature<?, ?>> flowerFeatures = level0.getBiome(blockPos1).value().getGenerationSettings().getFlowerFeatures();
+                        if (flowerFeatures.isEmpty()) {
+                            continue;
+                        }
+                        int randomInt = random0.nextInt(flowerFeatures.size());
+                        holder = ((RandomPatchConfiguration)((ConfiguredFeature)flowerFeatures.get(randomInt)).config()).feature();
+                    } else {
+                        if (optional.isEmpty()) {
+                            continue;
+                        }
+                        holder = optional.get();
+                    }
+                    holder.value().place(level0, level0.getChunkSource().getGenerator(), random0, blockPos1);
+                }
+            }
+        }
     }
 }

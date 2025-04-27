@@ -353,4 +353,8 @@ public abstract class FastNMS {
     public abstract void method$ClientboundLevelChunkWithLightPacket$write(Object packet, net.momirealms.craftengine.core.util.FriendlyByteBuf buf);
 
     public abstract byte[] field$ClientboundLevelChunkPacketData$buffer(Object chunkData);
+
+    public abstract boolean method$GrassBlock$isValidBonemealTarget(Object level, Object pos, Object state);
+
+    public abstract void method$GrassBlock$performBoneMeal(Object level, Object random, Object blockPos, Object state, Object thisBlock);
 }
