@@ -1131,4 +1131,16 @@ public class FastNMSImpl extends FastNMS {
             }
         }
     }
+
+    @Override
+    public void method$LevelChunk$markUnsaved(Object chunk) {
+        LevelChunk levelChunk = (LevelChunk) chunk;
+        levelChunk.markUnsaved();
+    }
+
+    @Override
+    public boolean method$LevelChunk$isUnsaved(Object chunk) {
+        LevelChunk levelChunk = (LevelChunk) chunk;
+        return levelChunk.isUnsaved();
+    }
 }

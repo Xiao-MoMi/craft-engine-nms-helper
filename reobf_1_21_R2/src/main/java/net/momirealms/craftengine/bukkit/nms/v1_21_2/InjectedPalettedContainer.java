@@ -7,6 +7,7 @@ import net.minecraft.world.level.chunk.PalettedContainer;
 import net.momirealms.craftengine.bukkit.plugin.injector.BukkitInjector;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.SectionPos;
+import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
 import net.momirealms.craftengine.core.world.chunk.InjectedPalettedContainerHolder;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     private PalettedContainer<T> target;
     private CEWorld world;
     private CESection section;
+    private CEChunk chunk;
     private SectionPos sectionPos;
 
     public InjectedPalettedContainer(IdMap<T> idList, T object, Strategy paletteProvider, T @Nullable [] presetValues) {
@@ -30,7 +32,15 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         this.target = (PalettedContainer<T>) target;
     }
 
+    @Override
+    public CEChunk ceChunk() {
+        return this.chunk;
+    }
 
+    @Override
+    public void ceChunk(CEChunk ceChunk) {
+        this.chunk = ceChunk;
+    }
 
     @Override
     public Object target() {

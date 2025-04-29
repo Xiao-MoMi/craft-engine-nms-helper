@@ -357,4 +357,8 @@ public abstract class FastNMS {
     public abstract boolean method$GrassBlock$isValidBonemealTarget(Object level, Object pos, Object state);
 
     public abstract void method$GrassBlock$performBoneMeal(Object level, Object random, Object blockPos, Object state, Object thisBlock);
+
+    public abstract void method$LevelChunk$markUnsaved(Object chunk);
+
+    public abstract boolean method$LevelChunk$isUnsaved(Object chunk);
 }
