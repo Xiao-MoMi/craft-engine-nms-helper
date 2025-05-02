@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_5;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
+import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
@@ -40,7 +41,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerAdvancementManager;
-import net.minecraft.server.commands.OpCommand;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -1142,5 +1142,13 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$LevelChunk$isUnsaved(Object chunk) {
         LevelChunk levelChunk = (LevelChunk) chunk;
         return levelChunk.isUnsaved();
+    }
+
+    @Override
+    public org.bukkit.entity.Entity getBukkitEntityById(int entityId, World world) {
+        ServerLevel serverLevel = ((CraftWorld) world).getHandle();
+        EntityLookup entityLookup = serverLevel.moonrise$getEntityLookup();
+        Entity entity = entityLookup.get(entityId);
+        return entity != null ? entity.getBukkitEntity() : null;
     }
 }

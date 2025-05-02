@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.DeserializationContext;
@@ -90,6 +91,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -1110,5 +1112,13 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$LevelChunk$isUnsaved(Object chunk) {
         LevelChunk levelChunk = (LevelChunk) chunk;
         return levelChunk.isUnsaved();
+    }
+
+    @Override
+    public org.bukkit.entity.Entity getBukkitEntityById(int entityId, World world) {
+        ServerLevel serverLevel = ((CraftWorld) world).getHandle();
+        EntityLookup entityLookup = serverLevel.getEntityLookup();
+        Entity entity = entityLookup.get(entityId);
+        return entity != null ? entity.getBukkitEntity() : null;
     }
 }
