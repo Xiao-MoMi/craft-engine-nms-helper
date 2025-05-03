@@ -105,7 +105,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -1343,7 +1342,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public org.bukkit.entity.Entity getBukkitEntityById(int entityId, World world) {
+    public org.bukkit.entity.Entity getBukkitEntityById(World world, int entityId) {
         ServerLevel serverLevel = ((CraftWorld) world).getHandle();
         EntityLookup entityLookup = serverLevel.getEntityLookup();
         Entity entity = entityLookup.get(entityId);

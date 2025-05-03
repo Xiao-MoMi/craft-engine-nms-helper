@@ -45,7 +45,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -70,8 +69,6 @@ import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import net.momirealms.craftengine.bukkit.util.Reflections;
-import net.momirealms.craftengine.core.util.RandomUtils;
-import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedPalettedContainerHolder;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
@@ -92,7 +89,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -1106,7 +1102,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public org.bukkit.entity.Entity getBukkitEntityById(int entityId, World world) {
+    public org.bukkit.entity.Entity getBukkitEntityById(World world, int entityId) {
         ServerLevel serverLevel = ((CraftWorld) world).getHandle();
         EntityLookup entityLookup = serverLevel.getEntityLookup();
         Entity entity = entityLookup.get(entityId);

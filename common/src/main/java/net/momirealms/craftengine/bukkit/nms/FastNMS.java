@@ -362,5 +362,5 @@ public abstract class FastNMS {
 
     public abstract boolean method$LevelChunk$isUnsaved(Object chunk);
 
-    public abstract org.bukkit.entity.Entity getBukkitEntityById(int entityId, World world);
+    public abstract org.bukkit.entity.Entity getBukkitEntityById(World world, int entityId);
 }
