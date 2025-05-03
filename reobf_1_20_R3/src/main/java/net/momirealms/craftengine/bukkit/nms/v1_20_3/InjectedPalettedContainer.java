@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@SuppressWarnings("deprecation")
 public class InjectedPalettedContainer<T> extends PalettedContainer<T> implements InjectedPalettedContainerHolder {
     private PalettedContainer<T> target;
     private CEWorld world;

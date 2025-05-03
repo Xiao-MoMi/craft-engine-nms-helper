@@ -1348,4 +1348,9 @@ public class FastNMSImpl extends FastNMS {
         Entity entity = entityLookup.get(entityId);
         return entity != null ? entity.getBukkitEntity() : null;
     }
+
+    @Override
+    public Object constructor$ClientboundSystemChatPacket(Object component, boolean overlay) {
+        return new ClientboundSystemChatPacket((Component) component, overlay);
+    }
 }

@@ -363,4 +363,6 @@ public abstract class FastNMS {
     public abstract boolean method$LevelChunk$isUnsaved(Object chunk);
 
     public abstract org.bukkit.entity.Entity getBukkitEntityById(World world, int entityId);
+
+    public abstract Object constructor$ClientboundSystemChatPacket(Object component, boolean overlay);
 }
