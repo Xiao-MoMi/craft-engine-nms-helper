@@ -82,6 +82,8 @@ public abstract class FastNMS {
 
     public abstract Object method$ServerChunkCache$getChunkAtIfLoadedMainThread(Object serverChunkCache, int x, int z);
 
+    public abstract Object method$ServerChunkCache$getChunk(Object serverChunkCache, int x, int z, boolean load);
+
     public abstract Object field$LevelChunkSection$states(Object section);
 
     public abstract Object[] method$ChunkAccess$getSections(Object chunk);

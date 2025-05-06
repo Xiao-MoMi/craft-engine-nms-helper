@@ -1155,4 +1155,10 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundSystemChatPacket(Object component, boolean overlay) {
         return new ClientboundSystemChatPacket((Component) component, overlay);
     }
+
+    @Override
+    public Object method$ServerChunkCache$getChunk(Object serverChunkCache, int x, int z, boolean load) {
+        ServerChunkCache chunkCache = (ServerChunkCache) serverChunkCache;
+        return chunkCache.getChunk(x, z, load);
+    }
 }
