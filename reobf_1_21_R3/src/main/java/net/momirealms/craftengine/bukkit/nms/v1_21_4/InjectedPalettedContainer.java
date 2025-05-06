@@ -5,11 +5,10 @@ import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.momirealms.craftengine.bukkit.plugin.injector.BukkitInjector;
-import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.SectionPos;
 import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
-import net.momirealms.craftengine.core.world.chunk.InjectedPalettedContainerHolder;
+import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,9 +16,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @SuppressWarnings("deprecation")
-public class InjectedPalettedContainer<T> extends PalettedContainer<T> implements InjectedPalettedContainerHolder {
+public class InjectedPalettedContainer<T> extends PalettedContainer<T> implements InjectedHolder.Palette {
     private PalettedContainer<T> target;
-    private CEWorld world;
     private CESection section;
     private CEChunk chunk;
     private SectionPos sectionPos;
@@ -61,16 +59,6 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     @Override
     public void ceSection(CESection ceSection) {
         this.section = ceSection;
-    }
-
-    @Override
-    public CEWorld ceWorld() {
-        return this.world;
-    }
-
-    @Override
-    public void ceWorld(CEWorld ceWorld) {
-        this.world = ceWorld;
     }
 
     @Override

@@ -1,6 +1,6 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_5;
+package net.momirealms.craftengine.bukkit.nms.v1_20_2;
 
-import io.papermc.paper.antixray.ChunkPacketInfo;
+import com.destroystokyo.paper.antixray.ChunkPacketInfo;
 import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.biome.Biome;
@@ -70,11 +70,6 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
     @Override
     public void acquire() {
         this.target.acquire();
-    }
-
-    @Override
-    public @NotNull LevelChunkSection copy() {
-        return this.target.copy();
     }
 
     @Override
@@ -179,7 +174,7 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
     }
 
     @Override
-    public void write(@NotNull FriendlyByteBuf buffer, @NotNull ChunkPacketInfo<BlockState> chunkPacketInfo, int chunkSectionIndex) {
-        this.target.write(buffer, chunkPacketInfo, chunkSectionIndex);
+    public void write(@NotNull FriendlyByteBuf buf, @NotNull ChunkPacketInfo<BlockState> chunkPacketInfo, int chunkSectionIndex) {
+        this.target.write(buf, chunkPacketInfo, chunkSectionIndex);
     }
 }

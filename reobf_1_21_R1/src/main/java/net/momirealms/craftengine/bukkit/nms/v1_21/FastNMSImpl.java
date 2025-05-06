@@ -82,7 +82,7 @@ import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import net.momirealms.craftengine.bukkit.util.Reflections;
-import net.momirealms.craftengine.core.world.chunk.InjectedPalettedContainerHolder;
+import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -109,10 +109,15 @@ public class FastNMSImpl extends FastNMS {
     private static final RegistryAccess REGISTRY_ACCESS = MinecraftServer.getServer().registryAccess();
 
     @Override
-    public InjectedPalettedContainerHolder createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
+    public InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
         InjectedPalettedContainer injectedObject = (InjectedPalettedContainer) Reflections.UNSAFE.allocateInstance(InjectedPalettedContainer.class);
         injectedObject.setTarget(palettedContainer);
         return injectedObject;
+    }
+
+    @Override
+    public InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection) {
+        return new InjectedLevelChunkSection(null, null, (LevelChunkSection) levelChunkSection);
     }
 
     @Override

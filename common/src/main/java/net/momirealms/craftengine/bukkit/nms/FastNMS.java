@@ -2,7 +2,7 @@ package net.momirealms.craftengine.bukkit.nms;
 
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
-import net.momirealms.craftengine.core.world.chunk.InjectedPalettedContainerHolder;
+import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
@@ -50,7 +50,9 @@ public abstract class FastNMS {
         return classSuffix;
     }
 
-    public abstract InjectedPalettedContainerHolder createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException;
+    public abstract InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException;
+
+    public abstract InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection);
 
     public abstract CollisionEntity createCollisionBoat(Object world, Object aabb,
                                                         double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding);
