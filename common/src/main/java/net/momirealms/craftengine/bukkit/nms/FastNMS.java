@@ -72,7 +72,7 @@ public abstract class FastNMS {
 
     public abstract boolean method$BlockStateBase$canOcclude(Object blockState);
 
-    public abstract void method$LevelChunkSection$setBlockState(Object section, int x, int y, int z, Object blockState, boolean lock);
+    public abstract Object method$LevelChunkSection$setBlockState(Object section, int x, int y, int z, Object blockState, boolean lock);
 
     public abstract Object method$LevelChunkSection$getBlockState(Object section, int x, int y, int z);
 

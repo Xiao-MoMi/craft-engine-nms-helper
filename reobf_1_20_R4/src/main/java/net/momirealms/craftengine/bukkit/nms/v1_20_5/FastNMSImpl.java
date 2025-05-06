@@ -175,9 +175,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$LevelChunkSection$setBlockState(Object section, int x, int y, int z, Object blockState, boolean lock) {
+    public Object method$LevelChunkSection$setBlockState(Object section, int x, int y, int z, Object blockState, boolean lock) {
         LevelChunkSection levelChunkSection = (LevelChunkSection) section;
-        levelChunkSection.setBlockState(x, y, z, (BlockState) blockState, lock);
+        return levelChunkSection.setBlockState(x, y, z, (BlockState) blockState, lock);
     }
 
     @Override
