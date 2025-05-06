@@ -21,6 +21,13 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
         super(states, biomes);
     }
 
+    public InjectedLevelChunkSection(PalettedContainer<BlockState> states, PalettedContainer<Holder<Biome>> biomes, CESection section, CEChunk chunk, SectionPos sectionPos) {
+        super(states, biomes);
+        this.section = section;
+        this.chunk = chunk;
+        this.sectionPos = sectionPos;
+    }
+
     @Override
     public CEChunk ceChunk() {
         return this.chunk;
@@ -53,7 +60,7 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
 
     @Override
     public @NotNull LevelChunkSection copy() {
-        return new InjectedLevelChunkSection(this.states.copy(), getBiomes().copy());
+        return new InjectedLevelChunkSection(this.states.copy(), getBiomes().copy(), this.section, this.chunk, this.sectionPos);
     }
 
     @Override
