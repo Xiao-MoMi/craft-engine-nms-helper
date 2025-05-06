@@ -48,6 +48,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -106,7 +107,8 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection) {
-        return new InjectedLevelChunkSection(null, null, (LevelChunkSection) levelChunkSection);
+        LevelChunkSection section = (LevelChunkSection) levelChunkSection;
+        return new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
     }
 
     @Override
@@ -1136,5 +1138,11 @@ public class FastNMSImpl extends FastNMS {
     public Object method$ServerChunkCache$getChunk(Object serverChunkCache, int x, int z, boolean load) {
         ServerChunkCache chunkCache = (ServerChunkCache) serverChunkCache;
         return chunkCache.getChunk(x, z, load);
+    }
+
+    @Override
+    public Object constructor$LevelChunkSection(Object section) {
+        LevelChunkSection levelChunkSection = (LevelChunkSection) section;
+        return new LevelChunkSection(levelChunkSection.getStates(), (PalettedContainer<Holder<Biome>>) levelChunkSection.getBiomes());
     }
 }
