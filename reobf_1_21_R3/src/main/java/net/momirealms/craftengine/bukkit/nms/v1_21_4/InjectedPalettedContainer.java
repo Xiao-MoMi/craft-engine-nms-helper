@@ -42,6 +42,7 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         target.write(buffer, chunkPacketInfo, chunkSectionIndex);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void setTarget(Object target) {
         this.target = (PalettedContainer<T>) target;

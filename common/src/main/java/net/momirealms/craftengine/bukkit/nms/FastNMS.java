@@ -371,4 +371,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ClientboundSystemChatPacket(Object component, boolean overlay);
 
     public abstract Object constructor$LevelChunkSection(Object section);
+
+    public abstract Object field$LevelChunkSection$biomes(Object section);
 }

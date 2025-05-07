@@ -1174,4 +1174,10 @@ public class FastNMSImpl extends FastNMS {
         LevelChunkSection levelChunkSection = (LevelChunkSection) section;
         return new LevelChunkSection(levelChunkSection.getStates(), (PalettedContainer<Holder<Biome>>) levelChunkSection.getBiomes());
     }
+
+    @Override
+    public Object field$LevelChunkSection$biomes(Object section) {
+        LevelChunkSection levelChunkSection = (LevelChunkSection) section;
+        return levelChunkSection.getBiomes();
+    }
 }

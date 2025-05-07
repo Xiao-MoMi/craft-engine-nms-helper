@@ -37,6 +37,7 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         this.isActive = b;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void setTarget(Object target) {
         this.target = (PalettedContainer<T>) target;
