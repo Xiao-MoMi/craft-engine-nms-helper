@@ -21,9 +21,20 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     private CESection section;
     private CEChunk chunk;
     private SectionPos sectionPos;
+    private boolean isActive;
 
     public InjectedPalettedContainer(IdMap<T> idList, T object, Strategy paletteProvider, T @Nullable [] presetValues) {
         super(idList, object, paletteProvider, presetValues);
+    }
+
+    @Override
+    public boolean isActive() {
+        return this.isActive;
+    }
+
+    @Override
+    public void setActive(boolean b) {
+        this.isActive = b;
     }
 
     @Override

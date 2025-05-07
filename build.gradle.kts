@@ -19,7 +19,7 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("net.momirealms:craft-engine-core:0.0.53-beta.6")
-        compileOnly("net.momirealms:craft-engine-bukkit:0.0.53-beta.6")
+        compileOnly("net.momirealms:craft-engine-core:0.0.53-beta.7")
+        compileOnly("net.momirealms:craft-engine-bukkit:0.0.53-beta.7")
     }
 }

@@ -5,7 +5,6 @@ import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.momirealms.craftengine.bukkit.plugin.injector.BukkitInjector;
-import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.SectionPos;
 import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
@@ -19,13 +18,23 @@ import java.util.function.Predicate;
 @SuppressWarnings("deprecation")
 public class InjectedPalettedContainer<T> extends PalettedContainer<T> implements InjectedHolder.Palette {
     private PalettedContainer<T> target;
-    private CEWorld world;
     private CESection section;
     private CEChunk chunk;
     private SectionPos sectionPos;
+    private boolean isActive;
 
     public InjectedPalettedContainer(IdMap<T> idList, T object, Strategy paletteProvider, T @Nullable [] presetValues) {
         super(idList, object, paletteProvider, presetValues);
+    }
+
+    @Override
+    public boolean isActive() {
+        return this.isActive;
+    }
+
+    @Override
+    public void setActive(boolean b) {
+        this.isActive = b;
     }
 
     @SuppressWarnings("unchecked")

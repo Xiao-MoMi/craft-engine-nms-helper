@@ -12,12 +12,11 @@ import net.momirealms.craftengine.core.world.chunk.CESection;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.Callable;
-
 public class InjectedLevelChunkSection extends LevelChunkSection implements InjectedHolder.Section {
     private CESection section;
     private CEChunk chunk;
     private SectionPos sectionPos;
+    private boolean isActive;
 
     public InjectedLevelChunkSection(PalettedContainer<BlockState> states, PalettedContainer<Holder<Biome>> biomes) {
         super(states, biomes);
@@ -28,6 +27,16 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
         this.section = section;
         this.chunk = chunk;
         this.sectionPos = sectionPos;
+    }
+
+    @Override
+    public boolean isActive() {
+        return this.isActive;
+    }
+
+    @Override
+    public void setActive(boolean b) {
+        this.isActive = b;
     }
 
     @Override

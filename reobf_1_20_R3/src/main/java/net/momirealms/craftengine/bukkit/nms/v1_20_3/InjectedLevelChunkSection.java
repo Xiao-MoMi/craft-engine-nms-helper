@@ -16,9 +16,20 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
     private CESection section;
     private CEChunk chunk;
     private SectionPos sectionPos;
+    private boolean isActive;
 
     public InjectedLevelChunkSection(PalettedContainer<BlockState> states, PalettedContainer<Holder<Biome>> biomes) {
         super(states, biomes);
+    }
+
+    @Override
+    public boolean isActive() {
+        return this.isActive;
+    }
+
+    @Override
+    public void setActive(boolean b) {
+        this.isActive = b;
     }
 
     @Override
