@@ -104,7 +104,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -1184,10 +1183,14 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object getBukkitEntityToServerEntity(org.bukkit.entity.Entity entity) {
-        CraftEntity craftEntity = (CraftEntity) entity;
-        Entity nmsEntity = craftEntity.getHandle();
-        return nmsEntity.moonrise$getTrackedEntity().serverEntity;
+    public Object field$Entity$trackedEntity(Object entity) {
+        Entity nmsEntity = (Entity) entity;
+        return nmsEntity.moonrise$getTrackedEntity();
+    }
+
+    @Override
+    public Object filed$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity) {
+        return ((ChunkMap.TrackedEntity) trackedEntity).serverEntity;
     }
 
     @Override
@@ -1196,52 +1199,182 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object modifyCustomTridentPacket(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        int id = packetImpl.getId();
-        UUID uuid = packetImpl.getUUID();
-        EntityType<?> type = EntityType.ITEM_DISPLAY;
-        double x = packetImpl.getX();
-        double y = packetImpl.getY();
-        double z = packetImpl.getZ();
-        float yRot = -packetImpl.getYRot();
-        float xRot = Math.clamp(-packetImpl.getXRot(), -90.0F, 90.0F);
-        float yHeadRot = packetImpl.getYHeadRot();
-        double xa = packetImpl.getXa();
-        double ya = packetImpl.getYa();
-        double za = packetImpl.getZa();
-        int data = packetImpl.getData();
-        return new ClientboundAddEntityPacket(id, uuid, x, y, z, xRot, yRot, type, data, new Vec3(xa, ya, za), yHeadRot);
-    }
-
-    @Override
     public boolean method$AbstractArrow$isInGround(Object entity) {
         AbstractArrow abstractArrow = (AbstractArrow) entity;
-        if (!abstractArrow.wasTouchingWater) return true;
         return abstractArrow.isInGround();
     }
 
     @Override
-    public Object modifyCustomTridentPositionSync(Object packet) {
-        ClientboundEntityPositionSyncPacket packetImpl = (ClientboundEntityPositionSyncPacket) packet;
-        PositionMoveRotation positionMoveRotation = packetImpl.values();
-        boolean onGround = packetImpl.onGround();
-        PositionMoveRotation newPositionMoveRotation = new PositionMoveRotation(
-                positionMoveRotation.position(), positionMoveRotation.deltaMovement(),
-                -positionMoveRotation.yRot(), Math.clamp(-positionMoveRotation.xRot(), -90.0F, 90.0F)
-        );
-        return new ClientboundEntityPositionSyncPacket(packetImpl.id(), newPositionMoveRotation, onGround);
+    public boolean field$AbstractArrow$wasTouchingWater(Object entity) {
+        AbstractArrow abstractArrow = (AbstractArrow) entity;
+        return abstractArrow.wasTouchingWater;
     }
 
     @Override
-    public Object modifyCustomTridentMove(Object packet, int entityId) {
+    public int field$ClientboundEntityPositionSyncPacket$id(Object packet) {
+        ClientboundEntityPositionSyncPacket packetImpl = (ClientboundEntityPositionSyncPacket) packet;
+        return packetImpl.id();
+    }
+
+    @Override
+    public Object field$ClientboundEntityPositionSyncPacket$values(Object packet) {
+        ClientboundEntityPositionSyncPacket packetImpl = (ClientboundEntityPositionSyncPacket) packet;
+        return packetImpl.values();
+    }
+
+    @Override
+    public boolean field$ClientboundEntityPositionSyncPacket$onGround(Object packet) {
+        ClientboundEntityPositionSyncPacket packetImpl = (ClientboundEntityPositionSyncPacket) packet;
+        return packetImpl.onGround();
+    }
+
+    @Override
+    public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, Object values, boolean onGround) {
+        PositionMoveRotation positionMoveRotationImpl = (PositionMoveRotation) values;
+        return new ClientboundEntityPositionSyncPacket(entityId, positionMoveRotationImpl, onGround);
+    }
+
+    @Override
+    public Object field$PositionMoveRotation$position(Object values) {
+        PositionMoveRotation positionMoveRotation = (PositionMoveRotation) values;
+        return positionMoveRotation.position();
+    }
+
+    @Override
+    public Object field$PositionMoveRotation$deltaMovement(Object values) {
+        PositionMoveRotation positionMoveRotation = (PositionMoveRotation) values;
+        return positionMoveRotation.deltaMovement();
+    }
+
+    @Override
+    public float field$PositionMoveRotation$yRot(Object values) {
+        PositionMoveRotation positionMoveRotation = (PositionMoveRotation) values;
+        return positionMoveRotation.yRot();
+    }
+
+    @Override
+    public float field$PositionMoveRotation$xRot(Object values) {
+        PositionMoveRotation positionMoveRotation = (PositionMoveRotation) values;
+        return positionMoveRotation.xRot();
+    }
+
+    @Override
+    public Object constructor$PositionMoveRotation(Object position, Object deltaMovement, float yRot, float xRot) {
+        Vec3 positionImpl = (Vec3) position;
+        Vec3 deltaMovementImpl = (Vec3) deltaMovement;
+        return new PositionMoveRotation(positionImpl, deltaMovementImpl, yRot, xRot);
+    }
+
+    @Override
+    public UUID field$ClientboundAddEntityPacket$uuid(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getUUID();
+    }
+
+    @Override
+    public Object field$ClientboundAddEntityPacket$entityType(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getType();
+    }
+
+    @Override
+    public double field$ClientboundAddEntityPacket$x(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getX();
+    }
+
+    @Override
+    public double field$ClientboundAddEntityPacket$y(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getY();
+    }
+
+    @Override
+    public double field$ClientboundAddEntityPacket$z(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getZ();
+    }
+
+    @Override
+    public float field$ClientboundAddEntityPacket$yRot(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getYRot();
+    }
+
+    @Override
+    public float field$ClientboundAddEntityPacket$xRot(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getXRot();
+    }
+
+    @Override
+    public float field$ClientboundAddEntityPacket$yHeadRot(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getYHeadRot();
+    }
+
+    @Override
+    public double field$ClientboundAddEntityPacket$xa(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getXa();
+    }
+
+    @Override
+    public double field$ClientboundAddEntityPacket$ya(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getYa();
+    }
+
+    @Override
+    public double field$ClientboundAddEntityPacket$za(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getZa();
+    }
+
+    @Override
+    public int field$ClientboundAddEntityPacket$data(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        return packetImpl.getData();
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$xa(Object packet) {
         ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
-        short xa = packetImpl.getXa();
-        short ya = packetImpl.getYa();
-        short za = packetImpl.getZa();
-        byte yRot = Mth.packDegrees(-packetImpl.getYRot());
-        byte xRot = Mth.packDegrees(Math.clamp(-packetImpl.getXRot(), -90.0F, 90.0F));
-        boolean onGround = packetImpl.isOnGround();
+        return packetImpl.getXa();
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$ya(Object packet) {
+        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
+        return packetImpl.getYa();
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$za(Object packet) {
+        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
+        return packetImpl.getZa();
+    }
+
+    @Override
+    public byte field$ClientboundMoveEntityPacket$yRot(Object packet) {
+        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
+        return Mth.packDegrees(packetImpl.getYRot());
+    }
+
+    @Override
+    public byte field$ClientboundMoveEntityPacket$xRot(Object packet) {
+        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
+        return Mth.packDegrees(packetImpl.getXRot());
+    }
+
+    @Override
+    public boolean field$ClientboundMoveEntityPacket$onGround(Object packet) {
+        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
+        return packetImpl.isOnGround();
+    }
+
+    @Override
+    public Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround) {
         return new ClientboundMoveEntityPacket.PosRot(entityId, xa, ya, za, yRot, xRot, onGround);
     }
 }

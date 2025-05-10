@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
@@ -375,15 +374,69 @@ public abstract class FastNMS {
 
     public abstract Object field$LevelChunkSection$biomes(Object section);
 
-    public abstract Object getBukkitEntityToServerEntity(org.bukkit.entity.Entity entity);
+    public abstract Object field$Entity$trackedEntity(Object entity);
+
+    public abstract Object filed$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity);
 
     public abstract void method$ServerEntity$sendChanges(Object serverEntity);
 
-    public abstract Object modifyCustomTridentPacket(Object packet);
-
     public abstract boolean method$AbstractArrow$isInGround(Object entity);
 
-    public abstract Object modifyCustomTridentPositionSync(Object packet);
+    public abstract boolean field$AbstractArrow$wasTouchingWater(Object entity);
 
-    public abstract Object modifyCustomTridentMove(Object packet, int entityId);
+    public abstract int field$ClientboundEntityPositionSyncPacket$id(Object packet);
+
+    public abstract Object field$ClientboundEntityPositionSyncPacket$values(Object packet);
+
+    public abstract boolean field$ClientboundEntityPositionSyncPacket$onGround(Object packet);
+
+    public abstract Object constructor$ClientboundEntityPositionSyncPacket(int entityId, Object values, boolean onGround);
+
+    public abstract Object field$PositionMoveRotation$position(Object values);
+
+    public abstract Object field$PositionMoveRotation$deltaMovement(Object values);
+
+    public abstract float field$PositionMoveRotation$yRot(Object values);
+
+    public abstract float field$PositionMoveRotation$xRot(Object values);
+
+    public abstract Object constructor$PositionMoveRotation(Object position, Object deltaMovement, float yRot, float xRot);
+
+    public abstract UUID field$ClientboundAddEntityPacket$uuid(Object packet);
+
+    public abstract Object field$ClientboundAddEntityPacket$entityType(Object packet);
+
+    public abstract double field$ClientboundAddEntityPacket$x(Object packet);
+
+    public abstract double field$ClientboundAddEntityPacket$y(Object packet);
+
+    public abstract double field$ClientboundAddEntityPacket$z(Object packet);
+
+    public abstract float field$ClientboundAddEntityPacket$yRot(Object packet);
+
+    public abstract float field$ClientboundAddEntityPacket$xRot(Object packet);
+
+    public abstract float field$ClientboundAddEntityPacket$yHeadRot(Object packet);
+
+    public abstract double field$ClientboundAddEntityPacket$xa(Object packet);
+
+    public abstract double field$ClientboundAddEntityPacket$ya(Object packet);
+
+    public abstract double field$ClientboundAddEntityPacket$za(Object packet);
+
+    public abstract int field$ClientboundAddEntityPacket$data(Object packet);
+
+    public abstract short field$ClientboundMoveEntityPacket$xa(Object packet);
+
+    public abstract short field$ClientboundMoveEntityPacket$ya(Object packet);
+
+    public abstract short field$ClientboundMoveEntityPacket$za(Object packet);
+
+    public abstract byte field$ClientboundMoveEntityPacket$yRot(Object packet);
+
+    public abstract byte field$ClientboundMoveEntityPacket$xRot(Object packet);
+
+    public abstract boolean field$ClientboundMoveEntityPacket$onGround(Object packet);
+
+    public abstract Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround);
 }
