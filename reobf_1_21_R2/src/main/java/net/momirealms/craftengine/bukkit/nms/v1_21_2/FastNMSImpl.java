@@ -1033,6 +1033,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public String getCustomItemId(Object itemStack) {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         CustomData customData = nmsStack.get(DataComponents.CUSTOM_DATA);
