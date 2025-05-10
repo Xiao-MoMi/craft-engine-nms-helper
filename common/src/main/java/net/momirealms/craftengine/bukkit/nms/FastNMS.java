@@ -404,8 +404,6 @@ public abstract class FastNMS {
 
     public abstract UUID field$ClientboundAddEntityPacket$uuid(Object packet);
 
-    public abstract Object field$ClientboundAddEntityPacket$entityType(Object packet);
-
     public abstract double field$ClientboundAddEntityPacket$x(Object packet);
 
     public abstract double field$ClientboundAddEntityPacket$y(Object packet);

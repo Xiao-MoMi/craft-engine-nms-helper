@@ -1218,12 +1218,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$ClientboundAddEntityPacket$entityType(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getType();
-    }
-
-    @Override
     public double field$ClientboundAddEntityPacket$x(Object packet) {
         ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
         return packetImpl.getX();
