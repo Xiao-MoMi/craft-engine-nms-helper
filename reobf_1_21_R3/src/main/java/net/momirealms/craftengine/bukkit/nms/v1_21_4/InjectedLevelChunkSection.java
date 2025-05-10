@@ -69,10 +69,10 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
         this.section = ceSection;
     }
 
-    @Override
-    public @NotNull LevelChunkSection copy() {
-        return new InjectedLevelChunkSection(this.states.copy(), getBiomes().copy(), this.section, this.chunk, this.sectionPos);
-    }
+//    @Override
+//    public @NotNull LevelChunkSection copy() {
+//        return new InjectedLevelChunkSection(this.states.copy(), getBiomes().copy(), this.section, this.chunk, this.sectionPos);
+//    }
 
     @Override
     @NotNull
