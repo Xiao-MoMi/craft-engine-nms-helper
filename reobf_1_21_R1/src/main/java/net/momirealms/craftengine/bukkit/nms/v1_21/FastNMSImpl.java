@@ -1368,4 +1368,9 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$Vec3(double x, double y, double z) {
         return new Vec3(x, y, z);
     }
+
+    @Override
+    public Object constructor$ClientboundTeleportEntityPacket(int entityId, double x, double y, double z, byte yRot, byte xRot, boolean onGround) {
+        throw new UnsupportedVersionException();
+    }
 }

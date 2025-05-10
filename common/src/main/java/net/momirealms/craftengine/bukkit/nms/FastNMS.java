@@ -439,4 +439,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround);
 
     public abstract Object constructor$Vec3(double x, double y, double z);
+
+    public abstract Object constructor$ClientboundTeleportEntityPacket(int entityId, double x, double y, double z, byte yRot, byte xRot, boolean onGround);
 }

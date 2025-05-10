@@ -39,7 +39,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -84,10 +83,8 @@ import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_20_R1.scheduler.CraftTask;
 import org.bukkit.craftbukkit.v1_20_R1.util.CraftNamespacedKey;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -1324,5 +1321,19 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$Vec3(double x, double y, double z) {
         return new Vec3(x, y, z);
+    }
+
+    @Override
+    public Object constructor$ClientboundTeleportEntityPacket(int entityId, double x, double y, double z, byte yRot, byte xRot, boolean onGround) {
+        ByteBuf buf = Unpooled.buffer();
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(buf);
+        byteBuf.writeVarInt(entityId);
+        byteBuf.writeDouble(x);
+        byteBuf.writeDouble(y);
+        byteBuf.writeDouble(z);
+        byteBuf.writeByte(yRot);
+        byteBuf.writeByte(xRot);
+        byteBuf.writeBoolean(onGround);
+        return new ClientboundTeleportEntityPacket(byteBuf);
     }
 }
