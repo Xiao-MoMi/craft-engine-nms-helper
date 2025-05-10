@@ -22,6 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPacket;
+import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;
 import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,6 +34,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.server.level.*;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -1338,5 +1340,33 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundTeleportEntityPacket(int entityId, double x, double y, double z, byte yRot, byte xRot, boolean onGround) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$Registry$key(Object registry) {
+        return ((Registry) registry).key();
+    }
+
+    @Override
+    public Map<?, ?> method$TagNetworkSerialization$serializeTagsToNetwork() {
+        return TagNetworkSerialization.serializeTagsToNetwork(MinecraftServer.getServer().registries());
+    }
+
+    @Override
+    public void method$TagNetworkSerialization$NetworkPayload$write(Object networkPayload, Object buffer) {
+        var payload = (TagNetworkSerialization.NetworkPayload) networkPayload;
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        payload.write(buf);
+    }
+
+    @Override
+    public Object method$TagNetworkSerialization$NetworkPayload$read(Object buffer) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
+        return TagNetworkSerialization.NetworkPayload.read(buf);
+    }
+
+    @Override
+    public Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags) {
+        return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
     }
 }

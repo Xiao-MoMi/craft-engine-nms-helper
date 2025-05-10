@@ -441,4 +441,14 @@ public abstract class FastNMS {
     public abstract Object constructor$Vec3(double x, double y, double z);
 
     public abstract Object constructor$ClientboundTeleportEntityPacket(int entityId, double x, double y, double z, byte yRot, byte xRot, boolean onGround);
+
+    public abstract Object method$Registry$key(Object registry);
+
+    public abstract Map<?, ?> method$TagNetworkSerialization$serializeTagsToNetwork();
+
+    public abstract void method$TagNetworkSerialization$NetworkPayload$write(Object networkPayload, Object buffer);
+
+    public abstract Object method$TagNetworkSerialization$NetworkPayload$read(Object buffer);
+
+    public abstract Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags);
 }
