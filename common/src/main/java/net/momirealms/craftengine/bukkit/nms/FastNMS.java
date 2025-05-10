@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
@@ -373,4 +374,16 @@ public abstract class FastNMS {
     public abstract Object constructor$LevelChunkSection(Object section);
 
     public abstract Object field$LevelChunkSection$biomes(Object section);
+
+    public abstract Object getBukkitEntityToServerEntity(org.bukkit.entity.Entity entity);
+
+    public abstract void method$ServerEntity$sendChanges(Object serverEntity);
+
+    public abstract Object modifyCustomTridentPacket(Object packet);
+
+    public abstract boolean method$AbstractArrow$isInGround(Object entity);
+
+    public abstract Object modifyCustomTridentPositionSync(Object packet);
+
+    public abstract Object modifyCustomTridentMove(Object packet, int entityId);
 }

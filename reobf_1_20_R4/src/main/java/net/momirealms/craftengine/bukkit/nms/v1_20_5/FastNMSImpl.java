@@ -43,10 +43,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerAdvancementManager;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ServerChunkCache;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.*;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -55,6 +52,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -1377,5 +1375,69 @@ public class FastNMSImpl extends FastNMS {
     public Object field$LevelChunkSection$biomes(Object section) {
         LevelChunkSection levelChunkSection = (LevelChunkSection) section;
         return levelChunkSection.getBiomes();
+    }
+
+    @Override
+    public Object getBukkitEntityToServerEntity(org.bukkit.entity.Entity entity) {
+        CraftEntity craftEntity = (CraftEntity) entity;
+        Entity nmsEntity = craftEntity.getHandle();
+        if (nmsEntity.tracker == null) return null;
+        return nmsEntity.tracker.serverEntity;
+    }
+
+    @Override
+    public void method$ServerEntity$sendChanges(Object serverEntity) {
+        ((ServerEntity) serverEntity).sendChanges();
+    }
+
+    @Override
+    public Object modifyCustomTridentPacket(Object packet) {
+        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
+        int id = packetImpl.getId();
+        UUID uuid = packetImpl.getUUID();
+        EntityType<?> type = EntityType.ITEM_DISPLAY;
+        double x = packetImpl.getX();
+        double y = packetImpl.getY();
+        double z = packetImpl.getZ();
+        float yRot = -packetImpl.getYRot();
+        float xRot = Math.clamp(-packetImpl.getXRot(), -90.0F, 90.0F);
+        float yHeadRot = packetImpl.getYHeadRot();
+        double xa = packetImpl.getXa();
+        double ya = packetImpl.getYa();
+        double za = packetImpl.getZa();
+        int data = packetImpl.getData();
+        return new ClientboundAddEntityPacket(id, uuid, x, y, z, xRot, yRot, type, data, new Vec3(xa, ya, za), yHeadRot);
+    }
+
+    @Override
+    public boolean method$AbstractArrow$isInGround(Object entity) {
+        AbstractArrow abstractArrow = (AbstractArrow) entity;
+        if (!abstractArrow.wasTouchingWater) return true;
+        return abstractArrow.inGround;
+    }
+
+    @Override
+    public Object modifyCustomTridentPositionSync(Object packet) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object modifyCustomTridentMove(Object packet, int entityId) {
+        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
+        short xa = packetImpl.getXa();
+        short ya = packetImpl.getYa();
+        short za = packetImpl.getZa();
+        byte yRot = packetImpl.getyRot();
+        byte xRot = packetImpl.getxRot();
+        float yRotFloat = -((yRot * 360) / 256.0F);
+        float xRotFloat = Math.clamp(-((xRot * 360) / 256.0F), -90.0F, 90.0F);
+        float yRotFloat0 = yRotFloat * 256.0F / 360.0F;
+        float xRotFloat0 = xRotFloat * 256.0F / 360.0F;
+        int yRotFloat1 = (int) yRotFloat0;
+        int xRotFloat1 = (int) xRotFloat0;
+        yRot = (byte) (yRotFloat0 < (float) yRotFloat1 ? yRotFloat1 - 1 : yRotFloat1);
+        xRot = (byte) (xRotFloat0 < (float) xRotFloat1 ? xRotFloat1 - 1 : xRotFloat1);
+        boolean onGround = packetImpl.isOnGround();
+        return new ClientboundMoveEntityPacket.PosRot(entityId, xa, ya, za, yRot, xRot, onGround);
     }
 }
