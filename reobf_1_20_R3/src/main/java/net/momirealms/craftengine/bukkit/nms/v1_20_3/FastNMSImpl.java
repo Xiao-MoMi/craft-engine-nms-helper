@@ -1330,4 +1330,9 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround) {
         return new ClientboundMoveEntityPacket.PosRot(entityId, xa, ya, za, yRot, xRot, onGround);
     }
+
+    @Override
+    public Object constructor$Vec3(double x, double y, double z) {
+        return new Vec3(x, y, z);
+    }
 }
