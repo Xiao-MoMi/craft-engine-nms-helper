@@ -1401,9 +1401,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean field$AbstractArrow$wasTouchingWater(Object entity) {
-        AbstractArrow abstractArrow = (AbstractArrow) entity;
-        return abstractArrow.wasTouchingWater;
+    public boolean field$Entity$wasTouchingWater(Object entity) {
+        Entity entityImpl = (Entity) entity;
+        return entityImpl.wasTouchingWater;
     }
 
     @Override

@@ -99,6 +99,7 @@ import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.scheduler.CraftTask;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -1195,6 +1196,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$ServerEntity$sendChanges(Object serverEntity) {
+        Arrow arrow;
         ((ServerEntity) serverEntity).sendChanges();
     }
 
@@ -1205,9 +1207,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean field$AbstractArrow$wasTouchingWater(Object entity) {
-        AbstractArrow abstractArrow = (AbstractArrow) entity;
-        return abstractArrow.wasTouchingWater;
+    public boolean field$Entity$wasTouchingWater(Object entity) {
+        Entity entityImpl = (Entity) entity;
+        return entityImpl.wasTouchingWater;
     }
 
     @Override

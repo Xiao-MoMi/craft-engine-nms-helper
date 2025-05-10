@@ -382,7 +382,7 @@ public abstract class FastNMS {
 
     public abstract boolean method$AbstractArrow$isInGround(Object entity);
 
-    public abstract boolean field$AbstractArrow$wasTouchingWater(Object entity);
+    public abstract boolean field$Entity$wasTouchingWater(Object entity);
 
     public abstract int field$ClientboundEntityPositionSyncPacket$id(Object packet);
 
