@@ -1370,4 +1370,9 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags) {
         return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
     }
+
+    @Override
+    public Object method$Registry$get(Object registry, Object key) {
+        return ((Registry) registry).get((ResourceLocation) key);
+    }
 }

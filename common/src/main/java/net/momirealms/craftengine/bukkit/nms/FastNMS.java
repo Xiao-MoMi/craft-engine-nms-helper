@@ -451,4 +451,6 @@ public abstract class FastNMS {
     public abstract Object method$TagNetworkSerialization$NetworkPayload$read(Object buffer);
 
     public abstract Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags);
+
+    public abstract Object method$Registry$get(Object registry, Object key);
 }
