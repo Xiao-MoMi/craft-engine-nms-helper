@@ -232,9 +232,9 @@ public abstract class FastNMS {
 
     public abstract void method$ParticleOptions$writeToNetwork(Object particle, Object buffer);
 
-    public abstract Optional<Object> method$BuiltInRegistries$byId(Object registry, int id);
+    public abstract Optional<Object> method$IdMap$byId(Object registry, int id);
 
-    public abstract Optional<Integer> method$BuiltInRegistries$getId(Object registry, Object value);
+    public abstract Optional<Integer> method$IdMap$getId(Object registry, Object value);
 
     public abstract String[] method$SoundEvent$location(Object soundEvent);
 
@@ -452,5 +452,4 @@ public abstract class FastNMS {
 
     public abstract Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags);
 
-    public abstract Object method$Registry$get(Object registry, Object key);
 }

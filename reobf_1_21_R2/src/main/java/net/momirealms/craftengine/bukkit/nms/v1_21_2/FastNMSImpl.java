@@ -55,10 +55,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -642,7 +639,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Object> method$BuiltInRegistries$byId(Object registry, int id) {
+    public Optional<Object> method$IdMap$byId(Object registry, int id) {
         Object object = ((IdMap)registry).byId(id);
         if (object == null) {
             return Optional.empty();
@@ -651,7 +648,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Integer> method$BuiltInRegistries$getId(Object registry, Object value) {
+    public Optional<Integer> method$IdMap$getId(Object registry, Object value) {
         int id = ((IdMap)registry).getId(value);
         return id == -1 ? Optional.empty() : Optional.of(id);
     }
@@ -1412,8 +1409,4 @@ public class FastNMSImpl extends FastNMS {
         return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
     }
 
-    @Override
-    public Object method$Registry$get(Object registry, Object key) {
-        return ((Registry) registry).getValue((ResourceLocation) key);
-    }
 }

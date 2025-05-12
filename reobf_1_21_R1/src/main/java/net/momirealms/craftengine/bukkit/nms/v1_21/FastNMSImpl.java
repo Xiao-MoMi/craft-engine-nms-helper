@@ -641,7 +641,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Object> method$BuiltInRegistries$byId(Object registry, int id) {
+    public Optional<Object> method$IdMap$byId(Object registry, int id) {
         Object object = ((IdMap)registry).byId(id);
         if (object == null) {
             return Optional.empty();
@@ -650,7 +650,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Integer> method$BuiltInRegistries$getId(Object registry, Object value) {
+    public Optional<Integer> method$IdMap$getId(Object registry, Object value) {
         int id = ((IdMap)registry).getId(value);
         return id == -1 ? Optional.empty() : Optional.of(id);
     }
@@ -1405,8 +1405,4 @@ public class FastNMSImpl extends FastNMS {
         return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
     }
 
-    @Override
-    public Object method$Registry$get(Object registry, Object key) {
-        return ((Registry) registry).get((ResourceLocation) key);
-    }
 }

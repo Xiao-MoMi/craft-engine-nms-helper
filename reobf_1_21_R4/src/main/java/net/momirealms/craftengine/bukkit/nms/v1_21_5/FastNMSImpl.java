@@ -9,6 +9,8 @@ import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.configuration.GlobalConfiguration;
+import io.papermc.paper.plugin.entrypoint.classloader.BytecodeModifyingURLClassLoader;
+import io.papermc.paper.plugin.entrypoint.classloader.PaperPluginClassLoader;
 import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
 import net.minecraft.advancements.*;
 import net.minecraft.core.*;
@@ -56,10 +58,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -105,6 +104,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.PluginClassLoader;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
@@ -112,6 +112,7 @@ import java.util.*;
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
     private static final RegistryAccess REGISTRY_ACCESS = MinecraftServer.getServer().registryAccess();
+    private ArmorDyeRecipe recipe;
 
     @Override
     public InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
@@ -643,8 +644,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Object> method$BuiltInRegistries$byId(Object registry, int id) {
-        Object object = ((IdMap)registry).byId(id);
+    public Optional<Object> method$IdMap$byId(Object registry, int id) {
+        Object object = ((IdMap) registry).byId(id);
         if (object == null) {
             return Optional.empty();
         }
@@ -652,8 +653,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Integer> method$BuiltInRegistries$getId(Object registry, Object value) {
-        int id = ((IdMap)registry).getId(value);
+    public Optional<Integer> method$IdMap$getId(Object registry, Object value) {
+        int id = ((IdMap) registry).getId(value);
         return id == -1 ? Optional.empty() : Optional.of(id);
     }
 
@@ -1412,11 +1413,8 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags) {
+        PaperPluginClassLoader;
+        PluginClassLoader
         return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
-    }
-
-    @Override
-    public Object method$Registry$get(Object registry, Object key) {
-        return ((Registry) registry).getValue((ResourceLocation) key);
     }
 }
