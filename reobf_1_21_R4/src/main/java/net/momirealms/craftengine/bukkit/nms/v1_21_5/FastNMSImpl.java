@@ -1413,8 +1413,6 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags) {
-        PaperPluginClassLoader;
-        PluginClassLoader
         return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
     }
 }

@@ -1363,4 +1363,9 @@ public class FastNMSImpl extends FastNMS {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
         return TagNetworkSerialization.NetworkPayload.read(buf);
     }
+
+    @Override
+    public Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags) {
+        return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
+    }
 }
