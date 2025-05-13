@@ -3,7 +3,6 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_5;
 import io.papermc.paper.antixray.ChunkPacketInfo;
 import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.momirealms.craftengine.bukkit.plugin.injector.BukkitInjector;
 import net.momirealms.craftengine.core.world.SectionPos;

@@ -14,8 +14,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
@@ -128,7 +130,7 @@ public abstract class FastNMS {
 
     public abstract Object constructor$AABB(double x1, double y1, double z1, double x2, double y2, double z2);
 
-    public abstract void method$LevelWriter$addFreshEntity(Object level, Object entity);
+    public abstract boolean method$LevelWriter$addFreshEntity(Object level, Object entity);
 
     public abstract Object method$CraftEntity$getHandle(Object entity);
 
@@ -459,4 +461,94 @@ public abstract class FastNMS {
     public abstract Object constructor$ClientboundSetSubtitleTextPacket(Object component);
 
     public abstract Object constructor$ClientboundSetTitlesAnimationPacket(int fadeIn, int stay, int fadeOut);
+    public abstract Object method$ItemStack$copyWithCount(Object stack, int count);
+
+    public abstract Object method$ItemStack$copy(Object stack);
+
+    public abstract float method$EnchantmentHelper$getTridentSpinAttackStrength(Object stack, Object entity);
+
+    public abstract boolean method$Entity$isInWaterOrRain(Object entity);
+
+    public abstract boolean method$ItemStack$nextDamageWillBreak(Object stack);
+
+    public abstract void method$ItemStack$setDamageValue(Object stack, int damage);
+
+    public abstract int method$ItemStack$getDamageValue(Object stack);
+
+    public abstract Object method$EnchantmentHelper$pickHighestLevel(Object stack);
+
+    public abstract Object method$Projectile$ThrownTrident$spawnProjectileFromRotationDelayed(Object level, Object spawnedFrom, Object owner, float z, float velocity, float innaccuracy);
+
+    public abstract Object method$Projectile$Delayed$projectile(Object projectile);
+
+    public abstract boolean method$Projectile$Delayed$attemptSpawn(Object projectile);
+
+    public abstract Object field$Player$containerMenu(Object player);
+
+    public abstract void method$AbstractContainerMenu$sendAllDataToRemote(Object menu);
+
+    public abstract void method$ItemStack$hurtWithoutBreaking(Object stack, int damage, Object player);
+
+    public abstract void method$ItemStack$consume(Object stack, int amount, Object player);
+
+    public abstract Object field$AbstractArrow$pickupItemStack(Object entity);
+
+    public abstract void field$AbstractArrow$pickupItemStack(Object entity, Object pickupItemStack);
+
+    public abstract boolean method$Player$hasInfiniteMaterials(Object player);
+
+    public abstract Object field$AbstractArrow$pickup(Object entity);
+
+    public abstract void field$AbstractArrow$pickup(Object entity, Object pickup);
+
+    public abstract void method$Level$playSound(Object level, @Nullable Object entity, Object sourceEntity, Object sound, Object source, float volume, float pitch);
+
+    public abstract float method$Entity$getYRot(Object entity);
+
+    public abstract float method$Entity$getXRot(Object entity);
+
+    public abstract void method$CraftEventFactory$callPlayerRiptideEvent(Object player, Object tridentItemStack, float velocityX, float velocityY, float velocityZ);
+
+    public abstract void method$Entity$push(Object entity, double x, double y, double z);
+
+    public abstract void method$Player$startAutoSpinAttack(Object player, int ticks, float damage, Object itemStack);
+
+    public abstract boolean method$Entity$onGround(Object entity);
+
+    public abstract void method$Entity$move(Object entity, Object type, Object movement);
+
+    public abstract boolean method$ItemStack$isEmpty(Object stack);
+
+    public abstract Object method$Holder$value(Object holder);
+
+    public abstract boolean field$Entity$hurtMarked(Object entity);
+
+    public abstract void field$Entity$hurtMarked(Object entity, boolean hurtMarked);
+
+    public abstract Object constructor$ThrownTrident(Object level, Object owner, Object stack);
+
+    public abstract void method$ThrownTrident$shootFromRotation(Object entity, Object shooter, float pitch, float yaw, float roll, float speed, float divergence);
+
+    public abstract void method$ItemStack$hurtAndBreak(Object stack, int amount, Object entity, Object slot);
+
+    public abstract Object method$LivingEntity$getSlotForHand(Object hand);
+
+    public abstract Object method$LivingEntity$getUsedItemHand(Object entity);
+
+    public abstract Object method$Player$getInventory(Object player);
+
+    public abstract void method$Inventory$removeItem(Object inventory, Object stack);
+
+    public abstract void method$ItemStack$hurtAndBreak(Object stack, int amount, Object entity, Consumer<?> breakCallback);
+
+    public abstract Object method$Player$getAbilities(Object player);
+
+    public abstract boolean field$Abilities$instabuild(Object abilities);
+
+    public abstract void method$LivingEntity$broadcastBreakEvent(Object entity, Object hand);
+
+    public abstract Object field$ThrownTrident$tridentItem(Object entity);
+
+    public abstract void field$ThrownTrident$tridentItem(Object entity, Object tridentItem);
+
 }

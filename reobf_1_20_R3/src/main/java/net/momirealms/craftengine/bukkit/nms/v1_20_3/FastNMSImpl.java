@@ -36,17 +36,25 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.server.level.*;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Abilities;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -86,6 +94,7 @@ import org.bukkit.craftbukkit.v1_20_R3.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntityType;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_20_R3.scheduler.CraftTask;
 import org.bukkit.entity.Player;
@@ -93,7 +102,9 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -309,9 +320,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$LevelWriter$addFreshEntity(Object level, Object entity) {
+    public boolean method$LevelWriter$addFreshEntity(Object level, Object entity) {
         LevelWriter levelWriter = (LevelWriter) level;
-        levelWriter.addFreshEntity((Entity) entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        return levelWriter.addFreshEntity((Entity) entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     @Override
@@ -1390,4 +1401,234 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundSetTitlesAnimationPacket(int fadeIn, int stay, int fadeOut) {
         return new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
     }
+    @Override
+    public Object method$ItemStack$copyWithCount(Object stack, int count) {
+        return ((net.minecraft.world.item.ItemStack) stack).copyWithCount(count);
+    }
+
+    @Override
+    public Object method$ItemStack$copy(Object stack) {
+        return ((net.minecraft.world.item.ItemStack) stack).copy();
+    }
+
+    @Override
+    public float method$EnchantmentHelper$getTridentSpinAttackStrength(Object stack, Object entity) {
+        return EnchantmentHelper.getRiptide((net.minecraft.world.item.ItemStack) stack);
+    }
+
+    @Override
+    public boolean method$Entity$isInWaterOrRain(Object entity) {
+        return ((net.minecraft.world.entity.Entity) entity).isInWaterOrRain();
+    }
+
+    @Override
+    public boolean method$ItemStack$nextDamageWillBreak(Object stack) {
+        net.minecraft.world.item.ItemStack stackImpl = (net.minecraft.world.item.ItemStack) stack;
+        return stackImpl.isDamageableItem() && stackImpl.getDamageValue() >= stackImpl.getMaxDamage() - 1;
+    }
+
+    @Override
+    public void method$ItemStack$setDamageValue(Object stack, int damage) {
+        ((net.minecraft.world.item.ItemStack) stack).setDamageValue(damage);
+    }
+
+    @Override
+    public int method$ItemStack$getDamageValue(Object stack) {
+        return ((net.minecraft.world.item.ItemStack) stack).getDamageValue();
+    }
+
+    @Override
+    public Object method$EnchantmentHelper$pickHighestLevel(Object stack) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$Projectile$ThrownTrident$spawnProjectileFromRotationDelayed(Object level, Object spawnedFrom, Object owner, float z, float velocity, float innaccuracy) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$Projectile$Delayed$projectile(Object projectile) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public boolean method$Projectile$Delayed$attemptSpawn(Object projectile) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$Player$containerMenu(Object player) {
+        return ((net.minecraft.world.entity.player.Player) player).containerMenu;
+    }
+
+    @Override
+    public void method$AbstractContainerMenu$sendAllDataToRemote(Object menu) {
+        ((AbstractContainerMenu) menu).sendAllDataToRemote();
+    }
+
+    @Override
+    public void method$ItemStack$hurtWithoutBreaking(Object stack, int damage, Object player) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void method$ItemStack$consume(Object stack, int amount, Object player) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$AbstractArrow$pickupItemStack(Object entity) {
+        return ((AbstractArrow) entity).pickupItemStack;
+    }
+
+    @Override
+    public void field$AbstractArrow$pickupItemStack(Object entity, Object pickupItemStack) {
+        ((AbstractArrow) entity).pickupItemStack = (net.minecraft.world.item.ItemStack) pickupItemStack;
+    }
+
+    @Override
+    public boolean method$Player$hasInfiniteMaterials(Object player) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$AbstractArrow$pickup(Object entity) {
+        return ((AbstractArrow) entity).pickup;
+    }
+
+    @Override
+    public void field$AbstractArrow$pickup(Object entity, Object pickup) {
+        ((AbstractArrow) entity).pickup = (AbstractArrow.Pickup) pickup;
+    }
+
+    @Override
+    public void method$Level$playSound(Object level, @Nullable Object entity, Object sourceEntity, Object sound, Object source, float volume, float pitch) {
+        ((Level) level).playSound((net.minecraft.world.entity.player.Player) entity, (Entity) sourceEntity, (SoundEvent) sound, (SoundSource) source, volume, pitch);
+    }
+
+    @Override
+    public float method$Entity$getYRot(Object entity) {
+        return ((net.minecraft.world.entity.Entity) entity).getYRot();
+    }
+
+    @Override
+    public float method$Entity$getXRot(Object entity) {
+        return ((net.minecraft.world.entity.Entity) entity).getXRot();
+    }
+
+    @Override
+    public void method$CraftEventFactory$callPlayerRiptideEvent(Object player, Object tridentItemStack, float velocityX, float velocityY, float velocityZ) {
+        CraftEventFactory.callPlayerRiptideEvent(
+                (net.minecraft.world.entity.player.Player) player,
+                (net.minecraft.world.item.ItemStack) tridentItemStack,
+                velocityX, velocityY, velocityZ
+        );
+    }
+
+    @Override
+    public void method$Entity$push(Object entity, double x, double y, double z) {
+        ((net.minecraft.world.entity.Entity) entity).push(x, y, z);
+    }
+
+    @Override
+    public void method$Player$startAutoSpinAttack(Object player, int ticks, float damage, Object itemStack) {
+        ((net.minecraft.world.entity.player.Player) player).startAutoSpinAttack(ticks);
+    }
+
+    @Override
+    public boolean method$Entity$onGround(Object entity) {
+        return ((net.minecraft.world.entity.Entity) entity).onGround();
+    }
+
+    @Override
+    public void method$Entity$move(Object entity, Object type, Object movement) {
+        ((net.minecraft.world.entity.Entity) entity).move((MoverType) type, (Vec3) movement);
+    }
+
+    @Override
+    public boolean method$ItemStack$isEmpty(Object stack) {
+        return ((net.minecraft.world.item.ItemStack) stack).isEmpty();
+    }
+
+    @Override
+    public Object method$Holder$value(Object holder) {
+        return ((Holder<?>) holder).value();
+    }
+
+    @Override
+    public boolean field$Entity$hurtMarked(Object entity) {
+        return ((Entity) entity).hurtMarked;
+    }
+
+    @Override
+    public void field$Entity$hurtMarked(Object entity, boolean hurtMarked) {
+        ((Entity) entity).hurtMarked = hurtMarked;
+    }
+
+    @Override
+    public Object constructor$ThrownTrident(Object level, Object owner, Object stack) {
+        return new ThrownTrident((Level) level, (LivingEntity) owner, (net.minecraft.world.item.ItemStack) stack);
+    }
+
+    @Override
+    public void method$ThrownTrident$shootFromRotation(Object entity, Object shooter, float pitch, float yaw, float roll, float speed, float divergence) {
+        ((ThrownTrident) entity).shootFromRotation((Entity) shooter, pitch, yaw, roll, speed, divergence);
+    }
+
+    @Override
+    public void method$ItemStack$hurtAndBreak(Object stack, int amount, Object entity, Object slot) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$LivingEntity$getSlotForHand(Object hand) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$LivingEntity$getUsedItemHand(Object entity) {
+        return ((LivingEntity) entity).getUsedItemHand();
+    }
+
+    @Override
+    public Object method$Player$getInventory(Object player) {
+        return ((net.minecraft.world.entity.player.Player) player).getInventory();
+    }
+
+    @Override
+    public void method$Inventory$removeItem(Object inventory, Object stack) {
+        ((Inventory) inventory).removeItem((net.minecraft.world.item.ItemStack) stack);
+    }
+
+    @Override
+    public void method$ItemStack$hurtAndBreak(Object stack, int amount, Object entity, Consumer<?> breakCallback) {
+        ((net.minecraft.world.item.ItemStack) stack).hurtAndBreak(amount, (LivingEntity)entity, (Consumer<LivingEntity>)breakCallback);
+    }
+
+    @Override
+    public Object method$Player$getAbilities(Object player) {
+        return ((net.minecraft.world.entity.player.Player) player).getAbilities();
+    }
+
+    @Override
+    public boolean field$Abilities$instabuild(Object abilities) {
+        return ((Abilities) abilities).instabuild;
+    }
+
+    @Override
+    public void method$LivingEntity$broadcastBreakEvent(Object entity, Object hand) {
+        ((LivingEntity) entity).broadcastBreakEvent((net.minecraft.world.InteractionHand) hand);
+    }
+
+    @Override
+    public Object field$ThrownTrident$tridentItem(Object entity) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void field$ThrownTrident$tridentItem(Object entity, Object tridentItem) {
+        throw new UnsupportedVersionException();
+    }
+
 }
