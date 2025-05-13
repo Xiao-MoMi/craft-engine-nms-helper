@@ -452,4 +452,11 @@ public abstract class FastNMS {
 
     public abstract Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags);
 
+    public abstract Object constructor$ClientboundActionBarPacket(Object component);
+
+    public abstract Object constructor$ClientboundSetTitleTextPacket(Object component);
+
+    public abstract Object constructor$ClientboundSetSubtitleTextPacket(Object component);
+
+    public abstract Object constructor$ClientboundSetTitlesAnimationPacket(int fadeIn, int stay, int fadeOut);
 }

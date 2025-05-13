@@ -7,8 +7,6 @@ import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
-import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import io.papermc.paper.plugin.entrypoint.classloader.PaperPluginClassLoader;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.critereon.DeserializationContext;
@@ -42,7 +40,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -1362,5 +1359,30 @@ public class FastNMSImpl extends FastNMS {
     public Object method$TagNetworkSerialization$NetworkPayload$read(Object buffer) {
         FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
         return TagNetworkSerialization.NetworkPayload.read(buf);
+    }
+
+    @Override
+    public Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags) {
+        return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
+    }
+
+    @Override
+    public Object constructor$ClientboundActionBarPacket(Object component) {
+        return new ClientboundSetActionBarTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetTitleTextPacket(Object component) {
+        return new ClientboundSetTitleTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetSubtitleTextPacket(Object component) {
+        return new ClientboundSetSubtitleTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetTitlesAnimationPacket(int fadeIn, int stay, int fadeOut) {
+        return new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
     }
 }

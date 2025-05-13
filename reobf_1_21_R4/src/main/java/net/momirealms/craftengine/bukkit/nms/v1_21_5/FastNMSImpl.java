@@ -9,8 +9,6 @@ import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.configuration.GlobalConfiguration;
-import io.papermc.paper.plugin.entrypoint.classloader.BytecodeModifyingURLClassLoader;
-import io.papermc.paper.plugin.entrypoint.classloader.PaperPluginClassLoader;
 import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
 import net.minecraft.advancements.*;
 import net.minecraft.core.*;
@@ -104,7 +102,6 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.PluginClassLoader;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
@@ -1413,8 +1410,26 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object constructor$ClientboundUpdateTagsPacket(Map<?, ?> tags) {
-        PaperPluginClassLoader;
-        PluginClassLoader
         return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
+    }
+
+    @Override
+    public Object constructor$ClientboundActionBarPacket(Object component) {
+        return new ClientboundSetActionBarTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetTitleTextPacket(Object component) {
+        return new ClientboundSetTitleTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetSubtitleTextPacket(Object component) {
+        return new ClientboundSetSubtitleTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetTitlesAnimationPacket(int fadeIn, int stay, int fadeOut) {
+        return new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
     }
 }

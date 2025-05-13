@@ -1409,4 +1409,23 @@ public class FastNMSImpl extends FastNMS {
         return new ClientboundUpdateTagsPacket((Map<ResourceKey<? extends Registry<?>>, TagNetworkSerialization.NetworkPayload>) tags);
     }
 
+    @Override
+    public Object constructor$ClientboundActionBarPacket(Object component) {
+        return new ClientboundSetActionBarTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetTitleTextPacket(Object component) {
+        return new ClientboundSetTitleTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetSubtitleTextPacket(Object component) {
+        return new ClientboundSetSubtitleTextPacket((Component) component);
+    }
+
+    @Override
+    public Object constructor$ClientboundSetTitlesAnimationPacket(int fadeIn, int stay, int fadeOut) {
+        return new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
+    }
 }
