@@ -94,7 +94,6 @@ import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftChunk;
@@ -1653,7 +1652,6 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$ItemStack$hurtAndBreak(Object stack, int amount, Object entity, Consumer<?> breakCallback) {
-        AttributeModifier attributeModifier = new AttributeModifier()
         throw new UnsupportedVersionException();
     }
 
