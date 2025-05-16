@@ -1625,4 +1625,12 @@ public class FastNMSImpl extends FastNMS {
         ((ThrownTrident) entity).tridentItem = (net.minecraft.world.item.ItemStack) tridentItem;
     }
 
+    @Override
+    public ItemStack ensureCraftItemStack(ItemStack itemStack) {
+        if (itemStack instanceof CraftItemStack craftItemStack) {
+            return craftItemStack;
+        } else {
+            return CraftItemStack.asCraftCopy(itemStack);
+        }
+    }
 }

@@ -1232,6 +1232,7 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         DataComponentType type = (DataComponentType) componentType;
         nmsStack.set(type, component);
+        CraftItemStack craftItemStack;
     }
 
     @Override
@@ -1852,4 +1853,12 @@ public class FastNMSImpl extends FastNMS {
         throw new UnsupportedVersionException();
     }
 
+    @Override
+    public ItemStack ensureCraftItemStack(ItemStack itemStack) {
+        if (itemStack instanceof CraftItemStack craftItemStack) {
+            return craftItemStack;
+        } else {
+            return CraftItemStack.asCraftCopy(itemStack);
+        }
+    }
 }

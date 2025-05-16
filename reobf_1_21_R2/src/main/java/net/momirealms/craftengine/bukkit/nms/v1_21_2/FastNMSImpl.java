@@ -1678,4 +1678,12 @@ public class FastNMSImpl extends FastNMS {
         throw new UnsupportedVersionException();
     }
 
+    @Override
+    public ItemStack ensureCraftItemStack(ItemStack itemStack) {
+        if (itemStack instanceof CraftItemStack craftItemStack) {
+            return craftItemStack;
+        } else {
+            return CraftItemStack.asCraftCopy(itemStack);
+        }
+    }
 }

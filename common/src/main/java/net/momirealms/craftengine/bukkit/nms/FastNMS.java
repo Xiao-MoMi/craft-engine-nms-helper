@@ -551,4 +551,5 @@ public abstract class FastNMS {
 
     public abstract void field$ThrownTrident$tridentItem(Object entity, Object tridentItem);
 
+    public abstract ItemStack ensureCraftItemStack(ItemStack itemStack);
 }
