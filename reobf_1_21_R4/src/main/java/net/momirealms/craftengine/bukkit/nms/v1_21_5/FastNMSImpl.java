@@ -61,7 +61,10 @@ import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
@@ -119,7 +122,6 @@ import java.util.function.Consumer;
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
     private static final RegistryAccess REGISTRY_ACCESS = MinecraftServer.getServer().registryAccess();
-    private ArmorDyeRecipe recipe;
 
     @Override
     public InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
@@ -925,7 +927,7 @@ public class FastNMSImpl extends FastNMS {
                 new BlockHitResult(vec3, (Direction) direction, blockPos, false),
                 0);
         try {
-            serverLevel.setBlock(blockPos, Blocks.BARRIER.defaultBlockState(), 4);
+            serverLevel.setBlock(blockPos, Blocks.COBWEB.defaultBlockState(), 4);
             packet.timestamp = System.currentTimeMillis();
             serverPlayer.connection.handleUseItemOn(packet);
         } finally {

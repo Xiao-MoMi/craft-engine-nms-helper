@@ -934,7 +934,7 @@ public class FastNMSImpl extends FastNMS {
                 new BlockHitResult(vec3, (Direction) direction, blockPos, false),
                 0);
         try {
-            serverLevel.setBlock(blockPos, Blocks.BARRIER.defaultBlockState(), 4);
+            serverLevel.setBlock(blockPos, Blocks.COBWEB.defaultBlockState(), 4);
             packet.timestamp = System.currentTimeMillis();
             serverPlayer.connection.handleUseItemOn(packet);
         } finally {
