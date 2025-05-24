@@ -80,10 +80,12 @@ import net.momirealms.craftengine.bukkit.util.Reflections;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_20_R1.CraftChunk;
+import org.bukkit.craftbukkit.v1_20_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
@@ -1629,5 +1631,10 @@ public class FastNMSImpl extends FastNMS {
         } else {
             return CraftItemStack.asCraftCopy(itemStack);
         }
+    }
+
+    @Override
+    public Particle method$CraftParticle$toBukkit(Object nmsParticle) {
+        return CraftParticle.toBukkit((ParticleType) nmsParticle);
     }
 }

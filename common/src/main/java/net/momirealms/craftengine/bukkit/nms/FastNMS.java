@@ -3,10 +3,7 @@ package net.momirealms.craftengine.bukkit.nms;
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
@@ -552,4 +549,6 @@ public abstract class FastNMS {
     public abstract void field$ThrownTrident$tridentItem(Object entity, Object tridentItem);
 
     public abstract ItemStack ensureCraftItemStack(ItemStack itemStack);
+
+    public abstract Particle method$CraftParticle$toBukkit(Object nmsParticle);
 }
