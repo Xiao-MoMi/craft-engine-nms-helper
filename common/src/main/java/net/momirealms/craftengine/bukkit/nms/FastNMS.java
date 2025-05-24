@@ -551,4 +551,6 @@ public abstract class FastNMS {
     public abstract ItemStack ensureCraftItemStack(ItemStack itemStack);
 
     public abstract Particle method$CraftParticle$toBukkit(Object nmsParticle);
+
+    public abstract boolean method$SignalGetter$hasNeighborSignal(Object level, Object blockPos);
 }

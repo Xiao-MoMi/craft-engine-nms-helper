@@ -1640,4 +1640,10 @@ public class FastNMSImpl extends FastNMS {
     public Particle method$CraftParticle$toBukkit(Object nmsParticle) {
         return CraftParticle.minecraftToBukkit((ParticleType) nmsParticle);
     }
+
+    @Override
+    public boolean method$SignalGetter$hasNeighborSignal(Object level, Object blockPos) {
+        SignalGetter levelObj = (SignalGetter) level;
+        return levelObj.hasNeighborSignal((BlockPos) blockPos);
+    }
 }

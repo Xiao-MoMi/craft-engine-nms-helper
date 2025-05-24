@@ -71,6 +71,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.RedstoneLampBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -1694,5 +1695,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Particle method$CraftParticle$toBukkit(Object nmsParticle) {
         return CraftParticle.minecraftToBukkit((ParticleType) nmsParticle);
+    }
+
+    @Override
+    public boolean method$SignalGetter$hasNeighborSignal(Object level, Object blockPos) {
+        SignalGetter levelObj = (SignalGetter) level;
+        return levelObj.hasNeighborSignal((BlockPos) blockPos);
     }
 }
