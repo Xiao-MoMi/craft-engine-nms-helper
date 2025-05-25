@@ -1660,8 +1660,12 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$BlockState$getCollisionShape(Object blockState, Object level, Object blockPos, Object collisionContext) {
         BlockState state = (BlockState) blockState;
-        BlockBehaviour blockBehaviour = null;
-        blockBehaviour.getCollisionShape(null, null, null, null);
         return state.getCollisionShape((BlockGetter) level, (BlockPos) blockPos, (CollisionContext) collisionContext);
+    }
+
+    @Override
+    public Object method$BlockState$getBlockSupportShape(Object blockState, Object level, Object blockPos) {
+        BlockState state = (BlockState) blockState;
+        return state.getBlockSupportShape((BlockGetter) level, (BlockPos) blockPos);
     }
 }
