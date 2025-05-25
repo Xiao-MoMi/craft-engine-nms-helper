@@ -553,4 +553,10 @@ public abstract class FastNMS {
     public abstract Particle method$CraftParticle$toBukkit(Object nmsParticle);
 
     public abstract boolean method$SignalGetter$hasNeighborSignal(Object level, Object blockPos);
+
+    public abstract Object method$BlockState$getBlock(Object blockState);
+
+    public abstract Object method$BlockState$getShape(Object blockState, Object level, Object blockPos, Object collisionContext);
+
+    public abstract Object method$BlockState$getCollisionShape(Object blockState, Object level, Object blockPos, Object collisionContext);
 }

@@ -87,6 +87,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
@@ -1692,7 +1693,6 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Particle method$CraftParticle$toBukkit(Object nmsParticle) {
-        RedstoneLampBlock
         return CraftParticle.minecraftToBukkit((ParticleType) nmsParticle);
     }
 
@@ -1700,5 +1700,23 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$SignalGetter$hasNeighborSignal(Object level, Object blockPos) {
         SignalGetter levelObj = (SignalGetter) level;
         return levelObj.hasNeighborSignal((BlockPos) blockPos);
+    }
+
+    @Override
+    public Object method$BlockState$getBlock(Object blockState) {
+        BlockState block = (BlockState) blockState;
+        return block.getBlock();
+    }
+
+    @Override
+    public Object method$BlockState$getShape(Object blockState, Object level, Object blockPos, Object collisionContext) {
+        BlockState state = (BlockState) blockState;
+        return state.getShape((BlockGetter) level, (BlockPos) blockPos, (CollisionContext) collisionContext);
+    }
+
+    @Override
+    public Object method$BlockState$getCollisionShape(Object blockState, Object level, Object blockPos, Object collisionContext) {
+        BlockState state = (BlockState) blockState;
+        return state.getCollisionShape((BlockGetter) level, (BlockPos) blockPos, (CollisionContext) collisionContext);
     }
 }
