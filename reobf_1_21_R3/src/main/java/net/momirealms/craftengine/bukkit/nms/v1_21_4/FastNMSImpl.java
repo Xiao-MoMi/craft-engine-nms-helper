@@ -84,6 +84,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LevelLightEngine;
+import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -1726,5 +1727,10 @@ public class FastNMSImpl extends FastNMS {
     public Object method$BlockState$getBlockSupportShape(Object blockState, Object level, Object blockPos) {
         BlockState state = (BlockState) blockState;
         return state.getBlockSupportShape((BlockGetter) level, (BlockPos) blockPos);
+    }
+
+    @Override
+    public boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState, Object blockGetter, Object blockPos) {
+        return LightEngine.hasDifferentLightProperties((BlockState) oldState, (BlockState) newState);
     }
 }

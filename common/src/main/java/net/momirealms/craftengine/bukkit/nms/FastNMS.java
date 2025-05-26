@@ -561,4 +561,6 @@ public abstract class FastNMS {
     public abstract Object method$BlockState$getCollisionShape(Object blockState, Object level, Object blockPos, Object collisionContext);
 
     public abstract Object method$BlockState$getBlockSupportShape(Object blockState, Object level, Object blockPos);
+
+    public abstract boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState, Object blockGetter, Object blockPos);
 }
