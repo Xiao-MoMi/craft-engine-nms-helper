@@ -1674,4 +1674,22 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState, Object blockGetter, Object blockPos) {
         return LightEngine.hasDifferentLightProperties((BlockGetter) blockGetter, (BlockPos) blockPos, (BlockState) oldState, (BlockState) newState);
     }
+
+    @Override
+    public Object constructor$FriendlyByteBuf(ByteBuf buf) {
+        return new FriendlyByteBuf(buf);
+    }
+
+    @Override
+    public ItemStack method$FriendlyByteBuf$readItem(Object buf) {
+        FriendlyByteBuf byteBuf = (FriendlyByteBuf) buf;
+        net.minecraft.world.item.ItemStack itemStack = byteBuf.readItem();
+        return CraftItemStack.asCraftMirror(itemStack);
+    }
+
+    @Override
+    public void method$FriendlyByteBuf$writeItem(Object buf, ItemStack itemStack) {
+        FriendlyByteBuf byteBuf = (FriendlyByteBuf) buf;
+        byteBuf.writeItem(CraftItemStack.unwrap(itemStack));
+    }
 }

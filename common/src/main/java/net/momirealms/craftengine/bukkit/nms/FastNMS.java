@@ -563,4 +563,10 @@ public abstract class FastNMS {
     public abstract Object method$BlockState$getBlockSupportShape(Object blockState, Object level, Object blockPos);
 
     public abstract boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState, Object blockGetter, Object blockPos);
+
+    public abstract Object constructor$FriendlyByteBuf(ByteBuf buf);
+
+    public abstract ItemStack method$FriendlyByteBuf$readItem(Object buf);
+
+    public abstract void method$FriendlyByteBuf$writeItem(Object buf, ItemStack itemStack);
 }
