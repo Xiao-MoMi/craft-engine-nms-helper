@@ -1719,6 +1719,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object constructor$FriendlyByteBuf(ByteBuf buf) {
+        ClientboundContainerSetContentPacket
         return new RegistryFriendlyByteBuf(buf, REGISTRY_ACCESS);
     }
 
