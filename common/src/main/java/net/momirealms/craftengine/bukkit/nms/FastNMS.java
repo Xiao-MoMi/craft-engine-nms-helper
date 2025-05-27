@@ -570,7 +570,7 @@ public abstract class FastNMS {
 
     public abstract void method$FriendlyByteBuf$writeItem(Object buf, ItemStack itemStack);
 
-    public abstract ItemStack method$ServerboundSetCreativeModeSlotPacket$readItem(Object buf);
+    public abstract ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf);
 
-    public abstract void method$ServerboundSetCreativeModeSlotPacket$writeItem(Object buf, ItemStack itemStack);
+    public abstract void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack);
 }

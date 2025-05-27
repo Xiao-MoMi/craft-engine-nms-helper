@@ -27,6 +27,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
@@ -1749,16 +1750,19 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC.encode(byteBuf, CraftItemStack.unwrap(itemStack));
     }
 
+    private static final StreamCodec<RegistryFriendlyByteBuf, net.minecraft.world.item.ItemStack> ITEM_UNTRUSTED_CODEC =
+            net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC);
+
     @Override
-    public ItemStack method$ServerboundSetCreativeModeSlotPacket$readItem(Object buf) {
+    public ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf) {
         RegistryFriendlyByteBuf byteBuf = (RegistryFriendlyByteBuf) buf;
-        net.minecraft.world.item.ItemStack itemStack = net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC).decode(byteBuf);
+        net.minecraft.world.item.ItemStack itemStack = ITEM_UNTRUSTED_CODEC.decode(byteBuf);
         return CraftItemStack.asCraftMirror(itemStack);
     }
 
     @Override
-    public void method$ServerboundSetCreativeModeSlotPacket$writeItem(Object buf, ItemStack itemStack) {
+    public void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack) {
         RegistryFriendlyByteBuf byteBuf = (RegistryFriendlyByteBuf) buf;
-        net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC).encode(byteBuf, CraftItemStack.unwrap(itemStack));
+        ITEM_UNTRUSTED_CODEC.encode(byteBuf, CraftItemStack.unwrap(itemStack));
     }
 }

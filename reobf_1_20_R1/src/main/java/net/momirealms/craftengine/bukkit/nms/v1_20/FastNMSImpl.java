@@ -1694,12 +1694,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public ItemStack method$ServerboundSetCreativeModeSlotPacket$readItem(Object buf) {
+    public ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf) {
         throw new UnsupportedVersionException();
     }
 
     @Override
-    public void method$ServerboundSetCreativeModeSlotPacket$writeItem(Object buf, ItemStack itemStack) {
+    public void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack) {
         throw new UnsupportedVersionException();
     }
 }
