@@ -1692,4 +1692,14 @@ public class FastNMSImpl extends FastNMS {
         FriendlyByteBuf byteBuf = (FriendlyByteBuf) buf;
         byteBuf.writeItem(CraftItemStack.unwrap(itemStack));
     }
+
+    @Override
+    public ItemStack method$ServerboundSetCreativeModeSlotPacket$readItem(Object buf) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void method$ServerboundSetCreativeModeSlotPacket$writeItem(Object buf, ItemStack itemStack) {
+        throw new UnsupportedVersionException();
+    }
 }
