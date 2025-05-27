@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
@@ -1702,4 +1703,43 @@ public class FastNMSImpl extends FastNMS {
     public void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public Codec method$DataComponentType$codec(Object componentType) {
+        throw new UnsupportedVersionException();
+    }
+//
+//    @Override
+//    public Object field$ItemStack$tag(Object itemStack) {
+//        net.minecraft.world.item.ItemStack item = (net.minecraft.world.item.ItemStack) itemStack;
+//        return item.getTag();
+//    }
+//
+//    @Override
+//    public void method$CompoundTag$put(Object compoundTag, String key, Object value) {
+//        CompoundTag tag = (CompoundTag) compoundTag;
+//        tag.put(key, (Tag) value);
+//    }
+//
+//    @Override
+//    public void method$CompoundTag$remove(Object compoundTag, String key) {
+//        CompoundTag tag = (CompoundTag) compoundTag;
+//        tag.remove(key);
+//    }
+//
+//    public Object constructor$IntTag(int i) {
+//        return IntTag.valueOf(i);
+//    }
+//
+//    public Object constructor$ByteTag(byte b) {
+//        return ByteTag.valueOf(b);
+//    }
+//
+//    public Object constructor$ByteArrayTag(byte[] bytes) {
+//        return new ByteArrayTag(bytes);
+//    }
+//
+//    public Object constructor$FloatTag(float f) {
+//        return FloatTag.valueOf(f);
+//    }
 }

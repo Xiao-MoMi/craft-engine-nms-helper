@@ -3,6 +3,7 @@ package net.momirealms.craftengine.bukkit.nms.v1_20_3;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -1709,6 +1710,11 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Codec method$DataComponentType$codec(Object componentType) {
         throw new UnsupportedVersionException();
     }
 }

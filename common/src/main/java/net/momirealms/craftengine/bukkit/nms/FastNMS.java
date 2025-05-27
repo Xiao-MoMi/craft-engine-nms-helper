@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.*;
@@ -573,4 +574,6 @@ public abstract class FastNMS {
     public abstract ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf);
 
     public abstract void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack);
+
+    public abstract Codec method$DataComponentType$codec(Object componentType);
 }

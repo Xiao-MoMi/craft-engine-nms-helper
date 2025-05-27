@@ -3,6 +3,8 @@ package net.momirealms.craftengine.bukkit.nms.v1_20_5;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JavaOps;
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -1939,5 +1941,11 @@ public class FastNMSImpl extends FastNMS {
     public void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack) {
         RegistryFriendlyByteBuf byteBuf = (RegistryFriendlyByteBuf) buf;
         ITEM_UNTRUSTED_CODEC.encode(byteBuf, CraftItemStack.unwrap(itemStack));
+    }
+
+    @Override
+    public Codec method$DataComponentType$codec(Object componentType) {
+        DataComponentType type = (DataComponentType) componentType;
+        return type.codec();
     }
 }
