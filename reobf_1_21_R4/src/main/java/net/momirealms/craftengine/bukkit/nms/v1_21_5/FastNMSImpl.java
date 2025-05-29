@@ -121,6 +121,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.annotation.Nullable;
+import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -1937,5 +1938,22 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$CompoundTag() {
         return new CompoundTag();
+    }
+
+    @Override
+    public byte[] method$NbtIo$toBytes(Object tag) throws IOException {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream)) {
+            NbtIo.writeUnnamedTag((Tag) tag, dataOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        }
+    }
+
+    @Override
+    public Object method$NbtIo$fromBytes(byte[] bytes) throws IOException {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+             DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream)) {
+            return NbtIo.readUnnamedTag(dataInputStream, NbtAccounter.unlimitedHeap());
+        }
     }
 }

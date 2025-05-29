@@ -10,6 +10,8 @@ import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.util.DataSanitizationUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
 import net.minecraft.advancements.*;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentPatch;
@@ -113,6 +115,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.annotation.Nullable;
+import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -2105,5 +2108,43 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$CompoundTag() {
         return new CompoundTag();
+    }
+
+    @Override
+    public byte[] method$NbtIo$toBytes(Object tag) throws IOException {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream)) {
+            NbtIo.writeUnnamedTag((Tag) tag, dataOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        }
+    }
+
+    @Override
+    public Object method$NbtIo$fromBytes(byte[] bytes) throws IOException {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+             DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream)) {
+            return readUnnamedTag(dataInputStream, NbtAccounter.unlimitedHeap());
+        }
+    }
+
+    private static Tag readUnnamedTag(DataInput input, NbtAccounter tracker) throws IOException {
+        byte type = input.readByte();
+        if (type == 0) {
+            return EndTag.INSTANCE;
+        } else {
+            StringTag.skipString(input);
+            return readTagSafe(input, tracker, type);
+        }
+    }
+
+    private static Tag readTagSafe(DataInput input, NbtAccounter tracker, byte typeId) {
+        try {
+            return TagTypes.getType(typeId).load(input, tracker);
+        } catch (IOException ioexception) {
+            CrashReport crashreport = CrashReport.forThrowable(ioexception, "Loading NBT data");
+            CrashReportCategory crc = crashreport.addCategory("NBT Tag");
+            crc.setDetail("Tag type", typeId);
+            throw new ReportedNbtException(crashreport);
+        }
     }
 }

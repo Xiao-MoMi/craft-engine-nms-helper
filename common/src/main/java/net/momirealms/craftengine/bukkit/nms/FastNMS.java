@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.function.Consumer;
@@ -634,4 +635,8 @@ public abstract class FastNMS {
     public abstract void method$CompoundTag$remove(Object compoundTag, String key);
 
     public abstract Object constructor$CompoundTag();
+
+    public abstract byte[] method$NbtIo$toBytes(Object tag) throws IOException;
+
+    public abstract Object method$NbtIo$fromBytes(byte[] bytes) throws IOException;
 }
