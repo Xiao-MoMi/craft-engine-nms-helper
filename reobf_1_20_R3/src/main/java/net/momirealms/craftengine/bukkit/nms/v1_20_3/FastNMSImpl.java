@@ -18,6 +18,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.nbt.*;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -1716,5 +1717,167 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Codec method$DataComponentType$codec(Object componentType) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$ItemStack$getOrCreateTag(Object itemStack) {
+        net.minecraft.world.item.ItemStack item = (net.minecraft.world.item.ItemStack) itemStack;
+        return item.getOrCreateTag();
+    }
+
+    @Override
+    public Object constructor$ShortTag(short s) {
+        return ShortTag.valueOf(s);
+    }
+
+    @Override
+    public short method$ShortTag$value(Object shortTag) {
+        ShortTag tag = (ShortTag) shortTag;
+        return tag.getAsShort();
+    }
+
+    @Override
+    public Object constructor$IntTag(int i) {
+        return IntTag.valueOf(i);
+    }
+
+    @Override
+    public int method$IntTag$value(Object intTag) {
+        IntTag tag = (IntTag) intTag;
+        return tag.getAsInt();
+    }
+
+    @Override
+    public Object constructor$LongTag(long l) {
+        return LongTag.valueOf(l);
+    }
+
+    @Override
+    public long method$LongTag$value(Object longTag) {
+        LongTag tag = (LongTag) longTag;
+        return tag.getAsLong();
+    }
+
+    @Override
+    public Object constructor$ByteTag(byte b) {
+        return ByteTag.valueOf(b);
+    }
+
+    @Override
+    public byte method$ByteTag$value(Object byteTag) {
+        ByteTag tag = (ByteTag) byteTag;
+        return tag.getAsByte();
+    }
+
+    @Override
+    public Object constructor$FloatTag(float f) {
+        return FloatTag.valueOf(f);
+    }
+
+    @Override
+    public float method$FloatTag$value(Object floatTag) {
+        FloatTag tag = (FloatTag) floatTag;
+        return tag.getAsFloat();
+    }
+
+    @Override
+    public Object constructor$DoubleTag(double d) {
+        return DoubleTag.valueOf(d);
+    }
+
+    @Override
+    public double method$DoubleTag$value(Object doubleTag) {
+        DoubleTag tag = (DoubleTag) doubleTag;
+        return tag.getAsDouble();
+    }
+
+    @Override
+    public Object constructor$ByteArrayTag(byte[] bytes) {
+        return new ByteArrayTag(bytes);
+    }
+
+    @Override
+    public byte[] method$ByteArrayTag$value(Object byteArrayTag) {
+        ByteArrayTag tag = (ByteArrayTag) byteArrayTag;
+        return tag.getAsByteArray();
+    }
+
+    @Override
+    public Object constructor$IntArrayTag(int[] ints) {
+        return new IntArrayTag(ints);
+    }
+
+    @Override
+    public int[] method$IntArrayTag$value(Object intArrayTag) {
+        IntArrayTag tag = (IntArrayTag) intArrayTag;
+        return tag.getAsIntArray();
+    }
+
+    @Override
+    public Object constructor$LongArrayTag(long[] longs) {
+        return new LongArrayTag(longs);
+    }
+
+    @Override
+    public long[] method$LongArrayTag$value(Object longArrayTag) {
+        LongArrayTag tag = (LongArrayTag) longArrayTag;
+        return tag.getAsLongArray();
+    }
+
+    @Override
+    public Object constructor$StringTag(String string) {
+        return StringTag.valueOf(string);
+    }
+
+    @Override
+    public String method$StringTag$value(Object stringTag) {
+        StringTag tag = (StringTag) stringTag;
+        return tag.getAsString();
+    }
+
+    @Override
+    public Object constructor$ListTag() {
+        return new ListTag();
+    }
+
+    @Override
+    public Object method$ListTag$get(Object listTag, int index) {
+        ListTag tag = (ListTag) listTag;
+        return tag.get(index);
+    }
+
+    @Override
+    public void method$ListTag$add(Object listTag, int index, Object value) {
+        ListTag tag = (ListTag) listTag;
+        tag.addTag(index, (Tag) value);
+    }
+
+    @Override
+    public Object method$ListTag$remove(Object listTag, int index) {
+        ListTag tag = (ListTag) listTag;
+        return tag.remove(index);
+    }
+
+    @Override
+    public Object method$CompoundTag$get(Object compoundTag, String key) {
+        CompoundTag tag = (CompoundTag) compoundTag;
+        return tag.get(key);
+    }
+
+    @Override
+    public void method$CompoundTag$put(Object compoundTag, String key, Object value) {
+        CompoundTag tag = (CompoundTag) compoundTag;
+        tag.put(key, (Tag) value);
+    }
+
+    @Override
+    public void method$CompoundTag$remove(Object compoundTag, String key) {
+        CompoundTag tag = (CompoundTag) compoundTag;
+        tag.remove(key);
+    }
+
+    @Override
+    public Object constructor$CompoundTag() {
+        return new CompoundTag();
     }
 }

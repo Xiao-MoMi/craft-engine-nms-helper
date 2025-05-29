@@ -576,4 +576,62 @@ public abstract class FastNMS {
     public abstract void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack);
 
     public abstract Codec method$DataComponentType$codec(Object componentType);
+
+    public abstract Object field$ItemStack$getOrCreateTag(Object itemStack);
+
+    public abstract Object constructor$ShortTag(short s);
+
+    public abstract short method$ShortTag$value(Object shortTag);
+
+    public abstract Object constructor$IntTag(int i);
+
+    public abstract int method$IntTag$value(Object intTag);
+
+    public abstract Object constructor$LongTag(long l);
+
+    public abstract long method$LongTag$value(Object longTag);
+
+    public abstract Object constructor$ByteTag(byte b);
+
+    public abstract byte method$ByteTag$value(Object byteTag);
+
+    public abstract Object constructor$FloatTag(float f);
+
+    public abstract float method$FloatTag$value(Object floatTag);
+
+    public abstract Object constructor$DoubleTag(double d);
+
+    public abstract double method$DoubleTag$value(Object doubleTag);
+
+    public abstract Object constructor$ByteArrayTag(byte[] bytes);
+
+    public abstract byte[] method$ByteArrayTag$value(Object byteArrayTag);
+
+    public abstract Object constructor$IntArrayTag(int[] ints);
+
+    public abstract int[] method$IntArrayTag$value(Object intArrayTag);
+
+    public abstract Object constructor$LongArrayTag(long[] longs);
+
+    public abstract long[] method$LongArrayTag$value(Object longArrayTag);
+
+    public abstract Object constructor$StringTag(String string);
+
+    public abstract String method$StringTag$value(Object stringTag);
+
+    public abstract Object constructor$ListTag();
+
+    public abstract Object method$ListTag$get(Object listTag, int index);
+
+    public abstract void method$ListTag$add(Object listTag, int index, Object value);
+
+    public abstract Object method$ListTag$remove(Object listTag, int index);
+
+    public abstract Object method$CompoundTag$get(Object compoundTag, String key);
+
+    public abstract void method$CompoundTag$put(Object compoundTag, String key, Object value);
+
+    public abstract void method$CompoundTag$remove(Object compoundTag, String key);
+
+    public abstract Object constructor$CompoundTag();
 }
