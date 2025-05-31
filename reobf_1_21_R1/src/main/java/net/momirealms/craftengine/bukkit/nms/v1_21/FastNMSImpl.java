@@ -25,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.nbt.*;
+import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -409,9 +410,9 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void sendPacket(Object player, Object packet) {
-        ServerPlayer playerImpl = (ServerPlayer) player;
-        playerImpl.connection.send((Packet<?>) packet);
+    public void sendPacket(Object connection, Object packet) {
+        Connection connectionImpl = (Connection) connection;
+        connectionImpl.send((Packet<?>) packet);
     }
 
     @Override
