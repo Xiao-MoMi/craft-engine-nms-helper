@@ -657,4 +657,6 @@ public abstract class FastNMS {
     public abstract Object method$NbtIo$fromBytes(byte[] bytes) throws IOException;
 
     public abstract Object registryAccess();
+
+    public abstract Object method$StatePredicate$always(boolean trueOrFalse);
 }

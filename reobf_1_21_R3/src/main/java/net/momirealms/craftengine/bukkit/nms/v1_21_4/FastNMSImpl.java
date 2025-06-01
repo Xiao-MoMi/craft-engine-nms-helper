@@ -14,6 +14,7 @@ import io.papermc.paper.util.ItemObfuscationSession;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.advancements.*;
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
@@ -1979,5 +1980,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public RegistryAccess registryAccess() {
         return MinecraftServer.getServer().registryAccess();
+    }
+
+    @Override
+    public Object method$StatePredicate$always(boolean trueOrFalse) {
+        return (BlockBehaviour.StatePredicate) (blockState, blockGetter, blockPos) -> trueOrFalse;
     }
 }

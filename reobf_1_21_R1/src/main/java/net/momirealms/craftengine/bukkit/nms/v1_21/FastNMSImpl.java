@@ -1963,4 +1963,9 @@ public class FastNMSImpl extends FastNMS {
     public RegistryAccess registryAccess() {
         return MinecraftServer.getServer().registryAccess();
     }
+
+    @Override
+    public Object method$StatePredicate$always(boolean trueOrFalse) {
+        return (BlockBehaviour.StatePredicate) (blockState, blockGetter, blockPos) -> trueOrFalse;
+    }
 }
