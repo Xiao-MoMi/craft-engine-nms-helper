@@ -4,10 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Leashable;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -17,6 +14,7 @@ import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class CollisionBoat extends Boat implements CollisionEntity {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
@@ -137,5 +135,13 @@ public class CollisionBoat extends Boat implements CollisionEntity {
     @Override
     public double rideHeight(@NotNull EntityDimensions dimensions) {
         return 0;
+    }
+
+    @Override
+    public void setDeltaMovement(@NotNull Vec3 deltaMovement) {
+    }
+
+    @Override
+    public void move(@NotNull MoverType type, @NotNull Vec3 movement) {
     }
 }

@@ -5,6 +5,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Leashable;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -135,5 +136,13 @@ public class CollisionBoat extends Boat implements CollisionEntity {
 
     @Override
     public void animateHurt(float yaw) {
+    }
+
+    @Override
+    public void setDeltaMovement(@NotNull Vec3 deltaMovement) {
+    }
+
+    @Override
+    public void move(@NotNull MoverType type, @NotNull Vec3 movement) {
     }
 }
