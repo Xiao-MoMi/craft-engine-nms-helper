@@ -14,7 +14,6 @@ import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class CollisionBoat extends Boat implements CollisionEntity {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
