@@ -3,6 +3,7 @@ package net.momirealms.craftengine.bukkit.nms;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -23,8 +24,8 @@ public abstract class FastNMS {
     public static final FastNMS INSTANCE = instance();
 
     private static FastNMS instance() {
-        String path = getImplPath();
         try {
+            String path = getImplPath();
             Class<?> clazz = Class.forName("net.momirealms.craftengine.bukkit.nms." + path + ".FastNMSImpl");
             Constructor<?> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
@@ -34,10 +35,11 @@ public abstract class FastNMS {
         }
     }
 
-    private static @NotNull String getImplPath() {
-        String bukkitVersion = Bukkit.getServer().getBukkitVersion().split("-")[0];
+    private static @NotNull String getImplPath() throws IllegalAccessException {
+        Object detectedVersion = VersionHelper.field$DetectedVersion$BUILT_IN.get(null);
+        String name = (String) VersionHelper.field$DetectedVersion$name.get(detectedVersion);
         String classSuffix;
-        switch (bukkitVersion) {
+        switch (name) {
             case "1.21.5" -> classSuffix = "v1_21_5";
             case "1.21.4" -> classSuffix = "v1_21_4";
             case "1.21.2", "1.21.3" -> classSuffix = "v1_21_2";
