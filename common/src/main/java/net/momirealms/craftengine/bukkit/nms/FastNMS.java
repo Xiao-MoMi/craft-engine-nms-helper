@@ -3,6 +3,7 @@ package net.momirealms.craftengine.bukkit.nms;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.momirealms.craftengine.core.registry.BuiltInRegistries;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.*;
@@ -24,7 +25,6 @@ import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
-    public static final FastNMS INSTANCE = instance();
     private static final Class<?> clazz$DetectedVersion = requireNonNull(
             ReflectionUtils.getClazz("net.minecraft.DetectedVersion", "net.minecraft.MinecraftVersion"));
     private static final Class<?> clazz$WorldVersion = requireNonNull(
@@ -33,6 +33,7 @@ public abstract class FastNMS {
             ReflectionUtils.getDeclaredField(clazz$DetectedVersion, clazz$WorldVersion, 0));
     public static final Field field$DetectedVersion$name = requireNonNull(
             ReflectionUtils.getDeclaredField(clazz$DetectedVersion, String.class, 1));
+    public static final FastNMS INSTANCE = instance();
 
     private static FastNMS instance() {
         try {
@@ -40,6 +41,7 @@ public abstract class FastNMS {
             Class<?> clazz = Class.forName("net.momirealms.craftengine.bukkit.nms." + path + ".FastNMSImpl");
             Constructor<?> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
+            BuiltInRegistries
             return (FastNMS) constructor.newInstance();
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Failed to initialize craftengine nms helper", e);

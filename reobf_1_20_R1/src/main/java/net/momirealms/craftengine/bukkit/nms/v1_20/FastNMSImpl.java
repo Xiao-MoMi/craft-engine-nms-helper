@@ -11,6 +11,7 @@ import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
+import net.minecraft.DetectedVersion;
 import net.minecraft.ReportedException;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.critereon.DeserializationContext;
