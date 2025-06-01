@@ -3,7 +3,7 @@ package net.momirealms.craftengine.bukkit.nms;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
-import net.momirealms.craftengine.core.util.VersionHelper;
+import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -16,12 +16,23 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
     public static final FastNMS INSTANCE = instance();
+    private static final Class<?> clazz$DetectedVersion = requireNonNull(
+            ReflectionUtils.getClazz("net.minecraft.DetectedVersion", "net.minecraft.MinecraftVersion"));
+    private static final Class<?> clazz$WorldVersion = requireNonNull(
+            ReflectionUtils.getClazz("net.minecraft.WorldVersion"));
+    public static final Field field$DetectedVersion$BUILT_IN = requireNonNull(
+            ReflectionUtils.getDeclaredField(clazz$DetectedVersion, clazz$WorldVersion, 0));
+    public static final Field field$DetectedVersion$name = requireNonNull(
+            ReflectionUtils.getDeclaredField(clazz$DetectedVersion, String.class, 1));
 
     private static FastNMS instance() {
         try {
@@ -36,8 +47,8 @@ public abstract class FastNMS {
     }
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
-        Object detectedVersion = VersionHelper.field$DetectedVersion$BUILT_IN.get(null);
-        String name = (String) VersionHelper.field$DetectedVersion$name.get(detectedVersion);
+        Object detectedVersion = field$DetectedVersion$BUILT_IN.get(null);
+        String name = (String) field$DetectedVersion$name.get(detectedVersion);
         String classSuffix;
         switch (name) {
             case "1.21.5" -> classSuffix = "v1_21_5";
@@ -641,4 +652,6 @@ public abstract class FastNMS {
     public abstract byte[] method$NbtIo$toBytes(Object tag) throws IOException;
 
     public abstract Object method$NbtIo$fromBytes(byte[] bytes) throws IOException;
+
+    public abstract Object registryAccess();
 }

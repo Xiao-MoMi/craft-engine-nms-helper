@@ -125,7 +125,6 @@ import java.util.function.Consumer;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
-    private static final RegistryAccess REGISTRY_ACCESS = MinecraftServer.getServer().registryAccess();
 
     @Override
     public InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
@@ -541,17 +540,17 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$Component$Serializer$fromJson(JsonElement element) {
-        return Component.Serializer.fromJson(element, REGISTRY_ACCESS);
+        return Component.Serializer.fromJson(element, registryAccess());
     }
 
     @Override
     public Object method$Component$Serializer$fromJson(String json) {
-        return Component.Serializer.fromJson(json, REGISTRY_ACCESS);
+        return Component.Serializer.fromJson(json, registryAccess());
     }
 
     @Override
     public String method$Component$Serializer$toJson(Object component) {
-        return Component.Serializer.toJson((Component) component, REGISTRY_ACCESS);
+        return Component.Serializer.toJson((Component) component, registryAccess());
     }
 
     @Override
@@ -577,7 +576,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, REGISTRY_ACCESS);
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
         try (DataSanitizationUtil.DataSanitizer ignored = DataSanitizationUtil.start(true)) {
             for(SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>)dataValues)) {
                 dataValue.write(buf);
@@ -588,7 +587,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf) {
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, REGISTRY_ACCESS);
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
         List<Object> list = new ArrayList();
         int i;
         while((i = buf.readUnsignedByte()) != 255) {
@@ -618,13 +617,13 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer) {
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, registryAccess());
         return ParticleTypes.STREAM_CODEC.decode(buf);
     }
 
     @Override
     public void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle) {
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, REGISTRY_ACCESS);
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, registryAccess());
         ParticleTypes.STREAM_CODEC.encode(buf, ((ParticleOptions)particle));
     }
 
@@ -948,7 +947,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void registerAdvancement(String[] key, Object jsonAdvancement) {
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(key[0], key[1]);
-        RegistryOps<JsonElement> ops = REGISTRY_ACCESS.createSerializationContext(JsonOps.INSTANCE);
+        RegistryOps<JsonElement> ops = registryAccess().createSerializationContext(JsonOps.INSTANCE);
         Advancement advancement = Advancement.CODEC.parse(ops, (JsonElement) jsonAdvancement).getOrThrow(JsonParseException::new);
         if (advancement != null) {
             MinecraftServer server = MinecraftServer.getServer();
@@ -1723,7 +1722,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object constructor$FriendlyByteBuf(ByteBuf buf) {
-        return new RegistryFriendlyByteBuf(buf, REGISTRY_ACCESS);
+        return new RegistryFriendlyByteBuf(buf, registryAccess());
     }
 
     @Override
@@ -1958,5 +1957,10 @@ public class FastNMSImpl extends FastNMS {
             crc.setDetail("Tag type", typeId);
             throw new ReportedNbtException(crashreport);
         }
+    }
+
+    @Override
+    public RegistryAccess registryAccess() {
+        return MinecraftServer.getServer().registryAccess();
     }
 }

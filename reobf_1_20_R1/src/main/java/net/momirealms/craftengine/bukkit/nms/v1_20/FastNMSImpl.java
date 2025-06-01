@@ -1910,4 +1910,9 @@ public class FastNMSImpl extends FastNMS {
             }
         }
     }
+
+    @Override
+    public RegistryAccess registryAccess() {
+        return MinecraftServer.getServer().registryAccess();
+    }
 }

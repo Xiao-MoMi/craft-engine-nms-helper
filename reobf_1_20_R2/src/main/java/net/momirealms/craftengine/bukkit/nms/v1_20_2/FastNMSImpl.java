@@ -1917,4 +1917,9 @@ public class FastNMSImpl extends FastNMS {
             throw new ReportedException(crashreport);
         }
     }
+
+    @Override
+    public RegistryAccess registryAccess() {
+        return MinecraftServer.getServer().registryAccess();
+    }
 }
