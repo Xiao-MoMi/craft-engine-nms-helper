@@ -1951,7 +1951,6 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$NbtIo$fromBytes(byte[] bytes) throws IOException {
-        BuiltInRegistries.ENTITY_TYPE
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
              DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream)) {
             return NbtIo.readUnnamedTag(dataInputStream, NbtAccounter.unlimitedHeap());

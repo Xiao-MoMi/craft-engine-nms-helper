@@ -41,7 +41,6 @@ public abstract class FastNMS {
             Class<?> clazz = Class.forName("net.momirealms.craftengine.bukkit.nms." + path + ".FastNMSImpl");
             Constructor<?> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
-            BuiltInRegistries
             return (FastNMS) constructor.newInstance();
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Failed to initialize craftengine nms helper", e);
