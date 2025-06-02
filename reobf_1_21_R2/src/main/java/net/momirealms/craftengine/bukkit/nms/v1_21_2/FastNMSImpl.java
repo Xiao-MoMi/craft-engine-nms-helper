@@ -453,7 +453,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Iterable<Object> method$ClientboundBundlePacket$subPackets(Object packet){
+    public Iterable<Object> method$ClientboundBundlePacket$subPackets(Object packet) {
         ClientboundBundlePacket packetImpl = (ClientboundBundlePacket) packet;
         return (Iterable) packetImpl.subPackets();
     }
@@ -579,7 +579,7 @@ public class FastNMSImpl extends FastNMS {
     public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
         try (DataSanitizationUtil.DataSanitizer ignored = DataSanitizationUtil.start(true)) {
-            for(SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>)dataValues)) {
+            for (SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>) dataValues)) {
                 dataValue.write(buf);
             }
         }
@@ -591,7 +591,7 @@ public class FastNMSImpl extends FastNMS {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
         List<Object> list = new ArrayList();
         int i;
-        while((i = buf.readUnsignedByte()) != 255) {
+        while ((i = buf.readUnsignedByte()) != 255) {
             list.add(SynchedEntityData.DataValue.read(buf, i));
         }
         return list;
@@ -625,7 +625,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) buffer, registryAccess());
-        ParticleTypes.STREAM_CODEC.encode(buf, ((ParticleOptions)particle));
+        ParticleTypes.STREAM_CODEC.encode(buf, ((ParticleOptions) particle));
     }
 
     @Override
@@ -635,7 +635,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$BlockParticleOption$getType(Object particle) {
-        return ((BlockParticleOption)particle).getType();
+        return ((BlockParticleOption) particle).getType();
     }
 
     @Override
@@ -660,7 +660,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Optional<Object> method$IdMap$byId(Object registry, int id) {
-        Object object = ((IdMap)registry).byId(id);
+        Object object = ((IdMap) registry).byId(id);
         if (object == null) {
             return Optional.empty();
         }
@@ -669,19 +669,19 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Optional<Integer> method$IdMap$getId(Object registry, Object value) {
-        int id = ((IdMap)registry).getId(value);
+        int id = ((IdMap) registry).getId(value);
         return id == -1 ? Optional.empty() : Optional.of(id);
     }
 
     @Override
     public String[] method$SoundEvent$location(Object soundEvent) {
-        ResourceLocation location = ((SoundEvent)soundEvent).location();
+        ResourceLocation location = ((SoundEvent) soundEvent).location();
         return new String[]{location.getNamespace(), location.getPath()};
     }
 
     @Override
     public Optional<Float> method$SoundEvent$fixedRange(Object soundEvent) {
-        return ((SoundEvent)soundEvent).fixedRange();
+        return ((SoundEvent) soundEvent).fixedRange();
     }
 
     @Override
@@ -1113,10 +1113,11 @@ public class FastNMSImpl extends FastNMS {
         BlockState shortGrassState = Blocks.SHORT_GRASS.defaultBlockState();
         Optional<Holder.Reference<PlacedFeature>> grassFeature = world.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).get(VegetationPlacements.GRASS_BONEMEAL);
 
-        out : for(int i = 0; i < 128; ++i) {
+        out:
+        for (int i = 0; i < 128; ++i) {
             BlockPos currentPos = topPos;
 
-            for(int j = 0; j < i / 16; ++j) {
+            for (int j = 0; j < i / 16; ++j) {
                 currentPos = currentPos.offset(
                         rand.nextInt(3) - 1,
                         (((RandomSource) random).nextInt(3) - 1) * rand.nextInt(3) / 2,
@@ -1144,7 +1145,7 @@ public class FastNMSImpl extends FastNMS {
                             continue;
                         }
                         int flowerIndex = rand.nextInt(flowers.size());
-                        feature = ((RandomPatchConfiguration)((ConfiguredFeature)flowers.get(flowerIndex)).config()).feature();
+                        feature = ((RandomPatchConfiguration) ((ConfiguredFeature) flowers.get(flowerIndex)).config()).feature();
                     } else {
                         if (grassFeature.isEmpty()) {
                             continue;
@@ -1447,6 +1448,7 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundSetTitlesAnimationPacket(int fadeIn, int stay, int fadeOut) {
         return new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
     }
+
     @Override
     public Object method$ItemStack$copyWithCount(Object stack, int count) {
         return ((net.minecraft.world.item.ItemStack) stack).copyWithCount(count);
@@ -1491,9 +1493,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Projectile$ThrownTrident$spawnProjectileFromRotationDelayed(Object level, Object spawnedFrom, Object owner, float z, float velocity, float innaccuracy) {
         return Projectile.spawnProjectileFromRotationDelayed(
                 ThrownTrident::new,
-                (ServerLevel)level,
-                (net.minecraft.world.item.ItemStack)spawnedFrom,
-                (LivingEntity)owner,
+                (ServerLevel) level,
+                (net.minecraft.world.item.ItemStack) spawnedFrom,
+                (LivingEntity) owner,
                 z,
                 velocity,
                 innaccuracy
