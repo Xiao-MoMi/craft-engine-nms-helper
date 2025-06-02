@@ -4,7 +4,7 @@ import io.papermc.paper.antixray.ChunkPacketInfo;
 import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.momirealms.craftengine.bukkit.plugin.injector.BukkitInjector;
+import net.momirealms.craftengine.bukkit.plugin.injector.WorldStorageInjector;
 import net.momirealms.craftengine.core.world.SectionPos;
 import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
@@ -116,7 +116,7 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     @SuppressWarnings("unchecked")
     @Override
     public @NotNull T getAndSet(int x, int y, int z, @NotNull T value) {
-        return (T) BukkitInjector.GetAndSetInterceptor.INSTANCE.intercept(this, new Object[]{x,y,z,value});
+        return (T) WorldStorageInjector.GetAndSetInterceptor.INSTANCE.intercept(this, new Object[]{x,y,z,value});
     }
     
     @Override

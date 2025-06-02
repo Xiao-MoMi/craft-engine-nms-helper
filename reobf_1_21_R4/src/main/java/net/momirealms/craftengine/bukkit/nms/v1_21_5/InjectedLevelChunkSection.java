@@ -5,7 +5,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.momirealms.craftengine.bukkit.plugin.injector.BukkitInjector;
+import net.momirealms.craftengine.bukkit.plugin.injector.WorldStorageInjector;
 import net.momirealms.craftengine.core.world.SectionPos;
 import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
@@ -78,7 +78,7 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
     @NotNull
     public BlockState setBlockState(int x, int y, int z, @NotNull BlockState state, boolean useLocks) {
         try {
-            return (BlockState) BukkitInjector.SetBlockStateInterceptor.INSTANCE.intercept(this, new Object[]{x, y, z, state, useLocks}, () -> super.setBlockState(x, y, z, state, useLocks));
+            return (BlockState) WorldStorageInjector.SetBlockStateInterceptor.INSTANCE.intercept(this, new Object[]{x, y, z, state, useLocks}, () -> super.setBlockState(x, y, z, state, useLocks));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

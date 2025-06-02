@@ -87,7 +87,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
-import net.momirealms.craftengine.bukkit.util.Reflections;
+import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
@@ -120,7 +120,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
-        InjectedPalettedContainer injectedObject = (InjectedPalettedContainer) Reflections.UNSAFE.allocateInstance(InjectedPalettedContainer.class);
+        InjectedPalettedContainer injectedObject = (InjectedPalettedContainer) ReflectionUtils.UNSAFE.allocateInstance(InjectedPalettedContainer.class);
         injectedObject.setTarget(palettedContainer);
         return injectedObject;
     }
@@ -1078,52 +1078,52 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$GrassBlock$performBoneMeal(Object level, Object random, Object blockPos, Object state, Object thisBlock) {
-        ServerLevel level0 = (ServerLevel) level;
-        RandomSource random0 = (RandomSource) random;
-        BlockPos blockPos0 = ((BlockPos) blockPos).above();
-        BlockState blockState0 = Blocks.GRASS.defaultBlockState();
-        Optional<Holder.Reference<PlacedFeature>> optional = level0.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).get(VegetationPlacements.GRASS_BONEMEAL);
+        ServerLevel serverLevel = (ServerLevel) level;
+        RandomSource randomSource = (RandomSource) random;
+        BlockPos abovePos = ((BlockPos) blockPos).above();
+        BlockState grassState = Blocks.GRASS.defaultBlockState();
+        Optional<Holder.Reference<PlacedFeature>> grassFeature = serverLevel.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).get(VegetationPlacements.GRASS_BONEMEAL);
 
         out : for(int i = 0; i < 128; ++i) {
-            BlockPos blockPos1 = blockPos0;
+            BlockPos currentPos = abovePos;
 
-            for(int i1 = 0; i1 < i / 16; ++i1) {
-                blockPos1 = blockPos1.offset(
-                        random0.nextInt(3) - 1,
-                        (((RandomSource) random).nextInt(3) - 1) * random0.nextInt(3) / 2,
-                        random0.nextInt(3) - 1
+            for(int j = 0; j < i / 16; ++j) {
+                currentPos = currentPos.offset(
+                        randomSource.nextInt(3) - 1,
+                        (((RandomSource) random).nextInt(3) - 1) * randomSource.nextInt(3) / 2,
+                        randomSource.nextInt(3) - 1
                 );
-                Object downBlockPos1 = FastNMS.INSTANCE.method$BlockPos$relative(blockPos1, Reflections.instance$Direction$DOWN);
-                if (!level0.getBlockState(blockPos1.below()).is(((net.minecraft.world.level.block.Block) thisBlock))
-                        || level0.getBlockState(blockPos1).isCollisionShapeFullBlock(level0, blockPos1)) {
+
+                Object downBlockPos =  currentPos.relative(Direction.DOWN);
+                if (!serverLevel.getBlockState(currentPos.below()).is(((net.minecraft.world.level.block.Block) thisBlock))
+                        || serverLevel.getBlockState(currentPos).isCollisionShapeFullBlock(serverLevel, currentPos)) {
                     continue out;
                 }
 
-                BlockState blockState1 = level0.getBlockState(blockPos1);
-                if (blockState1.is(blockState0.getBlock()) && random0.nextInt(10) == 0) {
-                    BonemealableBlock bonemealableBlock = (BonemealableBlock) blockState0.getBlock();
-                    if (bonemealableBlock.isValidBonemealTarget(level0, blockPos1, blockState1)) {
-                        bonemealableBlock.performBonemeal(level0, random0, blockPos1, blockState1);
+                BlockState currentState = serverLevel.getBlockState(currentPos);
+                if (currentState.is(grassState.getBlock()) && randomSource.nextInt(10) == 0) {
+                    BonemealableBlock bonemealableBlock = (BonemealableBlock) grassState.getBlock();
+                    if (bonemealableBlock.isValidBonemealTarget(serverLevel, currentPos, currentState)) {
+                        bonemealableBlock.performBonemeal(serverLevel, randomSource, currentPos, currentState);
                     }
                 }
 
-
-                if (blockState1.isAir()) {
-                    Holder<PlacedFeature> holder;
+                if (currentState.isAir()) {
+                    Holder<PlacedFeature> featureHolder;
                     if (((RandomSource) random).nextInt(8) == 0) {
-                        List<ConfiguredFeature<?, ?>> flowerFeatures = level0.getBiome(blockPos1).value().getGenerationSettings().getFlowerFeatures();
+                        List<ConfiguredFeature<?, ?>> flowerFeatures = serverLevel.getBiome(currentPos).value().getGenerationSettings().getFlowerFeatures();
                         if (flowerFeatures.isEmpty()) {
                             continue;
                         }
-                        int randomInt = random0.nextInt(flowerFeatures.size());
-                        holder = ((RandomPatchConfiguration)((ConfiguredFeature)flowerFeatures.get(randomInt)).config()).feature();
+                        int featureIndex = randomSource.nextInt(flowerFeatures.size());
+                        featureHolder = ((RandomPatchConfiguration)((ConfiguredFeature)flowerFeatures.get(featureIndex)).config()).feature();
                     } else {
-                        if (optional.isEmpty()) {
+                        if (grassFeature.isEmpty()) {
                             continue;
                         }
-                        holder = optional.get();
+                        featureHolder = grassFeature.get();
                     }
-                    holder.value().place(level0, level0.getChunkSource().getGenerator(), random0, blockPos1);
+                    featureHolder.value().place(serverLevel, serverLevel.getChunkSource().getGenerator(), randomSource, currentPos);
                 }
             }
         }
