@@ -8,6 +8,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
@@ -31,6 +32,7 @@ public class CollisionBoat extends Boat implements CollisionEntity {
         this.setSilent(true);
         this.blocksBuilding = blockBuilding;
         this.landBoats = true;
+        this.noPhysics = true;
     }
 
     @Override
@@ -142,5 +144,24 @@ public class CollisionBoat extends Boat implements CollisionEntity {
 
     @Override
     public void move(@NotNull MoverType type, @NotNull Vec3 movement) {
+    }
+
+    @Override
+    public @NotNull PushReaction getPistonPushReaction() {
+        return PushReaction.IGNORE;
+    }
+
+    @Override
+    public boolean isIgnoringBlockTriggers() {
+        return true;
+    }
+
+    @Override
+    protected boolean couldAcceptPassenger() {
+        return false;
+    }
+
+    @Override
+    protected void addPassenger(@NotNull Entity passenger) {
     }
 }
