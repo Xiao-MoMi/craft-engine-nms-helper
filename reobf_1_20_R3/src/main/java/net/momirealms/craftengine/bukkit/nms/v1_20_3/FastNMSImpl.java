@@ -1934,4 +1934,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$StatePredicate$always(boolean trueOrFalse) {
         return (BlockBehaviour.StatePredicate) (blockState, blockGetter, blockPos) -> trueOrFalse;
     }
+
+    @Override
+    public Object method$ResourceKey$create(Object registry, Object resourceLocation) {
+        return ResourceKey.create((ResourceKey) registry, (ResourceLocation) resourceLocation);
+    }
 }

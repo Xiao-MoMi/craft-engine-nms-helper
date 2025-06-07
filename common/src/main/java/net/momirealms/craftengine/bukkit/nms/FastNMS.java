@@ -659,4 +659,6 @@ public abstract class FastNMS {
     public abstract Object registryAccess();
 
     public abstract Object method$StatePredicate$always(boolean trueOrFalse);
+
+    public abstract Object method$ResourceKey$create(Object registry, Object resourceLocation);
 }
