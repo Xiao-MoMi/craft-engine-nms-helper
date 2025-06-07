@@ -51,6 +51,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -61,10 +62,7 @@ import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
@@ -1973,5 +1971,23 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ResourceKey$create(Object registry, Object resourceLocation) {
         return ResourceKey.create((ResourceKey) registry, (ResourceLocation) resourceLocation);
+    }
+
+    @Override
+    public List<Object> field$SimpleContainer$items(Object simpleContainer) {
+        SimpleContainer container = (SimpleContainer) simpleContainer;
+        return (List) container.items;
+    }
+
+    @Override
+    public Object field$SingleRecipeInput$item(Object singleRecipeInput) {
+        SingleRecipeInput recipeInput = (SingleRecipeInput) singleRecipeInput;
+        return recipeInput.item();
+    }
+
+    @Override
+    public Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot) {
+        AbstractFurnaceBlockEntity blockEntity = (AbstractFurnaceBlockEntity) entity;
+        return blockEntity.getItem(slot);
     }
 }

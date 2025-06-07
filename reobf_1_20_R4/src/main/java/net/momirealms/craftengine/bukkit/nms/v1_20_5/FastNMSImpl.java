@@ -50,6 +50,7 @@ import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -2162,5 +2163,22 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ResourceKey$create(Object registry, Object resourceLocation) {
         return ResourceKey.create((ResourceKey) registry, (ResourceLocation) resourceLocation);
+    }
+
+    @Override
+    public List<Object> field$SimpleContainer$items(Object simpleContainer) {
+        SimpleContainer container = (SimpleContainer) simpleContainer;
+        return (List) container.items;
+    }
+
+    @Override
+    public Object field$SingleRecipeInput$item(Object singleRecipeInput) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot) {
+        AbstractFurnaceBlockEntity blockEntity = (AbstractFurnaceBlockEntity) entity;
+        return blockEntity.getItem(slot);
     }
 }

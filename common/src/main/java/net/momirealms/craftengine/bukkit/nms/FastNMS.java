@@ -661,4 +661,10 @@ public abstract class FastNMS {
     public abstract Object method$StatePredicate$always(boolean trueOrFalse);
 
     public abstract Object method$ResourceKey$create(Object registry, Object resourceLocation);
+
+    public abstract List<Object> field$SimpleContainer$items(Object simpleContainer);
+
+    public abstract Object field$SingleRecipeInput$item(Object singleRecipeInput);
+
+    public abstract Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot);
 }
