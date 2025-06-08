@@ -155,4 +155,8 @@ public class CollisionBoat extends Boat implements CollisionEntity {
     protected void addPassenger(@NotNull Entity passenger) {
     }
 
+    @Override
+    public boolean shouldHardCollide() {
+        return true;
+    }
 }

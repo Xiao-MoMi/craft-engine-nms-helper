@@ -27,4 +27,9 @@ public class NonCollisionInteraction extends CollisionInteraction {
     public boolean canBeCollidedWith() {
         return false;
     }
+
+    @Override
+    public boolean shouldHardCollide() {
+        return false;
+    }
 }

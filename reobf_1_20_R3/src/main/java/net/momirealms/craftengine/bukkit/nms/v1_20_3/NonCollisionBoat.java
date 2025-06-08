@@ -27,4 +27,9 @@ public class NonCollisionBoat extends CollisionBoat {
     public boolean canBeCollidedWith() {
         return false;
     }
+
+    @Override
+    public boolean shouldHardCollide() {
+        return false;
+    }
 }
