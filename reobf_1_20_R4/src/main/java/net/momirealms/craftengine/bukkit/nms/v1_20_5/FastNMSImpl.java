@@ -3,11 +3,13 @@ package net.momirealms.craftengine.bukkit.nms.v1_20_5;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.util.DataSanitizationUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.CrashReport;
@@ -2180,5 +2182,10 @@ public class FastNMSImpl extends FastNMS {
     public Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot) {
         AbstractFurnaceBlockEntity blockEntity = (AbstractFurnaceBlockEntity) entity;
         return blockEntity.getItem(slot);
+    }
+
+    @Override
+    public Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException {
+        return TagParser.parseTag(nbt);
     }
 }

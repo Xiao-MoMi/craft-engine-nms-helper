@@ -5,6 +5,7 @@ import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
@@ -69,9 +70,9 @@ import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -1986,5 +1987,10 @@ public class FastNMSImpl extends FastNMS {
     public Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot) {
         AbstractFurnaceBlockEntity blockEntity = (AbstractFurnaceBlockEntity) entity;
         return blockEntity.getItem(slot);
+    }
+
+    @Override
+    public Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException {
+        return TagParser.parseCompoundFully(nbt);
     }
 }

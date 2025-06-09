@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -1947,5 +1948,10 @@ public class FastNMSImpl extends FastNMS {
     public Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot) {
         AbstractFurnaceBlockEntity blockEntity = (AbstractFurnaceBlockEntity) entity;
         return blockEntity.getItem(slot);
+    }
+
+    @Override
+    public Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException {
+        return TagParser.parseTag(nbt);
     }
 }

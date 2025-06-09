@@ -16,10 +16,12 @@ allprojects {
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.momirealms.net/releases/")
+        maven("https://libraries.minecraft.net/")
     }
 
     dependencies {
         compileOnly("net.momirealms:craft-engine-core:0.0.56")
         compileOnly("net.momirealms:craft-engine-bukkit:0.0.56")
+        compileOnly("com.mojang:brigadier:1.0.18")
     }
 }

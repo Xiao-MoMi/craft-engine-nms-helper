@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms;
 
 import com.google.gson.JsonElement;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
@@ -667,4 +668,6 @@ public abstract class FastNMS {
     public abstract Object field$SingleRecipeInput$item(Object singleRecipeInput);
 
     public abstract Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot);
+
+    public abstract Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException;
 }
