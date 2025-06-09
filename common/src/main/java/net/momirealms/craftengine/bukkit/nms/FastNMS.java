@@ -393,7 +393,7 @@ public abstract class FastNMS {
 
     public abstract Object field$Entity$trackedEntity(Object entity);
 
-    public abstract Object filed$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity);
+    public abstract Object field$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity);
 
     public abstract void method$ServerEntity$sendChanges(Object serverEntity);
 

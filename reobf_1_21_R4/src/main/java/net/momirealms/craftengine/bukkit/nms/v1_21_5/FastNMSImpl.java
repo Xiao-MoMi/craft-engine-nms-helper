@@ -1208,7 +1208,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object filed$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity) {
+    public Object field$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity) {
         return ((ChunkMap.TrackedEntity) trackedEntity).serverEntity;
     }
 
