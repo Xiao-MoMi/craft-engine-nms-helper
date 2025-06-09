@@ -9,7 +9,6 @@ import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.util.DataSanitizationUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.CrashReport;
