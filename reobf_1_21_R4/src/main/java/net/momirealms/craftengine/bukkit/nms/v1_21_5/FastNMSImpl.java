@@ -1002,10 +1002,14 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$ItemStack$transmuteCopy(Object itemStack1, Object itemStack2) {
+    public Object method$ItemStack$getItem(Object itemStack) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).getItem();
+    }
+
+    @Override
+    public Object method$ItemStack$transmuteCopy(Object itemStack1, Object item, int count) {
         net.minecraft.world.item.ItemStack nmsStack1 = (net.minecraft.world.item.ItemStack) itemStack1;
-        net.minecraft.world.item.ItemStack nmsStack2 = (net.minecraft.world.item.ItemStack) itemStack2;
-        return nmsStack1.transmuteCopy(nmsStack2.getItem(), 1);
+        return nmsStack1.transmuteCopy((ItemLike) item, count);
     }
 
     @Override
@@ -1974,6 +1978,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public List<Object> field$SimpleContainer$items(Object simpleContainer) {
         SimpleContainer container = (SimpleContainer) simpleContainer;
+        net.minecraft.world.item.ItemStack itemStack;
         return (List) container.items;
     }
 
@@ -1992,5 +1997,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException {
         return TagParser.parseCompoundFully(nbt);
+    }
+
+    @Override
+    public Object method$Registry$getValue(Object registry, Object resourceLocation) {
+        return ((Registry) registry).getValue((ResourceLocation) resourceLocation);
     }
 }

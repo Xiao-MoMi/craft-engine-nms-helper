@@ -1013,7 +1013,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$ItemStack$transmuteCopy(Object itemStack1, Object itemStack2) {
+    public Object method$ItemStack$getItem(Object itemStack) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).getItem();
+    }
+
+    @Override
+    public Object method$ItemStack$transmuteCopy(Object itemStack1, Object item, int count) {
         throw new UnsupportedVersionException();
     }
 
@@ -1957,5 +1962,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException {
         return TagParser.parseTag(nbt);
+    }
+
+    @Override
+    public Object method$Registry$getValue(Object registry, Object resourceLocation) {
+        return ((Registry) registry).get((ResourceLocation) resourceLocation);
     }
 }

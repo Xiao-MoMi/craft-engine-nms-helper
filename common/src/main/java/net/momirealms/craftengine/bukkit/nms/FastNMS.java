@@ -352,7 +352,9 @@ public abstract class FastNMS {
 
     public abstract void method$ItemStack$applyComponents(Object itemStack, Object component);
 
-    public abstract Object method$ItemStack$transmuteCopy(Object itemStack1, Object itemStack2);
+    public abstract Object method$ItemStack$getItem(Object itemStack);
+
+    public abstract Object method$ItemStack$transmuteCopy(Object itemStack, Object item, int count);
 
     public abstract Object method$ItemStack$getComponentsPatch(Object itemStack);
 
@@ -670,4 +672,6 @@ public abstract class FastNMS {
     public abstract Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot);
 
     public abstract Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException;
+
+    public abstract Object method$Registry$getValue(Object registry, Object resourceLocation);
 }

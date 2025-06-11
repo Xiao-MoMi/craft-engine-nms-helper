@@ -65,6 +65,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
@@ -1003,10 +1004,14 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$ItemStack$transmuteCopy(Object itemStack1, Object itemStack2) {
+    public Object method$ItemStack$getItem(Object itemStack) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).getItem();
+    }
+
+    @Override
+    public Object method$ItemStack$transmuteCopy(Object itemStack1, Object item, int count) {
         net.minecraft.world.item.ItemStack nmsStack1 = (net.minecraft.world.item.ItemStack) itemStack1;
-        net.minecraft.world.item.ItemStack nmsStack2 = (net.minecraft.world.item.ItemStack) itemStack2;
-        return nmsStack1.transmuteCopy(nmsStack2.getItem(), 1);
+        return nmsStack1.transmuteCopy((ItemLike) item, count);
     }
 
     @Override
@@ -2012,5 +2017,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException {
         return TagParser.parseTag(nbt);
+    }
+
+    @Override
+    public Object method$Registry$getValue(Object registry, Object resourceLocation) {
+        return ((Registry) registry).getValue((ResourceLocation) resourceLocation);
     }
 }
