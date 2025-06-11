@@ -674,4 +674,6 @@ public abstract class FastNMS {
     public abstract Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException;
 
     public abstract Object method$Registry$getValue(Object registry, Object resourceLocation);
+
+    public abstract Object constructor$ItemStack(Object item, int count);
 }

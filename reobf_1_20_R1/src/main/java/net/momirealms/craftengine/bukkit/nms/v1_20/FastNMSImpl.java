@@ -1964,4 +1964,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Registry$getValue(Object registry, Object resourceLocation) {
         return ((Registry) registry).get((ResourceLocation) resourceLocation);
     }
+
+    @Override
+    public Object constructor$ItemStack(Object item, int count) {
+        return new net.minecraft.world.item.ItemStack((ItemLike) item, count);
+    }
 }
