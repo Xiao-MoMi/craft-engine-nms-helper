@@ -2028,4 +2028,10 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ItemStack(Object item, int count) {
         return new net.minecraft.world.item.ItemStack((ItemLike) item, count);
     }
+
+    @Override
+    public void method$LevelAccessor$scheduleTick(Object levelAccessor, Object blockPos, Object block, int ticks) {
+        LevelAccessor level = (LevelAccessor) levelAccessor;
+        level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
+    }
 }
