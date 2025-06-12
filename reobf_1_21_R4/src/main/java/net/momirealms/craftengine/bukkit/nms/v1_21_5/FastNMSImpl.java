@@ -2014,4 +2014,9 @@ public class FastNMSImpl extends FastNMS {
         LevelAccessor level = (LevelAccessor) levelAccessor;
         level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
     }
+
+    @Override
+    public void method$ItemStack$setTag(Object itemStack, Object compoundTag) {
+        throw new UnsupportedVersionException();
+    }
 }

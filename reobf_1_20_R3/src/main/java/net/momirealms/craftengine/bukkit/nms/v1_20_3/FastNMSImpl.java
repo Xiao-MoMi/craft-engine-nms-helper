@@ -1050,12 +1050,17 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public String getCustomItemId(Object itemStack) {
-        throw new UnsupportedVersionException();
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        CompoundTag tag = nmsStack.getTag();
+        if (tag == null) return null;
+        return tag.getString("craftengine:id");
     }
 
     @Override
     public void setCustomItemId(Object itemStack, String id) {
-        throw new UnsupportedVersionException();
+        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
+        CompoundTag tag = nmsStack.getOrCreateTag();
+        tag.putString("craftengine:id", id);
     }
 
     @Override
@@ -1983,5 +1988,10 @@ public class FastNMSImpl extends FastNMS {
     public void method$LevelAccessor$scheduleTick(Object levelAccessor, Object blockPos, Object block, int ticks) {
         LevelAccessor level = (LevelAccessor) levelAccessor;
         level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
+    }
+
+    @Override
+    public void method$ItemStack$setTag(Object itemStack, Object compoundTag) {
+        ((net.minecraft.world.item.ItemStack) itemStack).setTag((CompoundTag) compoundTag);
     }
 }
