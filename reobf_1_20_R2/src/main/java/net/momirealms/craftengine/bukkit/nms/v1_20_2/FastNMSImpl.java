@@ -1989,4 +1989,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$ItemStack$setTag(Object itemStack, Object compoundTag) {
         ((net.minecraft.world.item.ItemStack) itemStack).setTag((CompoundTag) compoundTag);
     }
+
+    @Override
+    public Object method$AbstractContainerMenu$getCarried(Object menu) {
+        return ((AbstractContainerMenu) menu).getCarried();
+    }
 }

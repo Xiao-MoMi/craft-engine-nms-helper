@@ -680,4 +680,6 @@ public abstract class FastNMS {
     public abstract void method$LevelAccessor$scheduleTick(Object levelAccessor, Object blockPos, Object block, int ticks);
 
     public abstract void method$ItemStack$setTag(Object itemStack, Object compoundTag);
+
+    public abstract Object method$AbstractContainerMenu$getCarried(Object menu);
 }

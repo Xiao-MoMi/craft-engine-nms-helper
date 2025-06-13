@@ -2039,4 +2039,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$ItemStack$setTag(Object itemStack, Object compoundTag) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public Object method$AbstractContainerMenu$getCarried(Object menu) {
+        return ((AbstractContainerMenu) menu).getCarried();
+    }
 }

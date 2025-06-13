@@ -9,6 +9,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
+import io.papermc.paper.event.block.CompostItemEvent;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
@@ -1984,5 +1985,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ItemStack$setTag(Object itemStack, Object compoundTag) {
         ((net.minecraft.world.item.ItemStack) itemStack).setTag((CompoundTag) compoundTag);
+    }
+
+    @Override
+    public Object method$AbstractContainerMenu$getCarried(Object menu) {
+        return ((AbstractContainerMenu) menu).getCarried();
     }
 }
