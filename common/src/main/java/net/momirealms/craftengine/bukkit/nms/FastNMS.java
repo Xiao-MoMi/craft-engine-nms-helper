@@ -692,4 +692,6 @@ public abstract class FastNMS {
     public abstract int method$DataSlot$get(Object dataSlot);
 
     public abstract int field$AbstractContainerMenu$containerId(Object containerMenu);
+
+    public abstract Object method$AbstractContainerMenu$getSlot(Object containerMenu, int slot);
 }

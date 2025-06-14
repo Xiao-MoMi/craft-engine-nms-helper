@@ -2073,4 +2073,10 @@ public class FastNMSImpl extends FastNMS {
         AbstractContainerMenu menu = (AbstractContainerMenu) containerMenu;
         return menu.containerId;
     }
+
+    @Override
+    public Object method$AbstractContainerMenu$getSlot(Object containerMenu, int slot) {
+        AbstractContainerMenu menu = (AbstractContainerMenu) containerMenu;
+        return menu.getSlot(slot);
+    }
 }
