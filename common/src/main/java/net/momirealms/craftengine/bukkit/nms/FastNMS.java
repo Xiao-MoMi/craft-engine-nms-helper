@@ -503,6 +503,8 @@ public abstract class FastNMS {
 
     public abstract Object field$Player$containerMenu(Object player);
 
+    public abstract void field$Player$containerMenu(Object player, Object menu);
+
     public abstract void method$AbstractContainerMenu$sendAllDataToRemote(Object menu);
 
     public abstract void method$ItemStack$hurtWithoutBreaking(Object stack, int damage, Object player);
@@ -688,4 +690,6 @@ public abstract class FastNMS {
     public abstract List<Object> field$AbstractContainerMenu$dataSlots(Object menu);
 
     public abstract int method$DataSlot$get(Object dataSlot);
+
+    public abstract int field$AbstractContainerMenu$containerId(Object containerMenu);
 }

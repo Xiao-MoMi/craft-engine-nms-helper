@@ -2062,4 +2062,15 @@ public class FastNMSImpl extends FastNMS {
         DataSlot slot = (DataSlot) dataSlot;
         return slot.get();
     }
+
+    @Override
+    public void field$Player$containerMenu(Object player, Object menu) {
+        ((net.minecraft.world.entity.player.Player) player).containerMenu = (AbstractContainerMenu) menu;
+    }
+
+    @Override
+    public int field$AbstractContainerMenu$containerId(Object containerMenu) {
+        AbstractContainerMenu menu = (AbstractContainerMenu) containerMenu;
+        return menu.containerId;
+    }
 }
