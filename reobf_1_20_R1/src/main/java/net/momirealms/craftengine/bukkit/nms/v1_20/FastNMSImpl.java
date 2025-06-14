@@ -57,6 +57,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -2030,5 +2031,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundContainerSetDataPacket(int containerId, int id, int data) {
         return new ClientboundContainerSetDataPacket(containerId, id, data);
+    }
+
+    @Override
+    public Object method$Slot$getItem(Object slot) {
+        return ((Slot) slot).getItem();
     }
 }
