@@ -682,4 +682,10 @@ public abstract class FastNMS {
     public abstract void method$ItemStack$setTag(Object itemStack, Object compoundTag);
 
     public abstract Object method$AbstractContainerMenu$getCarried(Object menu);
+
+    public abstract void method$AbstractContainerMenu$broadcastFullState(Object menu);
+
+    public abstract List<Object> field$AbstractContainerMenu$dataSlots(Object menu);
+
+    public abstract int method$DataSlot$get(Object dataSlot);
 }

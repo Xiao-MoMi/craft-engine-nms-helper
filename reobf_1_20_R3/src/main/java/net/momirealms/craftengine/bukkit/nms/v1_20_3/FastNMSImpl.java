@@ -57,6 +57,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -1998,5 +1999,22 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$AbstractContainerMenu$getCarried(Object menu) {
         return ((AbstractContainerMenu) menu).getCarried();
+    }
+
+    @Override
+    public void method$AbstractContainerMenu$broadcastFullState(Object menu) {
+        ((AbstractContainerMenu) menu).broadcastFullState();
+    }
+
+    @Override
+    public List<Object> field$AbstractContainerMenu$dataSlots(Object menu) {
+        AbstractContainerMenu containerMenu = (AbstractContainerMenu) menu;
+        return (List) containerMenu.dataSlots;
+    }
+
+    @Override
+    public int method$DataSlot$get(Object dataSlot) {
+        DataSlot slot = (DataSlot) dataSlot;
+        return slot.get();
     }
 }
