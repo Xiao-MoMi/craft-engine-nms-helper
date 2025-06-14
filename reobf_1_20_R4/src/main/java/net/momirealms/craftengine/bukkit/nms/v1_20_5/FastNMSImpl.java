@@ -2252,4 +2252,9 @@ public class FastNMSImpl extends FastNMS {
         AbstractContainerMenu menu = (AbstractContainerMenu) containerMenu;
         return menu.getSlot(slot);
     }
+
+    @Override
+    public Object constructor$ClientboundContainerSetDataPacket(int containerId, int id, int data) {
+        return new ClientboundContainerSetDataPacket(containerId, id, data);
+    }
 }

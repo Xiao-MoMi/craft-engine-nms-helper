@@ -694,4 +694,6 @@ public abstract class FastNMS {
     public abstract int field$AbstractContainerMenu$containerId(Object containerMenu);
 
     public abstract Object method$AbstractContainerMenu$getSlot(Object containerMenu, int slot);
+
+    public abstract Object constructor$ClientboundContainerSetDataPacket(int containerId, int id, int data);
 }
