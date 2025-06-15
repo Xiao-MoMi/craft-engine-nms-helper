@@ -2090,4 +2090,10 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Slot$getItem(Object slot) {
         return ((Slot) slot).getItem();
     }
+
+    @Override
+    public boolean method$Entity$canBeCollidedWith(Object entity) {
+        Entity entityImpl = (Entity) entity;
+        return entityImpl.canBeCollidedWith();
+    }
 }

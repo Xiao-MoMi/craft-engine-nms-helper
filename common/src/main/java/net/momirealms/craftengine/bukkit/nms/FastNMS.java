@@ -693,4 +693,6 @@ public abstract class FastNMS {
     public abstract Object method$Slot$getItem(Object slot);
 
     public abstract Object constructor$ClientboundContainerSetDataPacket(int containerId, int id, int data);
+
+    public abstract boolean method$Entity$canBeCollidedWith(Object entity);
 }
