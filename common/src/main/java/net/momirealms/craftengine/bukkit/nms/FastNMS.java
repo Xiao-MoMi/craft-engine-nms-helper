@@ -55,6 +55,7 @@ public abstract class FastNMS {
         String name = (String) field$DetectedVersion$name.get(detectedVersion);
         String classSuffix;
         switch (name) {
+            case "1.21.6" -> classSuffix = "v1_21_6";
             case "1.21.5" -> classSuffix = "v1_21_5";
             case "1.21.4" -> classSuffix = "v1_21_4";
             case "1.21.2", "1.21.3" -> classSuffix = "v1_21_2";
