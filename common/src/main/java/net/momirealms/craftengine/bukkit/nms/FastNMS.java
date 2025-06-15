@@ -28,14 +28,8 @@ import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
-    private static final Class<?> clazz$DetectedVersion = requireNonNull(
-            ReflectionUtils.getClazz("net.minecraft.DetectedVersion", "net.minecraft.MinecraftVersion"));
-    private static final Class<?> clazz$WorldVersion = requireNonNull(
-            ReflectionUtils.getClazz("net.minecraft.WorldVersion"));
-    public static final Field field$DetectedVersion$BUILT_IN = requireNonNull(
-            ReflectionUtils.getDeclaredField(clazz$DetectedVersion, clazz$WorldVersion, 0));
-    public static final Field field$DetectedVersion$name = requireNonNull(
-            ReflectionUtils.getDeclaredField(clazz$DetectedVersion, String.class, 1));
+    private static final Class<?> clazz$SharedConstants = requireNonNull(ReflectionUtils.getClazz("net.minecraft.SharedConstants"));
+    private static final Field field$SharedConstants$VERSION_STRING = requireNonNull(ReflectionUtils.getDeclaredField(clazz$SharedConstants, String.class, 1));
     public static final FastNMS INSTANCE = instance();
 
     private static FastNMS instance() {
@@ -51,10 +45,10 @@ public abstract class FastNMS {
     }
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
-        Object detectedVersion = field$DetectedVersion$BUILT_IN.get(null);
-        String name = (String) field$DetectedVersion$name.get(detectedVersion);
+        String versionString = (String) field$SharedConstants$VERSION_STRING.get(null);
+        versionString = versionString.split("-", 2)[0];
         String classSuffix;
-        switch (name) {
+        switch (versionString) {
             case "1.21.6" -> classSuffix = "v1_21_6";
             case "1.21.5" -> classSuffix = "v1_21_5";
             case "1.21.4" -> classSuffix = "v1_21_4";
