@@ -2043,4 +2043,10 @@ public class FastNMSImpl extends FastNMS {
         Entity entityImpl = (Entity) entity;
         return entityImpl.canBeCollidedWith();
     }
+
+    @Override
+    public Object itemStackToCompoundTag(ItemStack itemStack) {
+        net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        return nmsStack.save(new CompoundTag());
+    }
 }

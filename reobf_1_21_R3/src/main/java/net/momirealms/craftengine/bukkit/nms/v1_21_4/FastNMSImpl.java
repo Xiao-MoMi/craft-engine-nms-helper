@@ -110,6 +110,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftChunk;
 import org.bukkit.craftbukkit.CraftParticle;
+import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
@@ -2095,5 +2096,16 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$Entity$canBeCollidedWith(Object entity) {
         Entity entityImpl = (Entity) entity;
         return entityImpl.canBeCollidedWith();
+    }
+
+    private static RegistryOps<Tag> SERIALIZATION_CONTEXT;
+
+    @Override
+    public Object itemStackToCompoundTag(ItemStack itemStack) {
+        if (SERIALIZATION_CONTEXT == null) {
+            SERIALIZATION_CONTEXT = registryAccess().createSerializationContext(NbtOps.INSTANCE);
+        }
+        net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        return net.minecraft.world.item.ItemStack.CODEC.encodeStart(SERIALIZATION_CONTEXT, nmsStack).getOrThrow();
     }
 }

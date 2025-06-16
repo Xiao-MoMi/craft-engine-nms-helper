@@ -36,6 +36,7 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -2050,5 +2051,11 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$Entity$canBeCollidedWith(Object entity) {
         Entity entityImpl = (Entity) entity;
         return entityImpl.canBeCollidedWith();
+    }
+
+    @Override
+    public Object itemStackToCompoundTag(ItemStack itemStack) {
+        net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        return nmsStack.save(new CompoundTag());
     }
 }

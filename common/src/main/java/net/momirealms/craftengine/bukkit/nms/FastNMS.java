@@ -695,4 +695,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ClientboundContainerSetDataPacket(int containerId, int id, int data);
 
     public abstract boolean method$Entity$canBeCollidedWith(Object entity);
+
+    public abstract Object itemStackToCompoundTag(ItemStack itemStack);
 }
