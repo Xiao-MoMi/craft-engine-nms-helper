@@ -703,4 +703,6 @@ public abstract class FastNMS {
     public abstract Object method$Block$defaultState(Object block);
 
     public abstract boolean method$BlockStateBase$isSignalSource(Object blockState);
+
+    public abstract Object method$Level$getFluidState(Object level, Object blockPos);
 }

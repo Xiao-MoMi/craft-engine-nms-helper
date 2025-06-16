@@ -106,7 +106,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftChunk;
 import org.bukkit.craftbukkit.CraftParticle;
-import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
@@ -2104,5 +2103,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$LevelAccessor$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks) {
         ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
+    }
+
+    @Override
+    public Object method$Level$getFluidState(Object level, Object blockPos) {
+        return ((Level) level).getFluidState((BlockPos) blockPos);
     }
 }

@@ -36,7 +36,6 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -2072,5 +2071,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$LevelAccessor$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks) {
         ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
+    }
+
+    @Override
+    public Object method$Level$getFluidState(Object level, Object blockPos) {
+        return ((Level) level).getFluidState((BlockPos) blockPos);
     }
 }

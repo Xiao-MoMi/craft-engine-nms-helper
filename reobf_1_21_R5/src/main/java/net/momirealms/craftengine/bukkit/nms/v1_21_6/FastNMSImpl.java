@@ -2129,4 +2129,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$LevelAccessor$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks) {
         ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
     }
+
+    @Override
+    public Object method$Level$getFluidState(Object level, Object blockPos) {
+        return ((Level) level).getFluidState((BlockPos) blockPos);
+    }
 }
