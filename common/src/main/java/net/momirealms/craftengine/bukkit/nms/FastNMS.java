@@ -674,7 +674,9 @@ public abstract class FastNMS {
 
     public abstract Object constructor$ItemStack(Object item, int count);
 
-    public abstract void method$LevelAccessor$scheduleTick(Object levelAccessor, Object blockPos, Object block, int ticks);
+    public abstract void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks);
+
+    public abstract void method$LevelAccessor$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks);
 
     public abstract void method$ItemStack$setTag(Object itemStack, Object compoundTag);
 
@@ -697,4 +699,8 @@ public abstract class FastNMS {
     public abstract boolean method$Entity$canBeCollidedWith(Object entity);
 
     public abstract Object itemStackToCompoundTag(ItemStack itemStack);
+
+    public abstract Object method$Block$defaultState(Object block);
+
+    public abstract boolean method$BlockStateBase$isSignalSource(Object blockState);
 }

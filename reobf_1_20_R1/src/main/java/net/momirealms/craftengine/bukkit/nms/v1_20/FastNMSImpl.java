@@ -9,7 +9,6 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
-import io.papermc.paper.event.block.CompostItemEvent;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
@@ -79,6 +78,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -1979,9 +1979,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$LevelAccessor$scheduleTick(Object levelAccessor, Object blockPos, Object block, int ticks) {
-        LevelAccessor level = (LevelAccessor) levelAccessor;
-        level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
+    public void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks) {
+        ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
     }
 
     @Override
@@ -2001,14 +2000,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public List<Object> field$AbstractContainerMenu$dataSlots(Object menu) {
-        AbstractContainerMenu containerMenu = (AbstractContainerMenu) menu;
-        return (List) containerMenu.dataSlots;
+        return (List) ((AbstractContainerMenu) menu).dataSlots;
     }
 
     @Override
     public int method$DataSlot$get(Object dataSlot) {
-        DataSlot slot = (DataSlot) dataSlot;
-        return slot.get();
+        return ((DataSlot) dataSlot).get();
     }
 
     @Override
@@ -2018,14 +2015,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int field$AbstractContainerMenu$containerId(Object containerMenu) {
-        AbstractContainerMenu menu = (AbstractContainerMenu) containerMenu;
-        return menu.containerId;
+        return ((AbstractContainerMenu) containerMenu).containerId;
     }
 
     @Override
     public Object method$AbstractContainerMenu$getSlot(Object containerMenu, int slot) {
-        AbstractContainerMenu menu = (AbstractContainerMenu) containerMenu;
-        return menu.getSlot(slot);
+        return ((AbstractContainerMenu) containerMenu).getSlot(slot);
     }
 
     @Override
@@ -2040,13 +2035,26 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$Entity$canBeCollidedWith(Object entity) {
-        Entity entityImpl = (Entity) entity;
-        return entityImpl.canBeCollidedWith();
+        return ((Entity) entity).canBeCollidedWith();
     }
 
     @Override
     public Object itemStackToCompoundTag(ItemStack itemStack) {
-        net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-        return nmsStack.save(new CompoundTag());
+        return CraftItemStack.asNMSCopy(itemStack).save(new CompoundTag());
+    }
+
+    @Override
+    public Object method$Block$defaultState(Object block) {
+        return ((net.minecraft.world.level.block.Block) block).defaultBlockState();
+    }
+
+    @Override
+    public boolean method$BlockStateBase$isSignalSource(Object blockState) {
+        return ((BlockBehaviour.BlockStateBase) blockState).isSignalSource();
+    }
+
+    @Override
+    public void method$LevelAccessor$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks) {
+        ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
     }
 }

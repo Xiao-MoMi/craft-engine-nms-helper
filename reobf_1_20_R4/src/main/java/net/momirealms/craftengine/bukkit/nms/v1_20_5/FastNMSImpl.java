@@ -85,6 +85,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConf
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -2206,7 +2207,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$LevelAccessor$scheduleTick(Object levelAccessor, Object blockPos, Object block, int ticks) {
+    public void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks) {
         LevelAccessor level = (LevelAccessor) levelAccessor;
         level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
     }
@@ -2267,8 +2268,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$Entity$canBeCollidedWith(Object entity) {
-        Entity entityImpl = (Entity) entity;
-        return entityImpl.canBeCollidedWith();
+        return ((Entity) entity).canBeCollidedWith();
     }
 
     private static RegistryOps<Tag> SERIALIZATION_CONTEXT;
@@ -2280,5 +2280,20 @@ public class FastNMSImpl extends FastNMS {
         }
         net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
         return net.minecraft.world.item.ItemStack.CODEC.encodeStart(SERIALIZATION_CONTEXT, nmsStack).getOrThrow();
+    }
+
+    @Override
+    public Object method$Block$defaultState(Object block) {
+        return ((net.minecraft.world.level.block.Block) block).defaultBlockState();
+    }
+
+    @Override
+    public boolean method$BlockStateBase$isSignalSource(Object blockState) {
+        return ((BlockBehaviour.BlockStateBase) blockState).isSignalSource();
+    }
+
+    @Override
+    public void method$LevelAccessor$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks) {
+        ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
     }
 }
