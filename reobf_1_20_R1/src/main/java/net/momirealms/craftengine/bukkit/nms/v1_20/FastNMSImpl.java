@@ -2068,4 +2068,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$FluidState$getType(Object fluidState) {
         return ((FluidState) fluidState).getType();
     }
+
+    @Override
+    public boolean method$Explosion$canTriggerBlocks(Object explosion) {
+        throw new UnsupportedVersionException();
+    }
 }
