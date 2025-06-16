@@ -82,6 +82,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -2076,5 +2077,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Level$getFluidState(Object level, Object blockPos) {
         return ((Level) level).getFluidState((BlockPos) blockPos);
+    }
+
+    @Override
+    public Object method$FluidState$getType(Object fluidState) {
+        return ((FluidState) fluidState).getType();
     }
 }
