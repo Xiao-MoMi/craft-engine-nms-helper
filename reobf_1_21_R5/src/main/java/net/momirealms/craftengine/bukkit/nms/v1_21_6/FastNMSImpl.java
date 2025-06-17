@@ -2150,4 +2150,9 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$BlockStateBase$canSurvive(Object blockState, Object level, Object blockPos) {
         return ((BlockState) blockState).canSurvive((LevelReader) level, (BlockPos) blockPos);
     }
+
+    @Override
+    public boolean method$BlockStateBase$isCollisionShapeFullBlock(Object blockState, Object level, Object blockPos) {
+        return ((BlockState) blockState).isCollisionShapeFullBlock((BlockGetter) level, (BlockPos) blockPos);
+    }
 }
