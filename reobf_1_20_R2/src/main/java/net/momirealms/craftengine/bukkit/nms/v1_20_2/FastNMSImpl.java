@@ -2083,4 +2083,9 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$Explosion$canTriggerBlocks(Object explosion) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public boolean method$BlockStateBase$canSurvive(Object blockState, Object level, Object blockPos) {
+        return ((BlockState) blockState).canSurvive((LevelReader) level, (BlockPos) blockPos);
+    }
 }

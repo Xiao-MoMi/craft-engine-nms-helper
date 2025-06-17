@@ -709,4 +709,6 @@ public abstract class FastNMS {
     public abstract Object method$FluidState$getType(Object fluidState);
 
     public abstract boolean method$Explosion$canTriggerBlocks(Object explosion);
+
+    public abstract boolean method$BlockStateBase$canSurvive(Object blockState, Object level, Object blockPos);
 }
