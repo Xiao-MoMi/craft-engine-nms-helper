@@ -2133,4 +2133,9 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$BlockStateBase$isTagKeyBlock(Object blockState, Object tag) {
         return ((BlockState) blockState).is(((TagKey<net.minecraft.world.level.block.Block>) tag));
     }
+
+    @Override
+    public Object method$TagKey$create(Object registry, Object location) {
+        return TagKey.create((ResourceKey<? extends Registry<Object>>) registry, (ResourceLocation) location);
+    }
 }

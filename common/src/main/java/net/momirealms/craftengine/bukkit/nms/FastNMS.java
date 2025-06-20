@@ -715,4 +715,6 @@ public abstract class FastNMS {
     public abstract boolean method$BlockStateBase$isCollisionShapeFullBlock(Object blockState, Object level, Object blockPos);
 
     public abstract boolean method$BlockStateBase$isTagKeyBlock(Object blockState, Object tag);
+
+    public abstract Object method$TagKey$create(Object registry, Object location);
 }
