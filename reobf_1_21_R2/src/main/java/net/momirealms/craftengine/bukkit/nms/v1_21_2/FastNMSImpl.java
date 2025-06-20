@@ -49,6 +49,7 @@ import net.minecraft.server.level.*;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -2143,5 +2144,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$BlockStateBase$isCollisionShapeFullBlock(Object blockState, Object level, Object blockPos) {
         return ((BlockState) blockState).isCollisionShapeFullBlock((BlockGetter) level, (BlockPos) blockPos);
+    }
+
+    @Override
+    public boolean method$BlockStateBase$isTagKeyBlock(Object blockState, Object tag) {
+        return ((BlockState) blockState).is(((TagKey<net.minecraft.world.level.block.Block>) tag));
     }
 }

@@ -50,6 +50,7 @@ import net.minecraft.server.level.*;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -1504,7 +1505,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$Entity$isInWaterOrRain(Object entity) {
-        return ((net.minecraft.world.entity.Entity) entity).isInWaterOrRain();
+        return ((Entity) entity).isInWaterOrRain();
     }
 
     @Override
@@ -1602,12 +1603,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public float method$Entity$getYRot(Object entity) {
-        return ((net.minecraft.world.entity.Entity) entity).getYRot();
+        return ((Entity) entity).getYRot();
     }
 
     @Override
     public float method$Entity$getXRot(Object entity) {
-        return ((net.minecraft.world.entity.Entity) entity).getXRot();
+        return ((Entity) entity).getXRot();
     }
 
     @Override
@@ -1621,7 +1622,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$Entity$push(Object entity, double x, double y, double z) {
-        ((net.minecraft.world.entity.Entity) entity).push(x, y, z);
+        ((Entity) entity).push(x, y, z);
     }
 
     @Override
@@ -1631,12 +1632,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$Entity$onGround(Object entity) {
-        return ((net.minecraft.world.entity.Entity) entity).onGround();
+        return ((Entity) entity).onGround();
     }
 
     @Override
     public void method$Entity$move(Object entity, Object type, Object movement) {
-        ((net.minecraft.world.entity.Entity) entity).move((MoverType) type, (Vec3) movement);
+        ((Entity) entity).move((MoverType) type, (Vec3) movement);
     }
 
     @Override
@@ -2154,5 +2155,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$BlockStateBase$isCollisionShapeFullBlock(Object blockState, Object level, Object blockPos) {
         return ((BlockState) blockState).isCollisionShapeFullBlock((BlockGetter) level, (BlockPos) blockPos);
+    }
+
+    @Override
+    public boolean method$BlockStateBase$isTagKeyBlock(Object blockState, Object tag) {
+        return ((BlockState) blockState).is(((TagKey<net.minecraft.world.level.block.Block>) tag));
     }
 }
