@@ -717,4 +717,6 @@ public abstract class FastNMS {
     public abstract boolean method$BlockStateBase$isTagKeyBlock(Object blockState, Object tag);
 
     public abstract Object method$TagKey$create(Object registry, Object location);
+
+    public abstract void method$Level$updateNeighborsAt(Object level, Object blockPos, Object block);
 }

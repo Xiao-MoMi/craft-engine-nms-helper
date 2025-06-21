@@ -2141,4 +2141,10 @@ public class FastNMSImpl extends FastNMS {
     public Object method$TagKey$create(Object registry, Object location) {
         return TagKey.create((ResourceKey<? extends Registry<Object>>) registry, (ResourceLocation) location);
     }
+
+    @Override
+    public void method$Level$updateNeighborsAt(Object levelAccessor, Object blockPos, Object block) {
+        Level level = (Level) levelAccessor;
+        level.updateNeighborsAt((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block);
+    }
 }
