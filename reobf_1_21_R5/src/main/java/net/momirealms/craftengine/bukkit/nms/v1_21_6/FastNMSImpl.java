@@ -131,6 +131,7 @@ import javax.annotation.Nullable;
 import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -2191,5 +2192,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType) {
         ((BlockBehaviour.BlockStateBase) blockState).isFaceSturdy((BlockGetter) level, (BlockPos) pos, (Direction) face, (SupportType) supportType);
+    }
+
+    @Override
+    public int method$BasePressurePlateBlock$getEntityCount(Object entityGetter, Object aabb, Class entityClass) {
+        return ((EntityGetter) entityGetter).getEntitiesOfClass(entityClass, (AABB) aabb, EntitySelector.NO_SPECTATORS.and(entity -> !entity.isIgnoringBlockTriggers())).size();
+    }
+
+    @Override
+    public Object method$AABB$move(Object aabb, Object pos) {
+        return ((AABB) aabb).move((BlockPos) pos);
     }
 }

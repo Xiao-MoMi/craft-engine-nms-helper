@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "rawtypes"})
 public abstract class FastNMS {
     private static final Class<?> clazz$SharedConstants = requireNonNull(ReflectionUtils.getClazz("net.minecraft.SharedConstants"));
     private static final Field field$SharedConstants$VERSION_STRING = requireNonNull(ReflectionUtils.getDeclaredField(clazz$SharedConstants, String.class, 1));
@@ -727,4 +727,8 @@ public abstract class FastNMS {
     public abstract void method$Level$setBlocksDirty(Object level, Object blockPos, Object oldState, Object newState);
 
     public abstract void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType);
+
+    public abstract int method$BasePressurePlateBlock$getEntityCount(Object entityGetter, Object aabb, Class entityClass);
+
+    public abstract Object method$AABB$move(Object aabb, Object pos);
 }
