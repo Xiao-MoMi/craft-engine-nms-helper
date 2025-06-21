@@ -75,6 +75,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -2169,5 +2170,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$Block$canSupportCenter(Object level, Object pos, Object direction) {
         return net.minecraft.world.level.block.Block.canSupportCenter((Level) level, (BlockPos) pos, (Direction) direction);
+    }
+
+    @Override
+    public void method$Level$setBlocksDirty(Object level, Object blockPos, Object oldState, Object newState) {
+        ((Level) level).setBlocksDirty((BlockPos) blockPos, (BlockState) oldState, (BlockState) newState);
+    }
+
+    @Override
+    public void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType) {
+        ((BlockBehaviour.BlockStateBase) blockState).isFaceSturdy((BlockGetter) level, (BlockPos) pos, (Direction) face, (SupportType) supportType);
     }
 }

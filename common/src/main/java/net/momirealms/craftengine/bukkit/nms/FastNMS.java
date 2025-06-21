@@ -723,4 +723,8 @@ public abstract class FastNMS {
     public abstract boolean method$Block$canSupportRigidBlock(Object level, Object pos);
 
     public abstract boolean method$Block$canSupportCenter(Object level, Object pos, Object direction);
+
+    public abstract void method$Level$setBlocksDirty(Object level, Object blockPos, Object oldState, Object newState);
+
+    public abstract void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType);
 }
