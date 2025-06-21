@@ -719,4 +719,8 @@ public abstract class FastNMS {
     public abstract Object method$TagKey$create(Object registry, Object location);
 
     public abstract void method$Level$updateNeighborsAt(Object level, Object blockPos, Object block);
+
+    public abstract boolean method$Block$canSupportRigidBlock(Object level, Object pos);
+
+    public abstract boolean method$Block$canSupportCenter(Object level, Object pos, Object direction);
 }

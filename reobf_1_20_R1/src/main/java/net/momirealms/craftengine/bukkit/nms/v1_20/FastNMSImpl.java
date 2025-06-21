@@ -2100,4 +2100,14 @@ public class FastNMSImpl extends FastNMS {
         Level level = (Level) levelAccessor;
         level.updateNeighborsAt((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block);
     }
+
+    @Override
+    public boolean method$Block$canSupportRigidBlock(Object level, Object pos) {
+        return net.minecraft.world.level.block.Block.canSupportRigidBlock((Level) level, (BlockPos) pos);
+    }
+
+    @Override
+    public boolean method$Block$canSupportCenter(Object level, Object pos, Object direction) {
+        return net.minecraft.world.level.block.Block.canSupportCenter((Level) level, (BlockPos) pos, (Direction) direction);
+    }
 }
