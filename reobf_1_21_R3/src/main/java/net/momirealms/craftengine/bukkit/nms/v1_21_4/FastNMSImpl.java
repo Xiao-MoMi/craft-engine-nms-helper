@@ -2161,7 +2161,6 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$Level$updateNeighborsAt(Object levelAccessor, Object blockPos, Object block) {
-        Level level = (Level) levelAccessor;
-        level.updateNeighborsAt((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block);
+        ((Level) levelAccessor).updateNeighborsAt((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block);
     }
 }
