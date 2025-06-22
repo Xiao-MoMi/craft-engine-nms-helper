@@ -731,4 +731,6 @@ public abstract class FastNMS {
     public abstract int method$BasePressurePlateBlock$getEntityCount(Object entityGetter, Object aabb, Class entityClass);
 
     public abstract Object method$AABB$move(Object aabb, Object pos);
+
+    public abstract void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks, Object priority);
 }

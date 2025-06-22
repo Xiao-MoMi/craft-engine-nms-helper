@@ -89,6 +89,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
@@ -2141,5 +2142,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$AABB$move(Object aabb, Object pos) {
         return ((AABB) aabb).move((BlockPos) pos);
+    }
+
+    @Override
+    public void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks, Object priority) {
+        LevelAccessor level = (LevelAccessor) levelAccessor;
+        level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
     }
 }
