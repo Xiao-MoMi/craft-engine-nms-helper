@@ -56,7 +56,9 @@ import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -2246,5 +2248,40 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$Entity$discard(Object entity) {
         ((Entity) entity).discard();
+    }
+
+    @Override
+    public Object method$BlockItem$place(Object blockItem, Object context) {
+        return ((BlockItem) blockItem).place((BlockPlaceContext) context);
+    }
+
+    @Override
+    public Object constructor$PlaceBlockBlockPlaceContext(Object level, Object hand, Object itemStack, Object hitResult) {
+        return new PlaceBlockBlockPlaceContext((Level) level, (InteractionHand) hand, (net.minecraft.world.item.ItemStack) itemStack, (BlockHitResult) hitResult);
+    }
+
+    @Override
+    public boolean method$InteractionResult$consumesAction(Object interactionResult) {
+        return ((InteractionResult) interactionResult).consumesAction();
+    }
+
+    @Override
+    public Object constructor$BlockHitResult(Override location, Object direction, Object blockPos, boolean inside) {
+        return new BlockHitResult((Vec3) location, (Direction) direction, (BlockPos) blockPos, inside);
+    }
+
+    @Override
+    public float method$EntityType$getHeight(Object entityType) {
+        return ((EntityType<?>) entityType).getHeight();
+    }
+
+    @Override
+    public Object constructor$ItemEntity(Object level, double posX, double posY, double posZ, Object itemStack) {
+        return new ItemEntity((Level) level, posX, posY, posZ, (net.minecraft.world.item.ItemStack) itemStack);
+    }
+
+    @Override
+    public void method$ItemEntity$setDefaultPickUpDelay(Object itemEntity) {
+        ((ItemEntity) itemEntity).setDefaultPickUpDelay();
     }
 }

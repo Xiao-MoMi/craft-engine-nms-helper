@@ -773,4 +773,18 @@ public abstract class FastNMS {
     public abstract int method$ItemStack$getCount(Object itemStack);
 
     public abstract void method$Entity$discard(Object entity);
+
+    public abstract Object method$BlockItem$place(Object blockItem, Object context);
+
+    public abstract Object constructor$PlaceBlockBlockPlaceContext(Object level, Object hand, Object itemStack, Object hitResult);
+
+    public abstract boolean method$InteractionResult$consumesAction(Object interactionResult);
+
+    public abstract Object constructor$BlockHitResult(Override location, Object direction, Object blockPos, boolean inside);
+
+    public abstract float method$EntityType$getHeight(Object entityType);
+
+    public abstract Object constructor$ItemEntity(Object level, double posX, double posY, double posZ, Object itemStack);
+
+    public abstract void method$ItemEntity$setDefaultPickUpDelay(Object itemEntity);
 }
