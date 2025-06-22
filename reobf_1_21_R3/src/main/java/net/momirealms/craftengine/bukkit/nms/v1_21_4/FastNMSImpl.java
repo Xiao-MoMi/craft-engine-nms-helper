@@ -55,13 +55,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.WorldlyContainerHolder;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -2266,5 +2264,45 @@ public class FastNMSImpl extends FastNMS {
         return containerImpl instanceof WorldlyContainer
                 ? IntStream.of(((WorldlyContainer)containerImpl).getSlotsForFace(directionImpl))
                 : IntStream.range(0, containerImpl.getContainerSize());
+    }
+
+    @Override
+    public Object method$Container$removeItem(Object container, int slot, int amount) {
+        return ((Container)container).removeItem(slot, amount);
+    }
+
+    @Override
+    public void method$Container$setChanged(Object container) {
+        ((Container)container).setChanged();
+    }
+
+    @Override
+    public void method$Container$setItem(Object container, int slot, Object stack) {
+        ((Container)container).setItem(slot, (net.minecraft.world.item.ItemStack)stack);
+    }
+
+    @Override
+    public Object method$EntityGetter$getEntitiesOfClass(Object entityGetter, Class entityClass, Object area, Predicate<Object> filter) {
+        return ((EntityGetter)entityGetter).getEntitiesOfClass(entityClass, ((AABB) area), filter);
+    }
+
+    @Override
+    public Object method$ItemEntity$getItem(Object itemEntity) {
+        return ((ItemEntity) itemEntity).getItem();
+    }
+
+    @Override
+    public void method$ItemStack$shrink(Object itemStack, int decrement) {
+        ((net.minecraft.world.item.ItemStack) itemStack).shrink(decrement);
+    }
+
+    @Override
+    public int method$ItemStack$getCount(Object itemStack) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).getCount();
+    }
+
+    @Override
+    public void method$Entity$discard(Object entity) {
+        ((Entity) entity).discard();
     }
 }

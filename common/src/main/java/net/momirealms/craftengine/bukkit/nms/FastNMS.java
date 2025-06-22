@@ -757,4 +757,20 @@ public abstract class FastNMS {
     public abstract boolean method$Entity$isAlive(Object entity);
 
     public abstract IntStream method$HopperBlockEntity$getSlots(Object container, Object direction);
+
+    public abstract Object method$Container$removeItem(Object container, int slot, int amount);
+
+    public abstract void method$Container$setChanged(Object container);
+
+    public abstract void method$Container$setItem(Object container, int slot, Object stack);
+
+    public abstract Object method$EntityGetter$getEntitiesOfClass(Object entityGetter, Class entityClass, Object area, Predicate<Object> filter);
+
+    public abstract Object method$ItemEntity$getItem(Object itemEntity);
+
+    public abstract void method$ItemStack$shrink(Object itemStack, int decrement);
+
+    public abstract int method$ItemStack$getCount(Object itemStack);
+
+    public abstract void method$Entity$discard(Object entity);
 }
