@@ -736,7 +736,5 @@ public abstract class FastNMS {
 
     public abstract boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean dropBlock, @Nullable Object entity, int recursionLeft);
 
-    public abstract Object method$Level$getBlockState(Object level, Object pos);
-
     public abstract boolean method$BlockStateBase$isAir(Object blockState);
 }

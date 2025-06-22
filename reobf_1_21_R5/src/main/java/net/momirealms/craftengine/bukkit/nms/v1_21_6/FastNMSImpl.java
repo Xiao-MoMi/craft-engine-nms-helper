@@ -132,7 +132,6 @@ import javax.annotation.Nullable;
 import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -2214,11 +2213,6 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean dropBlock, @Nullable Object entity, int recursionLeft) {
         return ((LevelWriter) level).destroyBlock((BlockPos) pos, dropBlock, (Entity) entity, recursionLeft);
-    }
-
-    @Override
-    public Object method$Level$getBlockState(Object level, Object pos) {
-        return ((Level) level).getBlockState((BlockPos) pos);
     }
 
     @Override
