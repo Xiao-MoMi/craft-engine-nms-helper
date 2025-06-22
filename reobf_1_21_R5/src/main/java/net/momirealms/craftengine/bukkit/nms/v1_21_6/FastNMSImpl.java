@@ -2211,4 +2211,9 @@ public class FastNMSImpl extends FastNMS {
         level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
     }
 
+    @Override
+    public boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean dropBlock, @Nullable Object entity, int recursionLeft) {
+        return ((LevelWriter) level).destroyBlock((BlockPos) pos, dropBlock, (Entity) entity, recursionLeft);
+    }
+
 }

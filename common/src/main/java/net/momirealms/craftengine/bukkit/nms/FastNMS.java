@@ -733,4 +733,6 @@ public abstract class FastNMS {
     public abstract Object method$AABB$move(Object aabb, Object pos);
 
     public abstract void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks, Object priority);
+
+    public abstract boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean dropBlock, @Nullable Object entity, int recursionLeft);
 }
