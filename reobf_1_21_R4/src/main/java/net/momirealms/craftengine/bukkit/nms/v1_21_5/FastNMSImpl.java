@@ -2304,7 +2304,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object constructor$BlockHitResult(Override location, Object direction, Object blockPos, boolean inside) {
+    public Object constructor$BlockHitResult(Object location, Object direction, Object blockPos, boolean inside) {
         return new BlockHitResult((Vec3) location, (Direction) direction, (BlockPos) blockPos, inside);
     }
 

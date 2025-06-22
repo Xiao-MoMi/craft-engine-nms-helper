@@ -780,7 +780,7 @@ public abstract class FastNMS {
 
     public abstract boolean method$InteractionResult$consumesAction(Object interactionResult);
 
-    public abstract Object constructor$BlockHitResult(Override location, Object direction, Object blockPos, boolean inside);
+    public abstract Object constructor$BlockHitResult(Object location, Object direction, Object blockPos, boolean inside);
 
     public abstract float method$EntityType$getHeight(Object entityType);
 
