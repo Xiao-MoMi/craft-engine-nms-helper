@@ -44,9 +44,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Container;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
@@ -63,8 +61,10 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -117,6 +117,8 @@ import javax.annotation.Nullable;
 import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -2143,5 +2145,55 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$BlockStateBase$isAir(Object blockState) {
         return ((BlockBehaviour.BlockStateBase) blockState).isAir();
+    }
+
+    @Override
+    public Object method$WorldlyContainerHolder$getContainer(Object block, Object state, Object level, Object pos) {
+        return ((WorldlyContainerHolder) block).getContainer((BlockState) state, (Level) level, (BlockPos) pos);
+    }
+
+    @Override
+    public boolean method$BlockStateBase$hasBlockEntity(Object blockState) {
+        return ((BlockState) blockState).hasBlockEntity();
+    }
+
+    @Override
+    public Object method$BlockGetter$getBlockEntity(Object blockGetter, Object blockPos) {
+        return ((BlockGetter) blockGetter).getBlockEntity((BlockPos) blockPos);
+    }
+
+    @Override
+    public Object method$ChestBlock$getContainer(Object chest, Object state, Object level, Object pos, boolean override) {
+        return ChestBlock.getContainer((ChestBlock) chest, (BlockState) state, (Level) level, (BlockPos) pos, override);
+    }
+
+    @Override
+    public Object method$EntityGetter$getEntities(Object entityGetter, @Nullable Object entity, Object area, Predicate<Object> predicate) {
+        return ((EntityGetter) entityGetter).getEntities(((Entity) entity), ((AABB) area), predicate);
+    }
+
+    @Override
+    public Object method$AABB$ofSize(Object center, double xSize, double ySize, double zSize) {
+        return AABB.ofSize((Vec3) center, xSize, ySize, zSize);
+    }
+
+    @Override
+    public Object method$BlockPos$getCenter(Object blockPos) {
+        return ((BlockPos) blockPos).getCenter();
+    }
+
+    @Override
+    public boolean method$Entity$isAlive(Object entity) {
+        return ((Entity) entity).isAlive();
+    }
+
+    @Override
+    public IntStream method$HopperBlockEntity$getSlots(Object container, Object direction) {
+        // 来自 23w13a_or_b 的 HopperBlockEntity.getSlots 方法
+        HopperBlockEntity containerImpl = (HopperBlockEntity) container;
+        Direction directionImpl = (Direction) direction;
+        return containerImpl instanceof WorldlyContainer
+                ? IntStream.of(((WorldlyContainer)containerImpl).getSlotsForFace(directionImpl))
+                : IntStream.range(0, containerImpl.getContainerSize());
     }
 }

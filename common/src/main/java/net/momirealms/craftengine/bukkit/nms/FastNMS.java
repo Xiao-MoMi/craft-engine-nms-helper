@@ -23,6 +23,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -737,4 +739,22 @@ public abstract class FastNMS {
     public abstract boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean dropBlock, @Nullable Object entity, int recursionLeft);
 
     public abstract boolean method$BlockStateBase$isAir(Object blockState);
+
+    public abstract Object method$WorldlyContainerHolder$getContainer(Object block, Object state, Object level, Object pos);
+
+    public abstract boolean method$BlockStateBase$hasBlockEntity(Object blockState);
+
+    public abstract Object method$BlockGetter$getBlockEntity(Object blockGetter, Object blockPos);
+
+    public abstract Object method$ChestBlock$getContainer(Object chest, Object state, Object level, Object pos, boolean override);
+
+    public abstract Object method$EntityGetter$getEntities(Object entityGetter, @Nullable Object entity, Object area, Predicate<Object> predicate);
+
+    public abstract Object method$AABB$ofSize(Object center, double xSize, double ySize, double zSize);
+
+    public abstract Object method$BlockPos$getCenter(Object blockPos);
+
+    public abstract boolean method$Entity$isAlive(Object entity);
+
+    public abstract IntStream method$HopperBlockEntity$getSlots(Object container, Object direction);
 }
