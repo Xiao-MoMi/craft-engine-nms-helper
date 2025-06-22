@@ -2241,7 +2241,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public IntStream method$HopperBlockEntity$getSlots(Object container, Object direction) {
         // 来自 23w13a_or_b 的 HopperBlockEntity.getSlots 方法
-        HopperBlockEntity containerImpl = (HopperBlockEntity) container;
+        Container containerImpl = (Container) container;
         Direction directionImpl = (Direction) direction;
         return containerImpl instanceof WorldlyContainer
                 ? IntStream.of(((WorldlyContainer)containerImpl).getSlotsForFace(directionImpl))
