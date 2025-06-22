@@ -2216,4 +2216,13 @@ public class FastNMSImpl extends FastNMS {
         return ((LevelWriter) level).destroyBlock((BlockPos) pos, dropBlock, (Entity) entity, recursionLeft);
     }
 
+    @Override
+    public Object method$Level$getBlockState(Object level, Object pos) {
+        return ((Level) level).getBlockState((BlockPos) pos);
+    }
+
+    @Override
+    public boolean method$BlockStateBase$isAir(Object blockState) {
+        return ((BlockBehaviour.BlockStateBase) blockState).isAir();
+    }
 }
