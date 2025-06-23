@@ -787,4 +787,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ItemEntity(Object level, double posX, double posY, double posZ, Object itemStack);
 
     public abstract void method$ItemEntity$setDefaultPickUpDelay(Object itemEntity);
+
+    public abstract Object method$BlockItem$getBlock(Object blockItem);
 }

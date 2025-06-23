@@ -2289,4 +2289,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$ItemEntity$setDefaultPickUpDelay(Object itemEntity) {
         ((ItemEntity) itemEntity).setDefaultPickUpDelay();
     }
+
+    @Override
+    public Object method$BlockItem$getBlock(Object blockItem) {
+        return ((BlockItem) blockItem).getBlock();
+    }
 }
