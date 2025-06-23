@@ -1,6 +1,5 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_2;
 
-import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -9,7 +8,6 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
-import io.papermc.paper.util.MCUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
@@ -70,8 +68,6 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -79,7 +75,6 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -98,7 +93,6 @@ import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
-import net.momirealms.craftengine.core.util.Pair;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -2310,49 +2304,8 @@ public class FastNMSImpl extends FastNMS {
         return map;
     }
 
-    private static boolean dropResources(BlockState state, Level world, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, net.minecraft.world.item.ItemStack tool) {
-        if (world instanceof ServerLevel) {
-            List<net.minecraft.world.item.ItemStack> drops = net.minecraft.world.level.block.Block.getDrops(state, (ServerLevel)world, pos, blockEntity, entity, tool);
-            drops.forEach((itemstack1) -> net.minecraft.world.level.block.Block.popResource(world, pos, itemstack1));
-            state.spawnAfterBreak((ServerLevel)world, pos, tool, true);
-            return !drops.isEmpty();
-        }
-        return false;
-    }
-
     @Override
-    public Pair<Boolean, Boolean> method$Level$destroyBlock(Object objLevel, Object objPos, boolean drop, @Nullable Object objEntity, int maxUpdateDepth) {
-        // 来自当前版本的方法必须从这里复刻一遍不能直接调用
-        Level level = (Level) objLevel;
-        BlockPos pos = (BlockPos) objPos;
-        Entity breakingEntity = (Entity) objEntity;
-        BlockState iblockdata = level.getBlockState(pos);
-        if (iblockdata.isAir()) {
-            return Pair.of(false, false);
-        } else {
-            FluidState fluid = level.getFluidState(pos);
-            boolean playEffect = true;
-            if (BlockDestroyEvent.getHandlerList().getRegisteredListeners().length > 0) {
-                BlockDestroyEvent event = new BlockDestroyEvent(MCUtil.toBukkitBlock(level, pos), fluid.createLegacyBlock().createCraftBlockData(), drop);
-                if (!event.callEvent()) {
-                    return Pair.of(false, false);
-                }
-                playEffect = event.playEffect();
-                drop = event.willDrop();
-            }
-            if (playEffect && !(iblockdata.getBlock() instanceof BaseFireBlock)) {
-                level.levelEvent(2001, pos, net.minecraft.world.level.block.Block.getId(iblockdata));
-            }
-            boolean realDropBlock = false;
-            if (drop) {
-                BlockEntity tileentity = iblockdata.hasBlockEntity() ? level.getBlockEntity(pos) : null;
-                realDropBlock = dropResources(iblockdata, level, pos, tileentity, breakingEntity, net.minecraft.world.item.ItemStack.EMPTY);
-            }
-            boolean flag1 = level.setBlock(pos, fluid.createLegacyBlock(), 3, maxUpdateDepth);
-            if (flag1) {
-                level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(breakingEntity, iblockdata));
-            }
-            return Pair.of(flag1, realDropBlock);
-        }
+    public Object field$BlockBehaviour$drops(Object blockBehaviour) {
+        return ((BlockBehaviour) blockBehaviour).getLootTable();
     }
 }
