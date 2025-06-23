@@ -2557,7 +2557,6 @@ public class FastNMSImpl extends FastNMS {
                 if (!event.callEvent()) {
                     return false;
                 }
-
                 effectType = ((CraftBlockData)event.getEffectBlock()).getState();
                 playEffect = event.playEffect();
                 drop = event.willDrop();

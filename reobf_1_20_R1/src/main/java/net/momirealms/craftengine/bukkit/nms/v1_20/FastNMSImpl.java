@@ -2314,7 +2314,6 @@ public class FastNMSImpl extends FastNMS {
                 if (!event.callEvent()) {
                     return false;
                 }
-
                 playEffect = event.playEffect();
                 drop = event.willDrop();
             }
