@@ -32,10 +32,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
-import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
-import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;
-import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
+import net.minecraft.network.protocol.common.*;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -2326,5 +2323,23 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$BlockItem$getBlock(Object blockItem) {
         return ((BlockItem) blockItem).getBlock();
+    }
+
+    @Override
+    public Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet) {
+        Map<String, Object> map = new HashMap<>();
+        var packetImpl = (ServerboundClientInformationPacket) packet;
+        if (packetImpl == null) return map;
+        ClientInformation information = packetImpl.information();
+        map.put("language", information.language());
+        map.put("viewDistance", information.viewDistance());
+        map.put("chatVisibility", information.chatVisibility());
+        map.put("chatColors", information.chatColors());
+        map.put("modelCustomisation", information.modelCustomisation());
+        map.put("mainHand", information.mainHand());
+        map.put("textFilteringEnabled", information.textFilteringEnabled());
+        map.put("allowsListing", information.allowsListing());
+        map.put("particleStatus", information.particleStatus());
+        return map;
     }
 }

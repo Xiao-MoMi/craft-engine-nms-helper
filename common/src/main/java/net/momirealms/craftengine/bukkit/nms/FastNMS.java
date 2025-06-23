@@ -789,4 +789,6 @@ public abstract class FastNMS {
     public abstract void method$ItemEntity$setDefaultPickUpDelay(Object itemEntity);
 
     public abstract Object method$BlockItem$getBlock(Object blockItem);
+
+    public abstract Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet);
 }

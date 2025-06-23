@@ -2279,4 +2279,20 @@ public class FastNMSImpl extends FastNMS {
     public Object method$BlockItem$getBlock(Object blockItem) {
         return ((BlockItem) blockItem).getBlock();
     }
+
+    @Override
+    public Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet) {
+        Map<String, Object> map = new HashMap<>();
+        var packetImpl = (ServerboundClientInformationPacket) packet;
+        if (packetImpl == null) return map;
+        map.put("language", packetImpl.language());
+        map.put("viewDistance", packetImpl.viewDistance());
+        map.put("chatVisibility", packetImpl.chatVisibility());
+        map.put("chatColors", packetImpl.chatColors());
+        map.put("modelCustomisation", packetImpl.modelCustomisation());
+        map.put("mainHand", packetImpl.mainHand());
+        map.put("textFilteringEnabled", packetImpl.textFilteringEnabled());
+        map.put("allowsListing", packetImpl.allowsListing());
+        return map;
+    }
 }
