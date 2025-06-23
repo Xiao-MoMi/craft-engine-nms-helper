@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_3;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
@@ -62,11 +63,9 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.SupportType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -75,6 +74,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -2307,5 +2307,46 @@ public class FastNMSImpl extends FastNMS {
         map.put("textFilteringEnabled", information.textFilteringEnabled());
         map.put("allowsListing", information.allowsListing());
         return map;
+    }
+
+    @Override
+    public boolean method$Level$destroyBlock(Object objLevel, Object objPos, boolean drop, @Nullable Object objEntity, int maxUpdateDepth) {
+        // 来自当前版本的方法必须从这里复刻一遍不能直接调用
+        Level level = (Level) objLevel;
+        BlockPos pos = (BlockPos) objPos;
+        Entity breakingEntity = (Entity) objEntity;
+        BlockState iblockdata = level.getBlockState(pos);
+        if (iblockdata.isAir()) {
+            return false;
+        } else {
+            FluidState fluid = level.getFluidState(pos);
+            boolean playEffect = true;
+            BlockState effectType = iblockdata;
+            int xp = iblockdata.getBlock().getExpDrop(iblockdata, (ServerLevel)level, pos, net.minecraft.world.item.ItemStack.EMPTY, true);
+            if (BlockDestroyEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                BlockDestroyEvent event = new BlockDestroyEvent(CraftBlock.at(level, pos), fluid.createLegacyBlock().createCraftBlockData(), iblockdata.createCraftBlockData(), xp, drop);
+                if (!event.callEvent()) {
+                    return false;
+                }
+
+                effectType = ((CraftBlockData)event.getEffectBlock()).getState();
+                playEffect = event.playEffect();
+                drop = event.willDrop();
+                xp = event.getExpToDrop();
+            }
+            if (playEffect && !(effectType.getBlock() instanceof BaseFireBlock)) {
+                level.levelEvent(2001, pos, net.minecraft.world.level.block.Block.getId(effectType));
+            }
+            if (drop) {
+                BlockEntity tileentity = iblockdata.hasBlockEntity() ? level.getBlockEntity(pos) : null;
+                net.minecraft.world.level.block.Block.dropResources(iblockdata, level, pos, tileentity, breakingEntity, net.minecraft.world.item.ItemStack.EMPTY, false);
+                iblockdata.getBlock().popExperience((ServerLevel)level, pos, xp, breakingEntity);
+            }
+            boolean flag1 = level.setBlock(pos, fluid.createLegacyBlock(), 3, maxUpdateDepth);
+            if (flag1) {
+                level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(breakingEntity, iblockdata));
+            }
+            return flag1;
+        }
     }
 }

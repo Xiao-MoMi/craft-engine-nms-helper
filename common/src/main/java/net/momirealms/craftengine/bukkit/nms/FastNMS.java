@@ -791,4 +791,6 @@ public abstract class FastNMS {
     public abstract Object method$BlockItem$getBlock(Object blockItem);
 
     public abstract Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet);
+
+    public abstract boolean method$Level$destroyBlock(Object objLevel, Object objPos, boolean dropBlock, @Nullable Object objEntity, int recursionLeft);
 }

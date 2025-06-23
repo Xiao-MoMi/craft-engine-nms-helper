@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
@@ -9,6 +10,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
+import io.papermc.paper.util.MCUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
@@ -62,11 +64,9 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.SupportType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -75,6 +75,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -2294,5 +2295,41 @@ public class FastNMSImpl extends FastNMS {
         map.put("textFilteringEnabled", packetImpl.textFilteringEnabled());
         map.put("allowsListing", packetImpl.allowsListing());
         return map;
+    }
+
+    @Override
+    public boolean method$Level$destroyBlock(Object objLevel, Object objPos, boolean drop, @Nullable Object objEntity, int maxUpdateDepth) {
+        // 来自当前版本的方法必须从这里复刻一遍不能直接调用
+        Level level = (Level) objLevel;
+        BlockPos pos = (BlockPos) objPos;
+        Entity breakingEntity = (Entity) objEntity;
+        BlockState iblockdata = level.getBlockState(pos);
+        if (iblockdata.isAir()) {
+            return false;
+        } else {
+            FluidState fluid = level.getFluidState(pos);
+            boolean playEffect = true;
+            if (BlockDestroyEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                BlockDestroyEvent event = new BlockDestroyEvent(MCUtil.toBukkitBlock(level, pos), fluid.createLegacyBlock().createCraftBlockData(), drop);
+                if (!event.callEvent()) {
+                    return false;
+                }
+
+                playEffect = event.playEffect();
+                drop = event.willDrop();
+            }
+            if (playEffect && !(iblockdata.getBlock() instanceof BaseFireBlock)) {
+                level.levelEvent(2001, pos, net.minecraft.world.level.block.Block.getId(iblockdata));
+            }
+            if (drop) {
+                BlockEntity tileentity = iblockdata.hasBlockEntity() ? level.getBlockEntity(pos) : null;
+                net.minecraft.world.level.block.Block.dropResources(iblockdata, level, pos, tileentity, breakingEntity, net.minecraft.world.item.ItemStack.EMPTY);
+            }
+            boolean flag1 = level.setBlock(pos, fluid.createLegacyBlock(), 3, maxUpdateDepth);
+            if (flag1) {
+                level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(breakingEntity, iblockdata));
+            }
+            return flag1;
+        }
     }
 }
