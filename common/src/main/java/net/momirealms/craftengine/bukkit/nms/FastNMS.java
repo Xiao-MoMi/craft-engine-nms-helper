@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.momirealms.craftengine.core.util.Pair;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -792,5 +793,5 @@ public abstract class FastNMS {
 
     public abstract Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet);
 
-    public abstract boolean method$Level$destroyBlock(Object objLevel, Object objPos, boolean dropBlock, @Nullable Object objEntity, int recursionLeft);
+    public abstract Pair<Boolean, Boolean> method$Level$destroyBlock(Object objLevel, Object objPos, boolean dropBlock, @Nullable Object objEntity, int recursionLeft);
 }

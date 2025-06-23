@@ -105,6 +105,7 @@ import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
+import net.momirealms.craftengine.core.util.Pair;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -2372,15 +2373,25 @@ public class FastNMSImpl extends FastNMS {
         return map;
     }
 
+    private static boolean dropResources(BlockState state, Level level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, net.minecraft.world.item.ItemStack tool, boolean dropExperience) {
+        if (level instanceof ServerLevel) {
+            List<net.minecraft.world.item.ItemStack> drops = net.minecraft.world.level.block.Block.getDrops(state, (ServerLevel)level, pos, blockEntity, entity, tool);
+            drops.forEach((stack) -> net.minecraft.world.level.block.Block.popResource(level, pos, stack));
+            state.spawnAfterBreak((ServerLevel)level, pos, tool, dropExperience);
+            return !drops.isEmpty();
+        }
+        return false;
+    }
+
     @Override
-    public boolean method$Level$destroyBlock(Object objLevel, Object objPos, boolean dropBlock, @Nullable Object objEntity, int recursionLeft) {
+    public Pair<Boolean, Boolean> method$Level$destroyBlock(Object objLevel, Object objPos, boolean dropBlock, @Nullable Object objEntity, int recursionLeft) {
         // 来自当前版本的方法必须从这里复刻一遍不能直接调用
         Level level = (Level) objLevel;
         BlockPos pos = (BlockPos) objPos;
         Entity entity = (Entity) objEntity;
         BlockState blockState = level.getBlockState(pos);
         if (blockState.isAir()) {
-            return false;
+            return Pair.of(false, false);
         } else {
             FluidState fluidState = level.getFluidState(pos);
             boolean playEffect = true;
@@ -2389,7 +2400,7 @@ public class FastNMSImpl extends FastNMS {
             if (BlockDestroyEvent.getHandlerList().getRegisteredListeners().length > 0) {
                 BlockDestroyEvent event = new BlockDestroyEvent(CraftBlock.at(level, pos), fluidState.createLegacyBlock().createCraftBlockData(), blockState.createCraftBlockData(), xp, dropBlock);
                 if (!event.callEvent()) {
-                    return false;
+                    return Pair.of(false, false);
                 }
                 effectType = ((CraftBlockData)event.getEffectBlock()).getState();
                 playEffect = event.playEffect();
@@ -2399,16 +2410,17 @@ public class FastNMSImpl extends FastNMS {
             if (playEffect && !(blockState.getBlock() instanceof BaseFireBlock)) {
                 level.levelEvent(2001, pos, net.minecraft.world.level.block.Block.getId(effectType));
             }
+            boolean realDropBlock = false;
             if (dropBlock) {
                 BlockEntity blockEntity = blockState.hasBlockEntity() ? level.getBlockEntity(pos) : null;
-                net.minecraft.world.level.block.Block.dropResources(blockState, level, pos, blockEntity, entity, net.minecraft.world.item.ItemStack.EMPTY, false);
+                realDropBlock = dropResources(blockState, level, pos, blockEntity, entity, net.minecraft.world.item.ItemStack.EMPTY, false);
                 blockState.getBlock().popExperience((ServerLevel)level, pos, xp, entity);
             }
             boolean flag = level.setBlock(pos, fluidState.createLegacyBlock(), 3, recursionLeft);
             if (flag) {
                 level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(entity, blockState));
             }
-            return flag;
+            return Pair.of(flag, realDropBlock);
         }
     }
 }
