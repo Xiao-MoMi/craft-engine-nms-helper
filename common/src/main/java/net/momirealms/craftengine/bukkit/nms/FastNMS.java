@@ -792,7 +792,4 @@ public abstract class FastNMS {
 
     public abstract Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet);
 
-    public abstract Object field$BlockBehaviour$drops(Object blockBehaviour);
-
-    public abstract Object method$LootParams$Builder$getLevel(Object lootParamsBuilder);
 }

@@ -62,7 +62,10 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -78,7 +81,6 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -2293,13 +2295,4 @@ public class FastNMSImpl extends FastNMS {
         return map;
     }
 
-    @Override
-    public Object field$BlockBehaviour$drops(Object blockBehaviour) {
-        return ((BlockBehaviour) blockBehaviour).getLootTable();
-    }
-
-    @Override
-    public Object method$LootParams$Builder$getLevel(Object lootParamsBuilder) {
-        return ((LootParams.Builder) lootParamsBuilder).getLevel();
-    }
 }
