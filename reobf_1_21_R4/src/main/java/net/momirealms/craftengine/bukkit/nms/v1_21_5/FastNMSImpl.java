@@ -88,6 +88,7 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -2342,5 +2343,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object field$BlockBehaviour$drops(Object blockBehaviour) {
         return ((BlockBehaviour) blockBehaviour).getLootTable();
+    }
+
+    @Override
+    public Object method$LootParams$Builder$getLevel(Object lootParamsBuilder) {
+        return ((LootParams.Builder) lootParamsBuilder).getLevel();
     }
 }
