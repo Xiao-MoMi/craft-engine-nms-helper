@@ -4,7 +4,9 @@ import com.google.gson.JsonElement;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.momirealms.craftengine.core.util.MinecraftVersion;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
+import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
@@ -20,18 +22,13 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
-import static java.util.Objects.requireNonNull;
-
 @SuppressWarnings({"unused", "rawtypes"})
 public abstract class FastNMS {
-    private static final Class<?> clazz$SharedConstants = requireNonNull(ReflectionUtils.getClazz("net.minecraft.SharedConstants"));
-    private static final Field field$SharedConstants$VERSION_STRING = requireNonNull(ReflectionUtils.getDeclaredField(clazz$SharedConstants, String.class, 1));
     public static final FastNMS INSTANCE = instance();
 
     private static FastNMS instance() {
@@ -47,22 +44,19 @@ public abstract class FastNMS {
     }
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
-        String versionString = (String) field$SharedConstants$VERSION_STRING.get(null);
-        versionString = versionString.split("-", 2)[0];
-        String classSuffix;
-        switch (versionString) {
-            case "1.21.6", "1.21.7" -> classSuffix = "v1_21_6";
-            case "1.21.5" -> classSuffix = "v1_21_5";
-            case "1.21.4" -> classSuffix = "v1_21_4";
-            case "1.21.2", "1.21.3" -> classSuffix = "v1_21_2";
-            case "1.21", "1.21.1" -> classSuffix = "v1_21";
-            case "1.20.5", "1.20.6" -> classSuffix = "v1_20_5";
-            case "1.20.3", "1.20.4" -> classSuffix = "v1_20_3";
-            case "1.20.2" -> classSuffix = "v1_20_2";
-            case "1.20", "1.20.1" -> classSuffix = "v1_20";
+        // 暂时使用反射等合并pr后修改成直接调用
+        return switch (ReflectionUtils.getDeclaredField(MinecraftVersion.class, String.class, 0).get(VersionHelper.MINECRAFT_VERSION).toString()) {
+            case "1.21.6", "1.21.7" -> "v1_21_6";
+            case "1.21.5" -> "v1_21_5";
+            case "1.21.4" -> "v1_21_4";
+            case "1.21.2", "1.21.3" -> "v1_21_2";
+            case "1.21", "1.21.1" -> "v1_21";
+            case "1.20.5", "1.20.6" -> "v1_20_5";
+            case "1.20.3", "1.20.4" -> "v1_20_3";
+            case "1.20.2" -> "v1_20_2";
+            case "1.20", "1.20.1" -> "v1_20";
             default -> throw new UnsupportedVersionException();
-        }
-        return classSuffix;
+        };
     }
 
     public abstract InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException;
