@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import net.momirealms.craftengine.core.util.MinecraftVersion;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.util.VersionHelper;
@@ -37,8 +38,7 @@ public abstract class FastNMS {
     }
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
-        // 暂时使用反射等合并pr后修改成直接调用
-        return switch (ReflectionUtils.getDeclaredField(MinecraftVersion.class, String.class, 0).get(VersionHelper.MINECRAFT_VERSION).toString()) {
+        return switch (VersionHelper.MINECRAFT_VERSION.version()) {
             case "1.21.6", "1.21.7" -> "v1_21_6";
             case "1.21.5" -> "v1_21_5";
             case "1.21.4" -> "v1_21_4";
@@ -160,7 +160,7 @@ public abstract class FastNMS {
 
     public abstract Object field$ServerGamePacketListenerImpl$connection(Object serverGamePacketListener);
 
-    public abstract Object field$Connection$channel(Object connection);
+    public abstract Channel field$Connection$channel(Object connection);
 
     public abstract void method$BlockStateBase$onPlace(Object blockState, Object world, Object blockPos, Object oldBlockState, boolean movedByPiston);
 
@@ -463,4 +463,16 @@ public abstract class FastNMS {
     public abstract String method$ResourceLocation$namespace(Object resourceLocation);
 
     public abstract String method$ResourceLocation$path(Object resourceLocation);
+
+    public abstract boolean method$BlockStateBase$is(Object blockState, Object tag);
+
+    public abstract boolean method$BlockStateBase$isAir(Object blockState);
+
+    public abstract boolean method$Block$canSupportRigidBlock(Object level, Object pos);
+
+    public abstract boolean method$Block$canSupportCenter(Object level, Object pos, Object direction);
+
+    public abstract void method$Level$setBlocksDirty(Object level, Object blockPos, Object oldState, Object newState);
+
+    public abstract void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType);
 }
