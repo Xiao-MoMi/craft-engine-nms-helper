@@ -41,11 +41,13 @@ import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -1361,5 +1363,95 @@ public class FastNMSImpl extends FastNMS {
             list.add(SynchedEntityData.DataValue.read(buf, i));
         }
         return list;
+    }
+
+    @Override
+    public int method$ClientboundEntityPositionSyncPacket$id(Object packet) {
+        return ((ClientboundEntityPositionSyncPacket) packet).id();
+    }
+
+    @Override
+    public Object field$ClientboundEntityPositionSyncPacket$values(Object packet) {
+        return ((ClientboundEntityPositionSyncPacket) packet).values();
+    }
+
+    @Override
+    public boolean field$ClientboundEntityPositionSyncPacket$onGround(Object packet) {
+        return ((ClientboundEntityPositionSyncPacket) packet).onGround();
+    }
+
+    @Override
+    public Object field$PositionMoveRotation$position(Object values) {
+        return ((PositionMoveRotation) values).position();
+    }
+
+    @Override
+    public Object field$PositionMoveRotation$deltaMovement(Object values) {
+        return ((PositionMoveRotation) values).deltaMovement();
+    }
+
+    @Override
+    public float field$PositionMoveRotation$yRot(Object values) {
+        return ((PositionMoveRotation) values).yRot();
+    }
+
+    @Override
+    public float field$PositionMoveRotation$xRot(Object values) {
+        return ((PositionMoveRotation) values).xRot();
+    }
+
+    @Override
+    public Object constructor$PositionMoveRotation(Object position, Object deltaMovement, float yRot, float xRot) {
+        return new PositionMoveRotation((Vec3) position, (Vec3) deltaMovement, yRot, xRot);
+    }
+
+    @Override
+    public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, Object values, boolean onGround) {
+        return new ClientboundEntityPositionSyncPacket(entityId, (PositionMoveRotation) values, onGround);
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$xa(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).getXa();
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$ya(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).getYa();
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$za(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).getZa();
+    }
+
+    @Override
+    public byte field$ClientboundMoveEntityPacket$yRot(Object packet) {
+        return Mth.packDegrees(((ClientboundMoveEntityPacket) packet).getyRot());
+    }
+
+    @Override
+    public byte field$ClientboundMoveEntityPacket$xRot(Object packet) {
+        return Mth.packDegrees(((ClientboundMoveEntityPacket) packet).getxRot());
+    }
+
+    @Override
+    public boolean field$ClientboundMoveEntityPacket$onGround(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).isOnGround();
+    }
+
+    @Override
+    public Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround) {
+        return new ClientboundMoveEntityPacket.PosRot(entityId, xa, ya, za, yRot, xRot, onGround);
+    }
+
+    @Override
+    public Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz() {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Map<String, Map<String, Integer>> gamePacketIdsByName() {
+        throw new UnsupportedVersionException();
     }
 }

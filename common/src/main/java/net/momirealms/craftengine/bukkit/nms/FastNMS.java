@@ -511,4 +511,40 @@ public abstract class FastNMS {
     public abstract void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf);
 
     public abstract List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf);
+
+    public abstract int method$ClientboundEntityPositionSyncPacket$id(Object packet);
+
+    public abstract Object field$ClientboundEntityPositionSyncPacket$values(Object packet);
+
+    public abstract boolean field$ClientboundEntityPositionSyncPacket$onGround(Object packet);
+
+    public abstract Object field$PositionMoveRotation$position(Object values);
+
+    public abstract Object field$PositionMoveRotation$deltaMovement(Object values);
+
+    public abstract float field$PositionMoveRotation$yRot(Object values);
+
+    public abstract float field$PositionMoveRotation$xRot(Object values);
+
+    public abstract Object constructor$PositionMoveRotation(Object position, Object deltaMovement, float yRot, float xRot);
+
+    public abstract Object constructor$ClientboundEntityPositionSyncPacket(int entityId, Object values, boolean onGround);
+
+    public abstract short field$ClientboundMoveEntityPacket$xa(Object packet);
+
+    public abstract short field$ClientboundMoveEntityPacket$ya(Object packet);
+
+    public abstract short field$ClientboundMoveEntityPacket$za(Object packet);
+
+    public abstract byte field$ClientboundMoveEntityPacket$yRot(Object packet);
+
+    public abstract byte field$ClientboundMoveEntityPacket$xRot(Object packet);
+
+    public abstract boolean field$ClientboundMoveEntityPacket$onGround(Object packet);
+
+    public abstract Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround);
+
+    public abstract Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz();
+
+    public abstract Map<String, Map<String, Integer>> gamePacketIdsByName();
 }

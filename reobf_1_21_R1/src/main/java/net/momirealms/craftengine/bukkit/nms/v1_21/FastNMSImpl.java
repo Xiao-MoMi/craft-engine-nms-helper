@@ -40,6 +40,7 @@ import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
@@ -1356,5 +1357,95 @@ public class FastNMSImpl extends FastNMS {
             list.add(SynchedEntityData.DataValue.read(buf, i));
         }
         return list;
+    }
+
+    @Override
+    public int method$ClientboundEntityPositionSyncPacket$id(Object packet) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$ClientboundEntityPositionSyncPacket$values(Object packet) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public boolean field$ClientboundEntityPositionSyncPacket$onGround(Object packet) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$PositionMoveRotation$position(Object values) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$PositionMoveRotation$deltaMovement(Object values) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public float field$PositionMoveRotation$yRot(Object values) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public float field$PositionMoveRotation$xRot(Object values) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$PositionMoveRotation(Object position, Object deltaMovement, float yRot, float xRot) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, Object values, boolean onGround) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$xa(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).getXa();
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$ya(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).getYa();
+    }
+
+    @Override
+    public short field$ClientboundMoveEntityPacket$za(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).getZa();
+    }
+
+    @Override
+    public byte field$ClientboundMoveEntityPacket$yRot(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).getyRot();
+    }
+
+    @Override
+    public byte field$ClientboundMoveEntityPacket$xRot(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).getxRot();
+    }
+
+    @Override
+    public boolean field$ClientboundMoveEntityPacket$onGround(Object packet) {
+        return ((ClientboundMoveEntityPacket) packet).isOnGround();
+    }
+
+    @Override
+    public Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround) {
+        return new ClientboundMoveEntityPacket.PosRot(entityId, xa, ya, za, yRot, xRot, onGround);
+    }
+
+    @Override
+    public Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz() {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Map<String, Map<String, Integer>> gamePacketIdsByName() {
+        throw new UnsupportedVersionException();
     }
 }
