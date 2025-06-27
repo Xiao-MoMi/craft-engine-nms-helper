@@ -786,4 +786,5 @@ public abstract class FastNMS {
 
     public abstract Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet);
 
+    public abstract Object method$Connection$getPacketListener(Object connection);
 }

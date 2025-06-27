@@ -2537,4 +2537,8 @@ public class FastNMSImpl extends FastNMS {
         return map;
     }
 
+    @Override
+    public Object method$Connection$getPacketListener(Object connection) {
+        return ((Connection) connection).getPacketListener();
+    }
 }
