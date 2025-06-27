@@ -1482,4 +1482,24 @@ public class FastNMSImpl extends FastNMS {
     public void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public Object method$SoundEvent$location(Object soundEvent) {
+        return ((SoundEvent) soundEvent).getLocation();
+    }
+
+    @Override
+    public Object constructor$SoundEvent(Object location, Optional<Float> fixedRange) {
+        return fixedRange.map((f) -> SoundEvent.createFixedRangeEvent((ResourceLocation) location, f)).orElseGet(() -> SoundEvent.createVariableRangeEvent((ResourceLocation) location));
+    }
+
+    @Override
+    public Optional<Float> method$SoundEvent$fixedRange(Object soundEvent) {
+        float range1 = ((SoundEvent) soundEvent).getRange(100.0F);
+        float range2 = ((SoundEvent) soundEvent).getRange(0.0F);
+        if (range1 == 16.0F * 100.0F && range2 == 16.0F) {
+            return Optional.empty();
+        }
+        return Optional.of(range1);
+    }
 }

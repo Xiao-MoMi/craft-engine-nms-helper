@@ -19,7 +19,6 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.*;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -1499,5 +1498,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value) {
         ((StreamCodec) streamCodec).encode(new RegistryFriendlyByteBuf((ByteBuf) byteBuffer, registryAccess()), value);
+    }
+
+    @Override
+    public Object method$SoundEvent$location(Object soundEvent) {
+        return ((SoundEvent) soundEvent).location();
+    }
+
+    @Override
+    public Object constructor$SoundEvent(Object location, Optional<Float> fixedRange) {
+        return fixedRange.map((f) -> SoundEvent.createFixedRangeEvent((ResourceLocation) location, f)).orElseGet(() -> SoundEvent.createVariableRangeEvent((ResourceLocation) location));
+    }
+
+    @Override
+    public Optional<Float> method$SoundEvent$fixedRange(Object soundEvent) {
+        float range1 = ((SoundEvent) soundEvent).getRange(100.0F);
+        float range2 = ((SoundEvent) soundEvent).getRange(0.0F);
+        if (range1 == 16.0F * 100.0F && range2 == 16.0F) {
+            return Optional.empty();
+        }
+        return Optional.of(range1);
     }
 }

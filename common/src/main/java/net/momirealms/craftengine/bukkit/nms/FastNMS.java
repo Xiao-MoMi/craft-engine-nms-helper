@@ -563,4 +563,10 @@ public abstract class FastNMS {
     public abstract Object method$StreamCodec$decode(Object streamCodec, Object byteBuffer);
 
     public abstract void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value);
+
+    public abstract Object method$SoundEvent$location(Object soundEvent);
+
+    public abstract Object constructor$SoundEvent(Object location, Optional<Float> fixedRange);
+
+    public abstract Optional<Float> method$SoundEvent$fixedRange(Object soundEvent);
 }
