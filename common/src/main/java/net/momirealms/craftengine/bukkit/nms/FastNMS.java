@@ -474,7 +474,7 @@ public abstract class FastNMS {
 
     public abstract void method$Level$setBlocksDirty(Object level, Object blockPos, Object oldState, Object newState);
 
-    public abstract void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType);
+    public abstract boolean method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType);
 
     public abstract int method$EntityGetter$getEntitiesOfClass(Object entityGetter, Object aabb, Class entityClass);
 

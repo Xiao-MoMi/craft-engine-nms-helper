@@ -1257,8 +1257,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType) {
-        ((BlockBehaviour.BlockStateBase) blockState).isFaceSturdy((BlockGetter) level, (BlockPos) pos, (Direction) face, (SupportType) supportType);
+    public boolean method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType) {
+        return ((BlockBehaviour.BlockStateBase) blockState).isFaceSturdy((BlockGetter) level, (BlockPos) pos, (Direction) face, (SupportType) supportType);
     }
 
     @Override
