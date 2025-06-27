@@ -547,4 +547,20 @@ public abstract class FastNMS {
     public abstract Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz();
 
     public abstract Map<String, Map<String, Integer>> gamePacketIdsByName();
+
+    public abstract Object method$FriendlyByteBuf$readById(Object buffer, Object idMap);
+
+    public abstract Object method$ClientboundLevelParticlesPacket$readParticle(Object buffer, Object particleType);
+
+    public abstract Object method$BlockParticleOption$getType(Object particle);
+
+    public abstract Object constructor$BlockParticleOption(Object particleType, Object blockState);
+
+    public abstract void method$FriendlyByteBuf$writeId(Object buffer, Object particle, Object idMap);
+
+    public abstract void method$ParticleOptions$writeToNetwork(Object particle, Object buffer);
+
+    public abstract Object method$StreamCodec$decode(Object streamCodec, Object byteBuffer);
+
+    public abstract void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value);
 }

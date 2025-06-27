@@ -481,10 +481,6 @@ public class FastNMSImpl extends FastNMS {
         return ((Entity) entity).getBukkitEntity();
     }
 
-    private <T extends ParticleOptions> T readParticle(FriendlyByteBuf buf, ParticleType<T> type) {
-        return type.getDeserializer().fromNetwork(type, buf);
-    }
-
     @Override
     public Optional<Object> method$IdMap$byId(Object registry, int id) {
         Object object = ((IdMap) registry).byId(id);
@@ -1440,6 +1436,50 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Map<String, Map<String, Integer>> gamePacketIdsByName() {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$FriendlyByteBuf$readById(Object buffer, Object idMap) {
+        return new FriendlyByteBuf((ByteBuf) buffer).readById((IdMap) idMap);
+    }
+
+    @Override
+    public Object method$ClientboundLevelParticlesPacket$readParticle(Object buffer, Object particleType) {
+        return this.readParticle(new FriendlyByteBuf((ByteBuf) buffer), (ParticleType) particleType);
+    }
+
+    private <T extends ParticleOptions> T readParticle(FriendlyByteBuf buf, ParticleType<T> type) {
+        return type.getDeserializer().fromNetwork(type, buf);
+    }
+
+    @Override
+    public Object method$BlockParticleOption$getType(Object particle) {
+        return ((BlockParticleOption) particle).getType();
+    }
+
+    @Override
+    public Object constructor$BlockParticleOption(Object particleType, Object blockState) {
+        return new BlockParticleOption((ParticleType<BlockParticleOption>) particleType, (BlockState) blockState);
+    }
+
+    @Override
+    public void method$FriendlyByteBuf$writeId(Object buffer, Object particle, Object idMap) {
+        (new FriendlyByteBuf((ByteBuf) buffer)).writeId((IdMap) idMap, ((ParticleOptions) particle).getType());
+    }
+
+    @Override
+    public void method$ParticleOptions$writeToNetwork(Object particle, Object buffer) {
+        ((ParticleOptions) particle).writeToNetwork(new FriendlyByteBuf((ByteBuf) buffer));
+    }
+
+    @Override
+    public Object method$StreamCodec$decode(Object streamCodec, Object byteBuffer) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value) {
         throw new UnsupportedVersionException();
     }
 }

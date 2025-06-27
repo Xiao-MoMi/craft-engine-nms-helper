@@ -1454,4 +1454,44 @@ public class FastNMSImpl extends FastNMS {
     public Map<String, Map<String, Integer>> gamePacketIdsByName() {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public Object method$FriendlyByteBuf$readById(Object buffer, Object idMap) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$ClientboundLevelParticlesPacket$readParticle(Object buffer, Object particleType) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$BlockParticleOption$getType(Object particle) {
+        return ((BlockParticleOption) particle).getType();
+    }
+
+    @Override
+    public Object constructor$BlockParticleOption(Object particleType, Object blockState) {
+        return new BlockParticleOption((ParticleType<BlockParticleOption>) particleType, (BlockState) blockState);
+    }
+
+    @Override
+    public void method$FriendlyByteBuf$writeId(Object buffer, Object particle, Object idMap) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void method$ParticleOptions$writeToNetwork(Object particle, Object buffer) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$StreamCodec$decode(Object streamCodec, Object byteBuffer) {
+        return ((StreamCodec) streamCodec).decode(new RegistryFriendlyByteBuf((ByteBuf) byteBuffer, registryAccess()));
+    }
+
+    @Override
+    public void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value) {
+        ((StreamCodec) streamCodec).encode(new RegistryFriendlyByteBuf((ByteBuf) byteBuffer, registryAccess()), value);
+    }
 }
