@@ -1292,4 +1292,56 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Registry$getKey(Object registry, Object value) {
         return ((Registry) registry).getKey(value);
     }
+
+    @Override
+    public boolean method$ItemStack$isEmpty(Object stack) {
+        return ((net.minecraft.world.item.ItemStack) stack).isEmpty();
+    }
+
+    @Override
+    public ItemStack method$CraftItemStack$asCraftCopy(ItemStack stack) {
+        return CraftItemStack.asCraftCopy(stack);
+    }
+
+    @Override
+    public Object method$Item$components(Object item) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$DataComponentMap$get(Object dataComponentMap, Object componentType) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$TagKey$create(Object registry, Object location) {
+        return TagKey.create((ResourceKey<? extends Registry<Object>>) registry, (ResourceLocation) location);
+    }
+
+    @Override
+    public boolean method$BlockStateBase$isReplaceable(Object blockState) {
+        return ((BlockState) blockState).canBeReplaced();
+    }
+
+    @Override
+    public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) friendlyByteBuf);
+        for (SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>) dataValues)) {
+            dataValue.write(buf);
+        }
+        buf.writeByte(255);
+    }
+
+    @Override
+    public List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf) {
+        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) friendlyByteBuf);
+        List<Object> list = new ArrayList();
+        int i;
+        while ((i = buf.readUnsignedByte()) != 255) {
+            list.add(SynchedEntityData.DataValue.read(buf, i));
+        }
+        return list;
+    }
+
+
 }

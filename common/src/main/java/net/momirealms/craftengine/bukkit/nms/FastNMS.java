@@ -5,8 +5,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import net.momirealms.craftengine.core.util.MinecraftVersion;
-import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -497,4 +495,20 @@ public abstract class FastNMS {
     public abstract Object method$TagNetworkSerialization$NetworkPayload$read(Object buffer);
 
     public abstract Object method$Registry$getKey(Object registry, Object value);
+
+    public abstract boolean method$ItemStack$isEmpty(Object stack);
+
+    public abstract ItemStack method$CraftItemStack$asCraftCopy(ItemStack stack);
+
+    public abstract Object method$Item$components(Object item);
+
+    public abstract Object method$DataComponentMap$get(Object dataComponentMap, Object componentType);
+
+    public abstract Object method$TagKey$create(Object registry, Object location);
+
+    public abstract boolean method$BlockStateBase$isReplaceable(Object blockState);
+
+    public abstract void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf);
+
+    public abstract List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf);
 }

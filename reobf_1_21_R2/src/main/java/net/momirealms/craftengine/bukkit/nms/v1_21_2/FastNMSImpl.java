@@ -8,7 +8,9 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.papermc.paper.util.DataSanitizationUtil;
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -49,6 +51,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.*;
@@ -1304,5 +1307,57 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Registry$getKey(Object registry, Object value) {
         return ((Registry) registry).getKey(value);
+    }
+
+    @Override
+    public boolean method$ItemStack$isEmpty(Object stack) {
+        return ((net.minecraft.world.item.ItemStack) stack).isEmpty();
+    }
+
+    @Override
+    public ItemStack method$CraftItemStack$asCraftCopy(ItemStack stack) {
+        return CraftItemStack.asCraftCopy(stack);
+    }
+
+    @Override
+    public Object method$Item$components(Object item) {
+        return ((Item) item).components();
+    }
+
+    @Override
+    public Object method$DataComponentMap$get(Object dataComponentMap, Object componentType) {
+        return ((DataComponentMap) dataComponentMap).get((DataComponentType) componentType);
+    }
+
+    @Override
+    public Object method$TagKey$create(Object registry, Object location) {
+        return TagKey.create((ResourceKey<? extends Registry<Object>>) registry, (ResourceLocation) location);
+    }
+
+    @Override
+    public boolean method$BlockStateBase$isReplaceable(Object blockState) {
+        return ((BlockState) blockState).canBeReplaced();
+    }
+
+    @Override
+    public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
+        try (DataSanitizationUtil.DataSanitizer ignored = DataSanitizationUtil.start(true)) {
+            for (SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>) dataValues)) {
+                dataValue.write(buf);
+            }
+        }
+        buf.writeByte(255);
+    }
+
+    @Override
+    public List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf) {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
+        List<Object> list = new ArrayList();
+        int i;
+        while ((i = buf.readUnsignedByte()) != 255) {
+            list.add(SynchedEntityData.DataValue.read(buf, i));
+        }
+        return list;
     }
 }
