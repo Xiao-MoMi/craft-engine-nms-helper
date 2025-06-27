@@ -160,6 +160,8 @@ public abstract class FastNMS {
 
     public abstract Object field$ServerGamePacketListenerImpl$connection(Object serverGamePacketListener);
 
+    public abstract void method$ServerPlayerConnection$send(Object connection, Object packet);
+
     public abstract Channel field$Connection$channel(Object connection);
 
     public abstract void method$BlockStateBase$onPlace(Object blockState, Object world, Object blockPos, Object oldBlockState, boolean movedByPiston);
@@ -475,4 +477,24 @@ public abstract class FastNMS {
     public abstract void method$Level$setBlocksDirty(Object level, Object blockPos, Object oldState, Object newState);
 
     public abstract void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType);
+
+    public abstract int method$EntityGetter$getEntitiesOfClass(Object entityGetter, Object aabb, Class entityClass);
+
+    public abstract Object method$AABB$move(Object aabb, Object pos);
+
+    public abstract void method$Level$updateNeighborsAt(Object levelAccessor, Object blockPos, Object block);
+
+    public abstract Object field$Entity$trackedEntity(Object entity);
+
+    public abstract Object field$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity);
+
+    public abstract boolean method$AbstractArrow$isInGround(Object entity);
+
+    public abstract Map method$TagNetworkSerialization$serializeTagsToNetwork();
+
+    public abstract void method$TagNetworkSerialization$NetworkPayload$write(Object networkPayload, Object buffer);
+
+    public abstract Object method$TagNetworkSerialization$NetworkPayload$read(Object buffer);
+
+    public abstract Object method$Registry$getKey(Object registry, Object value);
 }

@@ -32,20 +32,20 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ServerChunkCache;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.*;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
@@ -1250,5 +1250,60 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType) {
         ((BlockBehaviour.BlockStateBase) blockState).isFaceSturdy((BlockGetter) level, (BlockPos) pos, (Direction) face, (SupportType) supportType);
+    }
+
+    @Override
+    public int method$EntityGetter$getEntitiesOfClass(Object entityGetter, Object aabb, Class entityClass) {
+        return ((EntityGetter) entityGetter).getEntitiesOfClass(entityClass, (AABB) aabb, EntitySelector.NO_SPECTATORS.and(entity -> !entity.isIgnoringBlockTriggers())).size();
+    }
+
+    @Override
+    public Object method$AABB$move(Object aabb, Object pos) {
+        return ((AABB) aabb).move((BlockPos) pos);
+    }
+
+    @Override
+    public void method$Level$updateNeighborsAt(Object levelAccessor, Object blockPos, Object block) {
+        ((Level) levelAccessor).updateNeighborsAt((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block);
+    }
+
+    @Override
+    public Object field$Entity$trackedEntity(Object entity) {
+        return ((Entity) entity).moonrise$getTrackedEntity();
+    }
+
+    @Override
+    public Object field$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity) {
+        return ((ChunkMap.TrackedEntity) trackedEntity).serverEntity;
+    }
+
+    @Override
+    public boolean method$AbstractArrow$isInGround(Object entity) {
+        return ((AbstractArrow) entity).isInGround();
+    }
+
+    @Override
+    public void method$ServerPlayerConnection$send(Object connection, Object packet) {
+        ((ServerPlayerConnection) connection).send((Packet<?>) packet);
+    }
+
+    @Override
+    public Map method$TagNetworkSerialization$serializeTagsToNetwork() {
+        return TagNetworkSerialization.serializeTagsToNetwork(MinecraftServer.getServer().registries());
+    }
+
+    @Override
+    public void method$TagNetworkSerialization$NetworkPayload$write(Object networkPayload, Object buffer) {
+        ((TagNetworkSerialization.NetworkPayload) networkPayload).write(new FriendlyByteBuf((ByteBuf) buffer));
+    }
+
+    @Override
+    public Object method$TagNetworkSerialization$NetworkPayload$read(Object buffer) {
+        return TagNetworkSerialization.NetworkPayload.read(new FriendlyByteBuf((ByteBuf) buffer));
+    }
+
+    @Override
+    public Object method$Registry$getKey(Object registry, Object value) {
+        return ((Registry) registry).getKey(value);
     }
 }
