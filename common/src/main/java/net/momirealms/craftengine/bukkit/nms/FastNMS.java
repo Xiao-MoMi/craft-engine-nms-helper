@@ -569,4 +569,10 @@ public abstract class FastNMS {
     public abstract Object constructor$SoundEvent(Object location, Optional<Float> fixedRange);
 
     public abstract Optional<Float> method$SoundEvent$fixedRange(Object soundEvent);
+
+    public abstract Object method$LootParams$Builder$getOptionalParameter(Object lootParamsBuilder, Object key);
+
+    public abstract Object method$LootParams$Builder$getLevel(Object lootParamsBuilder);
+
+    public abstract Player method$ServerPlayer$getBukkitEntity(Object player);
 }

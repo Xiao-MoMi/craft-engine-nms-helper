@@ -41,6 +41,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.util.Mth;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
@@ -73,6 +74,7 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -1511,5 +1513,20 @@ public class FastNMSImpl extends FastNMS {
             return Optional.empty();
         }
         return Optional.of(range1);
+    }
+
+    @Override
+    public Object method$LootParams$Builder$getOptionalParameter(Object lootParamsBuilder, Object key) {
+        return ((LootParams.Builder) lootParamsBuilder).getOptionalParameter((ContextKey) key);
+    }
+
+    @Override
+    public Object method$LootParams$Builder$getLevel(Object lootParamsBuilder) {
+        return ((LootParams.Builder) lootParamsBuilder).getLevel();
+    }
+
+    @Override
+    public Player method$ServerPlayer$getBukkitEntity(Object player) {
+        return ((ServerPlayer) player).getBukkitEntity();
     }
 }
