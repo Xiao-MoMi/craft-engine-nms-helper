@@ -790,4 +790,6 @@ public abstract class FastNMS {
     public abstract Object method$Connection$getPacketListener(Object connection);
 
     public abstract Key method$DefaultedRegistry$getKey(Object registry, Object object);
+
+    public abstract Object[] method$Direction$orderedByNearest(Object entity);
 }

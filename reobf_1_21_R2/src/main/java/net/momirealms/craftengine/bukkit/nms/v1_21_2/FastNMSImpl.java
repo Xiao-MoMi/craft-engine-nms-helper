@@ -2370,4 +2370,9 @@ public class FastNMSImpl extends FastNMS {
         ResourceLocation resourceLocation = ((DefaultedRegistry) registry).getKey(object);
         return Key.of(resourceLocation.getNamespace(), resourceLocation.getPath());
     }
+
+    @Override
+    public Object[] method$Direction$orderedByNearest(Object entity) {
+        return Direction.orderedByNearest((Entity) entity);
+    }
 }
