@@ -910,7 +910,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     private static final StreamCodec<RegistryFriendlyByteBuf, net.minecraft.world.item.ItemStack> ITEM_UNTRUSTED_CODEC =
-            net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
+            net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
 
     @Override
     public ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf) {
