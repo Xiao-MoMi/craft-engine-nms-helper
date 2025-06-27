@@ -2380,4 +2380,9 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundDisconnectPacket(Object component) {
         return new ClientboundDisconnectPacket((Component) component);
     }
+
+    @Override
+    public Object field$ServerboundResourcePackPacket$action(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).action();
+    }
 }

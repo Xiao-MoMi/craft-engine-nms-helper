@@ -794,4 +794,6 @@ public abstract class FastNMS {
     public abstract Object[] method$Direction$orderedByNearest(Object entity);
 
     public abstract Object constructor$ClientboundDisconnectPacket(Object component);
+
+    public abstract Object field$ServerboundResourcePackPacket$action(Object packet);
 }
