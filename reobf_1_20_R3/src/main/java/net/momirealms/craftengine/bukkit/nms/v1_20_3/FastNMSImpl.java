@@ -1518,4 +1518,9 @@ public class FastNMSImpl extends FastNMS {
     public Player method$ServerPlayer$getBukkitEntity(Object player) {
         return ((ServerPlayer) player).getBukkitEntity();
     }
+
+    @Override
+    public void method$Block$dropResources(Object state, Object level, Object pos) {
+        net.minecraft.world.level.block.Block.dropResources((BlockState) state, (Level) level, (BlockPos) pos);
+    }
 }

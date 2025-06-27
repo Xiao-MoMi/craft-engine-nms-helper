@@ -575,4 +575,6 @@ public abstract class FastNMS {
     public abstract Object method$LootParams$Builder$getLevel(Object lootParamsBuilder);
 
     public abstract Player method$ServerPlayer$getBukkitEntity(Object player);
+
+    public abstract void method$Block$dropResources(Object state, Object level, Object pos);
 }
