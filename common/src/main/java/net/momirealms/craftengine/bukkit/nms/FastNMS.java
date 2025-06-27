@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -577,4 +578,6 @@ public abstract class FastNMS {
     public abstract Player method$ServerPlayer$getBukkitEntity(Object player);
 
     public abstract void method$Block$dropResources(Object state, Object level, Object pos);
+
+    public abstract BlockRedstoneEvent method$CraftEventFactory$callRedstoneChange(Object world, Object pos, int oldCurrent, int newCurrent);
 }
