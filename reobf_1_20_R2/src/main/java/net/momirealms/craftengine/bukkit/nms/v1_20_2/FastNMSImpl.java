@@ -28,10 +28,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.network.protocol.common.ClientboundResourcePackPacket;
-import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;
-import net.minecraft.network.protocol.common.ServerboundClientInformationPacket;
-import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
+import net.minecraft.network.protocol.common.*;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -2322,5 +2319,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object[] method$Direction$orderedByNearest(Object entity) {
         return Direction.orderedByNearest((Entity) entity);
+    }
+
+    @Override
+    public Object constructor$ClientboundDisconnectPacket(Object component) {
+        return new ClientboundDisconnectPacket((Component) component);
     }
 }

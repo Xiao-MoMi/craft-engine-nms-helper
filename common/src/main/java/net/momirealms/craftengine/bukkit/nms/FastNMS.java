@@ -792,4 +792,6 @@ public abstract class FastNMS {
     public abstract Key method$DefaultedRegistry$getKey(Object registry, Object object);
 
     public abstract Object[] method$Direction$orderedByNearest(Object entity);
+
+    public abstract Object constructor$ClientboundDisconnectPacket(Object component);
 }

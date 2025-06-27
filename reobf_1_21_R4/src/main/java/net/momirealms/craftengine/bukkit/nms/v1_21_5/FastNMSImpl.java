@@ -2358,4 +2358,9 @@ public class FastNMSImpl extends FastNMS {
     public Object[] method$Direction$orderedByNearest(Object entity) {
         return Direction.orderedByNearest((Entity) entity);
     }
+
+    @Override
+    public Object constructor$ClientboundDisconnectPacket(Object component) {
+        return new ClientboundDisconnectPacket((Component) component);
+    }
 }
