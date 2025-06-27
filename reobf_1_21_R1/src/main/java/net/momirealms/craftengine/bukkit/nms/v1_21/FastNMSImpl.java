@@ -100,6 +100,7 @@ import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
+import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -2347,5 +2348,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Connection$getPacketListener(Object connection) {
         return ((Connection) connection).getPacketListener();
+    }
+
+    @Override
+    public Key method$DefaultedRegistry$getKey(Object registry, Object object) {
+        ResourceLocation resourceLocation = ((DefaultedRegistry) registry).getKey(object);
+        return Key.of(resourceLocation.getNamespace(), resourceLocation.getPath());
     }
 }

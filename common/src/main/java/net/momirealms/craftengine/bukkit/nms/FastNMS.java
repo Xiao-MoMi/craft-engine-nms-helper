@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.MinecraftVersion;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.util.VersionHelper;
@@ -787,4 +788,6 @@ public abstract class FastNMS {
     public abstract Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet);
 
     public abstract Object method$Connection$getPacketListener(Object connection);
+
+    public abstract Key method$DefaultedRegistry$getKey(Object registry, Object object);
 }
