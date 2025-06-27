@@ -1515,4 +1515,9 @@ public class FastNMSImpl extends FastNMS {
     public BlockRedstoneEvent method$CraftEventFactory$callRedstoneChange(Object world, Object pos, int oldCurrent, int newCurrent) {
         return CraftEventFactory.callRedstoneChange((Level) world, (BlockPos) pos, oldCurrent, newCurrent);
     }
+
+    @Override
+    public boolean method$Level$destroyBlock(Object level, Object pos, boolean drop) {
+        return ((Level) level).destroyBlock((BlockPos) pos, drop);
+    }
 }

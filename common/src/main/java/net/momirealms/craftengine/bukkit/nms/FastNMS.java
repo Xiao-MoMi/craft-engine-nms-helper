@@ -580,4 +580,6 @@ public abstract class FastNMS {
     public abstract void method$Block$dropResources(Object state, Object level, Object pos);
 
     public abstract BlockRedstoneEvent method$CraftEventFactory$callRedstoneChange(Object world, Object pos, int oldCurrent, int newCurrent);
+
+    public abstract boolean method$Level$destroyBlock(Object level, Object pos, boolean drop);
 }

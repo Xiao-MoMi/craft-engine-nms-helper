@@ -64,10 +64,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.RedstoneLampBlock;
-import net.minecraft.world.level.block.SupportType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -1549,5 +1546,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public BlockRedstoneEvent method$CraftEventFactory$callRedstoneChange(Object world, Object pos, int oldCurrent, int newCurrent) {
         return CraftEventFactory.callRedstoneChange((Level) world, (BlockPos) pos, oldCurrent, newCurrent);
+    }
+
+    @Override
+    public boolean method$Level$destroyBlock(Object level, Object pos, boolean drop) {
+        return ((Level) level).destroyBlock((BlockPos) pos, drop);
     }
 }
