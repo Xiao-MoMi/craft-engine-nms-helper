@@ -2,33 +2,25 @@ package net.momirealms.craftengine.bukkit.nms.v1_20_3;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.world.ChunkEntitySlices;
-import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
-import net.minecraft.Util;
-import net.minecraft.advancements.*;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.nbt.*;
 import net.minecraft.network.Connection;
-import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.network.protocol.common.*;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;
+import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -36,36 +28,28 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.ServerAdvancementManager;
-import net.minecraft.server.level.*;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.*;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Abilities;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,9 +58,6 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
@@ -88,15 +69,12 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
-import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -109,20 +87,12 @@ import org.bukkit.craftbukkit.v1_20_R3.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntityType;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_20_R3.scheduler.CraftTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitTask;
 
-import javax.annotation.Nullable;
-import java.io.*;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -160,8 +130,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState) {
-        PalettedContainer pc = (PalettedContainer) palettedContainer;
-        return pc.getAndSet(x, y, z, blockState);
+        return ((PalettedContainer) palettedContainer).getAndSet(x, y, z, blockState);
     }
 
     @Override
@@ -186,68 +155,57 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int method$BlockStateBase$getLightEmission(Object blockState) {
-        BlockState blockStateBase = (BlockState) blockState;
-        return blockStateBase.getLightEmission();
+        return ((BlockState) blockState).getLightEmission();
     }
 
     @Override
     public boolean method$BlockStateBase$canOcclude(Object blockState) {
-        BlockState blockStateBase = (BlockState) blockState;
-        return blockStateBase.canOcclude();
+        return ((BlockState) blockState).canOcclude();
     }
 
     @Override
     public Object method$LevelChunkSection$setBlockState(Object section, int x, int y, int z, Object blockState, boolean lock) {
-        LevelChunkSection levelChunkSection = (LevelChunkSection) section;
-        return levelChunkSection.setBlockState(x, y, z, (BlockState) blockState, lock);
+        return ((LevelChunkSection) section).setBlockState(x, y, z, (BlockState) blockState, lock);
     }
 
     @Override
     public Object method$LevelChunkSection$getBlockState(Object section, int x, int y, int z) {
-        LevelChunkSection levelChunkSection = (LevelChunkSection) section;
-        return levelChunkSection.getBlockState(x, y, z);
+        return ((LevelChunkSection) section).getBlockState(x, y, z);
     }
 
     @Override
     public Object field$CraftChunk$worldServer(Chunk chunk) {
-        CraftChunk craftChunk = (CraftChunk) chunk;
-        return craftChunk.getCraftWorld().getHandle();
+        return ((CraftChunk) chunk).getCraftWorld().getHandle();
     }
 
     @Override
     public Object method$ServerLevel$getChunkSource(Object serverLevel) {
-        ServerLevel world = (ServerLevel) serverLevel;
-        return world.getChunkSource();
+        return ((ServerLevel) serverLevel).getChunkSource();
     }
 
     @Override
     public Object method$ServerChunkCache$getChunkAtIfLoadedMainThread(Object serverChunkCache, int x, int z) {
-        ServerChunkCache chunkCache = (ServerChunkCache) serverChunkCache;
-        return chunkCache.getChunkAtIfLoadedMainThread(x, z);
+        return ((ServerChunkCache) serverChunkCache).getChunkAtIfLoadedMainThread(x, z);
     }
 
     @Override
     public Object field$LevelChunkSection$states(Object section) {
-        LevelChunkSection levelChunkSection = (LevelChunkSection) section;
-        return levelChunkSection.states;
+        return ((LevelChunkSection) section).states;
     }
 
     @Override
     public Object[] method$ChunkAccess$getSections(Object chunk) {
-        LevelChunk levelChunk = (LevelChunk) chunk;
-        return levelChunk.getSections();
+        return ((LevelChunk) chunk).getSections();
     }
 
     @Override
     public Object field$ChunkAccess$blockEntities(Object chunkAccess) {
-        ChunkAccess access = (ChunkAccess) chunkAccess;
-        return access.blockEntities;
+        return ((ChunkAccess) chunkAccess).blockEntities;
     }
 
     @Override
     public Object field$CraftWorld$ServerLevel(World world) {
-        CraftWorld craftWorld = (CraftWorld) world;
-        return craftWorld.getHandle();
+        return ((CraftWorld) world).getHandle();
     }
 
     @Override
@@ -322,14 +280,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$BlockGetter$getBlockState(Object blockGetter, Object blockPos) {
-        BlockGetter blockGetterImpl = (BlockGetter) blockGetter;
-        return blockGetterImpl.getBlockState((BlockPos) blockPos);
+        return ((BlockGetter) blockGetter).getBlockState((BlockPos) blockPos);
     }
 
     @Override
     public Object method$CraftPlayer$getHandle(Player player) {
-        CraftPlayer playerImpl = (CraftPlayer) player;
-        return playerImpl.getHandle();
+        return ((CraftPlayer) player).getHandle();
     }
 
     @Override
@@ -339,14 +295,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$LevelWriter$addFreshEntity(Object level, Object entity) {
-        LevelWriter levelWriter = (LevelWriter) level;
-        return levelWriter.addFreshEntity((Entity) entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        return ((LevelWriter) level).addFreshEntity((Entity) entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     @Override
     public Object method$CraftEntity$getHandle(Object entity) {
-        CraftEntity craftEntity = (CraftEntity) entity;
-        return craftEntity.getHandle();
+        return ((CraftEntity) entity).getHandle();
     }
 
     @Override
@@ -358,34 +312,24 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean isPreventingStatusUpdates(World world, int x, int z) {
-        ServerLevel serverLevel = ((CraftWorld) world).getHandle();
-        ChunkEntitySlices slices = serverLevel.getEntityLookup().getChunk(x, z);
+    public boolean method$ServerLevel$isPreventingStatusUpdates(Object world, int x, int z) {
+        ChunkEntitySlices slices = ((ServerLevel) world).getEntityLookup().getChunk(x, z);
         return slices != null && slices.isPreventingStatusUpdates();
     }
 
     @Override
-    public Object field$ClientboundLevelChunkWithLightPacket$chunkData(Object packet) {
-        ClientboundLevelChunkWithLightPacket levelChunkPacket = (ClientboundLevelChunkWithLightPacket) packet;
-        return levelChunkPacket.getChunkData();
-    }
-
-    @Override
     public int method$Entity$getId(Object entity) {
-        Entity entityImpl = (Entity) entity;
-        return entityImpl.getId();
+        return ((Entity) entity).getId();
     }
 
     @Override
     public boolean method$LevelWriter$setBlock(Object level, Object blockPos, Object blockState, int flags) {
-        LevelWriter levelWriter = (LevelWriter) level;
-        return levelWriter.setBlock((BlockPos) blockPos, (BlockState) blockState, flags);
+        return ((LevelWriter) level).setBlock((BlockPos) blockPos, (BlockState) blockState, flags);
     }
 
     @Override
     public Object method$ServerChunkCache$getVisibleChunkIfPresent(Object chunkSource, long chunkKey) {
-        ServerChunkCache serverChunkCache = (ServerChunkCache) chunkSource;
-        return serverChunkCache.chunkMap.getVisibleChunkIfPresent(chunkKey);
+        return ((ServerChunkCache) chunkSource).chunkMap.getVisibleChunkIfPresent(chunkKey);
     }
 
     @Override
@@ -405,56 +349,52 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$ServerChunkCache$blockChanged(Object chunkCache, Object blockPos) {
-        ServerChunkCache serverChunkCache = (ServerChunkCache) chunkCache;
-        serverChunkCache.blockChanged((BlockPos) blockPos);
+        ((ServerChunkCache) chunkCache).blockChanged((BlockPos) blockPos);
     }
 
     @Override
-    public void sendPacket(Object connection, Object packet) {
-        Connection connectionImpl = (Connection) connection;
-        connectionImpl.send((Packet<?>) packet);
+    public void method$Connection$send(Object connection, Object packet) {
+        ((Connection) connection).send((Packet<?>) packet);
     }
 
     @Override
     public List<Object> method$ChunkHolder$getPlayers(Object chunkHolder) {
-        ChunkHolder chunkHolderImpl = (ChunkHolder) chunkHolder;
-        return (List) chunkHolderImpl.getPlayers(false);
+        return (List) ((ChunkHolder) chunkHolder).getPlayers(false);
     }
 
     @Override
     public Object constructor$ClientboundBundlePacket(List<Object> packets) {
-        List<Packet<ClientGamePacketListener>> packetList = (List) packets;
-        return new ClientboundBundlePacket(packetList);
+        return new ClientboundBundlePacket((List) packets);
     }
 
     @Override
-    public Object field$Player$connection$connection(Object player) {
-        ServerPlayer playerImpl = (ServerPlayer) player;
-        return playerImpl.connection.connection;
+    public Object field$Player$connection(Object player) {
+        return ((ServerPlayer) player).connection;
     }
 
     @Override
-    public Object field$Player$connection$connection$channel(Object player) {
-        ServerPlayer playerImpl = (ServerPlayer) player;
-        return playerImpl.connection.connection.channel;
+    public Object field$ServerGamePacketListenerImpl$connection(Object serverGamePacketListener) {
+        return ((ServerGamePacketListenerImpl) serverGamePacketListener).connection;
+    }
+
+    @Override
+    public Object field$Connection$channel(Object connection) {
+        return ((Connection) connection).channel;
     }
 
     @Override
     public void method$BlockStateBase$onPlace(Object blockState, Object world, Object blockPos, Object oldBlockState, boolean movedByPiston) {
-        BlockBehaviour.BlockStateBase blockStateBase = (BlockBehaviour.BlockStateBase) blockState;
-        blockStateBase.onPlace((Level) world, (BlockPos) blockPos, (BlockState) oldBlockState, movedByPiston);
+        ((BlockBehaviour.BlockStateBase) blockState).onPlace((Level) world, (BlockPos) blockPos, (BlockState) oldBlockState, movedByPiston);
     }
 
     @Override
     public void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
-        Level levelImpl = (Level) level;
-        levelImpl.levelEvent(eventId, (BlockPos) blockPos, stateId);
+        ((Level) level).levelEvent(eventId, (BlockPos) blockPos, stateId);
     }
 
     @Override
     public Iterable<Object> method$ClientboundBundlePacket$subPackets(Object packet) {
-        ClientboundBundlePacket packetImpl = (ClientboundBundlePacket) packet;
-        return (Iterable) packetImpl.subPackets();
+        return (Iterable) ((ClientboundBundlePacket) packet).subPackets();
     }
 
     @Override
@@ -464,50 +404,27 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$SoundEvent$location(Object soundEvent) {
-        SoundEvent event = (SoundEvent) soundEvent;
-        return event.getLocation();
-    }
-
-    @Override
-    public int field$ServerboundInteractPacket$entityId(Object packet) {
-        ServerboundInteractPacket packetImpl = (ServerboundInteractPacket) packet;
-        return packetImpl.getEntityId();
-    }
-
-    @Override
-    public Object field$ClientboundAddEntityPacket$type(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getType();
-    }
-
-    @Override
-    public int field$ClientboundAddEntityPacket$entityId(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getId();
+        return ((SoundEvent) soundEvent).getLocation();
     }
 
     @Override
     public Object field$ServerboundSwingPacket$hand(Object packet) {
-        ServerboundSwingPacket packetImpl = (ServerboundSwingPacket) packet;
-        return packetImpl.getHand();
+        return ((ServerboundSwingPacket) packet).getHand();
     }
 
     @Override
     public Object field$BlockParticleOption$blockState(Object object) {
-        BlockParticleOption option = (BlockParticleOption) object;
-        return option.getState();
+        return ((BlockParticleOption) object).getState();
     }
 
     @Override
     public Object field$ServerboundPlayerActionPacket$pos(Object packet) {
-        ServerboundPlayerActionPacket packetImpl = (ServerboundPlayerActionPacket) packet;
-        return packetImpl.getPos();
+        return ((ServerboundPlayerActionPacket) packet).getPos();
     }
 
     @Override
     public Object field$ServerboundPlayerActionPacket$action(Object packet) {
-        ServerboundPlayerActionPacket packetImpl = (ServerboundPlayerActionPacket) packet;
-        return packetImpl.getAction();
+        return ((ServerboundPlayerActionPacket) packet).getAction();
     }
 
     @Override
@@ -517,20 +434,17 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int field$SynchedEntityData$DataValue$id(Object data) {
-        SynchedEntityData.DataValue synchedEntityData = (SynchedEntityData.DataValue) data;
-        return synchedEntityData.id();
+        return ((SynchedEntityData.DataValue) data).id();
     }
 
     @Override
     public Object field$SynchedEntityData$DataValue$value(Object data) {
-        SynchedEntityData.DataValue synchedEntityData = (SynchedEntityData.DataValue) data;
-        return synchedEntityData.value();
+        return ((SynchedEntityData.DataValue) data).value();
     }
 
     @Override
     public Object field$SynchedEntityData$DataValue$serializer(Object data) {
-        SynchedEntityData.DataValue synchedEntityData = (SynchedEntityData.DataValue) data;
-        return synchedEntityData.serializer();
+        return ((SynchedEntityData.DataValue) data).serializer();
     }
 
     @Override
@@ -554,118 +468,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public List<NamespacedKey> getAllVanillaItems() {
-        List<NamespacedKey> list = new ArrayList<>();
-        for (Item item : BuiltInRegistries.ITEM) {
-            ResourceLocation location = BuiltInRegistries.ITEM.getKey(item);
-            list.add(new NamespacedKey(location.getNamespace(), location.getPath()));
-        }
-        return list;
-    }
-
-    @Override
     public org.bukkit.entity.Entity method$Entity$getBukkitEntity(Object entity) {
-        Entity entityImpl = (Entity) entity;
-        return entityImpl.getBukkitEntity();
-    }
-
-    @Override
-    public int method$ClientboundEntityPositionSyncPacket$id(Object packet) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) friendlyByteBuf);
-        for (SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>) dataValues)) {
-            dataValue.write(buf);
-        }
-        buf.writeByte(255);
-    }
-
-    @Override
-    public List<Object> method$ClientboundSetEntityDataPacket$unpack(Object friendlyByteBuf) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) friendlyByteBuf);
-        List<Object> list = new ArrayList();
-        int i;
-        while ((i = buf.readUnsignedByte()) != 255) {
-            list.add(SynchedEntityData.DataValue.read(buf, i));
-        }
-        return list;
-    }
-
-    @Override
-    public Map<String, Map<Class<?>, Integer>> method$getGamePacketIdsByClazz() {
-        Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz = new HashMap<>();
-        Map<Class<?>, Integer> serverBoundIds = new HashMap<>();
-        Map<Class<?>, Integer> clientBoundIds = new HashMap<>();
-        gamePacketIdsByClazz.put("serverbound", serverBoundIds);
-        gamePacketIdsByClazz.put("clientbound", clientBoundIds);
-        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.SERVERBOUND).forEach((id, packet) -> serverBoundIds.put(packet, id));
-        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.CLIENTBOUND).forEach((id, packet) -> clientBoundIds.put(packet, id));
-        return gamePacketIdsByClazz;
-    }
-
-    @Override
-    public Map<String, Map<String, Integer>> method$getGamePacketIdsByName() {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public List<NamespacedKey> getAllVanillaSounds() {
-        List<NamespacedKey> list = new ArrayList<>();
-        for (SoundEvent event : BuiltInRegistries.SOUND_EVENT) {
-            list.add(new NamespacedKey(event.getLocation().getNamespace(), event.getLocation().getPath()));
-        }
-        return list;
-    }
-
-    @Override
-    public Object method$ParticleTypes$STREAM_CODEC$decode(Object buffer) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void method$ParticleTypes$STREAM_CODEC$encode(Object buffer, Object particle) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object constructor$BlockParticleOption(Object particleType, Object blockState) {
-        return new BlockParticleOption((ParticleType<BlockParticleOption>) particleType, (BlockState) blockState);
-    }
-
-    @Override
-    public Object method$BlockParticleOption$getType(Object particle) {
-        return ((BlockParticleOption) particle).getType();
-    }
-
-    @Override
-    public Object method$ClientboundLevelParticlesPacket$readParticle(Object buffer, Object particleType) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        return this.readParticle(buf, (ParticleType) particleType);
+        return ((Entity) entity).getBukkitEntity();
     }
 
     private <T extends ParticleOptions> T readParticle(FriendlyByteBuf buf, ParticleType<T> type) {
         return type.getDeserializer().fromNetwork(type, buf);
-    }
-
-    @Override
-    public Object method$FriendlyByteBuf$readById(Object buffer, Object idMap) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        return buf.readById((IdMap) idMap);
-    }
-
-    @Override
-    public void method$FriendlyByteBuf$writeId(Object buffer, Object particle, Object idMap) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        buf.writeId((IdMap) idMap, ((ParticleOptions) particle).getType());
-    }
-
-    @Override
-    public void method$ParticleOptions$writeToNetwork(Object particle, Object buffer) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        ((ParticleOptions) particle).writeToNetwork(buf);
     }
 
     @Override
@@ -684,44 +492,18 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public String[] method$SoundEvent$location(Object soundEvent) {
-        ResourceLocation location = ((SoundEvent) soundEvent).getLocation();
-        return new String[]{location.getNamespace(), location.getPath()};
-    }
-
-    @Override
-    public Optional<Float> method$SoundEvent$fixedRange(Object soundEvent) {
-        float range1 = ((SoundEvent) soundEvent).getRange(100.0F);
-        float range2 = ((SoundEvent) soundEvent).getRange(0.0F);
-        if (range1 == 16.0F * 100.0F && range2 == 16.0F) {
-            return Optional.empty();
-        }
-        return Optional.of(range1);
-    }
-
-    @Override
-    public Object constructor$SoundEvent(Object location, Object fixedRange) {
-        ResourceLocation id = (ResourceLocation) location;
-        Optional<Float> distanceToTravel = (Optional) fixedRange;
-        return distanceToTravel.map((float_) -> SoundEvent.createFixedRangeEvent(id, float_)).orElseGet(() -> SoundEvent.createVariableRangeEvent(id));
-    }
-
-    @Override
     public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
-        SoundEvent event = (SoundEvent) soundEvent;
-        event.writeToNetwork(new FriendlyByteBuf(buffer));
+        ((SoundEvent) soundEvent).writeToNetwork(new FriendlyByteBuf(buffer));
     }
 
     @Override
     public List<Object> field$ClientboundPlayerInfoUpdatePacket$entries(Object packet) {
-        ClientboundPlayerInfoUpdatePacket updatePacket = (ClientboundPlayerInfoUpdatePacket) packet;
-        return (List) updatePacket.entries();
+        return (List) ((ClientboundPlayerInfoUpdatePacket) packet).entries();
     }
 
     @Override
     public EnumSet<? extends Enum> field$ClientboundPlayerInfoUpdatePacket$actions(Object packet) {
-        ClientboundPlayerInfoUpdatePacket updatePacket = (ClientboundPlayerInfoUpdatePacket) packet;
-        return updatePacket.actions();
+        return ((ClientboundPlayerInfoUpdatePacket) packet).actions();
     }
 
     @Override
@@ -731,14 +513,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Optional method$RecipeManager$getRecipeFor(Object recipeManager, Object recipeType, Object recipeInput, Object level, Object resourceKeyOrLocation) {
-        RecipeManager manager = (RecipeManager) recipeManager;
-        return manager.getRecipeFor((RecipeType) recipeType, (Container) recipeInput, (Level) level, (ResourceLocation) resourceKeyOrLocation);
+        return ((RecipeManager) recipeManager).getRecipeFor((RecipeType) recipeType, (Container) recipeInput, (Level) level, (ResourceLocation) resourceKeyOrLocation);
     }
 
     @Override
     public Object field$ClientboundPlayerInfoUpdatePacket$Entry$displayName(Object entry) {
-        ClientboundPlayerInfoUpdatePacket.Entry e = (ClientboundPlayerInfoUpdatePacket.Entry) entry;
-        return e.displayName();
+        return ((ClientboundPlayerInfoUpdatePacket.Entry) entry).displayName();
     }
 
     @Override
@@ -756,40 +536,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$ClientboundSetCursorItemPacket$item(Object packet) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public List<Object> field$ClientboundContainerSetContentPacket$items(Object packet) {
-        ClientboundContainerSetContentPacket itemPacket = (ClientboundContainerSetContentPacket) packet;
-        return (List) itemPacket.getItems();
-    }
-
-    @Override
-    public Object field$ClientboundContainerSetContentPacket$carriedItem(Object packet) {
-        ClientboundContainerSetContentPacket itemPacket = (ClientboundContainerSetContentPacket) packet;
-        return itemPacket.getCarriedItem();
-    }
-
-    @Override
-    public Object field$ClientboundContainerSetSlotPacket$item(Object packet) {
-        ClientboundContainerSetSlotPacket itemPacket = (ClientboundContainerSetSlotPacket) packet;
-        return itemPacket.getItem();
-    }
-
-    @Override
-    public Object field$ClientboundSetPlayerInventoryPacket$contents(Object packet) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void resetComponent(Object itemStack, Object resourceLocation) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void setComponent(Object itemStack, Object resourceLocation, Object component) {
+    public void method$ItemStack$setComponent(Object itemStack, Object resourceLocation, Object component) {
         throw new UnsupportedVersionException();
     }
 
@@ -800,24 +547,21 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$ServerPlayer$gameMode(Object player) {
-        ServerPlayer serverPlayer = (ServerPlayer) player;
-        return serverPlayer.gameMode;
+        return ((ServerPlayer) player).gameMode;
     }
 
     @Override
-    public void setMayBuild(Object player, boolean can) {
-        ServerPlayer serverPlayer = (ServerPlayer) player;
-        serverPlayer.getAbilities().mayBuild = can;
+    public void field$Player$mayBuild(Object player, boolean can) {
+        ((net.minecraft.world.entity.player.Player) player).getAbilities().mayBuild = can;
     }
 
     @Override
-    public boolean mayBuild(Object player) {
-        ServerPlayer serverPlayer = (ServerPlayer) player;
-        return serverPlayer.getAbilities().mayBuild;
+    public boolean field$Player$mayBuild(Object player) {
+        return ((net.minecraft.world.entity.player.Player) player).getAbilities().mayBuild;
     }
 
     @Override
-    public double getInteractionRange(Object player) {
+    public double method$Player$getInteractionRange(Object player) {
         return 4.5d;
     }
 
@@ -828,20 +572,17 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public float method$BlockStateBase$getDestroyProgress(Object blockState, Object player, Object level, Object blockPos) {
-        BlockBehaviour.BlockStateBase state = (BlockBehaviour.BlockStateBase) blockState;
-        return state.getDestroyProgress((ServerPlayer) player, (BlockGetter) level, (BlockPos) blockPos);
+        return ((BlockBehaviour.BlockStateBase) blockState).getDestroyProgress((ServerPlayer) player, (BlockGetter) level, (BlockPos) blockPos);
     }
 
     @Override
     public boolean method$ItemStack$isCorrectToolForDrops(Object itemStack, Object blockState) {
-        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
-        return nmsStack.isCorrectToolForDrops((BlockState) blockState);
+        return ((net.minecraft.world.item.ItemStack) itemStack).isCorrectToolForDrops((BlockState) blockState);
     }
 
     @Override
     public boolean method$Player$hasCorrectToolForDrops(Object player, Object state) {
-        net.minecraft.world.entity.player.Player nmsPlayer = (net.minecraft.world.entity.player.Player) player;
-        return nmsPlayer.hasCorrectToolForDrops((BlockState) state);
+        return ((net.minecraft.world.entity.player.Player) player).hasCorrectToolForDrops((BlockState) state);
     }
 
     @Override
@@ -860,33 +601,28 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean canBreakInAdventureMode(Object itemStack, Object blockInWorld) {
-        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
-        return nmsStack.hasAdventureModeBreakTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
+    public boolean method$ItemStack$canBreakInAdventureMode(Object itemStack, Object blockInWorld) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).hasAdventureModeBreakTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
     }
 
     @Override
-    public boolean canPlaceInAdventureMode(Object itemStack, Object blockInWorld) {
-        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
-        return nmsStack.hasAdventureModePlaceTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
+    public boolean method$ItemStack$canPlaceInAdventureMode(Object itemStack, Object blockInWorld) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).hasAdventureModePlaceTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
     }
 
     @Override
     public Object method$Direction$getOpposite(Object direction) {
-        Direction d = (Direction) direction;
-        return d.getOpposite();
+        return ((Direction) direction).getOpposite();
     }
 
     @Override
     public Object method$BlockPos$relative(Object blockPos, Object direction) {
-        BlockPos pos = (BlockPos) blockPos;
-        return pos.relative((Direction) direction);
+        return ((BlockPos) blockPos).relative((Direction) direction);
     }
 
     @Override
     public String field$ClientboundResourcePackPushPacket$url(Object packet) {
-        ClientboundResourcePackPushPacket pack = (ClientboundResourcePackPushPacket) packet;
-        return pack.url();
+        return ((ClientboundResourcePackPushPacket) packet).url();
     }
 
     @Override
@@ -901,8 +637,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public UUID field$ClientboundResourcePackPushPacket$uuid(Object packet) {
-        ClientboundResourcePackPushPacket pack = (ClientboundResourcePackPushPacket) packet;
-        return pack.id();
+        return ((ClientboundResourcePackPushPacket) packet).id();
     }
 
     @Override
@@ -911,14 +646,13 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object toNMSEntityType(org.bukkit.entity.EntityType entityType) {
+    public Object method$CraftEntityType$toNMSEntityType(org.bukkit.entity.EntityType entityType) {
         return CraftEntityType.bukkitToMinecraft(entityType);
     }
 
     @Override
     public boolean method$BonemealableBlock$isValidBonemealTarget(Object block, Object level, Object blockPos, Object state) {
-        BonemealableBlock bonemealableBlock = (BonemealableBlock) block;
-        return bonemealableBlock.isValidBonemealTarget((LevelReader) level, (BlockPos) blockPos, (BlockState) state);
+        return ((BonemealableBlock) block).isValidBonemealTarget((LevelReader) level, (BlockPos) blockPos, (BlockState) state);
     }
 
     @Override
@@ -961,25 +695,6 @@ public class FastNMSImpl extends FastNMS {
         } finally {
             serverLevel.setBlock(blockPos, previous, 4);
             serverPlayer.connection.send(new ClientboundBlockUpdatePacket(serverLevel, blockPos));
-        }
-    }
-
-    @Override
-    public void registerAdvancement(String[] key, Object jsonAdvancement) {
-        ResourceLocation location = new ResourceLocation(key[0], key[1]);
-        Advancement advancement = Util.getOrThrow(Advancement.CODEC.parse(JsonOps.INSTANCE, (JsonElement) jsonAdvancement), JsonParseException::new);
-        MinecraftServer server = MinecraftServer.getServer();
-        ServerAdvancementManager serverAdvancementManager = server.getAdvancements();
-        AdvancementHolder holder = new AdvancementHolder(location, advancement);
-        serverAdvancementManager.advancements.put(location, holder);
-        AdvancementTree tree = serverAdvancementManager.tree();
-        tree.addAll(List.of(holder));
-        AdvancementNode node = tree.get(location);
-        if (node != null) {
-            AdvancementNode root = node.root();
-            if (root.holder().value().display().isPresent()) {
-                TreeNodePosition.run(root);
-            }
         }
     }
 
@@ -1035,22 +750,17 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object getComponentType(String namespace, String id) {
+    public Object method$ItemStack$getComponent(Object itemStack, Object type) {
         throw new UnsupportedVersionException();
     }
 
     @Override
-    public Object getComponent(Object itemStack, Object type) {
+    public boolean method$ItemStack$hasComponent(Object itemStack, Object type) {
         throw new UnsupportedVersionException();
     }
 
     @Override
-    public boolean hasComponent(Object itemStack, Object type) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object removeComponent(Object itemStack, Object type) {
+    public Object method$ItemStack$removeComponent(Object itemStack, Object type) {
         throw new UnsupportedVersionException();
     }
 
@@ -1070,102 +780,13 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Runnable getBukkitTaskRunnable(BukkitTask bukkitTask) {
-        CraftTask craftTask = (CraftTask) bukkitTask;
-        return craftTask.rTask;
-    }
-
-    @Override
-    public Object constructor$ClientboundLevelChunkWithLightPacket(net.momirealms.craftengine.core.util.FriendlyByteBuf buf) {
-        return new ClientboundLevelChunkWithLightPacket(new FriendlyByteBuf(buf));
-    }
-
-    @Override
-    public void method$ClientboundLevelChunkWithLightPacket$write(Object packet, net.momirealms.craftengine.core.util.FriendlyByteBuf buf) {
-        ((ClientboundLevelChunkWithLightPacket) packet).write(new FriendlyByteBuf(buf));
-    }
-
-    @Override
-    public byte[] field$ClientboundLevelChunkPacketData$buffer(Object chunkData) {
-        return ((ClientboundLevelChunkPacketData) chunkData).getReadBuffer().array();
-    }
-
-    @Override
-    public boolean method$GrassBlock$isValidBonemealTarget(Object level, Object pos, Object state) {
-        return ((LevelReader) level).getBlockState(((BlockPos) pos).above()).isAir();
-    }
-
-    @Override
-    public void method$GrassBlock$performBoneMeal(Object level, Object random, Object blockPos, Object state, Object thisBlock) {
-        ServerLevel world = (ServerLevel) level;
-        RandomSource rand = (RandomSource) random;
-        BlockPos topPos = ((BlockPos) blockPos).above();
-        BlockState shortGrassState = Blocks.SHORT_GRASS.defaultBlockState();
-        Optional<Holder.Reference<PlacedFeature>> grassFeature = world.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).get(VegetationPlacements.GRASS_BONEMEAL);
-
-        out:
-        for (int i = 0; i < 128; ++i) {
-            BlockPos currentPos = topPos;
-
-            for (int j = 0; j < i / 16; ++j) {
-                currentPos = currentPos.offset(
-                        rand.nextInt(3) - 1,
-                        (((RandomSource) random).nextInt(3) - 1) * rand.nextInt(3) / 2,
-                        rand.nextInt(3) - 1
-                );
-                Object belowPos = currentPos.relative(Direction.DOWN);
-                if (!world.getBlockState(currentPos.below()).is(((net.minecraft.world.level.block.Block) thisBlock))
-                        || world.getBlockState(currentPos).isCollisionShapeFullBlock(world, currentPos)) {
-                    continue out;
-                }
-
-                BlockState currentState = world.getBlockState(currentPos);
-                if (currentState.is(shortGrassState.getBlock()) && rand.nextInt(10) == 0) {
-                    BonemealableBlock grassBlock = (BonemealableBlock) shortGrassState.getBlock();
-                    if (grassBlock.isValidBonemealTarget(world, currentPos, currentState)) {
-                        grassBlock.performBonemeal(world, rand, currentPos, currentState);
-                    }
-                }
-
-                if (currentState.isAir()) {
-                    Holder<PlacedFeature> feature;
-                    if (((RandomSource) random).nextInt(8) == 0) {
-                        List<ConfiguredFeature<?, ?>> flowers = world.getBiome(currentPos).value().getGenerationSettings().getFlowerFeatures();
-                        if (flowers.isEmpty()) {
-                            continue;
-                        }
-                        int flowerIndex = rand.nextInt(flowers.size());
-                        feature = ((RandomPatchConfiguration) ((ConfiguredFeature) flowers.get(flowerIndex)).config()).feature();
-                    } else {
-                        if (grassFeature.isEmpty()) {
-                            continue;
-                        }
-                        feature = grassFeature.get();
-                    }
-                    feature.value().place(world, world.getChunkSource().getGenerator(), rand, currentPos);
-                }
-            }
-        }
-    }
-
-    @Override
     public void method$LevelChunk$markUnsaved(Object chunk) {
-        LevelChunk levelChunk = (LevelChunk) chunk;
-        levelChunk.setUnsaved(true);
+        ((LevelChunk) chunk).setUnsaved(true);
     }
 
     @Override
     public boolean method$LevelChunk$isUnsaved(Object chunk) {
-        LevelChunk levelChunk = (LevelChunk) chunk;
-        return levelChunk.isUnsaved();
-    }
-
-    @Override
-    public org.bukkit.entity.Entity getBukkitEntityById(World world, int entityId) {
-        ServerLevel serverLevel = ((CraftWorld) world).getHandle();
-        EntityLookup entityLookup = serverLevel.getEntityLookup();
-        Entity entity = entityLookup.get(entityId);
-        return entity != null ? entity.getBukkitEntity() : null;
+        return ((LevelChunk) chunk).isUnsaved();
     }
 
     @Override
@@ -1175,8 +796,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$ServerChunkCache$getChunk(Object serverChunkCache, int x, int z, boolean load) {
-        ServerChunkCache chunkCache = (ServerChunkCache) serverChunkCache;
-        return chunkCache.getChunk(x, z, load);
+        return ((ServerChunkCache) serverChunkCache).getChunk(x, z, load);
     }
 
     @Override
@@ -1187,222 +807,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$LevelChunkSection$biomes(Object section) {
-        LevelChunkSection levelChunkSection = (LevelChunkSection) section;
-        return levelChunkSection.getBiomes();
-    }
-
-    @Override
-    public Object field$Entity$trackedEntity(Object entity) {
-        Entity nmsEntity = (Entity) entity;
-        if (nmsEntity.tracker == null) return null;
-        return nmsEntity.tracker;
-    }
-
-    @Override
-    public Object field$ChunkMap$TrackedEntity$serverEntity(Object trackedEntity) {
-        return ((ChunkMap.TrackedEntity) trackedEntity).serverEntity;
-    }
-
-    @Override
-    public void method$ServerEntity$sendChanges(Object serverEntity) {
-        ((ServerEntity) serverEntity).sendChanges();
-    }
-
-    @Override
-    public boolean method$AbstractArrow$isInGround(Object entity) {
-        AbstractArrow abstractArrow = (AbstractArrow) entity;
-        return abstractArrow.inGround;
+        return ((LevelChunkSection) section).getBiomes();
     }
 
     @Override
     public boolean field$Entity$wasTouchingWater(Object entity) {
-        Entity entityImpl = (Entity) entity;
-        return entityImpl.wasTouchingWater;
-    }
-
-    @Override
-    public int field$ClientboundEntityPositionSyncPacket$id(Object packet) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object field$ClientboundEntityPositionSyncPacket$values(Object packet) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public boolean field$ClientboundEntityPositionSyncPacket$onGround(Object packet) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, Object values, boolean onGround) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object field$PositionMoveRotation$position(Object values) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object field$PositionMoveRotation$deltaMovement(Object values) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public float field$PositionMoveRotation$yRot(Object values) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public float field$PositionMoveRotation$xRot(Object values) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object constructor$PositionMoveRotation(Object position, Object deltaMovement, float yRot, float xRot) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public UUID field$ClientboundAddEntityPacket$uuid(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getUUID();
-    }
-
-    @Override
-    public double field$ClientboundAddEntityPacket$x(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getX();
-    }
-
-    @Override
-    public double field$ClientboundAddEntityPacket$y(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getY();
-    }
-
-    @Override
-    public double field$ClientboundAddEntityPacket$z(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getZ();
-    }
-
-    @Override
-    public float field$ClientboundAddEntityPacket$yRot(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getYRot();
-    }
-
-    @Override
-    public float field$ClientboundAddEntityPacket$xRot(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getXRot();
-    }
-
-    @Override
-    public float field$ClientboundAddEntityPacket$yHeadRot(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getYHeadRot();
-    }
-
-    @Override
-    public double field$ClientboundAddEntityPacket$xa(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getXa();
-    }
-
-    @Override
-    public double field$ClientboundAddEntityPacket$ya(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getYa();
-    }
-
-    @Override
-    public double field$ClientboundAddEntityPacket$za(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getZa();
-    }
-
-    @Override
-    public int field$ClientboundAddEntityPacket$data(Object packet) {
-        ClientboundAddEntityPacket packetImpl = (ClientboundAddEntityPacket) packet;
-        return packetImpl.getData();
-    }
-
-    @Override
-    public short field$ClientboundMoveEntityPacket$xa(Object packet) {
-        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
-        return packetImpl.getXa();
-    }
-
-    @Override
-    public short field$ClientboundMoveEntityPacket$ya(Object packet) {
-        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
-        return packetImpl.getYa();
-    }
-
-    @Override
-    public short field$ClientboundMoveEntityPacket$za(Object packet) {
-        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
-        return packetImpl.getZa();
-    }
-
-    @Override
-    public byte field$ClientboundMoveEntityPacket$yRot(Object packet) {
-        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
-        return packetImpl.getyRot();
-    }
-
-    @Override
-    public byte field$ClientboundMoveEntityPacket$xRot(Object packet) {
-        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
-        return packetImpl.getxRot();
-    }
-
-    @Override
-    public boolean field$ClientboundMoveEntityPacket$onGround(Object packet) {
-        ClientboundMoveEntityPacket packetImpl = (ClientboundMoveEntityPacket) packet;
-        return packetImpl.isOnGround();
-    }
-
-    @Override
-    public Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround) {
-        return new ClientboundMoveEntityPacket.PosRot(entityId, xa, ya, za, yRot, xRot, onGround);
-    }
-
-    @Override
-    public Object constructor$Vec3(double x, double y, double z) {
-        return new Vec3(x, y, z);
-    }
-
-    @Override
-    public Object constructor$ClientboundTeleportEntityPacket(int entityId, double x, double y, double z, byte yRot, byte xRot, boolean onGround) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$Registry$key(Object registry) {
-        return ((Registry) registry).key();
-    }
-
-    @Override
-    public Map<?, ?> method$TagNetworkSerialization$serializeTagsToNetwork() {
-        return TagNetworkSerialization.serializeTagsToNetwork(MinecraftServer.getServer().registries());
-    }
-
-    @Override
-    public void method$TagNetworkSerialization$NetworkPayload$write(Object networkPayload, Object buffer) {
-        var payload = (TagNetworkSerialization.NetworkPayload) networkPayload;
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        payload.write(buf);
-    }
-
-    @Override
-    public Object method$TagNetworkSerialization$NetworkPayload$read(Object buffer) {
-        FriendlyByteBuf buf = new FriendlyByteBuf((ByteBuf) buffer);
-        return TagNetworkSerialization.NetworkPayload.read(buf);
+        return ((Entity) entity).wasTouchingWater;
     }
 
     @Override
@@ -1431,242 +841,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$ItemStack$copyWithCount(Object stack, int count) {
-        return ((net.minecraft.world.item.ItemStack) stack).copyWithCount(count);
-    }
-
-    @Override
-    public Object method$ItemStack$copy(Object stack) {
-        return ((net.minecraft.world.item.ItemStack) stack).copy();
-    }
-
-    @Override
-    public float method$EnchantmentHelper$getTridentSpinAttackStrength(Object stack, Object entity) {
-        return EnchantmentHelper.getRiptide((net.minecraft.world.item.ItemStack) stack);
-    }
-
-    @Override
-    public boolean method$Entity$isInWaterOrRain(Object entity) {
-        return ((net.minecraft.world.entity.Entity) entity).isInWaterOrRain();
-    }
-
-    @Override
-    public boolean method$ItemStack$nextDamageWillBreak(Object stack) {
-        net.minecraft.world.item.ItemStack stackImpl = (net.minecraft.world.item.ItemStack) stack;
-        return stackImpl.isDamageableItem() && stackImpl.getDamageValue() >= stackImpl.getMaxDamage() - 1;
-    }
-
-    @Override
-    public void method$ItemStack$setDamageValue(Object stack, int damage) {
-        ((net.minecraft.world.item.ItemStack) stack).setDamageValue(damage);
-    }
-
-    @Override
-    public int method$ItemStack$getDamageValue(Object stack) {
-        return ((net.minecraft.world.item.ItemStack) stack).getDamageValue();
-    }
-
-    @Override
-    public Object method$EnchantmentHelper$pickHighestLevel(Object stack) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$Projectile$ThrownTrident$spawnProjectileFromRotationDelayed(Object level, Object spawnedFrom, Object owner, float z, float velocity, float innaccuracy) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$Projectile$Delayed$projectile(Object projectile) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public boolean method$Projectile$Delayed$attemptSpawn(Object projectile) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
     public Object field$Player$containerMenu(Object player) {
         return ((net.minecraft.world.entity.player.Player) player).containerMenu;
-    }
-
-    @Override
-    public void method$AbstractContainerMenu$sendAllDataToRemote(Object menu) {
-        ((AbstractContainerMenu) menu).sendAllDataToRemote();
-    }
-
-    @Override
-    public void method$ItemStack$hurtWithoutBreaking(Object stack, int damage, Object player) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void method$ItemStack$consume(Object stack, int amount, Object player) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object field$AbstractArrow$pickupItemStack(Object entity) {
-        return ((AbstractArrow) entity).pickupItemStack;
-    }
-
-    @Override
-    public void field$AbstractArrow$pickupItemStack(Object entity, Object pickupItemStack) {
-        ((AbstractArrow) entity).pickupItemStack = (net.minecraft.world.item.ItemStack) pickupItemStack;
-    }
-
-    @Override
-    public boolean method$Player$hasInfiniteMaterials(Object player) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object field$AbstractArrow$pickup(Object entity) {
-        return ((AbstractArrow) entity).pickup;
-    }
-
-    @Override
-    public void field$AbstractArrow$pickup(Object entity, Object pickup) {
-        ((AbstractArrow) entity).pickup = (AbstractArrow.Pickup) pickup;
-    }
-
-    @Override
-    public void method$Level$playSound(Object level, @Nullable Object entity, Object sourceEntity, Object sound, Object source, float volume, float pitch) {
-        ((Level) level).playSound((net.minecraft.world.entity.player.Player) entity, (Entity) sourceEntity, (SoundEvent) sound, (SoundSource) source, volume, pitch);
-    }
-
-    @Override
-    public float method$Entity$getYRot(Object entity) {
-        return ((net.minecraft.world.entity.Entity) entity).getYRot();
-    }
-
-    @Override
-    public float method$Entity$getXRot(Object entity) {
-        return ((net.minecraft.world.entity.Entity) entity).getXRot();
-    }
-
-    @Override
-    public void method$CraftEventFactory$callPlayerRiptideEvent(Object player, Object tridentItemStack, float velocityX, float velocityY, float velocityZ) {
-        CraftEventFactory.callPlayerRiptideEvent(
-                (net.minecraft.world.entity.player.Player) player,
-                (net.minecraft.world.item.ItemStack) tridentItemStack,
-                velocityX, velocityY, velocityZ
-        );
-    }
-
-    @Override
-    public void method$Entity$push(Object entity, double x, double y, double z) {
-        ((net.minecraft.world.entity.Entity) entity).push(x, y, z);
-    }
-
-    @Override
-    public void method$Player$startAutoSpinAttack(Object player, int ticks, float damage, Object itemStack) {
-        ((net.minecraft.world.entity.player.Player) player).startAutoSpinAttack(ticks);
-    }
-
-    @Override
-    public boolean method$Entity$onGround(Object entity) {
-        return ((net.minecraft.world.entity.Entity) entity).onGround();
-    }
-
-    @Override
-    public void method$Entity$move(Object entity, Object type, Object movement) {
-        ((net.minecraft.world.entity.Entity) entity).move((MoverType) type, (Vec3) movement);
-    }
-
-    @Override
-    public boolean method$ItemStack$isEmpty(Object stack) {
-        return ((net.minecraft.world.item.ItemStack) stack).isEmpty();
-    }
-
-    @Override
-    public Object method$Holder$value(Object holder) {
-        return ((Holder<?>) holder).value();
-    }
-
-    @Override
-    public boolean field$Entity$hurtMarked(Object entity) {
-        return ((Entity) entity).hurtMarked;
-    }
-
-    @Override
-    public void field$Entity$hurtMarked(Object entity, boolean hurtMarked) {
-        ((Entity) entity).hurtMarked = hurtMarked;
-    }
-
-    @Override
-    public Object constructor$ThrownTrident(Object level, Object owner, Object stack) {
-        return new ThrownTrident((Level) level, (LivingEntity) owner, (net.minecraft.world.item.ItemStack) stack);
-    }
-
-    @Override
-    public void method$ThrownTrident$shootFromRotation(Object entity, Object shooter, float pitch, float yaw, float roll, float speed, float divergence) {
-        ((ThrownTrident) entity).shootFromRotation((Entity) shooter, pitch, yaw, roll, speed, divergence);
-    }
-
-    @Override
-    public void method$ItemStack$hurtAndBreak(Object stack, int amount, Object entity, Object slot) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$LivingEntity$getSlotForHand(Object hand) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$LivingEntity$getUsedItemHand(Object entity) {
-        return ((LivingEntity) entity).getUsedItemHand();
-    }
-
-    @Override
-    public Object method$Player$getInventory(Object player) {
-        return ((net.minecraft.world.entity.player.Player) player).getInventory();
-    }
-
-    @Override
-    public void method$Inventory$removeItem(Object inventory, Object stack) {
-        ((Inventory) inventory).removeItem((net.minecraft.world.item.ItemStack) stack);
-    }
-
-    @Override
-    public void method$ItemStack$hurtAndBreak(Object stack, int amount, Object entity, Consumer<?> breakCallback) {
-        ((net.minecraft.world.item.ItemStack) stack).hurtAndBreak(amount, (LivingEntity) entity, (Consumer<LivingEntity>) breakCallback);
-    }
-
-    @Override
-    public Object method$Player$getAbilities(Object player) {
-        return ((net.minecraft.world.entity.player.Player) player).getAbilities();
-    }
-
-    @Override
-    public boolean field$Abilities$instabuild(Object abilities) {
-        return ((Abilities) abilities).instabuild;
-    }
-
-    @Override
-    public void method$LivingEntity$broadcastBreakEvent(Object entity, Object hand) {
-        ((LivingEntity) entity).broadcastBreakEvent((net.minecraft.world.InteractionHand) hand);
-    }
-
-    @Override
-    public Object field$ThrownTrident$tridentItem(Object entity) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void field$ThrownTrident$tridentItem(Object entity, Object tridentItem) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public ItemStack ensureCraftItemStack(ItemStack itemStack) {
-        if (itemStack instanceof CraftItemStack craftItemStack) {
-            return craftItemStack;
-        } else {
-            return CraftItemStack.asCraftCopy(itemStack);
-        }
     }
 
     @Override
@@ -1676,32 +852,27 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$SignalGetter$hasNeighborSignal(Object level, Object blockPos) {
-        SignalGetter levelObj = (SignalGetter) level;
-        return levelObj.hasNeighborSignal((BlockPos) blockPos);
+        return ((SignalGetter) level).hasNeighborSignal((BlockPos) blockPos);
     }
 
     @Override
     public Object method$BlockState$getBlock(Object blockState) {
-        BlockState block = (BlockState) blockState;
-        return block.getBlock();
+        return ((BlockState) blockState).getBlock();
     }
 
     @Override
     public Object method$BlockState$getShape(Object blockState, Object level, Object blockPos, Object collisionContext) {
-        BlockState state = (BlockState) blockState;
-        return state.getShape((BlockGetter) level, (BlockPos) blockPos, (CollisionContext) collisionContext);
+        return ((BlockState) blockState).getShape((BlockGetter) level, (BlockPos) blockPos, (CollisionContext) collisionContext);
     }
 
     @Override
     public Object method$BlockState$getCollisionShape(Object blockState, Object level, Object blockPos, Object collisionContext) {
-        BlockState state = (BlockState) blockState;
-        return state.getCollisionShape((BlockGetter) level, (BlockPos) blockPos, (CollisionContext) collisionContext);
+        return ((BlockState) blockState).getCollisionShape((BlockGetter) level, (BlockPos) blockPos, (CollisionContext) collisionContext);
     }
 
     @Override
     public Object method$BlockState$getBlockSupportShape(Object blockState, Object level, Object blockPos) {
-        BlockState state = (BlockState) blockState;
-        return state.getBlockSupportShape((BlockGetter) level, (BlockPos) blockPos);
+        return ((BlockState) blockState).getBlockSupportShape((BlockGetter) level, (BlockPos) blockPos);
     }
 
     @Override
@@ -1716,15 +887,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public ItemStack method$FriendlyByteBuf$readItem(Object buf) {
-        FriendlyByteBuf byteBuf = (FriendlyByteBuf) buf;
-        net.minecraft.world.item.ItemStack itemStack = byteBuf.readItem();
-        return CraftItemStack.asCraftMirror(itemStack);
+        return CraftItemStack.asCraftMirror(((FriendlyByteBuf) buf).readItem());
     }
 
     @Override
     public void method$FriendlyByteBuf$writeItem(Object buf, ItemStack itemStack) {
-        FriendlyByteBuf byteBuf = (FriendlyByteBuf) buf;
-        byteBuf.writeItem(CraftItemStack.unwrap(itemStack));
+        ((FriendlyByteBuf) buf).writeItem(CraftItemStack.unwrap(itemStack));
     }
 
     @Override
@@ -1744,8 +912,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$ItemStack$getOrCreateTag(Object itemStack) {
-        net.minecraft.world.item.ItemStack item = (net.minecraft.world.item.ItemStack) itemStack;
-        return item.getOrCreateTag();
+        return ((net.minecraft.world.item.ItemStack) itemStack).getOrCreateTag();
     }
 
     @Override
@@ -1755,8 +922,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public short method$ShortTag$value(Object shortTag) {
-        ShortTag tag = (ShortTag) shortTag;
-        return tag.getAsShort();
+        return ((ShortTag) shortTag).getAsShort();
     }
 
     @Override
@@ -1766,8 +932,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int method$IntTag$value(Object intTag) {
-        IntTag tag = (IntTag) intTag;
-        return tag.getAsInt();
+        return ((IntTag) intTag).getAsInt();
     }
 
     @Override
@@ -1777,8 +942,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public long method$LongTag$value(Object longTag) {
-        LongTag tag = (LongTag) longTag;
-        return tag.getAsLong();
+        return ((LongTag) longTag).getAsLong();
     }
 
     @Override
@@ -1788,8 +952,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public byte method$ByteTag$value(Object byteTag) {
-        ByteTag tag = (ByteTag) byteTag;
-        return tag.getAsByte();
+        return ((ByteTag) byteTag).getAsByte();
     }
 
     @Override
@@ -1799,8 +962,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public float method$FloatTag$value(Object floatTag) {
-        FloatTag tag = (FloatTag) floatTag;
-        return tag.getAsFloat();
+        return ((FloatTag) floatTag).getAsFloat();
     }
 
     @Override
@@ -1810,8 +972,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public double method$DoubleTag$value(Object doubleTag) {
-        DoubleTag tag = (DoubleTag) doubleTag;
-        return tag.getAsDouble();
+        return ((DoubleTag) doubleTag).getAsDouble();
     }
 
     @Override
@@ -1821,8 +982,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public byte[] method$ByteArrayTag$value(Object byteArrayTag) {
-        ByteArrayTag tag = (ByteArrayTag) byteArrayTag;
-        return tag.getAsByteArray();
+        return ((ByteArrayTag) byteArrayTag).getAsByteArray();
     }
 
     @Override
@@ -1832,8 +992,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int[] method$IntArrayTag$value(Object intArrayTag) {
-        IntArrayTag tag = (IntArrayTag) intArrayTag;
-        return tag.getAsIntArray();
+        return ((IntArrayTag) intArrayTag).getAsIntArray();
     }
 
     @Override
@@ -1843,8 +1002,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public long[] method$LongArrayTag$value(Object longArrayTag) {
-        LongArrayTag tag = (LongArrayTag) longArrayTag;
-        return tag.getAsLongArray();
+        return ((LongArrayTag) longArrayTag).getAsLongArray();
     }
 
     @Override
@@ -1854,8 +1012,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public String method$StringTag$value(Object stringTag) {
-        StringTag tag = (StringTag) stringTag;
-        return tag.getAsString();
+        return ((StringTag) stringTag).getAsString();
     }
 
     @Override
@@ -1865,82 +1022,37 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$ListTag$get(Object listTag, int index) {
-        ListTag tag = (ListTag) listTag;
-        return tag.get(index);
+        return ((ListTag) listTag).get(index);
     }
 
     @Override
     public void method$ListTag$add(Object listTag, int index, Object value) {
-        ListTag tag = (ListTag) listTag;
-        tag.addTag(index, (Tag) value);
+        ((ListTag) listTag).addTag(index, (Tag) value);
     }
 
     @Override
     public Object method$ListTag$remove(Object listTag, int index) {
-        ListTag tag = (ListTag) listTag;
-        return tag.remove(index);
+        return ((ListTag) listTag).remove(index);
     }
 
     @Override
     public Object method$CompoundTag$get(Object compoundTag, String key) {
-        CompoundTag tag = (CompoundTag) compoundTag;
-        return tag.get(key);
+        return ((CompoundTag) compoundTag).get(key);
     }
 
     @Override
     public void method$CompoundTag$put(Object compoundTag, String key, Object value) {
-        CompoundTag tag = (CompoundTag) compoundTag;
-        tag.put(key, (Tag) value);
+        ((CompoundTag) compoundTag).put(key, (Tag) value);
     }
 
     @Override
     public void method$CompoundTag$remove(Object compoundTag, String key) {
-        CompoundTag tag = (CompoundTag) compoundTag;
-        tag.remove(key);
+        ((CompoundTag) compoundTag).remove(key);
     }
 
     @Override
     public Object constructor$CompoundTag() {
         return new CompoundTag();
-    }
-
-    @Override
-    public byte[] method$NbtIo$toBytes(Object tag) throws IOException {
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-             DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream)) {
-            NbtIo.writeUnnamedTag((Tag) tag, dataOutputStream);
-            return byteArrayOutputStream.toByteArray();
-        }
-    }
-
-
-    @Override
-    public Object method$NbtIo$fromBytes(byte[] bytes) throws IOException {
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-             DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream)) {
-            return readUnnamedTag(dataInputStream, NbtAccounter.unlimitedHeap());
-        }
-    }
-
-    private static Tag readUnnamedTag(DataInput input, NbtAccounter tracker) throws IOException {
-        byte type = input.readByte();
-        if (type == 0) {
-            return EndTag.INSTANCE;
-        } else {
-            StringTag.skipString(input);
-            return readTagSafe(input, tracker, type);
-        }
-    }
-
-    private static Tag readTagSafe(DataInput input, NbtAccounter tracker, byte typeId) {
-        try {
-            return TagTypes.getType(typeId).load(input, tracker);
-        } catch (IOException ioexception) {
-            CrashReport crashreport = CrashReport.forThrowable(ioexception, "Loading NBT data");
-            CrashReportCategory crc = crashreport.addCategory("NBT Tag");
-            crc.setDetail("Tag type", typeId);
-            throw new ReportedNbtException(crashreport);
-        }
     }
 
     @Override
@@ -1960,8 +1072,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public List<Object> field$SimpleContainer$items(Object simpleContainer) {
-        SimpleContainer container = (SimpleContainer) simpleContainer;
-        return (List) container.items;
+        return (List) ((SimpleContainer) simpleContainer).items;
     }
 
     @Override
@@ -1971,8 +1082,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$AbstractFurnaceBlockEntity$getItem(Object entity, int slot) {
-        AbstractFurnaceBlockEntity blockEntity = (AbstractFurnaceBlockEntity) entity;
-        return blockEntity.getItem(slot);
+        return ((AbstractFurnaceBlockEntity) entity).getItem(slot);
     }
 
     @Override
@@ -1992,8 +1102,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks) {
-        LevelAccessor level = (LevelAccessor) levelAccessor;
-        level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
+        ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
     }
 
     @Override
@@ -2013,14 +1122,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public List<Object> field$AbstractContainerMenu$dataSlots(Object menu) {
-        AbstractContainerMenu containerMenu = (AbstractContainerMenu) menu;
-        return (List) containerMenu.dataSlots;
+        return (List) ((AbstractContainerMenu) menu).dataSlots;
     }
 
     @Override
     public int method$DataSlot$get(Object dataSlot) {
-        DataSlot slot = (DataSlot) dataSlot;
-        return slot.get();
+        return ((DataSlot) dataSlot).get();
     }
 
     @Override
@@ -2030,14 +1137,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int field$AbstractContainerMenu$containerId(Object containerMenu) {
-        AbstractContainerMenu menu = (AbstractContainerMenu) containerMenu;
-        return menu.containerId;
+        return ((AbstractContainerMenu) containerMenu).containerId;
     }
 
     @Override
     public Object method$AbstractContainerMenu$getSlot(Object containerMenu, int slot) {
-        AbstractContainerMenu menu = (AbstractContainerMenu) containerMenu;
-        return menu.getSlot(slot);
+        return ((AbstractContainerMenu) containerMenu).getSlot(slot);
     }
 
     @Override
@@ -2048,17 +1153,6 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Slot$getItem(Object slot) {
         return ((Slot) slot).getItem();
-    }
-
-    @Override
-    public boolean method$Entity$canBeCollidedWith(Object entity) {
-        return ((Entity) entity).canBeCollidedWith();
-    }
-
-    @Override
-    public Object itemStackToCompoundTag(ItemStack itemStack) {
-        net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
-        return nmsStack.save(new CompoundTag());
     }
 
     @Override
@@ -2102,236 +1196,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean method$BlockStateBase$isTagKeyBlock(Object blockState, Object tag) {
-        return ((BlockState) blockState).is(((TagKey<net.minecraft.world.level.block.Block>) tag));
+    public String method$ResourceLocation$namespace(Object resourceLocation) {
+        return ((ResourceLocation) resourceLocation).getNamespace();
     }
 
     @Override
-    public Object method$TagKey$create(Object registry, Object location) {
-        return TagKey.create((ResourceKey<? extends Registry<Object>>) registry, (ResourceLocation) location);
-    }
-
-    @Override
-    public void method$Level$updateNeighborsAt(Object levelAccessor, Object blockPos, Object block) {
-        ((Level) levelAccessor).updateNeighborsAt((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block);
-    }
-
-    @Override
-    public boolean method$Block$canSupportRigidBlock(Object level, Object pos) {
-        return net.minecraft.world.level.block.Block.canSupportRigidBlock((Level) level, (BlockPos) pos);
-    }
-
-    @Override
-    public boolean method$Block$canSupportCenter(Object level, Object pos, Object direction) {
-        return net.minecraft.world.level.block.Block.canSupportCenter((Level) level, (BlockPos) pos, (Direction) direction);
-    }
-
-    @Override
-    public void method$Level$setBlocksDirty(Object level, Object blockPos, Object oldState, Object newState) {
-        ((Level) level).setBlocksDirty((BlockPos) blockPos, (BlockState) oldState, (BlockState) newState);
-    }
-
-    @Override
-    public void method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType) {
-        ((BlockBehaviour.BlockStateBase) blockState).isFaceSturdy((BlockGetter) level, (BlockPos) pos, (Direction) face, (SupportType) supportType);
-    }
-
-    @Override
-    public int method$BasePressurePlateBlock$getEntityCount(Object entityGetter, Object aabb, Class entityClass) {
-        return ((EntityGetter) entityGetter).getEntitiesOfClass(entityClass, (AABB) aabb, EntitySelector.NO_SPECTATORS.and(entity -> !entity.isIgnoringBlockTriggers())).size();
-    }
-
-    @Override
-    public Object method$AABB$move(Object aabb, Object pos) {
-        return ((AABB) aabb).move((BlockPos) pos);
-    }
-
-    @Override
-    public void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks, Object priority) {
-        LevelAccessor level = (LevelAccessor) levelAccessor;
-        level.scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
-    }
-
-    @Override
-    public boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean dropBlock, @Nullable Object entity, int recursionLeft) {
-        return ((LevelWriter) level).destroyBlock((BlockPos) pos, dropBlock, (Entity) entity, recursionLeft);
-    }
-
-    @Override
-    public boolean method$BlockStateBase$isAir(Object blockState) {
-        return ((BlockBehaviour.BlockStateBase) blockState).isAir();
-    }
-
-    @Override
-    public Object method$WorldlyContainerHolder$getContainer(Object block, Object state, Object level, Object pos) {
-        return ((WorldlyContainerHolder) block).getContainer((BlockState) state, (Level) level, (BlockPos) pos);
-    }
-
-    @Override
-    public boolean method$BlockStateBase$hasBlockEntity(Object blockState) {
-        return ((BlockState) blockState).hasBlockEntity();
-    }
-
-    @Override
-    public Object method$BlockGetter$getBlockEntity(Object blockGetter, Object blockPos) {
-        return ((BlockGetter) blockGetter).getBlockEntity((BlockPos) blockPos);
-    }
-
-    @Override
-    public Object method$ChestBlock$getContainer(Object chest, Object state, Object level, Object pos, boolean override) {
-        return ChestBlock.getContainer((ChestBlock) chest, (BlockState) state, (Level) level, (BlockPos) pos, override);
-    }
-
-    @Override
-    public Object method$EntityGetter$getEntities(Object entityGetter, @Nullable Object entity, Object area, Predicate<Object> predicate) {
-        return ((EntityGetter) entityGetter).getEntities(((Entity) entity), ((AABB) area), predicate);
-    }
-
-    @Override
-    public Object method$AABB$ofSize(Object center, double xSize, double ySize, double zSize) {
-        return AABB.ofSize((Vec3) center, xSize, ySize, zSize);
-    }
-
-    @Override
-    public Object method$BlockPos$getCenter(Object blockPos) {
-        return ((BlockPos) blockPos).getCenter();
-    }
-
-    @Override
-    public boolean method$Entity$isAlive(Object entity) {
-        return ((Entity) entity).isAlive();
-    }
-
-    @Override
-    public IntStream method$HopperBlockEntity$getSlots(Object container, Object direction) {
-        // 来自 23w13a_or_b 的 HopperBlockEntity.getSlots 方法
-        Container containerImpl = (Container) container;
-        Direction directionImpl = (Direction) direction;
-        return containerImpl instanceof WorldlyContainer
-                ? IntStream.of(((WorldlyContainer)containerImpl).getSlotsForFace(directionImpl))
-                : IntStream.range(0, containerImpl.getContainerSize());
-    }
-
-    @Override
-    public Object method$Container$removeItem(Object container, int slot, int amount) {
-        return ((Container)container).removeItem(slot, amount);
-    }
-
-    @Override
-    public void method$Container$setChanged(Object container) {
-        ((Container)container).setChanged();
-    }
-
-    @Override
-    public void method$Container$setItem(Object container, int slot, Object stack) {
-        ((Container)container).setItem(slot, (net.minecraft.world.item.ItemStack)stack);
-    }
-
-    @Override
-    public Object method$EntityGetter$getEntitiesOfClass(Object entityGetter, Class entityClass, Object area, Predicate<Object> filter) {
-        return ((EntityGetter)entityGetter).getEntitiesOfClass(entityClass, ((AABB) area), filter);
-    }
-
-    @Override
-    public Object method$ItemEntity$getItem(Object itemEntity) {
-        return ((ItemEntity) itemEntity).getItem();
-    }
-
-    @Override
-    public void method$ItemStack$shrink(Object itemStack, int decrement) {
-        ((net.minecraft.world.item.ItemStack) itemStack).shrink(decrement);
-    }
-
-    @Override
-    public int method$ItemStack$getCount(Object itemStack) {
-        return ((net.minecraft.world.item.ItemStack) itemStack).getCount();
-    }
-
-    @Override
-    public void method$Entity$discard(Object entity) {
-        ((Entity) entity).discard();
-    }
-
-    @Override
-    public Object method$BlockItem$place(Object blockItem, Object context) {
-        return ((BlockItem) blockItem).place((BlockPlaceContext) context);
-    }
-
-    @Override
-    public Object constructor$PlaceBlockBlockPlaceContext(Object level, Object hand, Object itemStack, Object hitResult) {
-        return new PlaceBlockBlockPlaceContext((Level) level, (InteractionHand) hand, (net.minecraft.world.item.ItemStack) itemStack, (BlockHitResult) hitResult);
-    }
-
-    @Override
-    public boolean method$InteractionResult$consumesAction(Object interactionResult) {
-        return ((InteractionResult) interactionResult).consumesAction();
-    }
-
-    @Override
-    public Object constructor$BlockHitResult(Object location, Object direction, Object blockPos, boolean inside) {
-        return new BlockHitResult((Vec3) location, (Direction) direction, (BlockPos) blockPos, inside);
-    }
-
-    @Override
-    public float method$EntityType$getHeight(Object entityType) {
-        return ((EntityType<?>) entityType).getHeight();
-    }
-
-    @Override
-    public Object constructor$ItemEntity(Object level, double posX, double posY, double posZ, Object itemStack) {
-        return new ItemEntity((Level) level, posX, posY, posZ, (net.minecraft.world.item.ItemStack) itemStack);
-    }
-
-    @Override
-    public void method$ItemEntity$setDefaultPickUpDelay(Object itemEntity) {
-        ((ItemEntity) itemEntity).setDefaultPickUpDelay();
-    }
-
-    @Override
-    public Object method$BlockItem$getBlock(Object blockItem) {
-        return ((BlockItem) blockItem).getBlock();
-    }
-
-    @Override
-    public Map<String, Object> method$ServerboundClientInformationPacket$information(Object packet) {
-        Map<String, Object> map = new HashMap<>();
-        var packetImpl = (ServerboundClientInformationPacket) packet;
-        if (packetImpl == null) return map;
-        ClientInformation information = packetImpl.information();
-        map.put("language", information.language());
-        map.put("viewDistance", information.viewDistance());
-        map.put("chatVisibility", information.chatVisibility());
-        map.put("chatColors", information.chatColors());
-        map.put("modelCustomisation", information.modelCustomisation());
-        map.put("mainHand", information.mainHand());
-        map.put("textFilteringEnabled", information.textFilteringEnabled());
-        map.put("allowsListing", information.allowsListing());
-        return map;
-    }
-
-    @Override
-    public Object method$Connection$getPacketListener(Object connection) {
-        return ((Connection) connection).getPacketListener();
-    }
-
-    @Override
-    public Key method$DefaultedRegistry$getKey(Object registry, Object object) {
-        ResourceLocation resourceLocation = ((DefaultedRegistry) registry).getKey(object);
-        return Key.of(resourceLocation.getNamespace(), resourceLocation.getPath());
-    }
-
-    @Override
-    public Object[] method$Direction$orderedByNearest(Object entity) {
-        return Direction.orderedByNearest((Entity) entity);
-    }
-
-    @Override
-    public Object constructor$ClientboundDisconnectPacket(Object component) {
-        return new ClientboundDisconnectPacket((Component) component);
-    }
-
-    @Override
-    public Object field$ServerboundResourcePackPacket$action(Object packet) {
-        return ((ServerboundResourcePackPacket) packet).action();
+    public String method$ResourceLocation$path(Object resourceLocation) {
+        return ((ResourceLocation) resourceLocation).getPath();
     }
 }
