@@ -44,10 +44,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PositionMoveRotation;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -57,6 +54,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -1545,5 +1543,35 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$Level$destroyBlock(Object level, Object pos, boolean drop) {
         return ((Level) level).destroyBlock((BlockPos) pos, drop);
+    }
+
+    @Override
+    public Object method$itemStack$save(Object itemStack, Object compoundTag) {
+        return net.minecraft.world.item.ItemStack.CODEC.encodeStart(registryAccess().createSerializationContext(NbtOps.INSTANCE), (net.minecraft.world.item.ItemStack) itemStack).result().orElseThrow();
+    }
+
+    @Override
+    public Object method$ItemStack$getTag(Object itemStack) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Set method$CompoundTag$entrySet(Object compoundTag) {
+        Map<String, Tag> tags = new HashMap<>();
+        CompoundTag tag = (CompoundTag) compoundTag;
+        for (String key : tag.getAllKeys()) {
+            tags.put(key, tag.get(key));
+        }
+        return tags.entrySet();
+    }
+
+    @Override
+    public Object method$CompoundTag$merge(Object tag1, Object tag2) {
+        return ((CompoundTag) tag1).merge((CompoundTag) tag2);
+    }
+
+    @Override
+    public Object method$CompoundTag$copy(Object compoundTag) {
+        return ((CompoundTag) compoundTag).copy();
     }
 }

@@ -1549,4 +1549,34 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$Level$destroyBlock(Object level, Object pos, boolean drop) {
         return ((Level) level).destroyBlock((BlockPos) pos, drop);
     }
+
+    @Override
+    public Object method$itemStack$save(Object itemStack, Object compoundTag) {
+        return net.minecraft.world.item.ItemStack.CODEC.encodeStart(registryAccess().createSerializationContext(NbtOps.INSTANCE), (net.minecraft.world.item.ItemStack) itemStack).result().orElseThrow();
+    }
+
+    @Override
+    public Object method$ItemStack$getTag(Object itemStack) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Set method$CompoundTag$entrySet(Object compoundTag) {
+        Map<String, Tag> tags = new HashMap<>();
+        CompoundTag tag = (CompoundTag) compoundTag;
+        for (String key : tag.getAllKeys()) {
+            tags.put(key, tag.get(key));
+        }
+        return tags.entrySet();
+    }
+
+    @Override
+    public Object method$CompoundTag$merge(Object tag1, Object tag2) {
+        return ((CompoundTag) tag1).merge((CompoundTag) tag2);
+    }
+
+    @Override
+    public Object method$CompoundTag$copy(Object compoundTag) {
+        return ((CompoundTag) compoundTag).copy();
+    }
 }

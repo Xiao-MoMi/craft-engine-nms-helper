@@ -56,6 +56,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -69,6 +70,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
@@ -1734,5 +1736,30 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$Level$destroyBlock(Object level, Object pos, boolean drop) {
         return ((Level) level).destroyBlock((BlockPos) pos, drop);
+    }
+
+    @Override
+    public Object method$itemStack$save(Object itemStack, Object compoundTag) {
+        return net.minecraft.world.item.ItemStack.CODEC.encodeStart(registryAccess().createSerializationContext(NbtOps.INSTANCE), (net.minecraft.world.item.ItemStack) itemStack).result().orElseThrow();
+    }
+
+    @Override
+    public Object method$ItemStack$getTag(Object itemStack) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Set method$CompoundTag$entrySet(Object compoundTag) {
+        return ((CompoundTag) compoundTag).tags.entrySet();
+    }
+
+    @Override
+    public Object method$CompoundTag$merge(Object tag1, Object tag2) {
+        return ((CompoundTag) tag1).merge((CompoundTag) tag2);
+    }
+
+    @Override
+    public Object method$CompoundTag$copy(Object compoundTag) {
+        return ((CompoundTag) compoundTag).copy();
     }
 }

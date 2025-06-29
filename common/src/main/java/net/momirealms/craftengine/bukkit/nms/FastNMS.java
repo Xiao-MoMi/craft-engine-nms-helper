@@ -582,4 +582,14 @@ public abstract class FastNMS {
     public abstract BlockRedstoneEvent method$CraftEventFactory$callRedstoneChange(Object world, Object pos, int oldCurrent, int newCurrent);
 
     public abstract boolean method$Level$destroyBlock(Object level, Object pos, boolean drop);
+
+    public abstract Object method$itemStack$save(Object itemStack, Object compoundTag);
+
+    public abstract Object method$ItemStack$getTag(Object itemStack);
+
+    public abstract Set<Map.Entry> method$CompoundTag$entrySet(Object compoundTag);
+
+    public abstract Object method$CompoundTag$merge(Object tag1, Object tag2);
+
+    public abstract Object method$CompoundTag$copy(Object compoundTag);
 }
