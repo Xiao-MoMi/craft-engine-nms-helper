@@ -598,4 +598,6 @@ public abstract class FastNMS {
     public abstract Object field$ServerboundResourcePackPacket$action(Object packet);
 
     public abstract UUID field$ServerboundResourcePackPacket$id(Object packet);
+
+    public abstract Object method$Block$asItem(Object block);
 }

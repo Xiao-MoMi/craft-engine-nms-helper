@@ -1560,4 +1560,9 @@ public class FastNMSImpl extends FastNMS {
     public UUID field$ServerboundResourcePackPacket$id(Object packet) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public Object method$Block$asItem(Object block) {
+        return ((net.minecraft.world.level.block.Block) block).asItem();
+    }
 }

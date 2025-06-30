@@ -1775,4 +1775,9 @@ public class FastNMSImpl extends FastNMS {
     public UUID field$ServerboundResourcePackPacket$id(Object packet) {
         return ((ServerboundResourcePackPacket) packet).id();
     }
+
+    @Override
+    public Object method$Block$asItem(Object block) {
+        return ((net.minecraft.world.level.block.Block) block).asItem();
+    }
 }
