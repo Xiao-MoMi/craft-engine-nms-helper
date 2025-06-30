@@ -56,7 +56,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -70,7 +69,6 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
@@ -1761,5 +1759,20 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$CompoundTag$copy(Object compoundTag) {
         return ((CompoundTag) compoundTag).copy();
+    }
+
+    @Override
+    public void method$Player$startSleepInBed(Object player, Object pos, boolean force) {
+        ((net.minecraft.world.entity.player.Player) player).startSleepInBed((BlockPos) pos, force);
+    }
+
+    @Override
+    public Object field$ServerboundResourcePackPacket$action(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).action();
+    }
+
+    @Override
+    public UUID field$ServerboundResourcePackPacket$id(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).id();
     }
 }

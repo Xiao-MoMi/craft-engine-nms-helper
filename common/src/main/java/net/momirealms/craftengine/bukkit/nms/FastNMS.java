@@ -592,4 +592,10 @@ public abstract class FastNMS {
     public abstract Object method$CompoundTag$merge(Object tag1, Object tag2);
 
     public abstract Object method$CompoundTag$copy(Object compoundTag);
+
+    public abstract void method$Player$startSleepInBed(Object player, Object pos, boolean force);
+
+    public abstract Object field$ServerboundResourcePackPacket$action(Object packet);
+
+    public abstract UUID field$ServerboundResourcePackPacket$id(Object packet);
 }

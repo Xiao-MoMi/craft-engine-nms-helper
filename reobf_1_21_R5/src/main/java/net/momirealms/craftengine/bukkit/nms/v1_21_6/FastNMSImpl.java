@@ -64,7 +64,9 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -1576,5 +1578,20 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$CompoundTag$copy(Object compoundTag) {
         return ((CompoundTag) compoundTag).copy();
+    }
+
+    @Override
+    public void method$Player$startSleepInBed(Object player, Object pos, boolean force) {
+        ((net.minecraft.world.entity.player.Player) player).startSleepInBed((BlockPos) pos, force);
+    }
+
+    @Override
+    public Object field$ServerboundResourcePackPacket$action(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).action();
+    }
+
+    @Override
+    public UUID field$ServerboundResourcePackPacket$id(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).id();
     }
 }

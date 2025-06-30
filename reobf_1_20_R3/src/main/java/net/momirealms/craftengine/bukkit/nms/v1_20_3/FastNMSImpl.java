@@ -1560,4 +1560,19 @@ public class FastNMSImpl extends FastNMS {
     public Object method$CompoundTag$copy(Object compoundTag) {
         return ((CompoundTag) compoundTag).copy();
     }
+
+    @Override
+    public void method$Player$startSleepInBed(Object player, Object pos, boolean force) {
+        ((net.minecraft.world.entity.player.Player) player).startSleepInBed((BlockPos) pos, force);
+    }
+
+    @Override
+    public Object field$ServerboundResourcePackPacket$action(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).action();
+    }
+
+    @Override
+    public UUID field$ServerboundResourcePackPacket$id(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).id();
+    }
 }

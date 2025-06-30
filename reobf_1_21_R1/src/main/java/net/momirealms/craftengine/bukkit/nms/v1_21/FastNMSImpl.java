@@ -40,7 +40,6 @@ import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
@@ -1571,5 +1570,20 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$CompoundTag$copy(Object compoundTag) {
         return ((CompoundTag) compoundTag).copy();
+    }
+
+    @Override
+    public void method$Player$startSleepInBed(Object player, Object pos, boolean force) {
+        ((net.minecraft.world.entity.player.Player) player).startSleepInBed((BlockPos) pos, force);
+    }
+
+    @Override
+    public Object field$ServerboundResourcePackPacket$action(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).action();
+    }
+
+    @Override
+    public UUID field$ServerboundResourcePackPacket$id(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).id();
     }
 }

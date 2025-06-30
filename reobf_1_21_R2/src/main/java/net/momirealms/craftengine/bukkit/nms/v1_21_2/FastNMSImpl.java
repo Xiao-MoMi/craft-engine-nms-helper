@@ -44,7 +44,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -54,7 +57,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -1573,5 +1575,20 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$CompoundTag$copy(Object compoundTag) {
         return ((CompoundTag) compoundTag).copy();
+    }
+
+    @Override
+    public void method$Player$startSleepInBed(Object player, Object pos, boolean force) {
+        ((net.minecraft.world.entity.player.Player) player).startSleepInBed((BlockPos) pos, force);
+    }
+
+    @Override
+    public Object field$ServerboundResourcePackPacket$action(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).action();
+    }
+
+    @Override
+    public UUID field$ServerboundResourcePackPacket$id(Object packet) {
+        return ((ServerboundResourcePackPacket) packet).id();
     }
 }
