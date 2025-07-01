@@ -77,6 +77,7 @@ import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -1568,7 +1569,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$RegistryAccess$getOrThrow(Object registryAccess, Object resourceKey) {
+    public Object method$RegistryAccess$lookupOrThrow(Object registryAccess, Object resourceKey) {
         return ((RegistryAccess) registryAccess).lookupOrThrow((ResourceKey) resourceKey);
     }
 

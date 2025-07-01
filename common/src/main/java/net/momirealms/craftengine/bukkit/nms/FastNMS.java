@@ -601,7 +601,7 @@ public abstract class FastNMS {
 
     public abstract Object method$Block$asItem(Object block);
 
-    public abstract Object method$RegistryAccess$getOrThrow(Object registryAccess, Object resourceKey);
+    public abstract Object method$RegistryAccess$lookupOrThrow(Object registryAccess, Object resourceKey);
 
     public abstract int method$Registry$getId(Object registry, Object value);
 

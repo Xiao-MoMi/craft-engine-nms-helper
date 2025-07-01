@@ -1598,7 +1598,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$RegistryAccess$getOrThrow(Object registryAccess, Object resourceKey) {
+    public Object method$RegistryAccess$lookupOrThrow(Object registryAccess, Object resourceKey) {
         return ((RegistryAccess) registryAccess).lookupOrThrow((ResourceKey) resourceKey);
     }
 
