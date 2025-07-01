@@ -1606,4 +1606,14 @@ public class FastNMSImpl extends FastNMS {
     public int method$Registry$getId(Object registry, Object value) {
         return ((Registry) registry).getId(value);
     }
+
+    @Override
+    public Optional<Object> method$Registry$getHolderByResourceLocation(Object registry, Object resourceLocation) {
+        return ((Registry) registry).get((ResourceLocation) resourceLocation);
+    }
+
+    @Override
+    public Optional<Object> method$Registry$getHolderByResourceKey(Object registry, Object resourceKey) {
+        return ((Registry) registry).get((ResourceKey) resourceKey);
+    }
 }

@@ -604,4 +604,8 @@ public abstract class FastNMS {
     public abstract Object method$RegistryAccess$getOrThrow(Object registryAccess, Object resourceKey);
 
     public abstract int method$Registry$getId(Object registry, Object value);
+
+    public abstract Optional<Object> method$Registry$getHolderByResourceLocation(Object registry, Object resourceLocation);
+
+    public abstract Optional<Object> method$Registry$getHolderByResourceKey(Object registry, Object resourceKey);
 }
