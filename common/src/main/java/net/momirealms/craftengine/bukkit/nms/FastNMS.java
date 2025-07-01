@@ -600,4 +600,8 @@ public abstract class FastNMS {
     public abstract UUID field$ServerboundResourcePackPacket$id(Object packet);
 
     public abstract Object method$Block$asItem(Object block);
+
+    public abstract Object method$RegistryAccess$getOrThrow(Object registryAccess, Object resourceKey);
+
+    public abstract int method$Registry$getId(Object registry, Object value);
 }

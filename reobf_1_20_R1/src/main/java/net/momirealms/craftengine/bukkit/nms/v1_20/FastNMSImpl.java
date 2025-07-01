@@ -13,6 +13,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
 import net.minecraft.network.Connection;
 import net.minecraft.network.ConnectionProtocol;
@@ -1564,5 +1565,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Block$asItem(Object block) {
         return ((net.minecraft.world.level.block.Block) block).asItem();
+    }
+
+    @Override
+    public Object method$RegistryAccess$getOrThrow(Object registryAccess, Object resourceKey) {
+        return ((RegistryAccess) registryAccess).lookupOrThrow((ResourceKey) resourceKey);
+    }
+
+    @Override
+    public int method$Registry$getId(Object registry, Object value) {
+        return ((Registry) registry).getId(value);
     }
 }

@@ -1780,4 +1780,14 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Block$asItem(Object block) {
         return ((net.minecraft.world.level.block.Block) block).asItem();
     }
+
+    @Override
+    public Object method$RegistryAccess$getOrThrow(Object registryAccess, Object resourceKey) {
+        return ((RegistryAccess) registryAccess).lookupOrThrow((ResourceKey) resourceKey);
+    }
+
+    @Override
+    public int method$Registry$getId(Object registry, Object value) {
+        return ((Registry) registry).getId(value);
+    }
 }
