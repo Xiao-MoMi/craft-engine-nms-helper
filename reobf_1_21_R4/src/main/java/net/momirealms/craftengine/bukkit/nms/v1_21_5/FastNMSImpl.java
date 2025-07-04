@@ -1614,4 +1614,9 @@ public class FastNMSImpl extends FastNMS {
     public Optional<Object> method$Registry$getHolderByResourceKey(Object registry, Object resourceKey) {
         return ((Registry) registry).get((ResourceKey) resourceKey);
     }
+
+    @Override
+    public Optional<Object> getEntityById(int entityId, World world) {
+        return Optional.ofNullable(((CraftWorld) world).getHandle().moonrise$getEntityLookup().get(entityId));
+    }
 }
