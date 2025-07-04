@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_6;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
+import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
@@ -1621,7 +1622,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Object> getEntityById(int entityId, World world) {
-        return Optional.ofNullable(((CraftWorld) world).getHandle().moonrise$getEntityLookup().get(entityId));
+    public Object method$ServerLevel$getEntityLookup(Object serverLevel) {
+        return ((ServerLevel) serverLevel).moonrise$getEntityLookup();
+    }
+
+    @Override
+    public Object method$EntityLookup$get(Object entityLookup, int id) {
+        return ((EntityLookup) entityLookup).get(id);
     }
 }

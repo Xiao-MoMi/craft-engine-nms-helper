@@ -609,5 +609,7 @@ public abstract class FastNMS {
 
     public abstract Optional<Object> method$Registry$getHolderByResourceKey(Object registry, Object resourceKey);
 
-    public abstract Optional<Object> getEntityById(int entityId, World world);
+    public abstract Object method$ServerLevel$getEntityLookup(Object serverLevel);
+
+    public abstract Object method$EntityLookup$get(Object entityLookup, int id);
 }

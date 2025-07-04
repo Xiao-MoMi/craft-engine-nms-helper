@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -1603,7 +1604,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Object> getEntityById(int entityId, World world) {
-        return Optional.ofNullable(((CraftWorld) world).getHandle().getEntityLookup().get(entityId));
+    public Object method$ServerLevel$getEntityLookup(Object serverLevel) {
+        return ((ServerLevel) serverLevel).getEntityLookup();
+    }
+
+    @Override
+    public Object method$EntityLookup$get(Object entityLookup, int id) {
+        return ((EntityLookup) entityLookup).get(id);
     }
 }
