@@ -79,6 +79,7 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -1652,5 +1653,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ServerConfigurationPacketListenerImpl$returnToWorld(Object packetListener) {
         ((ServerConfigurationPacketListenerImpl) packetListener).returnToWorld();
+    }
+
+    @Override
+    public boolean method$BlockStateBase$isPathFindable(Object blockState, Object blockGetter, Object blockPos, Object type) {
+        return ((BlockState) blockState).isPathfindable((PathComputationType) type);
     }
 }

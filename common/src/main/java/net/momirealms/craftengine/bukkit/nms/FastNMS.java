@@ -623,4 +623,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ServerResourcePackInfo(UUID id, String url, String hash, boolean isRequired, @Nullable Object prompt);
 
     public abstract void method$ServerConfigurationPacketListenerImpl$returnToWorld(Object packetListener);
+
+    public abstract boolean method$BlockStateBase$isPathFindable(Object blockState, Object blockGetter, Object blockPos, Object type);
 }
