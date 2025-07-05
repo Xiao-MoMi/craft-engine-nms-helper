@@ -612,4 +612,6 @@ public abstract class FastNMS {
     public abstract Object method$ServerLevel$getEntityLookup(Object serverLevel);
 
     public abstract Object method$EntityLookup$get(Object entityLookup, int id);
+
+    public abstract boolean field$BlockBehavior$hasCollision(Object block);
 }

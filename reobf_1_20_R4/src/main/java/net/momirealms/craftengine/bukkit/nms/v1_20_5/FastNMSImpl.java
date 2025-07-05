@@ -1811,4 +1811,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$EntityLookup$get(Object entityLookup, int id) {
         return ((EntityLookup) entityLookup).get(id);
     }
+
+    @Override
+    public boolean field$BlockBehavior$hasCollision(Object block) {
+        return ((BlockBehaviour) block).hasCollision;
+    }
 }
