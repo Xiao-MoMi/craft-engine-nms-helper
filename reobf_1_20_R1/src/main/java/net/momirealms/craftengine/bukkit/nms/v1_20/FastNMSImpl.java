@@ -14,7 +14,6 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
 import net.minecraft.network.Connection;
 import net.minecraft.network.ConnectionProtocol;
@@ -78,7 +77,6 @@ import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -99,6 +97,7 @@ import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -1602,5 +1601,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean field$BlockBehavior$hasCollision(Object block) {
         return ((BlockBehaviour) block).hasCollision;
+    }
+
+    @Override
+    public Object method$Connection$getPacketListener(Object connection) {
+        return ((Connection) connection).getPacketListener();
+    }
+
+    @Override
+    public Object constructor$ServerResourcePackConfigurationTask(Object info) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$ServerResourcePackInfo(UUID id, String url, String hash, boolean isRequired, @Nullable Object prompt) {
+        return new MinecraftServer.ServerResourcePackInfo(url, hash, isRequired, (Component) prompt);
+    }
+
+    @Override
+    public void method$ServerConfigurationPacketListenerImpl$returnToWorld(Object packetListener) {
+        throw new UnsupportedVersionException();
     }
 }

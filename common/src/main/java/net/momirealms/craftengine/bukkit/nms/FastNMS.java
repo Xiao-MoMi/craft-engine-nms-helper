@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
@@ -614,4 +615,12 @@ public abstract class FastNMS {
     public abstract Object method$EntityLookup$get(Object entityLookup, int id);
 
     public abstract boolean field$BlockBehavior$hasCollision(Object block);
+
+    public abstract Object method$Connection$getPacketListener(Object connection);
+
+    public abstract Object constructor$ServerResourcePackConfigurationTask(Object info);
+
+    public abstract Object constructor$ServerResourcePackInfo(UUID id, String url, String hash, boolean isRequired, @Nullable Object prompt);
+
+    public abstract void method$ServerConfigurationPacketListenerImpl$returnToWorld(Object packetListener);
 }

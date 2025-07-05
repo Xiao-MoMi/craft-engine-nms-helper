@@ -32,8 +32,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.*;
+import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.network.ServerPlayerConnection;
+import net.minecraft.server.network.config.ServerResourcePackConfigurationTask;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
@@ -101,6 +103,7 @@ import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -1616,5 +1619,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean field$BlockBehavior$hasCollision(Object block) {
         return ((BlockBehaviour) block).hasCollision;
+    }
+
+    @Override
+    public Object method$Connection$getPacketListener(Object connection) {
+        return ((Connection) connection).getPacketListener();
+    }
+
+    @Override
+    public Object constructor$ServerResourcePackConfigurationTask(Object info) {
+        return new ServerResourcePackConfigurationTask((MinecraftServer.ServerResourcePackInfo) info);
+    }
+
+    @Override
+    public Object constructor$ServerResourcePackInfo(UUID id, String url, String hash, boolean isRequired, @Nullable Object prompt) {
+        return new MinecraftServer.ServerResourcePackInfo(url, hash, isRequired, (Component) prompt);
+    }
+
+    @Override
+    public void method$ServerConfigurationPacketListenerImpl$returnToWorld(Object packetListener) {
+        ((ServerConfigurationPacketListenerImpl) packetListener).returnToWorld();
     }
 }
