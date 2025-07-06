@@ -410,7 +410,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
+    public void method$LevelAccessor$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
         ((Level) level).levelEvent(eventId, (BlockPos) blockPos, stateId);
     }
 

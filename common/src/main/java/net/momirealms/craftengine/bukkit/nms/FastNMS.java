@@ -166,7 +166,7 @@ public abstract class FastNMS {
 
     public abstract void method$BlockStateBase$onPlace(Object blockState, Object world, Object blockPos, Object oldBlockState, boolean movedByPiston);
 
-    public abstract void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId);
+    public abstract void method$LevelAccessor$levelEvent(Object level, int eventId, Object blockPos, int stateId);
 
     public abstract Iterable<Object> method$ClientboundBundlePacket$subPackets(Object packet);
 

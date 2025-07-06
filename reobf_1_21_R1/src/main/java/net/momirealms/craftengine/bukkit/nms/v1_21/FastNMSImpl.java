@@ -402,8 +402,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$Level$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
-        ((Level) level).levelEvent(eventId, (BlockPos) blockPos, stateId);
+    public void method$LevelAccessor$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
+        ((LevelAccessor) level).levelEvent(eventId, (BlockPos) blockPos, stateId);
     }
 
     @Override
@@ -1665,7 +1665,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$Player$abilities(Object player) {
-        return ((ServerPlayer) player).getAbilities();
+        return ((net.minecraft.world.entity.player.Player) player).getAbilities();
     }
 
     @Override
