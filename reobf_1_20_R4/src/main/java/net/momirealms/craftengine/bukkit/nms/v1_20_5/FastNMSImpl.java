@@ -35,7 +35,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.*;
-import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.network.ServerPlayerConnection;
@@ -1845,11 +1844,6 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$BlockStateBase$isPathFindable(Object blockState, Object blockGetter, Object blockPos, Object type) {
         return ((BlockState) blockState).isPathfindable((PathComputationType) type);
-    }
-
-    @Override
-    public boolean method$Player$preventsBlockDrops(Object player) {
-        throw new UnsupportedVersionException();
     }
 
     @Override
