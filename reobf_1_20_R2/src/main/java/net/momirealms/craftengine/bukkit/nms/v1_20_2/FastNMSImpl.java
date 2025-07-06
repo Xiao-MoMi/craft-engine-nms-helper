@@ -45,6 +45,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
@@ -1650,5 +1651,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$LevelAccessor$levelEvent(Object level, Object entity, int eventId, Object blockPos, int stateId) {
         ((LevelAccessor) level).levelEvent((net.minecraft.world.entity.player.Player) entity, eventId, (BlockPos) blockPos, stateId);
+    }
+
+    @Override
+    public Object field$Player$abilities(Object player) {
+        return ((ServerPlayer) player).getAbilities();
+    }
+
+    @Override
+    public boolean field$Abilities$instabuild(Object abilities) {
+        return ((Abilities) abilities).instabuild;
     }
 }

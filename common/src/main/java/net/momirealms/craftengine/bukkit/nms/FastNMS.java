@@ -627,4 +627,8 @@ public abstract class FastNMS {
     public abstract boolean method$BlockStateBase$isPathFindable(Object blockState, Object blockGetter, Object blockPos, Object type);
 
     public abstract void method$LevelAccessor$levelEvent(Object level, Object entity, int eventId, Object blockPos, int stateId);
+
+    public abstract Object field$Player$abilities(Object player);
+
+    public abstract boolean field$Abilities$instabuild(Object abilities);
 }
