@@ -625,4 +625,8 @@ public abstract class FastNMS {
     public abstract void method$ServerConfigurationPacketListenerImpl$returnToWorld(Object packetListener);
 
     public abstract boolean method$BlockStateBase$isPathFindable(Object blockState, Object blockGetter, Object blockPos, Object type);
+
+    public abstract boolean method$Player$preventsBlockDrops(Object player);
+
+    public abstract void method$LevelAccessor$levelEvent(Object level, Object entity, int eventId, Object blockPos, int stateId);
 }

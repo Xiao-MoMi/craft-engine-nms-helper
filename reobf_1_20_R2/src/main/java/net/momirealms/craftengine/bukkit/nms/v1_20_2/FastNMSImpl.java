@@ -1646,4 +1646,14 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$BlockStateBase$isPathFindable(Object blockState, Object blockGetter, Object blockPos, Object type) {
         return ((BlockState) blockState).isPathfindable((BlockGetter) blockGetter, (BlockPos) blockPos, (PathComputationType) type);
     }
+
+    @Override
+    public boolean method$Player$preventsBlockDrops(Object player) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void method$LevelAccessor$levelEvent(Object level, Object entity, int eventId, Object blockPos, int stateId) {
+        ((LevelAccessor) level).levelEvent((net.minecraft.world.entity.player.Player) entity, eventId, (BlockPos) blockPos, stateId);
+    }
 }
