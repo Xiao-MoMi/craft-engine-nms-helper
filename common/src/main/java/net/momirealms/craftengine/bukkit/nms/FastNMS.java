@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms;
 
 import com.google.gson.JsonElement;
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
@@ -631,4 +632,6 @@ public abstract class FastNMS {
     public abstract Object field$Player$abilities(Object player);
 
     public abstract boolean field$Abilities$instabuild(Object abilities);
+
+    public abstract GameProfile field$ClientboundLoginFinishedPacket$gameProfile(Object packet);
 }

@@ -5,6 +5,7 @@ import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -34,6 +35,7 @@ import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;
 import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.login.ClientboundLoginFinishedPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -1679,5 +1681,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean field$Abilities$instabuild(Object abilities) {
         return ((Abilities) abilities).instabuild;
+    }
+
+    @Override
+    public GameProfile field$ClientboundLoginFinishedPacket$gameProfile(Object packet) {
+        return ((ClientboundLoginFinishedPacket) packet).gameProfile();
     }
 }
