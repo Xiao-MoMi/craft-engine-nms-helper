@@ -65,6 +65,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.equipment.trim.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -1686,5 +1687,20 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public GameProfile field$ClientboundLoginFinishedPacket$gameProfile(Object packet) {
         return ((ClientboundLoginFinishedPacket) packet).gameProfile();
+    }
+
+    @Override
+    public Optional method$TrimMaterials$getFromIngredient(Object itemStack) {
+        return TrimMaterials.getFromIngredient(registryAccess(), (net.minecraft.world.item.ItemStack) itemStack);
+    }
+
+    @Override
+    public Optional method$TrimPatterns$getFromTemplate(Object itemStack) {
+        return TrimPatterns.getFromTemplate(registryAccess(), (net.minecraft.world.item.ItemStack) itemStack);
+    }
+
+    @Override
+    public Object constructor$ArmorTrim(Object trimMaterial, Object trimPattern) {
+        return new ArmorTrim((Holder<TrimMaterial>) trimMaterial, (Holder<TrimPattern>) trimPattern);
     }
 }

@@ -634,4 +634,10 @@ public abstract class FastNMS {
     public abstract boolean field$Abilities$instabuild(Object abilities);
 
     public abstract GameProfile field$ClientboundLoginFinishedPacket$gameProfile(Object packet);
+
+    public abstract Optional method$TrimMaterials$getFromIngredient(Object itemStack);
+
+    public abstract Optional method$TrimPatterns$getFromTemplate(Object itemStack);
+
+    public abstract Object constructor$ArmorTrim(Object trimMaterial, Object trimPattern);
 }

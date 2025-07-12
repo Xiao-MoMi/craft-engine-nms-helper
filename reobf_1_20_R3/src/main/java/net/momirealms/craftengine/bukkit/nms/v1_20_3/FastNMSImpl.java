@@ -53,6 +53,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.armortrim.*;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -1667,5 +1668,20 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public GameProfile field$ClientboundLoginFinishedPacket$gameProfile(Object packet) {
         return ((ClientboundGameProfilePacket) packet).getGameProfile();
+    }
+
+    @Override
+    public Optional method$TrimMaterials$getFromIngredient(Object itemStack) {
+        return TrimMaterials.getFromIngredient(registryAccess(), (net.minecraft.world.item.ItemStack) itemStack);
+    }
+
+    @Override
+    public Optional method$TrimPatterns$getFromTemplate(Object itemStack) {
+        return TrimPatterns.getFromTemplate(registryAccess(), (net.minecraft.world.item.ItemStack) itemStack);
+    }
+
+    @Override
+    public Object constructor$ArmorTrim(Object trimMaterial, Object trimPattern) {
+        return new ArmorTrim((Holder<TrimMaterial>) trimMaterial, (Holder<TrimPattern>) trimPattern);
     }
 }
