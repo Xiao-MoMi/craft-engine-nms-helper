@@ -640,4 +640,6 @@ public abstract class FastNMS {
     public abstract Optional method$TrimPatterns$getFromTemplate(Object itemStack);
 
     public abstract Object constructor$ArmorTrim(Object trimMaterial, Object trimPattern);
+
+    public abstract Object method$CustomData$getUnsafe(Object customData);
 }

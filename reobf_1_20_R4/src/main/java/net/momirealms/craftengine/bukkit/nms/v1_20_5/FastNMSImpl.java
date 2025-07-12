@@ -1884,4 +1884,9 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ArmorTrim(Object trimMaterial, Object trimPattern) {
         return new ArmorTrim((Holder<TrimMaterial>) trimMaterial, (Holder<TrimPattern>) trimPattern);
     }
+
+    @Override
+    public Object method$CustomData$getUnsafe(Object customData) {
+        return ((CustomData) customData).getUnsafe();
+    }
 }
