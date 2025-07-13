@@ -644,4 +644,6 @@ public abstract class FastNMS {
     public abstract Object method$CustomData$getUnsafe(Object customData);
 
     public abstract boolean method$ServerLevel$setChunkForced(Object serverLevel, int chunkX, int chunkZ, boolean add);
+
+    public abstract boolean method$LevelReader$isClientSide(Object level);
 }

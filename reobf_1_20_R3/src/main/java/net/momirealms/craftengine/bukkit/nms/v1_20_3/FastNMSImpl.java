@@ -1694,4 +1694,9 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$ServerLevel$setChunkForced(Object serverLevel, int chunkX, int chunkZ, boolean add) {
         return ((ServerLevel) serverLevel).setChunkForced(chunkX, chunkZ, add);
     }
+
+    @Override
+    public boolean method$LevelReader$isClientSide(Object level) {
+        return ((LevelReader) level).isClientSide();
+    }
 }

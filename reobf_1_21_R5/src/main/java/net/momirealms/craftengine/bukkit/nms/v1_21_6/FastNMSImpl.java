@@ -1707,6 +1707,7 @@ public class FastNMSImpl extends FastNMS {
         return new ArmorTrim((Holder<TrimMaterial>) trimMaterial, (Holder<TrimPattern>) trimPattern);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public Object method$CustomData$getUnsafe(Object customData) {
         return ((CustomData) customData).getUnsafe();
@@ -1715,5 +1716,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$ServerLevel$setChunkForced(Object serverLevel, int chunkX, int chunkZ, boolean add) {
         return ((ServerLevel) serverLevel).setChunkForced(chunkX, chunkZ, add);
+    }
+
+    @Override
+    public boolean method$LevelReader$isClientSide(Object level) {
+        return ((LevelReader) level).isClientSide();
     }
 }

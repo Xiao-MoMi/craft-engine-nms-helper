@@ -1670,11 +1670,16 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$CustomData$getUnsafe(Object customData) {
-        throw new UnsupportedVersionException();BlockBehaviour
+        throw new UnsupportedVersionException();
     }
 
     @Override
     public boolean method$ServerLevel$setChunkForced(Object serverLevel, int chunkX, int chunkZ, boolean add) {
         return ((ServerLevel) serverLevel).setChunkForced(chunkX, chunkZ, add);
+    }
+
+    @Override
+    public boolean method$LevelReader$isClientSide(Object level) {
+        return ((LevelReader) level).isClientSide();
     }
 }
