@@ -642,4 +642,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ArmorTrim(Object trimMaterial, Object trimPattern);
 
     public abstract Object method$CustomData$getUnsafe(Object customData);
+
+    public abstract boolean method$ServerLevel$setChunkForced(Object serverLevel, int chunkX, int chunkZ, boolean add);
 }

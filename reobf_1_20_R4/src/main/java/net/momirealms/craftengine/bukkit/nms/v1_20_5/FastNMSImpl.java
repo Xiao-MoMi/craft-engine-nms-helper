@@ -1889,4 +1889,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$CustomData$getUnsafe(Object customData) {
         return ((CustomData) customData).getUnsafe();
     }
+
+    @Override
+    public boolean method$ServerLevel$setChunkForced(Object serverLevel, int chunkX, int chunkZ, boolean add) {
+        return ((ServerLevel) serverLevel).setChunkForced(chunkX, chunkZ, add);
+    }
 }
