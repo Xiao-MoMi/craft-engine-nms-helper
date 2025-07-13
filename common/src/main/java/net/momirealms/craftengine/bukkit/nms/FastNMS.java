@@ -427,9 +427,9 @@ public abstract class FastNMS {
 
     public abstract Object constructor$ItemStack(Object item, int count);
 
-    public abstract void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks);
+    public abstract void method$ScheduledTickAccess$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks);
 
-    public abstract void method$LevelAccessor$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks);
+    public abstract void method$ScheduledTickAccess$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks);
 
     public abstract void method$ItemStack$setTag(Object itemStack, Object compoundTag);
 
@@ -453,7 +453,7 @@ public abstract class FastNMS {
 
     public abstract boolean method$BlockStateBase$isSignalSource(Object blockState);
 
-    public abstract Object method$Level$getFluidState(Object level, Object blockPos);
+    public abstract Object method$BlockGetter$getFluidState(Object level, Object blockPos);
 
     public abstract Object method$FluidState$getType(Object fluidState);
 

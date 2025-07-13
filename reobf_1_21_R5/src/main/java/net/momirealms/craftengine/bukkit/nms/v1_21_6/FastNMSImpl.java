@@ -1141,8 +1141,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$LevelAccessor$scheduleBlockTick(Object levelAccessor, Object blockPos, Object block, int ticks) {
-        ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
+    public void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks) {
+        ((ScheduledTickAccess) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
     }
 
     @Override
@@ -1206,13 +1206,13 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$LevelAccessor$scheduleFluidTick(Object levelAccessor, Object blockPos, Object fluid, int ticks) {
-        ((LevelAccessor) levelAccessor).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
+    public void method$ScheduledTickAccess$scheduleFluidTick(Object level, Object blockPos, Object fluid, int ticks) {
+        ((ScheduledTickAccess) level).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
     }
 
     @Override
-    public Object method$Level$getFluidState(Object level, Object blockPos) {
-        return ((Level) level).getFluidState((BlockPos) blockPos);
+    public Object method$BlockGetter$getFluidState(Object level, Object blockPos) {
+        return ((BlockGetter) level).getFluidState((BlockPos) blockPos);
     }
 
     @Override
