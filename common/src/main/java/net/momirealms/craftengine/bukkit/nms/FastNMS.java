@@ -646,4 +646,6 @@ public abstract class FastNMS {
     public abstract boolean method$ServerLevel$setChunkForced(Object serverLevel, int chunkX, int chunkZ, boolean add);
 
     public abstract boolean method$LevelReader$isClientSide(Object level);
+
+    public abstract void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks, Object priority);
 }

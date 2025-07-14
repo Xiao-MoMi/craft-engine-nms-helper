@@ -84,6 +84,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
@@ -1698,5 +1699,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$LevelReader$isClientSide(Object level) {
         return ((LevelReader) level).isClientSide();
+    }
+
+    @Override
+    public void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks, Object priority) {
+        ((LevelAccessor) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
     }
 }
