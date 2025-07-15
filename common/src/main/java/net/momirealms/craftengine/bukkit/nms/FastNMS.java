@@ -1,9 +1,12 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import net.momirealms.craftengine.core.util.VersionHelper;
@@ -652,4 +655,14 @@ public abstract class FastNMS {
     public abstract Object method$StreamDecoder$decode(Object streamDecoder, Object buf);
 
     public abstract void method$StreamEncoder$encode(Object streamEncoder, Object buf, Object value);
+
+    public abstract boolean method$HashedStack$matches(Object hashedStack, Object itemStack, Object hashGenerator);
+
+    public abstract Object method$Player$getInventory(Object player);
+
+    public abstract Object method$Container$getItem(Object container, int slot);
+
+    public abstract Object method$HashedStack$create(Object itemStack, Object hashGenerator);
+
+    public abstract DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<HashCode> value);
 }

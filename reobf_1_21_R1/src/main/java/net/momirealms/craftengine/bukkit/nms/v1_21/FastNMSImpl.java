@@ -3,19 +3,19 @@ package net.momirealms.craftengine.bukkit.nms.v1_21;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
+import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.papermc.paper.util.DataSanitizationUtil;
 import net.minecraft.core.*;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
@@ -47,6 +47,7 @@ import net.minecraft.server.network.config.ServerResourcePackConfigurationTask;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
@@ -1728,5 +1729,30 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$StreamEncoder$encode(Object streamEncoder, Object buf, Object value) {
         ((StreamEncoder) streamEncoder).encode(buf, value);
+    }
+
+    @Override
+    public boolean method$HashedStack$matches(Object hashedStack, Object itemStack, Object hashGenerator) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$Player$getInventory(Object player) {
+        return ((net.minecraft.world.entity.player.Player) player).getInventory();
+    }
+
+    @Override
+    public Object method$Container$getItem(Object container, int slot) {
+        return ((Container) container).getItem(slot);
+    }
+
+    @Override
+    public Object method$HashedStack$create(Object itemStack, Object hashGenerator) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<HashCode> value) {
+        return ((TypedDataComponent) typedDataComponent).encodeValue(value);
     }
 }
