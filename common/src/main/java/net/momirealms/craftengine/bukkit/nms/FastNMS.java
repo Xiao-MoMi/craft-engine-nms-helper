@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
-import java.util.function.Function;
 
 @SuppressWarnings({"unused", "rawtypes"})
 public abstract class FastNMS {
@@ -664,6 +663,6 @@ public abstract class FastNMS {
 
     public abstract Object method$HashedStack$create(Object itemStack, Object hashGenerator);
 
-    public abstract Function<Object, Integer> createDecoratedHashOpsGenerator(DynamicOps<HashCode> value);
+    public abstract Object createDecoratedHashOpsGenerator(DynamicOps<HashCode> value);
 
 }

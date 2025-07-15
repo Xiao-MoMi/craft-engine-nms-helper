@@ -123,7 +123,6 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Function;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -1756,8 +1755,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Function<Object, Integer> createDecoratedHashOpsGenerator(DynamicOps<HashCode> value) {
-        return (typedDataComponent) -> ((TypedDataComponent<?>) typedDataComponent)
+    public Object createDecoratedHashOpsGenerator(DynamicOps<HashCode> value) {
+        return (HashedPatchMap.HashGenerator) (typedDataComponent) -> typedDataComponent
                 .encodeValue(value)
                 .getOrThrow((s -> new IllegalArgumentException("Failed to hash " + typedDataComponent + ": " + s)))
                 .asInt();

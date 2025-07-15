@@ -113,7 +113,6 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Function;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -1741,7 +1740,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Function<Object, Integer> createDecoratedHashOpsGenerator(DynamicOps<HashCode> value) {
+    public Object createDecoratedHashOpsGenerator(DynamicOps<HashCode> value) {
         throw new UnsupportedVersionException();
     }
 
