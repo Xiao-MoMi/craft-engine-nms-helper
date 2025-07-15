@@ -1,10 +1,10 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.function.Function;
 
 @SuppressWarnings({"unused", "rawtypes"})
 public abstract class FastNMS {
@@ -663,5 +664,6 @@ public abstract class FastNMS {
 
     public abstract Object method$HashedStack$create(Object itemStack, Object hashGenerator);
 
-    public abstract DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<?> value);
+    public abstract Function<Object, Integer> createDecoratedHashOpsGenerator(DynamicOps<HashCode> value);
+
 }

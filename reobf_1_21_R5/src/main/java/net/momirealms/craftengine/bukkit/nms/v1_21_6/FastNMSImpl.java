@@ -3,12 +3,12 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_6;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
+import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
@@ -127,6 +127,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -1760,7 +1761,10 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<?> value) {
-        return ((TypedDataComponent) typedDataComponent).encodeValue(value);
+    public Function<Object, Integer> createDecoratedHashOpsGenerator(DynamicOps<HashCode> value) {
+        return (typedDataComponent) -> ((TypedDataComponent<?>) typedDataComponent)
+                .encodeValue(value)
+                .getOrThrow((s -> new IllegalArgumentException("Failed to hash " + typedDataComponent + ": " + s)))
+                .asInt();
     }
 }

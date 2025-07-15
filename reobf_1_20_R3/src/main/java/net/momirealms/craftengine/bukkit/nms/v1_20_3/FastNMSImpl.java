@@ -1,11 +1,11 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_3;
 
 import com.google.common.collect.Lists;
+import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -114,6 +114,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -1739,7 +1740,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<?> value) {
+    public Function<Object, Integer> createDecoratedHashOpsGenerator(DynamicOps<HashCode> value) {
         throw new UnsupportedVersionException();
     }
+
 }
