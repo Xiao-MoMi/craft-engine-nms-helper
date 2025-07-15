@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.datafixers.DataFixUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
@@ -14,6 +15,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -22,13 +25,13 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
-import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.StreamDecoder;
+import net.minecraft.network.codec.StreamEncoder;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
@@ -63,6 +66,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
@@ -124,6 +128,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -1675,7 +1680,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$LevelAccessor$levelEvent(Object level, Object entity, int eventId, Object blockPos, int stateId) {
-        ((LevelAccessor) level).levelEvent((net.minecraft.world.entity.Entity) entity, eventId, (BlockPos) blockPos, stateId);
+        ((LevelAccessor) level).levelEvent((Entity) entity, eventId, (BlockPos) blockPos, stateId);
     }
 
     @Override
@@ -1727,5 +1732,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks, Object priority) {
         ((ScheduledTickAccess) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
+    }
+
+    @Override
+    public Object method$StreamDecoder$decode(Object streamDecoder, Object buf) {
+        return ((StreamDecoder) streamDecoder).decode(buf);
+    }
+
+    @Override
+    public void method$StreamEncoder$decode(Object streamEncoder, Object buf, Object value) {
+        ((StreamEncoder) streamEncoder).encode(buf, value);
     }
 }

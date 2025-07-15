@@ -648,4 +648,8 @@ public abstract class FastNMS {
     public abstract boolean method$LevelReader$isClientSide(Object level);
 
     public abstract void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks, Object priority);
+
+    public abstract Object method$StreamDecoder$decode(Object streamDecoder, Object buf);
+
+    public abstract void method$StreamEncoder$decode(Object streamEncoder, Object buf, Object value);
 }

@@ -1688,4 +1688,14 @@ public class FastNMSImpl extends FastNMS {
     public void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks, Object priority) {
         ((LevelAccessor) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
     }
+
+    @Override
+    public Object method$StreamDecoder$decode(Object streamDecoder, Object buf) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void method$StreamEncoder$decode(Object streamEncoder, Object buf, Object value) {
+        throw new UnsupportedVersionException();
+    }
 }

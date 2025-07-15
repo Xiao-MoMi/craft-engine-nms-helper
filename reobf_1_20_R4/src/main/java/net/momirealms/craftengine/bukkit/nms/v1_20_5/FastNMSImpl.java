@@ -24,6 +24,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.StreamDecoder;
+import net.minecraft.network.codec.StreamEncoder;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.*;
 import net.minecraft.network.protocol.cookie.CookiePacketTypes;
@@ -1905,5 +1907,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks, Object priority) {
         ((LevelAccessor) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
+    }
+
+    @Override
+    public Object method$StreamDecoder$decode(Object streamDecoder, Object buf) {
+        return ((StreamDecoder) streamDecoder).decode(buf);
+    }
+
+    @Override
+    public void method$StreamEncoder$decode(Object streamEncoder, Object buf, Object value) {
+        ((StreamEncoder) streamEncoder).encode(buf, value);
     }
 }
