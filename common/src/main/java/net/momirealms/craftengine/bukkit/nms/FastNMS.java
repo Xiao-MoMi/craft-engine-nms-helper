@@ -1,6 +1,5 @@
 package net.momirealms.craftengine.bukkit.nms;
 
-import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -664,5 +663,5 @@ public abstract class FastNMS {
 
     public abstract Object method$HashedStack$create(Object itemStack, Object hashGenerator);
 
-    public abstract DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<HashCode> value);
+    public abstract DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<?> value);
 }

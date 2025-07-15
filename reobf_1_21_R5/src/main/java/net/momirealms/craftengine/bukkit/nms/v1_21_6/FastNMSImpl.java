@@ -3,7 +3,6 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_6;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
-import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
@@ -1761,7 +1760,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<HashCode> value) {
+    public DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<?> value) {
         return ((TypedDataComponent) typedDataComponent).encodeValue(value);
     }
 }

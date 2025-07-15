@@ -1,7 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_5;
 
 import com.google.common.collect.Lists;
-import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -1940,7 +1939,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<HashCode> value) {
+    public DataResult<Object> method$TypedDataComponent$encodeValue(Object typedDataComponent, DynamicOps<?> value) {
         return ((TypedDataComponent) typedDataComponent).encodeValue(value);
     }
 }
