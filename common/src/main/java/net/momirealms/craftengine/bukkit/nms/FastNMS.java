@@ -651,5 +651,5 @@ public abstract class FastNMS {
 
     public abstract Object method$StreamDecoder$decode(Object streamDecoder, Object buf);
 
-    public abstract void method$StreamEncoder$decode(Object streamEncoder, Object buf, Object value);
+    public abstract void method$StreamEncoder$encode(Object streamEncoder, Object buf, Object value);
 }

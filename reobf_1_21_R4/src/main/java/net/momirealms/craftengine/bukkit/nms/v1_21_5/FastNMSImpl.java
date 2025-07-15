@@ -1732,7 +1732,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$StreamEncoder$decode(Object streamEncoder, Object buf, Object value) {
+    public void method$StreamEncoder$encode(Object streamEncoder, Object buf, Object value) {
         ((StreamEncoder) streamEncoder).encode(buf, value);
     }
 }
