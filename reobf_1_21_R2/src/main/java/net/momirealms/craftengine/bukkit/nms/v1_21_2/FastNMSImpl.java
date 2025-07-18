@@ -74,7 +74,9 @@ import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -1758,6 +1760,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object createDecoratedHashOpsGenerator(DynamicOps<HashCode> value) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$StateHolder$getValue(Object stateHolder, Object property) {
+        return ((StateHolder) stateHolder).getValue((Property) property);
     }
 
 }

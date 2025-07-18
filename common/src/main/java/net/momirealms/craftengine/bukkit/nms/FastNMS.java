@@ -665,4 +665,6 @@ public abstract class FastNMS {
 
     public abstract Object createDecoratedHashOpsGenerator(DynamicOps<HashCode> value);
 
+    public abstract Object method$StateHolder$getValue(Object stateHolder, Object property);
+
 }
