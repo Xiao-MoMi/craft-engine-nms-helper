@@ -117,6 +117,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftChunk;
 import org.bukkit.craftbukkit.CraftParticle;
+import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
@@ -1780,5 +1781,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Entity$getType(Object entity) {
         return ((Entity) entity).getType();
+    }
+
+    @Override
+    public void method$BlockableEventLoop$scheduleOnMain(Runnable runnable) {
+        MinecraftServer.getServer().scheduleOnMain(runnable);
+    }
+
+    @Override
+    public void method$Connection$handleDisconnection(Object connection) {
+        ((Connection) connection).handleDisconnection();
     }
 }

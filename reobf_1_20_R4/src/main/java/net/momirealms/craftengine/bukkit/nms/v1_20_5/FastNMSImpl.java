@@ -1957,4 +1957,14 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Entity$getType(Object entity) {
         return ((Entity) entity).getType();
     }
+
+    @Override
+    public void method$BlockableEventLoop$scheduleOnMain(Runnable runnable) {
+        MinecraftServer.getServer().scheduleOnMain(runnable);
+    }
+
+    @Override
+    public void method$Connection$handleDisconnection(Object connection) {
+        ((Connection) connection).handleDisconnection();
+    }
 }
