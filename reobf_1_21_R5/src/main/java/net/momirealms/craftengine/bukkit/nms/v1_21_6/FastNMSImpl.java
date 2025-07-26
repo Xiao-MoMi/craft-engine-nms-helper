@@ -14,6 +14,7 @@ import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
 import net.minecraft.core.*;
@@ -117,7 +118,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftChunk;
 import org.bukkit.craftbukkit.CraftParticle;
-import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
@@ -388,8 +388,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$Connection$send(Object connection, Object packet) {
-        ((Connection) connection).send((Packet<?>) packet);
+    public void method$Connection$send(Object connection, Object packet, @Nullable Object sendListener) {
+        ((Connection) connection).send((Packet<?>) packet, ((ChannelFutureListener) sendListener));
     }
 
     @Override
@@ -1791,5 +1791,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$Connection$handleDisconnection(Object connection) {
         ((Connection) connection).handleDisconnection();
+    }
+
+    @Override
+    public Object method$PacketSendListener$thenRun(Runnable runnable) {
+        return PacketSendListener.thenRun(runnable);
+    }
+
+    @Override
+    public void method$Connection$disconnect(Object connection, Object disconnectReason) {
+        ((Connection) connection).disconnect((Component) disconnectReason);
     }
 }

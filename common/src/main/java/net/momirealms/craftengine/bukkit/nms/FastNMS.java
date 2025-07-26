@@ -153,7 +153,7 @@ public abstract class FastNMS {
 
     public abstract void method$ServerChunkCache$blockChanged(Object chunkCache, Object blockPos);
 
-    public abstract void method$Connection$send(Object connection, Object packet);
+    public abstract void method$Connection$send(Object connection, Object packet, Object sendListener);
 
     public abstract List<Object> method$ChunkHolder$getPlayers(Object chunkHolder);
 
@@ -672,4 +672,8 @@ public abstract class FastNMS {
     public abstract void method$BlockableEventLoop$scheduleOnMain(Runnable runnable);
 
     public abstract void method$Connection$handleDisconnection(Object connection);
+
+    public abstract Object method$PacketSendListener$thenRun(Runnable runnable);
+
+    public abstract void method$Connection$disconnect(Object connection, Object disconnectReason);
 }

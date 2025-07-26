@@ -383,8 +383,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$Connection$send(Object connection, Object packet) {
-        ((Connection) connection).send((Packet<?>) packet);
+    public void method$Connection$send(Object connection, Object packet, Object sendListener) {
+        ((Connection) connection).send((Packet<?>) packet, ((PacketSendListener) sendListener));
     }
 
     @Override
@@ -1675,7 +1675,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$LevelAccessor$levelEvent(Object level, Object entity, int eventId, Object blockPos, int stateId) {
-        ((LevelAccessor) level).levelEvent((net.minecraft.world.entity.Entity) entity, eventId, (BlockPos) blockPos, stateId);
+        ((LevelAccessor) level).levelEvent((Entity) entity, eventId, (BlockPos) blockPos, stateId);
     }
 
     @Override
@@ -1785,5 +1785,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$Connection$handleDisconnection(Object connection) {
         ((Connection) connection).handleDisconnection();
+    }
+
+    @Override
+    public Object method$PacketSendListener$thenRun(Runnable runnable) {
+        return PacketSendListener.thenRun(runnable);
+    }
+
+    @Override
+    public void method$Connection$disconnect(Object connection, Object disconnectReason) {
+        ((Connection) connection).disconnect((Component) disconnectReason);
     }
 }

@@ -21,6 +21,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.network.Connection;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.PacketSendListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
@@ -375,8 +376,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$Connection$send(Object connection, Object packet) {
-        ((Connection) connection).send((Packet<?>) packet);
+    public void method$Connection$send(Object connection, Object packet, Object sendListener) {
+        ((Connection) connection).send((Packet<?>) packet, ((PacketSendListener) sendListener));
     }
 
     @Override
@@ -1764,5 +1765,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$Connection$handleDisconnection(Object connection) {
         ((Connection) connection).handleDisconnection();
+    }
+
+    @Override
+    public Object method$PacketSendListener$thenRun(Runnable runnable) {
+        return PacketSendListener.thenRun(runnable);
+    }
+
+    @Override
+    public void method$Connection$disconnect(Object connection, Object disconnectReason) {
+        ((Connection) connection).disconnect((Component) disconnectReason);
     }
 }
