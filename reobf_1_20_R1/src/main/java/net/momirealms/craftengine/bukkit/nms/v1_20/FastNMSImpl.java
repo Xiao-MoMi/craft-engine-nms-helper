@@ -1733,4 +1733,8 @@ public class FastNMSImpl extends FastNMS {
         return ((StateHolder) stateHolder).getValue((Property) property);
     }
 
+    @Override
+    public Object method$Entity$getType(Object entity) {
+        return ((Entity) entity).getType();
+    }
 }

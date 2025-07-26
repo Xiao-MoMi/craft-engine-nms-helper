@@ -17,7 +17,10 @@ import io.netty.channel.Channel;
 import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
 import net.minecraft.core.*;
-import net.minecraft.core.component.*;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
@@ -1772,5 +1775,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$StateHolder$getValue(Object stateHolder, Object property) {
         return ((StateHolder) stateHolder).getValue((Property) property);
+    }
+
+    @Override
+    public Object method$Entity$getType(Object entity) {
+        return ((Entity) entity).getType();
     }
 }

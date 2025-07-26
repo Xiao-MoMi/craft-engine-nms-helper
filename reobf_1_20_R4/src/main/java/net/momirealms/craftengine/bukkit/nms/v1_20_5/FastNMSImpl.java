@@ -14,7 +14,10 @@ import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.util.DataSanitizationUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.core.*;
-import net.minecraft.core.component.*;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
@@ -1950,4 +1953,8 @@ public class FastNMSImpl extends FastNMS {
         return ((StateHolder) stateHolder).getValue((Property) property);
     }
 
+    @Override
+    public Object method$Entity$getType(Object entity) {
+        return ((Entity) entity).getType();
+    }
 }
