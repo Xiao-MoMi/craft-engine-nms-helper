@@ -676,4 +676,6 @@ public abstract class FastNMS {
     public abstract Object method$PacketSendListener$thenRun(Runnable runnable);
 
     public abstract void method$Connection$disconnect(Object connection, Object disconnectReason);
+
+    public abstract boolean method$ItemStack$is(Object itemStack, Object tag);
 }

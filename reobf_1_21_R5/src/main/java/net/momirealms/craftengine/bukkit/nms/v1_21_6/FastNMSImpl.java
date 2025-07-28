@@ -1802,4 +1802,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$Connection$disconnect(Object connection, Object disconnectReason) {
         ((Connection) connection).disconnect((Component) disconnectReason);
     }
+
+    @Override
+    public boolean method$ItemStack$is(Object itemStack, Object tag) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).is((TagKey<Item>) tag);
+    }
 }

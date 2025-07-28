@@ -55,6 +55,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.armortrim.*;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -1775,5 +1776,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$Connection$disconnect(Object connection, Object disconnectReason) {
         ((Connection) connection).disconnect((Component) disconnectReason);
+    }
+
+    @Override
+    public boolean method$ItemStack$is(Object itemStack, Object tag) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).is((TagKey<Item>) tag);
     }
 }
