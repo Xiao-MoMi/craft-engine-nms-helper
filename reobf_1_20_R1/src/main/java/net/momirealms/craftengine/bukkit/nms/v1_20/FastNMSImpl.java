@@ -47,15 +47,13 @@ import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.armortrim.*;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
@@ -1793,5 +1791,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$CraftingContainer$setCurrentRecipe(Object container, Object recipe) {
         ((CraftingContainer) container).setCurrentRecipe((CraftingRecipe) recipe);
+    }
+
+    @Override
+    public Object method$CraftInventoryCrafting$getResultInventory(CraftingInventory inventory) {
+        return ((CraftInventoryCrafting) inventory).getResultInventory();
+    }
+
+    @Override
+    public void method$ResultContainer$setRecipeUsed(Object container, Object recipe) {
+        ((ResultContainer) container).setRecipeUsed((Recipe<?>) recipe);
     }
 }
