@@ -48,12 +48,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.armortrim.*;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
@@ -104,11 +106,13 @@ import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftInventoryCrafting;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_20_R1.util.CraftNamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
@@ -1779,5 +1783,15 @@ public class FastNMSImpl extends FastNMS {
         int g = (int) (rgb[1] * 255.0F);
         int b = (int) (rgb[2] * 255.0F);
         return 0 << 24 | r << 16 | g << 8 | b;
+    }
+
+    @Override
+    public Object method$CraftInventoryCrafting$getMatrixInventory(CraftingInventory inventory) {
+        return ((CraftInventoryCrafting) inventory).getMatrixInventory();
+    }
+
+    @Override
+    public void method$CraftingContainer$setCurrentRecipe(Object container, Object recipe) {
+        ((CraftingContainer) container).setCurrentRecipe((CraftingRecipe) recipe);
     }
 }

@@ -54,12 +54,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.armortrim.*;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -112,10 +114,12 @@ import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntityType;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryCrafting;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
@@ -1796,5 +1800,15 @@ public class FastNMSImpl extends FastNMS {
         int g = (int) (rgb[1] * 255.0F);
         int b = (int) (rgb[2] * 255.0F);
         return 0 << 24 | r << 16 | g << 8 | b;
+    }
+
+    @Override
+    public Object method$CraftInventoryCrafting$getMatrixInventory(CraftingInventory inventory) {
+        return ((CraftInventoryCrafting) inventory).getMatrixInventory();
+    }
+
+    @Override
+    public void method$CraftingContainer$setCurrentRecipe(Object container, Object recipe) {
+        ((CraftingContainer) container).setCurrentRecipe((RecipeHolder<CraftingRecipe>) recipe);
     }
 }

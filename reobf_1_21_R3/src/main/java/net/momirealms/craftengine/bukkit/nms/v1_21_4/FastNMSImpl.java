@@ -66,6 +66,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
@@ -122,10 +123,12 @@ import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
+import org.bukkit.craftbukkit.inventory.CraftInventoryCrafting;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
@@ -1814,5 +1817,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public int method$DyeColor$getTextureDiffuseColor(Object dyeColor) {
         return ((DyeColor) dyeColor).getTextureDiffuseColor();
+    }
+
+    @Override
+    public Object method$CraftInventoryCrafting$getMatrixInventory(CraftingInventory inventory) {
+        return ((CraftInventoryCrafting) inventory).getMatrixInventory();
+    }
+
+    @Override
+    public void method$CraftingContainer$setCurrentRecipe(Object container, Object recipe) {
+        ((CraftingContainer) container).setCurrentRecipe((RecipeHolder<CraftingRecipe>) recipe);
     }
 }

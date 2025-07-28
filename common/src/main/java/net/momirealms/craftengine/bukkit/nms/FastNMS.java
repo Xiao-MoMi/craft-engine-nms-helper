@@ -17,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -682,4 +683,8 @@ public abstract class FastNMS {
     public abstract Object method$DyeItem$getDyeColor(Object dyeItem);
 
     public abstract int method$DyeColor$getTextureDiffuseColor(Object dyeColor);
+
+    public abstract Object method$CraftInventoryCrafting$getMatrixInventory(CraftingInventory inventory);
+
+    public abstract void method$CraftingContainer$setCurrentRecipe(Object container, Object recipe);
 }
