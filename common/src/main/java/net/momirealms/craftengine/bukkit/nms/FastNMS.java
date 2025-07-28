@@ -678,4 +678,8 @@ public abstract class FastNMS {
     public abstract void method$Connection$disconnect(Object connection, Object disconnectReason);
 
     public abstract boolean method$ItemStack$is(Object itemStack, Object tag);
+
+    public abstract Object method$DyeItem$getDyeColor(Object dyeItem);
+
+    public abstract int method$DyeColor$getTextureDiffuseColor(Object dyeColor);
 }

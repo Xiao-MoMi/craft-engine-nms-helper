@@ -50,6 +50,8 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.armortrim.*;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -1763,5 +1765,19 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$ItemStack$is(Object itemStack, Object tag) {
         return ((net.minecraft.world.item.ItemStack) itemStack).is((TagKey<Item>) tag);
+    }
+
+    @Override
+    public Object method$DyeItem$getDyeColor(Object dyeItem) {
+        return ((DyeItem) dyeItem).getDyeColor();
+    }
+
+    @Override
+    public int method$DyeColor$getTextureDiffuseColor(Object dyeColor) {
+        float[] rgb = ((DyeColor) dyeColor).getTextureDiffuseColors();
+        int r = (int) (rgb[0] * 255.0F);
+        int g = (int) (rgb[1] * 255.0F);
+        int b = (int) (rgb[2] * 255.0F);
+        return 0 << 24 | r << 16 | g << 8 | b;
     }
 }
