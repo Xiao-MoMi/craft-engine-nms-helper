@@ -695,4 +695,8 @@ public abstract class FastNMS {
     public abstract void method$RecipeManager$addRecipe(Object recipeManager, Object recipeHolder);
 
     public abstract Object method$Ingredient$of(Object[] items);
+
+    public abstract void method$RecipeMap$removeRecipe(Object recipeMap, Object id);
+
+    public abstract void method$RecipeManager$removeRecipe(Object recipeManager, Object id);
 }

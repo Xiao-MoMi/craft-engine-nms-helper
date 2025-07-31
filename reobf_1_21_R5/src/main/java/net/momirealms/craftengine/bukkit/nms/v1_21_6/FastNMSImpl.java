@@ -1849,4 +1849,14 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Ingredient$of(Object[] items) {
         return Ingredient.of((ItemLike[]) items);
     }
+
+    @Override
+    public void method$RecipeMap$removeRecipe(Object recipeMap, Object id) {
+        ((RecipeMap) recipeMap).removeRecipe((ResourceKey) id);
+    }
+
+    @Override
+    public void method$RecipeManager$removeRecipe(Object recipeManager, Object id) {
+        ((RecipeManager) recipeManager).removeRecipe((ResourceKey) id);
+    }
 }

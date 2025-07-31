@@ -2027,4 +2027,14 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Ingredient$of(Object[] items) {
         return Ingredient.of((ItemLike[]) items);
     }
+
+    @Override
+    public void method$RecipeMap$removeRecipe(Object recipeMap, Object id) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void method$RecipeManager$removeRecipe(Object recipeManager, Object id) {
+        ((RecipeManager) recipeManager).removeRecipe((ResourceLocation) id);
+    }
 }
