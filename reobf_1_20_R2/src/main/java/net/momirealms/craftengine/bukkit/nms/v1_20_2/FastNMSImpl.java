@@ -57,10 +57,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.armortrim.*;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -1818,5 +1815,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ResultContainer$setRecipeUsed(Object container, Object recipe) {
         ((ResultContainer) container).setRecipeUsed((RecipeHolder<?>) recipe);
+    }
+
+    @Override
+    public void method$RecipeManager$addRecipe(Object recipeManager, Object recipeHolder) {
+        ((RecipeManager) recipeManager).addRecipe((RecipeHolder<?>) recipeHolder);
+    }
+
+    @Override
+    public Object method$Ingredient$of(Object[] items) {
+        return Ingredient.of((ItemLike[]) items);
     }
 }

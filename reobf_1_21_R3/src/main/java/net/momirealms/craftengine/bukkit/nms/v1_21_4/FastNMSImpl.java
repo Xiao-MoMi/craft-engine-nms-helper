@@ -1835,4 +1835,14 @@ public class FastNMSImpl extends FastNMS {
     public void method$ResultContainer$setRecipeUsed(Object container, Object recipe) {
         ((ResultContainer) container).setRecipeUsed((RecipeHolder<?>) recipe);
     }
+
+    @Override
+    public void method$RecipeManager$addRecipe(Object recipeManager, Object recipeHolder) {
+        ((RecipeManager) recipeManager).addRecipe((RecipeHolder<?>) recipeHolder);
+    }
+
+    @Override
+    public Object method$Ingredient$of(Object[] items) {
+        return Ingredient.of((ItemLike[]) items);
+    }
 }

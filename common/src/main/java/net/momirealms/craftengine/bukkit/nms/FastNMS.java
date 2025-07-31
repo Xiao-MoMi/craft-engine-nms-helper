@@ -691,4 +691,8 @@ public abstract class FastNMS {
     public abstract Object method$CraftInventoryCrafting$getResultInventory(CraftingInventory inventory);
 
     public abstract void method$ResultContainer$setRecipeUsed(Object container, Object recipe);
+
+    public abstract void method$RecipeManager$addRecipe(Object recipeManager, Object recipeHolder);
+
+    public abstract Object method$Ingredient$of(Object[] items);
 }
