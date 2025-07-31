@@ -699,4 +699,6 @@ public abstract class FastNMS {
     public abstract void method$RecipeMap$removeRecipe(Object recipeMap, Object id);
 
     public abstract void method$RecipeManager$removeRecipe(Object recipeManager, Object id);
+
+    public abstract Object constructor$RecipeHolder(Object id, Object recipe);
 }

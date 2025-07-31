@@ -1852,4 +1852,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$RecipeManager$removeRecipe(Object recipeManager, Object id) {
         ((RecipeManager) recipeManager).removeRecipe((ResourceKey) id);
     }
+
+    @Override
+    public Object constructor$RecipeHolder(Object id, Object recipe) {
+        return new RecipeHolder((ResourceKey<Recipe<?>>) id, (Recipe<?>) recipe);
+    }
 }
