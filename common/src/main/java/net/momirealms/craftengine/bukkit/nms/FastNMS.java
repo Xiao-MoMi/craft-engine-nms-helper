@@ -701,4 +701,12 @@ public abstract class FastNMS {
     public abstract void method$RecipeManager$removeRecipe(Object recipeManager, Object id);
 
     public abstract Object constructor$RecipeHolder(Object id, Object recipe);
+
+    public abstract int method$CraftingInput$ingredientCount(Object input);
+
+    public abstract int method$CraftingInput$size(Object input);
+
+    public abstract Object method$CraftingInput$getItem(Object input, int index);
+
+    public abstract int method$Container$getContainerSize(Object container);
 }

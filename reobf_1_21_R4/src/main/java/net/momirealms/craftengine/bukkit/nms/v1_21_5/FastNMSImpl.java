@@ -1858,4 +1858,24 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$RecipeHolder(Object id, Object recipe) {
         return new RecipeHolder((ResourceKey<Recipe<?>>) id, (Recipe<?>) recipe);
     }
+
+    @Override
+    public int method$CraftingInput$ingredientCount(Object input) {
+        return ((CraftingInput) input).ingredientCount();
+    }
+
+    @Override
+    public int method$CraftingInput$size(Object input) {
+        return ((CraftingInput) input).size();
+    }
+
+    @Override
+    public Object method$CraftingInput$getItem(Object input, int index) {
+        return ((CraftingInput) input).getItem(index);
+    }
+
+    @Override
+    public int method$Container$getContainerSize(Object container) {
+        return ((Container) container).getContainerSize();
+    }
 }

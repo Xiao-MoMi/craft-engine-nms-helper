@@ -91,6 +91,7 @@ import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
+import net.momirealms.craftengine.core.item.recipe.input.CraftingInput;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -1840,5 +1841,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$RecipeHolder(Object id, Object recipe) {
         return new RecipeHolder((ResourceLocation) id, (Recipe<?>) recipe);
+    }
+
+    @Override
+    public int method$CraftingInput$ingredientCount(Object input) {
+        return ((CraftingInput) input).ingredientCount();
+    }
+
+    @Override
+    public int method$CraftingInput$size(Object input) {
+        return ((CraftingInput) input).size();
+    }
+
+    @Override
+    public Object method$CraftingInput$getItem(Object input, int index) {
+        return ((CraftingInput) input).getItem(index);
+    }
+
+    @Override
+    public int method$Container$getContainerSize(Object container) {
+        return ((Container) container).getContainerSize();
     }
 }
