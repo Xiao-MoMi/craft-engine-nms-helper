@@ -1849,4 +1849,9 @@ public class FastNMSImpl extends FastNMS {
     public boolean method$Item$canBeDepleted(Object item) {
         return ((Item) item).canBeDepleted();
     }
+
+    @Override
+    public int method$DyeColor$getFireworkColor(Object dyeColor) {
+        return ((DyeColor) dyeColor).getFireworkColor();
+    }
 }

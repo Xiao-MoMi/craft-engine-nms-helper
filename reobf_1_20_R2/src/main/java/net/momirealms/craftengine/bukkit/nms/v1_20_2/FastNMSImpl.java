@@ -91,7 +91,6 @@ import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
-import net.momirealms.craftengine.core.item.recipe.input.CraftingInput;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -1866,5 +1865,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$Item$canBeDepleted(Object item) {
         return ((Item) item).canBeDepleted();
+    }
+
+    @Override
+    public int method$DyeColor$getFireworkColor(Object dyeColor) {
+        return ((DyeColor) dyeColor).getFireworkColor();
     }
 }

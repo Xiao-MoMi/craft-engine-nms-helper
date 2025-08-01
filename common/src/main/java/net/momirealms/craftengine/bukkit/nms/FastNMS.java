@@ -711,4 +711,6 @@ public abstract class FastNMS {
     public abstract int method$Container$getContainerSize(Object container);
 
     public abstract boolean method$Item$canBeDepleted(Object item);
+
+    public abstract int method$DyeColor$getFireworkColor(Object dyeColor);
 }
