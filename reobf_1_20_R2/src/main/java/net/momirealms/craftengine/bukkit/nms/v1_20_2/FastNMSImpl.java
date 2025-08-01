@@ -1845,21 +1845,26 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int method$CraftingInput$ingredientCount(Object input) {
-        return ((CraftingInput) input).ingredientCount();
+        throw new UnsupportedVersionException();
     }
 
     @Override
     public int method$CraftingInput$size(Object input) {
-        return ((CraftingInput) input).size();
+        throw new UnsupportedVersionException();
     }
 
     @Override
     public Object method$CraftingInput$getItem(Object input, int index) {
-        return ((CraftingInput) input).getItem(index);
+        throw new UnsupportedVersionException();
     }
 
     @Override
     public int method$Container$getContainerSize(Object container) {
         return ((Container) container).getContainerSize();
+    }
+
+    @Override
+    public boolean method$Item$canBeDepleted(Object item) {
+        return ((Item) item).canBeDepleted();
     }
 }

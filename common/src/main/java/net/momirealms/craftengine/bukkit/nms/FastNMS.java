@@ -709,4 +709,6 @@ public abstract class FastNMS {
     public abstract Object method$CraftingInput$getItem(Object input, int index);
 
     public abstract int method$Container$getContainerSize(Object container);
+
+    public abstract boolean method$Item$canBeDepleted(Object item);
 }

@@ -1884,4 +1884,9 @@ public class FastNMSImpl extends FastNMS {
     public int method$Container$getContainerSize(Object container) {
         return ((Container) container).getContainerSize();
     }
+
+    @Override
+    public boolean method$Item$canBeDepleted(Object item) {
+        throw new UnsupportedVersionException();
+    }
 }
