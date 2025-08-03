@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -65,6 +66,24 @@ public abstract class FastNMS {
 
     public abstract CollisionEntity createCollisionInteraction(Object world, Object aabb,
                                                                double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding);
+
+    public abstract Object createShapedRecipe(CustomShapedRecipe<ItemStack> recipe);
+
+    public abstract Object createShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe);
+
+    public abstract Object createSmokingRecipe(CustomSmokingRecipe<ItemStack> recipe);
+
+    public abstract Object createSmeltingRecipe(CustomSmeltingRecipe<ItemStack> recipe);
+
+    public abstract Object createBlastingRecipe(CustomBlastingRecipe<ItemStack> recipe);
+
+    public abstract Object createCampfireRecipe(CustomCampfireRecipe<ItemStack> recipe);
+
+    public abstract Object createStonecuttingRecipe(CustomStoneCuttingRecipe<ItemStack> recipe);
+
+    public abstract Object createSmithingTransformRecipe(CustomSmithingTransformRecipe<ItemStack> recipe);
+
+    public abstract Object createSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe);
 
     public abstract Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState);
 

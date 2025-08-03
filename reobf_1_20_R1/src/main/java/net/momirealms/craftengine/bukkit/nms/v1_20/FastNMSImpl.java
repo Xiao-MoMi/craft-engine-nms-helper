@@ -53,6 +53,10 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.armortrim.*;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -92,6 +96,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -145,6 +150,51 @@ public class FastNMSImpl extends FastNMS {
     public CollisionEntity createCollisionInteraction(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding) {
         if (canCollide) return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
         else return new NonCollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+    }
+
+    @Override
+    public Object createShapedRecipe(CustomShapedRecipe<ItemStack> recipe) {
+        return null;
+    }
+
+    @Override
+    public Object createShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe) {
+        return null;
+    }
+
+    @Override
+    public Object createSmokingRecipe(CustomSmokingRecipe<ItemStack> recipe) {
+        return null;
+    }
+
+    @Override
+    public Object createSmeltingRecipe(CustomSmeltingRecipe<ItemStack> recipe) {
+        return null;
+    }
+
+    @Override
+    public Object createBlastingRecipe(CustomBlastingRecipe<ItemStack> recipe) {
+        return null;
+    }
+
+    @Override
+    public Object createCampfireRecipe(CustomCampfireRecipe<ItemStack> recipe) {
+        return null;
+    }
+
+    @Override
+    public Object createStonecuttingRecipe(CustomStoneCuttingRecipe<ItemStack> recipe) {
+        return null;
+    }
+
+    @Override
+    public Object createSmithingTransformRecipe(CustomSmithingTransformRecipe<ItemStack> recipe) {
+        return null;
+    }
+
+    @Override
+    public Object createSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe) {
+        return null;
     }
 
     @Override
