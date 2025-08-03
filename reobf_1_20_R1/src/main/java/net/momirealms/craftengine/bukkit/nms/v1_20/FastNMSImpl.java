@@ -96,6 +96,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_20.recipe.*;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
@@ -154,47 +155,47 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createShapedRecipe(CustomShapedRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedShapedRecipe.of(recipe);
     }
 
     @Override
     public Object createShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedShapelessRecipe.of(recipe);
     }
 
     @Override
     public Object createSmokingRecipe(CustomSmokingRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedSmokingRecipe.of(recipe);
     }
 
     @Override
     public Object createSmeltingRecipe(CustomSmeltingRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedSmeltingRecipe.of(recipe);
     }
 
     @Override
     public Object createBlastingRecipe(CustomBlastingRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedBlastingRecipe.of(recipe);
     }
 
     @Override
     public Object createCampfireRecipe(CustomCampfireRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedCampfireCookingRecipe.of(recipe);
     }
 
     @Override
     public Object createStonecuttingRecipe(CustomStoneCuttingRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedStonecuttingRecipe.of(recipe);
     }
 
     @Override
     public Object createSmithingTransformRecipe(CustomSmithingTransformRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedSmithingTransformRecipe.of(recipe);
     }
 
     @Override
     public Object createSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe) {
-        return null;
+        return InjectedSmithingTrimRecipe.of(recipe);
     }
 
     @Override

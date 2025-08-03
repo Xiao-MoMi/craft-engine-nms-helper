@@ -2,7 +2,6 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_6.recipe;
 
 import com.google.common.collect.Maps;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
