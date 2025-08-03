@@ -732,4 +732,10 @@ public abstract class FastNMS {
     public abstract boolean method$Item$canBeDepleted(Object item);
 
     public abstract int method$DyeColor$getFireworkColor(Object dyeColor);
+
+    public abstract Object method$MinecraftServer$getRecipeManager(Object server);
+
+    public abstract Object field$RecipeManager$recipes(Object recipeManager);
+
+    public abstract Object method$MinecraftServer$getServer();
 }

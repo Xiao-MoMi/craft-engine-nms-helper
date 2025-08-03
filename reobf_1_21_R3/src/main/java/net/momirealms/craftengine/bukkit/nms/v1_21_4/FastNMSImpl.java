@@ -1946,4 +1946,19 @@ public class FastNMSImpl extends FastNMS {
     public int method$DyeColor$getFireworkColor(Object dyeColor) {
         return ((DyeColor) dyeColor).getFireworkColor();
     }
+
+    @Override
+    public Object method$MinecraftServer$getRecipeManager(Object server) {
+        return ((MinecraftServer) server).getRecipeManager();
+    }
+
+    @Override
+    public Object field$RecipeManager$recipes(Object recipeManager) {
+        return ((RecipeManager) recipeManager).recipes;
+    }
+
+    @Override
+    public Object method$MinecraftServer$getServer() {
+        return MinecraftServer.getServer();
+    }
 }

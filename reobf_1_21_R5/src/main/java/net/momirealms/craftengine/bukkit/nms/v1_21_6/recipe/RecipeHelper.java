@@ -3,6 +3,7 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_6.recipe;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CookingBookCategory;
@@ -46,10 +47,12 @@ public final class RecipeHelper {
     }
 
     public static CraftingBookCategory toMinecraft(CraftingRecipeCategory category) {
+        if (category == null) return null;
         return CraftingBookCategory.values()[category.ordinal()];
     }
 
     public static CookingBookCategory toMinecraft(CookingRecipeCategory category) {
+        if (category == null) return null;
         return CookingBookCategory.values()[category.ordinal()];
     }
 
