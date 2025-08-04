@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
@@ -738,4 +739,28 @@ public abstract class FastNMS {
     public abstract Object field$RecipeManager$recipes(Object recipeManager);
 
     public abstract Object method$MinecraftServer$getServer();
+
+    public abstract Object method$ActualItem$item(Object actualItem);
+
+    public abstract int method$ActualItem$count(Object actualItem);
+
+    public abstract Object method$ActualItem$components(Object actualItem);
+
+    public abstract Object constructor$InjectedHashedStack(Object item, int count, Object components, net.momirealms.craftengine.core.entity.player.Player player);
+
+    public abstract int field$ServerboundContainerClickPacket$containerId(Object packet);
+
+    public abstract int field$ServerboundContainerClickPacket$stateId(Object packet);
+
+    public abstract short field$ServerboundContainerClickPacket$slotNum(Object packet);
+
+    public abstract byte field$ServerboundContainerClickPacket$buttonNum(Object packet);
+
+    public abstract Object field$ServerboundContainerClickPacket$clickType(Object packet);
+
+    public abstract Int2ObjectMap field$ServerboundContainerClickPacket$changedSlots(Object packet);
+
+    public abstract Object field$ServerboundContainerClickPacket$carriedItem(Object packet);
+
+    public abstract Object constructor$ServerboundContainerClickPacket(int containerId, int stateId, short slotNum, byte buttonNum, Object clickType, Int2ObjectMap changedSlots, Object carriedItem);
 }

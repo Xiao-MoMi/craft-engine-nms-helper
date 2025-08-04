@@ -17,6 +17,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -118,6 +119,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_21_6.network.InjectedHashedStack;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.recipe.*;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.GsonHelper;
@@ -1965,5 +1967,65 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$MinecraftServer$getServer() {
         return MinecraftServer.getServer();
+    }
+
+    @Override
+    public Object method$ActualItem$item(Object actualItem) {
+        return ((HashedStack.ActualItem) actualItem).item();
+    }
+
+    @Override
+    public int method$ActualItem$count(Object actualItem) {
+        return ((HashedStack.ActualItem) actualItem).count();
+    }
+
+    @Override
+    public Object method$ActualItem$components(Object actualItem) {
+        return ((HashedStack.ActualItem) actualItem).components();
+    }
+
+    @Override
+    public Object constructor$InjectedHashedStack(Object item, int count, Object components, net.momirealms.craftengine.core.entity.player.Player player) {
+        return new InjectedHashedStack((Holder<Item>) item, count, (HashedPatchMap) components, player);
+    }
+
+    @Override
+    public int field$ServerboundContainerClickPacket$containerId(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).containerId();
+    }
+
+    @Override
+    public int field$ServerboundContainerClickPacket$stateId(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).stateId();
+    }
+
+    @Override
+    public short field$ServerboundContainerClickPacket$slotNum(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).slotNum();
+    }
+
+    @Override
+    public byte field$ServerboundContainerClickPacket$buttonNum(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).buttonNum();
+    }
+
+    @Override
+    public Object field$ServerboundContainerClickPacket$clickType(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).clickType();
+    }
+
+    @Override
+    public Int2ObjectMap field$ServerboundContainerClickPacket$changedSlots(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).changedSlots();
+    }
+
+    @Override
+    public Object field$ServerboundContainerClickPacket$carriedItem(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).carriedItem();
+    }
+
+    @Override
+    public Object constructor$ServerboundContainerClickPacket(int containerId, int stateId, short slotNum, byte buttonNum, Object clickType, Int2ObjectMap changedSlots, Object carriedItem) {
+        return new ServerboundContainerClickPacket(containerId, stateId, slotNum, buttonNum, (ClickType) clickType, changedSlots, (HashedStack) carriedItem);
     }
 }

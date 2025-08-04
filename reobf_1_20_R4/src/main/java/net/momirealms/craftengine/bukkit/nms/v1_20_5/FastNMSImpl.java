@@ -13,6 +13,7 @@ import io.netty.channel.Channel;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.util.DataSanitizationUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -2143,5 +2144,65 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$MinecraftServer$getServer() {
         return MinecraftServer.getServer();
+    }
+
+    @Override
+    public Object method$ActualItem$item(Object actualItem) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public int method$ActualItem$count(Object actualItem) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$ActualItem$components(Object actualItem) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$InjectedHashedStack(Object item, int count, Object components, net.momirealms.craftengine.core.entity.player.Player player) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public int field$ServerboundContainerClickPacket$containerId(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).getContainerId();
+    }
+
+    @Override
+    public int field$ServerboundContainerClickPacket$stateId(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).getStateId();
+    }
+
+    @Override
+    public short field$ServerboundContainerClickPacket$slotNum(Object packet) {
+        return (short) ((ServerboundContainerClickPacket) packet).getSlotNum();
+    }
+
+    @Override
+    public byte field$ServerboundContainerClickPacket$buttonNum(Object packet) {
+        return (byte) ((ServerboundContainerClickPacket) packet).getButtonNum();
+    }
+
+    @Override
+    public Object field$ServerboundContainerClickPacket$clickType(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).getClickType();
+    }
+
+    @Override
+    public Int2ObjectMap field$ServerboundContainerClickPacket$changedSlots(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).getChangedSlots();
+    }
+
+    @Override
+    public Object field$ServerboundContainerClickPacket$carriedItem(Object packet) {
+        return ((ServerboundContainerClickPacket) packet).getCarriedItem();
+    }
+
+    @Override
+    public Object constructor$ServerboundContainerClickPacket(int containerId, int stateId, short slotNum, byte buttonNum, Object clickType, Int2ObjectMap changedSlots, Object carriedItem) {
+        return new ServerboundContainerClickPacket(containerId, stateId, slotNum, buttonNum, (ClickType) clickType, (net.minecraft.world.item.ItemStack) carriedItem, changedSlots);
     }
 }
