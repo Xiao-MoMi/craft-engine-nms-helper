@@ -97,6 +97,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_20.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20.recipe.*;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
@@ -128,6 +129,11 @@ import java.util.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
+
+    @Override
+    public Object getCraftEngineLootItemType() {
+        return CraftEngineItem.TYPE;
+    }
 
     @Override
     public InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
