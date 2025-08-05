@@ -1962,21 +1962,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$ActualItem$item(Object actualItem) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public int method$ActualItem$count(Object actualItem) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$ActualItem$components(Object actualItem) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
     public Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player) {
         throw new UnsupportedVersionException();
     }
