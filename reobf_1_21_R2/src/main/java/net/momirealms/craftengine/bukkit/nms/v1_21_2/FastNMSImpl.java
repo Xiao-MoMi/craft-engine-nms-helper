@@ -1977,7 +1977,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object constructor$InjectedHashedStack(Object item, int count, Object components, net.momirealms.craftengine.core.entity.player.Player player) {
+    public Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player) {
         throw new UnsupportedVersionException();
     }
 

@@ -746,7 +746,7 @@ public abstract class FastNMS {
 
     public abstract Object method$ActualItem$components(Object actualItem);
 
-    public abstract Object constructor$InjectedHashedStack(Object item, int count, Object components, net.momirealms.craftengine.core.entity.player.Player player);
+    public abstract Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
 
     public abstract int field$ServerboundContainerClickPacket$containerId(Object packet);
 

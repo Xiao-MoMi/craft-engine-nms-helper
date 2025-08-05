@@ -1979,8 +1979,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object constructor$InjectedHashedStack(Object item, int count, Object components, net.momirealms.craftengine.core.entity.player.Player player) {
-        return new InjectedHashedStack((Holder<Item>) item, count, (HashedPatchMap) components, player);
+    public Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player) {
+        return new InjectedHashedStack((HashedStack) hashedStack, player);
     }
 
     @Override
