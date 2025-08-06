@@ -20,6 +20,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -759,4 +760,6 @@ public abstract class FastNMS {
     public abstract Object field$ServerboundContainerClickPacket$carriedItem(Object packet);
 
     public abstract Object constructor$ServerboundContainerClickPacket(int containerId, int stateId, short slotNum, byte buttonNum, Object clickType, Int2ObjectMap changedSlots, Object carriedItem);
+
+    public abstract Object method$CraftInventory$getInventory(Inventory inventory);
 }
