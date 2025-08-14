@@ -852,6 +852,11 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public boolean method$ItemStack$hasNonDefaultComponent(Object itemStack, Object type) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
     public Object method$ItemStack$removeComponent(Object itemStack, Object type) {
         throw new UnsupportedVersionException();
     }

@@ -319,6 +319,8 @@ public abstract class FastNMS {
 
     public abstract boolean method$ItemStack$hasComponent(Object itemStack, Object type);
 
+    public abstract boolean method$ItemStack$hasNonDefaultComponent(Object itemStack, Object type);
+
     public abstract Object method$ItemStack$removeComponent(Object itemStack, Object type);
 
     public abstract String getCustomItemId(Object itemStack);

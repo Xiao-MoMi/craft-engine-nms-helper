@@ -845,6 +845,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public boolean method$ItemStack$hasNonDefaultComponent(Object itemStack, Object type) {
+        Optional<?> optional = ((net.minecraft.world.item.ItemStack) itemStack).getComponentsPatch().get((DataComponentType<?>) type);
+        return optional != null;
+    }
+
+    @Override
     public Object method$ItemStack$removeComponent(Object itemStack, Object type) {
         return ((net.minecraft.world.item.ItemStack) itemStack).remove((DataComponentType<?>) type);
     }
