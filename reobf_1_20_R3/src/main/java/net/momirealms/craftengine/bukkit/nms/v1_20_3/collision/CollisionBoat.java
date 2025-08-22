@@ -37,7 +37,7 @@ public class CollisionBoat extends Boat implements CollisionEntity {
         String s = this.getEncodeId();
         if (s != null) {
             tag.putString("id", s);
-            this.saveWithoutId(tag, false);
+            this.saveWithoutId(tag, true);
             return true;
         } else {
             return false;
