@@ -59,6 +59,8 @@ public abstract class FastNMS {
         };
     }
 
+    public abstract Object toMinecraftIngredient(Ingredient<ItemStack> ingredient);
+
     public abstract Object getCraftEngineLootItemType();
 
     public abstract InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException;

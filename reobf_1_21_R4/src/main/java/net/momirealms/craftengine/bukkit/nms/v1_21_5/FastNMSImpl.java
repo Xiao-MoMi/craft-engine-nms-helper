@@ -152,6 +152,11 @@ import java.util.*;
 public class FastNMSImpl extends FastNMS {
 
     @Override
+    public Object toMinecraftIngredient(net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack> ingredient) {
+        return RecipeHelper.toMinecraft(ingredient);
+    }
+
+    @Override
     public Object getCraftEngineLootItemType() {
         return CraftEngineItem.TYPE;
     }
