@@ -2030,4 +2030,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$CraftInventory$getInventory(Inventory inventory) {
         return ((CraftInventory) inventory).getInventory();
     }
+
+    @Override
+    public boolean method$BlockStateBase$isBlock(Object blockState, Object block) {
+        return ((BlockBehaviour.BlockStateBase) blockState).is(((net.minecraft.world.level.block.Block) block));
+    }
 }
