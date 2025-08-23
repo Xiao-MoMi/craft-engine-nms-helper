@@ -766,4 +766,6 @@ public abstract class FastNMS {
     public abstract Object constructor$ServerboundContainerClickPacket(int containerId, int stateId, short slotNum, byte buttonNum, Object clickType, Int2ObjectMap changedSlots, Object carriedItem);
 
     public abstract Object method$CraftInventory$getInventory(Inventory inventory);
+
+    public abstract boolean method$BlockStateBase$isBlock(Object blockState, Object block);
 }
