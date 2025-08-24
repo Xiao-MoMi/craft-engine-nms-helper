@@ -28,7 +28,7 @@ public class InjectedSmeltingRecipe extends SmeltingRecipe {
                                   ItemStack result,
                                   float experience,
                                   int cookingTime) {
-        super(new ResourceLocation(recipe.id().namespace(), recipe.id().value()), group, category, roughIngredient, result, experience, cookingTime);
+        super(new ResourceLocation(recipe.id().namespace(), recipe.id().value()), group, category, visualIngredient, result, experience, cookingTime);
         this.recipe = recipe;
         this.roughIngredient = roughIngredient;
     }
