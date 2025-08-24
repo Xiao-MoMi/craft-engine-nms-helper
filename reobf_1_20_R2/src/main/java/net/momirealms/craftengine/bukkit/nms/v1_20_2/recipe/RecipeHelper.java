@@ -46,11 +46,16 @@ public final class RecipeHelper {
             return Ingredient.EMPTY;
         }
         List itemStacks = BukkitRecipeManager.getIngredientLooks(ingredient.items());
+        net.minecraft.world.item.ItemStack[] exactItems = new net.minecraft.world.item.ItemStack[itemStacks.size()];
+        for (int i = 0; i < itemStacks.size(); i++) {
+            exactItems[i] = (net.minecraft.world.item.ItemStack) itemStacks.get(i);
+        }
         Ingredient nmsIngredient = Ingredient.of(itemStacks.stream());
         nmsIngredient.exact = true;
-        nmsIngredient.itemStacks = (net.minecraft.world.item.ItemStack[]) itemStacks.toArray();
+        nmsIngredient.itemStacks = exactItems;
         return nmsIngredient;
     }
+
 
     public static net.momirealms.craftengine.core.item.recipe.input.CraftingInput<ItemStack> toCraftEngine(CraftingContainer input) {
         return net.momirealms.craftengine.core.item.recipe.input.CraftingInput
