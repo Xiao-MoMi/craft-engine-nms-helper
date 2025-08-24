@@ -17,16 +17,26 @@ import org.jetbrains.annotations.NotNull;
 
 public class InjectedCampfireCookingRecipe extends CampfireCookingRecipe {
     private final CustomCampfireRecipe<org.bukkit.inventory.ItemStack> recipe;
+    private final Ingredient roughIngredient;
 
-    public InjectedCampfireCookingRecipe(CustomCampfireRecipe<org.bukkit.inventory.ItemStack> recipe, String group, CookingBookCategory category, Ingredient ingredient, ItemStack result, float experience, int cookingTime) {
-        super(group, category, ingredient, result, experience, cookingTime);
+    public InjectedCampfireCookingRecipe(CustomCampfireRecipe<org.bukkit.inventory.ItemStack> recipe,
+                                         String group,
+                                         CookingBookCategory category,
+                                         Ingredient visualIngredient,
+                                         Ingredient roughIngredient,
+                                         ItemStack result,
+                                         float experience,
+                                         int cookingTime) {
+        super(group, category, visualIngredient, result, experience, cookingTime);
         this.recipe = recipe;
+        this.roughIngredient = roughIngredient;
     }
 
     public static InjectedCampfireCookingRecipe of(CustomCampfireRecipe<org.bukkit.inventory.ItemStack> recipe) {
         return new InjectedCampfireCookingRecipe(recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.category()),
+                RecipeHelper.toMinecraftVisual(recipe.ingredient()),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
                 (ItemStack) recipe.result().buildItem(ItemBuildContext.EMPTY).getLiteralObject(),
                 recipe.experience(),
@@ -36,7 +46,7 @@ public class InjectedCampfireCookingRecipe extends CampfireCookingRecipe {
 
     @Override
     public boolean matches(@NotNull SingleRecipeInput input, @NotNull Level level) {
-        boolean vanillaMatches = super.matches(input, level);
+        boolean vanillaMatches = this.roughIngredient.test(input.item());
         if (!vanillaMatches) return false;
         Item<org.bukkit.inventory.ItemStack> wrapped = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(input.item()));
         SingleItemInput<org.bukkit.inventory.ItemStack> singleItemInput = new SingleItemInput<>(UniqueIdItem.of(wrapped));

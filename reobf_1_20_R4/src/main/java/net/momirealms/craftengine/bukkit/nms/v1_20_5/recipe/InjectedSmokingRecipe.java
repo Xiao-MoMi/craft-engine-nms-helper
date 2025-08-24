@@ -17,16 +17,26 @@ import org.jetbrains.annotations.NotNull;
 
 public class InjectedSmokingRecipe extends SmokingRecipe {
     private final CustomSmokingRecipe<org.bukkit.inventory.ItemStack> recipe;
+    private final Ingredient roughIngredient;
 
-    public InjectedSmokingRecipe(CustomSmokingRecipe<org.bukkit.inventory.ItemStack> recipe, String group, CookingBookCategory category, Ingredient ingredient, ItemStack result, float experience, int cookingTime) {
-        super(group, category, ingredient, result, experience, cookingTime);
+    public InjectedSmokingRecipe(CustomSmokingRecipe<org.bukkit.inventory.ItemStack> recipe,
+                                 String group,
+                                 CookingBookCategory category,
+                                 Ingredient visualIngredient,
+                                 Ingredient roughIngredient,
+                                 ItemStack result,
+                                 float experience,
+                                 int cookingTime) {
+        super(group, category, visualIngredient, result, experience, cookingTime);
         this.recipe = recipe;
+        this.roughIngredient = roughIngredient;
     }
 
     public static InjectedSmokingRecipe of(CustomSmokingRecipe<org.bukkit.inventory.ItemStack> recipe) {
         return new InjectedSmokingRecipe(recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.category()),
+                RecipeHelper.toMinecraftVisual(recipe.ingredient()),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
                 (ItemStack) recipe.result().buildItem(ItemBuildContext.EMPTY).getLiteralObject(),
                 recipe.experience(),
@@ -36,7 +46,7 @@ public class InjectedSmokingRecipe extends SmokingRecipe {
 
     @Override
     public boolean matches(@NotNull Container inventory, @NotNull Level world) {
-        boolean vanillaMatches = super.matches(inventory, world);
+        boolean vanillaMatches = this.roughIngredient.test(inventory.getItem(0));
         if (!vanillaMatches) return false;
         Item<org.bukkit.inventory.ItemStack> wrapped = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(inventory.getItem(0)));
         SingleItemInput<org.bukkit.inventory.ItemStack> singleItemInput = new SingleItemInput<>(UniqueIdItem.of(wrapped));

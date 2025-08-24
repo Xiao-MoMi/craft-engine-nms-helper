@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_2.recipe;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -15,30 +16,57 @@ import java.util.List;
 
 public class InjectedShapelessRecipe extends ShapelessRecipe {
     private final CustomShapelessRecipe<ItemStack> recipe;
+    private final NonNullList<Ingredient> roughIngredients;
 
-    public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe, String group, CraftingBookCategory category, net.minecraft.world.item.ItemStack result, NonNullList<Ingredient> ingredients) {
-        super(group, category, result, ingredients);
+    public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
+                                   String group,
+                                   CraftingBookCategory category,
+                                   net.minecraft.world.item.ItemStack result,
+                                   NonNullList<Ingredient> visualIngredients,
+                                   NonNullList<Ingredient> roughIngredients) {
+        super(group, category, result, visualIngredients);
         this.recipe = recipe;
+        this.roughIngredients = roughIngredients;
     }
 
     public static InjectedShapelessRecipe of(CustomShapelessRecipe<ItemStack> recipe) {
-        List<net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack>> ingredients = recipe.ingredientsInUse();
-        NonNullList<Ingredient> data = NonNullList.withSize(ingredients.size(), Ingredient.EMPTY);
-        for (int i = 0; i < ingredients.size(); i++) {
-            data.set(i, RecipeHelper.toMinecraft(ingredients.get(i)));
+        List<net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack>> visualIngredients = recipe.ingredientsInUse();
+        NonNullList<Ingredient> visualData = NonNullList.withSize(visualIngredients.size(), Ingredient.EMPTY);
+        for (int i = 0; i < visualIngredients.size(); i++) {
+            visualData.set(i, RecipeHelper.toMinecraft(visualIngredients.get(i)));
+        }
+        List<net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack>> roughIngredients = recipe.ingredientsInUse();
+        NonNullList<Ingredient> roughData = NonNullList.withSize(roughIngredients.size(), Ingredient.EMPTY);
+        for (int i = 0; i < roughIngredients.size(); i++) {
+            roughData.set(i, RecipeHelper.toMinecraft(roughIngredients.get(i)));
         }
         return new InjectedShapelessRecipe(
                 recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.category()),
                 (net.minecraft.world.item.ItemStack) recipe.result().buildItem(ItemBuildContext.EMPTY).getLiteralObject(),
-                data
+                visualData,
+                roughData
         );
+    }
+
+    private boolean vanillaMatches(CraftingContainer inventory, Level world) {
+        StackedContents sc = new StackedContents();
+        sc.initialize(this);
+        int i = 0;
+        for(int j = 0; j < inventory.getContainerSize(); ++j) {
+            net.minecraft.world.item.ItemStack itemstack = inventory.getItem(j);
+            if (!itemstack.isEmpty()) {
+                ++i;
+                sc.accountStack(itemstack, 1);
+            }
+        }
+        return i == this.roughIngredients.size() && sc.canCraft(this, null);
     }
 
     @Override
     public boolean matches(@NotNull CraftingContainer inventory, @NotNull Level world) {
-        boolean vanillaMatches = super.matches(inventory, world);
+        boolean vanillaMatches = this.vanillaMatches(inventory, world);
         if (!vanillaMatches) return false;
         return this.recipe.matches(RecipeHelper.toCraftEngine(inventory));
     }

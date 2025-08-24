@@ -13,20 +13,31 @@ import java.util.Map;
 
 public class InjectedShapedRecipe extends ShapedRecipe {
     private final CustomShapedRecipe<ItemStack> recipe;
+    private final ShapedRecipePattern roughPattern;
 
-    public InjectedShapedRecipe(CustomShapedRecipe<ItemStack> recipe, String group, CraftingBookCategory category, ShapedRecipePattern pattern, net.minecraft.world.item.ItemStack result, boolean showNotification) {
-        super(group, category, pattern, result, showNotification);
+    public InjectedShapedRecipe(CustomShapedRecipe<ItemStack> recipe,
+                                String group,
+                                CraftingBookCategory category,
+                                ShapedRecipePattern visualPattern,
+                                ShapedRecipePattern roughPattern,
+                                net.minecraft.world.item.ItemStack result,
+                                boolean showNotification) {
+        super(group, category, visualPattern, result, showNotification);
         this.recipe = recipe;
+        this.roughPattern = roughPattern;
     }
 
     public static InjectedShapedRecipe of(CustomShapedRecipe<ItemStack> recipe) {
-        Map<Character, Ingredient> data = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraft));
-        ShapedRecipePattern pattern = ShapedRecipePattern.of(data, recipe.pattern().pattern());
+        Map<Character, Ingredient> visualData = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraftVisual));
+        ShapedRecipePattern visualPattern = ShapedRecipePattern.of(visualData, recipe.pattern().pattern());
+        Map<Character, Ingredient> roughData = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraft));
+        ShapedRecipePattern roughPattern = ShapedRecipePattern.of(roughData, recipe.pattern().pattern());
         return new InjectedShapedRecipe(
                 recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.category()),
-                pattern,
+                visualPattern,
+                roughPattern,
                 (net.minecraft.world.item.ItemStack) recipe.result().buildItem(ItemBuildContext.EMPTY).getLiteralObject(),
                 recipe.showNotification()
         );
@@ -34,7 +45,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
 
     @Override
     public boolean matches(@NotNull CraftingInput input, @NotNull Level level) {
-        boolean vanillaMatches = super.matches(input, level);
+        boolean vanillaMatches = this.roughPattern.matches(input);
         if (!vanillaMatches) return false;
         return this.recipe.matches(RecipeHelper.toCraftEngine(input));
     }

@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.momirealms.craftengine.bukkit.item.BukkitItemManager;
+import net.momirealms.craftengine.bukkit.item.recipe.BukkitRecipeManager;
 import net.momirealms.craftengine.core.item.BuildableItem;
 import net.momirealms.craftengine.core.item.CustomItem;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
@@ -37,6 +38,18 @@ public final class RecipeHelper {
             items.add(item);
         }
         return Ingredient.of(items.toArray(new Item[0]));
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static Ingredient toMinecraftVisual(net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack> ingredient) {
+        if (ingredient == null) {
+            return Ingredient.EMPTY;
+        }
+        List itemStacks = BukkitRecipeManager.getIngredientLooks(ingredient.items());
+        Ingredient nmsIngredient = Ingredient.of(itemStacks.stream());
+        nmsIngredient.exact = true;
+        nmsIngredient.itemStacks = (net.minecraft.world.item.ItemStack[]) itemStacks.toArray();
+        return nmsIngredient;
     }
 
     public static net.momirealms.craftengine.core.item.recipe.input.CraftingInput<ItemStack> toCraftEngine(CraftingInput input) {
