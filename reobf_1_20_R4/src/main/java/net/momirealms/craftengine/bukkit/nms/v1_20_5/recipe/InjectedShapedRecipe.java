@@ -32,7 +32,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
     }
 
     public static InjectedShapedRecipe of(CustomShapedRecipe<ItemStack> recipe) {
-        Map<Character, Ingredient> visualData = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraft));
+        Map<Character, Ingredient> visualData = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraftVisual));
         ShapedRecipePattern visualPattern = ShapedRecipePattern.of(visualData, recipe.pattern().pattern());
         Map<Character, Ingredient> roughData = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraft));
         ShapedRecipePattern roughPattern = ShapedRecipePattern.of(roughData, recipe.pattern().pattern());

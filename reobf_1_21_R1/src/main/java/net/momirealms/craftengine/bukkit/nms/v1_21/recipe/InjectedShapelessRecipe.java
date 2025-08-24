@@ -38,7 +38,7 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         List<net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack>> roughIngredients = recipe.ingredientsInUse();
         NonNullList<Ingredient> roughData = NonNullList.withSize(roughIngredients.size(), Ingredient.EMPTY);
         for (int i = 0; i < roughIngredients.size(); i++) {
-            roughData.set(i, RecipeHelper.toMinecraftVisual(roughIngredients.get(i)));
+            roughData.set(i, RecipeHelper.toMinecraft(roughIngredients.get(i)));
         }
         return new InjectedShapelessRecipe(
                 recipe,
