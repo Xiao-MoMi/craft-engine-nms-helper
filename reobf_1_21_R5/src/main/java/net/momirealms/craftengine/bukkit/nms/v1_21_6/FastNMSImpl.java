@@ -113,7 +113,7 @@ import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
-import net.momirealms.craftengine.bukkit.nms.v1_21_6.block.BlockStateWrapper;
+import net.momirealms.craftengine.bukkit.nms.v1_21_6.block.PaperStatePropertyAccessor;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.chunk.InjectedLevelChunkSection;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.chunk.InjectedPalettedContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.CollisionBoat;
@@ -123,7 +123,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.NonCollisionInter
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.network.InjectedHashedStack;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.recipe.*;
-import net.momirealms.craftengine.core.block.VanillaBlockStateWrapper;
+import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.GsonHelper;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
@@ -159,8 +159,8 @@ import java.util.*;
 public class FastNMSImpl extends FastNMS {
 
     @Override
-    public VanillaBlockStateWrapper createBlockStateWrapper(Object blockState) {
-        return new BlockStateWrapper((BlockState) blockState);
+    public StatePropertyAccessor createBlockPropertyAccessor(Object blockState) {
+        return new PaperStatePropertyAccessor((BlockState) blockState);
     }
 
     @Override

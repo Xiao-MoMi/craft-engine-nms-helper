@@ -2,27 +2,26 @@ package net.momirealms.craftengine.bukkit.nms.v1_21.block;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.momirealms.craftengine.core.block.VanillaBlockStateWrapper;
-import org.jetbrains.annotations.Nullable;
+import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
 
 import java.util.Collection;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class BlockStateWrapper implements VanillaBlockStateWrapper {
+public class PaperStatePropertyAccessor implements StatePropertyAccessor {
     private final BlockState blockState;
 
-    public BlockStateWrapper(BlockState blockState) {
+    public PaperStatePropertyAccessor(BlockState blockState) {
         this.blockState = blockState;
     }
 
     @Override
-    public Collection<String> properties() {
+    public Collection<String> getPropertyNames() {
         return this.blockState.getProperties().stream().map(Property::getName).collect(Collectors.toList());
     }
 
     @Override
-    public @Nullable String getProperty(String s) {
+    public String getPropertyValueAsString(String s) {
         Property<?> property = this.blockState.getBlock().getStateDefinition().getProperty(s);
         if (property == null) {
             return null;
@@ -30,13 +29,18 @@ public class BlockStateWrapper implements VanillaBlockStateWrapper {
         return this.blockState.getValue(property).toString().toLowerCase(Locale.ROOT);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public boolean hasProperty(String s) {
-        return this.blockState.getBlock().getStateDefinition().getProperty(s) != null;
+    public <T> T getPropertyValue(String s) {
+        Property<?> property = this.blockState.getBlock().getStateDefinition().getProperty(s);
+        if (property == null) {
+            return null;
+        }
+        return (T) this.blockState.getValue(property);
     }
 
     @Override
-    public Object literalObject() {
-        return this.blockState;
+    public boolean hasProperty(String s) {
+        return this.blockState.getBlock().getStateDefinition().getProperty(s) != null;
     }
 }

@@ -9,7 +9,7 @@ import com.mojang.serialization.DynamicOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.momirealms.craftengine.core.block.VanillaBlockStateWrapper;
+import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
@@ -60,7 +60,7 @@ public abstract class FastNMS {
         };
     }
 
-    public abstract VanillaBlockStateWrapper createBlockStateWrapper(Object blockState);
+    public abstract StatePropertyAccessor createBlockPropertyAccessor(Object blockState);
 
     public abstract Object toMinecraftIngredient(Ingredient<ItemStack> ingredient);
 

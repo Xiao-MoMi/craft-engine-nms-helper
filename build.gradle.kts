@@ -20,8 +20,8 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("net.momirealms:craft-engine-core:0.0.62.2")
-        compileOnly("net.momirealms:craft-engine-bukkit:0.0.62.2")
+        compileOnly("net.momirealms:craft-engine-core:0.0.62.3.1")
+        compileOnly("net.momirealms:craft-engine-bukkit:0.0.62.3.1")
         compileOnly("com.mojang:brigadier:1.0.18")
     }
 }
