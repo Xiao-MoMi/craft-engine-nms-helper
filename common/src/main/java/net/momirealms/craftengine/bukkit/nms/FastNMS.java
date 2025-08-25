@@ -60,7 +60,7 @@ public abstract class FastNMS {
         };
     }
 
-    public abstract StatePropertyAccessor createBlockPropertyAccessor(Object blockState);
+    public abstract StatePropertyAccessor createStatePropertyAccessor(Object blockState);
 
     public abstract Object toMinecraftIngredient(Ingredient<ItemStack> ingredient);
 

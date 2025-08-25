@@ -140,7 +140,7 @@ import java.util.*;
 public class FastNMSImpl extends FastNMS {
 
     @Override
-    public StatePropertyAccessor createBlockPropertyAccessor(Object blockState) {
+    public StatePropertyAccessor createStatePropertyAccessor(Object blockState) {
         return new PaperStatePropertyAccessor((BlockState) blockState);
     }
 
