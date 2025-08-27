@@ -35,7 +35,7 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
                 recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.category()),
-                (net.minecraft.world.item.ItemStack) recipe.result().buildItem(ItemBuildContext.EMPTY).getLiteralObject(),
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.EMPTY).getLiteralObject(),
                 visualIngredients,
                 roughIngredients
         );
