@@ -771,4 +771,12 @@ public abstract class FastNMS {
     public abstract Object method$CraftInventory$getInventory(Inventory inventory);
 
     public abstract boolean method$BlockStateBase$isBlock(Object blockState, Object block);
+
+    public abstract Object field$BlockHitResul$blockPos(Object result);
+
+    public abstract Object field$HitResult$location(Object result);
+
+    public abstract Object field$BlockHitResul$miss(Object result);
+
+    public abstract Object field$BlockHitResul$direction(Object result);
 }

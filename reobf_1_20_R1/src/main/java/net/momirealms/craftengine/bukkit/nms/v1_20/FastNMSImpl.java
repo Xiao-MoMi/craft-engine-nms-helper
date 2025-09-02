@@ -82,6 +82,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -2006,5 +2007,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$BlockStateBase$isBlock(Object blockState, Object block) {
         return ((BlockBehaviour.BlockStateBase) blockState).is(((net.minecraft.world.level.block.Block) block));
+    }
+
+    @Override
+    public Object field$BlockHitResul$blockPos(Object result) {
+        return ((BlockHitResult) result).getBlockPos();
+    }
+
+    @Override
+    public Object field$HitResult$location(Object result) {
+        return ((HitResult) result).getLocation();
+    }
+
+    @Override
+    public Object field$BlockHitResul$miss(Object result) {
+        return ((BlockHitResult) result).getType() == HitResult.Type.MISS;
+    }
+
+    @Override
+    public Object field$BlockHitResul$direction(Object result) {
+        return ((BlockHitResult) result).getDirection();
     }
 }
