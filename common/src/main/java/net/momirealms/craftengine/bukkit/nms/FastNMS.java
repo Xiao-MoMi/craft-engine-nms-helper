@@ -776,7 +776,7 @@ public abstract class FastNMS {
 
     public abstract Object field$HitResult$location(Object result);
 
-    public abstract Object field$BlockHitResul$miss(Object result);
+    public abstract boolean field$BlockHitResul$miss(Object result);
 
     public abstract Object field$BlockHitResul$direction(Object result);
 }

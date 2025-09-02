@@ -2056,7 +2056,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$BlockHitResul$miss(Object result) {
+    public boolean field$BlockHitResul$miss(Object result) {
         return ((BlockHitResult) result).getType() == HitResult.Type.MISS;
     }
 
