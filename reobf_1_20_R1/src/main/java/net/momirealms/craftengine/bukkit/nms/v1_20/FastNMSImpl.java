@@ -69,10 +69,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.Fluid;
@@ -2027,5 +2024,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object field$BlockHitResul$direction(Object result) {
         return ((BlockHitResult) result).getDirection();
+    }
+
+    @Override
+    public Object method$ChunkSource$getLightEngine(Object chunkSource) {
+        return ((ChunkSource) chunkSource).getLightEngine();
     }
 }

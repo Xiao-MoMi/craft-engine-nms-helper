@@ -779,4 +779,6 @@ public abstract class FastNMS {
     public abstract boolean field$BlockHitResul$miss(Object result);
 
     public abstract Object field$BlockHitResul$direction(Object result);
+
+    public abstract Object method$ChunkSource$getLightEngine(Object chunkSource);
 }
