@@ -29,7 +29,14 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
 
     @Override
     public boolean save(@NotNull CompoundTag tag) {
-        return super.saveAsPassenger(tag, true, false, true);
+        String encodeId = this.getEncodeId(false);
+        if (encodeId != null) {
+            tag.putString("id", encodeId);
+            this.saveWithoutId(tag, true, false, true);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

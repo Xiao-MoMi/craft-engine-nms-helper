@@ -1461,10 +1461,29 @@ public class FastNMSImpl extends FastNMS {
         return ((BlockState) blockState).canBeReplaced();
     }
 
+    private static final boolean HAS_ANTICHEAT;
+
+    static {
+        boolean has;
+        try {
+            ItemObfuscationSession.ObfuscationLevel level = GlobalConfiguration.get().anticheat.obfuscation.items.binding.level;
+            has = true;
+        } catch (NoSuchFieldError error) {
+            has = false;
+        }
+        HAS_ANTICHEAT = has;
+    }
+
     @Override
     public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
-        try (ItemObfuscationSession ignored = ItemObfuscationSession.start(GlobalConfiguration.get().anticheat.obfuscation.items.binding.level)) {
+        if (HAS_ANTICHEAT) {
+            try (ItemObfuscationSession ignored = ItemObfuscationSession.start(GlobalConfiguration.get().anticheat.obfuscation.items.binding.level)) {
+                for (SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>) dataValues)) {
+                    dataValue.write(buf);
+                }
+            }
+        } else {
             for (SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>) dataValues)) {
                 dataValue.write(buf);
             }
