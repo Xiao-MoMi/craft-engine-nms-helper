@@ -122,6 +122,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_4.recipe.*;
 import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
+import net.momirealms.craftengine.core.util.Tristate;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.Particle;
@@ -1461,23 +1462,26 @@ public class FastNMSImpl extends FastNMS {
         return ((BlockState) blockState).canBeReplaced();
     }
 
-    private static final boolean HAS_ANTICHEAT;
+    private static Boolean HAS_ANTICHEAT;
 
-    static {
-        boolean has;
-        try {
-            ItemObfuscationSession.ObfuscationLevel level = GlobalConfiguration.get().anticheat.obfuscation.items.binding.level;
-            has = true;
-        } catch (NoSuchFieldError error) {
-            has = false;
+    private static boolean hasAntiCheat() {
+        if (HAS_ANTICHEAT == null) {
+            boolean has;
+            try {
+                ItemObfuscationSession.ObfuscationLevel level = GlobalConfiguration.get().anticheat.obfuscation.items.binding.level;
+                has = true;
+            } catch (NoSuchFieldError error) {
+                has = false;
+            }
+            HAS_ANTICHEAT = has;
         }
-        HAS_ANTICHEAT = has;
+        return HAS_ANTICHEAT;
     }
 
     @Override
     public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
-        if (HAS_ANTICHEAT) {
+        if (hasAntiCheat()) {
             try (ItemObfuscationSession ignored = ItemObfuscationSession.start(GlobalConfiguration.get().anticheat.obfuscation.items.binding.level)) {
                 for (SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>) dataValues)) {
                     dataValue.write(buf);
