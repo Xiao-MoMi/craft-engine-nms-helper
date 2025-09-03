@@ -1017,8 +1017,17 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC.encode((RegistryFriendlyByteBuf) buf, CraftItemStack.unwrap(itemStack));
     }
 
-    private static final StreamCodec<RegistryFriendlyByteBuf, net.minecraft.world.item.ItemStack> ITEM_UNTRUSTED_CODEC =
-            net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
+    private static final StreamCodec<RegistryFriendlyByteBuf, net.minecraft.world.item.ItemStack> ITEM_UNTRUSTED_CODEC;
+
+    static {
+        StreamCodec<RegistryFriendlyByteBuf, net.minecraft.world.item.ItemStack> codec;
+        try {
+            codec = net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
+        } catch (NoSuchMethodError error) {
+            codec = net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC);
+        }
+        ITEM_UNTRUSTED_CODEC = codec;
+    }
 
     @Override
     public ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf) {
