@@ -2047,4 +2047,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$ChunkSource$getLightEngine(Object chunkSource) {
         return ((ChunkSource) chunkSource).getLightEngine();
     }
+
+    @Override
+    public void method$Level$updateNeighbourForOutputSignal(Object level, Object pos, Object block) {
+        ((Level) level).updateNeighbourForOutputSignal((BlockPos) pos, (net.minecraft.world.level.block.Block) block);
+    }
 }
