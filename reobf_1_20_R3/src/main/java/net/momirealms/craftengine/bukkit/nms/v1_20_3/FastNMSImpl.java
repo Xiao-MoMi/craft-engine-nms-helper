@@ -13,6 +13,7 @@ import io.netty.channel.Channel;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.world.ChunkEntitySlices;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -2055,5 +2056,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ItemStack$of(Object compoundTag) {
         return net.minecraft.world.item.ItemStack.of((CompoundTag) compoundTag);
+    }
+
+    @Override
+    public Object constructor$ClientboundRemoveEntitiesPacket(IntList entities) {
+        return new ClientboundRemoveEntitiesPacket(entities);
     }
 }

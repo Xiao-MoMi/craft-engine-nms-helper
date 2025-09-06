@@ -14,6 +14,7 @@ import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.util.DataSanitizationUtil;
 import io.papermc.paper.world.ChunkEntitySlices;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -2257,5 +2258,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ItemStack$of(Object compoundTag) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$ClientboundRemoveEntitiesPacket(IntList entities) {
+        return new ClientboundRemoveEntitiesPacket(entities);
     }
 }

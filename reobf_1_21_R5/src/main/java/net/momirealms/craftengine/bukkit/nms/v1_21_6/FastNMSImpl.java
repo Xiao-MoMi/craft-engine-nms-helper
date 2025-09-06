@@ -18,6 +18,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -87,7 +88,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
@@ -2081,5 +2081,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ItemStack$of(Object compoundTag) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$ClientboundRemoveEntitiesPacket(IntList entities) {
+        return new ClientboundRemoveEntitiesPacket(entities);
     }
 }
