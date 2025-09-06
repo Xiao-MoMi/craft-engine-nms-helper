@@ -2253,4 +2253,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$Level$updateNeighbourForOutputSignal(Object level, Object pos, Object block) {
         ((Level) level).updateNeighbourForOutputSignal((BlockPos) pos, (net.minecraft.world.level.block.Block) block);
     }
+
+    @Override
+    public Object method$ItemStack$of(Object compoundTag) {
+        throw new UnsupportedVersionException();
+    }
 }

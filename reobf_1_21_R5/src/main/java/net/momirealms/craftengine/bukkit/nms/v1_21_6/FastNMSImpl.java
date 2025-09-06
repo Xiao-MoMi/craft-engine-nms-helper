@@ -87,6 +87,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
@@ -2075,5 +2076,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$Level$updateNeighbourForOutputSignal(Object level, Object pos, Object block) {
         ((Level) level).updateNeighbourForOutputSignal((BlockPos) pos, (net.minecraft.world.level.block.Block) block);
+    }
+
+    @Override
+    public Object method$ItemStack$of(Object compoundTag) {
+        throw new UnsupportedVersionException();
     }
 }

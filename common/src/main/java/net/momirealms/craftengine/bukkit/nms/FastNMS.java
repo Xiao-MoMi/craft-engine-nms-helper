@@ -783,4 +783,6 @@ public abstract class FastNMS {
     public abstract Object method$ChunkSource$getLightEngine(Object chunkSource);
 
     public abstract void method$Level$updateNeighbourForOutputSignal(Object level, Object pos, Object block);
+
+    public abstract Object method$ItemStack$of(Object compoundTag);
 }
