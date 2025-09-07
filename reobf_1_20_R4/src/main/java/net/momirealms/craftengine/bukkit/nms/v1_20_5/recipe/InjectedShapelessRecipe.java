@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CustomShapelessRecipe;
+import net.momirealms.craftengine.core.item.recipe.PlacementInfo;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class InjectedShapelessRecipe extends ShapelessRecipe {
     private final CustomShapelessRecipe<ItemStack> recipe;
     private final NonNullList<Ingredient> roughIngredients;
+    private boolean isMatching;
 
     public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
                                    String group,
@@ -54,14 +56,29 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         StackedContents sc = new StackedContents();
         sc.initialize(this);
         int i = 0;
-        for(int j = 0; j < inventory.getContainerSize(); ++j) {
+        for (int j = 0; j < inventory.getContainerSize(); ++j) {
             net.minecraft.world.item.ItemStack itemstack = inventory.getItem(j);
             if (!itemstack.isEmpty()) {
                 ++i;
                 sc.accountStack(itemstack, 1);
             }
         }
-        return i == this.roughIngredients.size() && sc.canCraft(this, null);
+        if (i != this.roughIngredients.size()) {
+            return false;
+        }
+        this.isMatching = true;
+        boolean canCraft = sc.canCraft(this, null);
+        this.isMatching = false;
+        return canCraft;
+    }
+
+    @Override
+    public @NotNull NonNullList<Ingredient> getIngredients() {
+        if (this.isMatching) {
+            return this.roughIngredients;
+        } else {
+            return super.getIngredients();
+        }
     }
 
     @Override

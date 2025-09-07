@@ -18,6 +18,7 @@ import java.util.List;
 public class InjectedShapelessRecipe extends ShapelessRecipe {
     private final CustomShapelessRecipe<ItemStack> recipe;
     private final NonNullList<Ingredient> roughIngredients;
+    private boolean isMatching;
 
     public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
                                    String group,
@@ -62,7 +63,22 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
                 sc.accountStack(itemstack, 1);
             }
         }
-        return i == this.roughIngredients.size() && sc.canCraft(this, null);
+        if (i != this.roughIngredients.size()) {
+            return false;
+        }
+        this.isMatching = true;
+        boolean canCraft = sc.canCraft(this, null);
+        this.isMatching = false;
+        return canCraft;
+    }
+
+    @Override
+    public @NotNull NonNullList<Ingredient> getIngredients() {
+        if (this.isMatching) {
+            return this.roughIngredients;
+        } else {
+            return super.getIngredients();
+        }
     }
 
     @Override

@@ -1,10 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_2.recipe;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CustomShapelessRecipe;
@@ -16,6 +13,7 @@ import java.util.List;
 public class InjectedShapelessRecipe extends ShapelessRecipe {
     private final CustomShapelessRecipe<ItemStack> recipe;
     private final List<Ingredient> roughIngredients;
+    private PlacementInfo roughPlacementInfo;
 
     public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
                                    String group,
@@ -48,7 +46,7 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
             return this.roughIngredients.getFirst().test(input.getItem(0));
         } else {
             input.stackedContents().initializeExtras(this, input);
-            boolean canCraft = input.stackedContents().canCraft(this, null);
+            boolean canCraft = input.stackedContents().canCraft(roughPlacementInfo().unpackedIngredients(), null);
             input.stackedContents().resetExtras();
             return canCraft;
         }
@@ -69,5 +67,12 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
     @Override
     public boolean showNotification() {
         return this.recipe.showNotification();
+    }
+
+    public PlacementInfo roughPlacementInfo() {
+        if (this.roughPlacementInfo == null) {
+            this.roughPlacementInfo = PlacementInfo.create(this.roughIngredients);
+        }
+        return this.roughPlacementInfo;
     }
 }
