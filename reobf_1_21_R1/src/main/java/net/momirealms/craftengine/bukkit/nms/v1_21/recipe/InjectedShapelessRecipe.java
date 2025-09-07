@@ -1,7 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21.recipe;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -9,7 +8,6 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CustomShapelessRecipe;
-import net.momirealms.craftengine.core.item.recipe.PlacementInfo;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,11 +57,11 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         } else if (input.size() == 1 && this.roughIngredients.size() == 1) {
             return this.roughIngredients.getFirst().test(input.getItem(0));
         } else {
-            input.stackedContents().initializeExtras(this, input);
             this.isMatching = true;
+            input.stackedContents().initializeExtras(this, input);
             boolean canCraft = input.stackedContents().canCraft(this, null);
-            this.isMatching = false;
             input.stackedContents().resetExtras();
+            this.isMatching = false;
             return canCraft;
         }
     }

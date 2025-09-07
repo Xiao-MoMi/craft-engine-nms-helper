@@ -1,7 +1,11 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_4.recipe;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CustomShapelessRecipe;
@@ -12,8 +16,9 @@ import java.util.List;
 
 public class InjectedShapelessRecipe extends ShapelessRecipe {
     private final CustomShapelessRecipe<ItemStack> recipe;
-    private final List<Ingredient> roughIngredients;
-    private PlacementInfo roughPlacementInfo;
+    private final List<Ingredient> visualIngredients;
+    private final net.minecraft.world.item.ItemStack result;
+    private PlacementInfo placementInfo;
 
     public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
                                    String group,
@@ -21,9 +26,10 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
                                    net.minecraft.world.item.ItemStack result,
                                    List<Ingredient> visualIngredients,
                                    List<Ingredient> roughIngredients) {
-        super(group, category, result, visualIngredients);
+        super(group, category, result, roughIngredients);
         this.recipe = recipe;
-        this.roughIngredients = roughIngredients;
+        this.visualIngredients = visualIngredients;
+        this.result = result;
     }
 
     public static InjectedShapelessRecipe of(CustomShapelessRecipe<ItemStack> recipe) {
@@ -39,22 +45,9 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         );
     }
 
-    private boolean vanillaMatches(@NotNull CraftingInput input, @NotNull Level level) {
-        if (input.ingredientCount() != this.roughIngredients.size()) {
-            return false;
-        } else if (input.size() == 1 && this.roughIngredients.size() == 1) {
-            return this.roughIngredients.getFirst().test(input.getItem(0));
-        } else {
-            input.stackedContents().initializeExtras(this, input);
-            boolean canCraft = input.stackedContents().canCraft(roughPlacementInfo().ingredients(), null);
-            input.stackedContents().resetExtras();
-            return canCraft;
-        }
-    }
-
     @Override
     public boolean matches(@NotNull CraftingInput input, @NotNull Level level) {
-        boolean vanillaMatches = this.vanillaMatches(input, level);
+        boolean vanillaMatches = super.matches(input, level);
         if (!vanillaMatches) return false;
         return this.recipe.matches(RecipeHelper.toCraftEngine(input));
     }
@@ -65,14 +58,24 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
     }
 
     @Override
-    public boolean showNotification() {
-        return this.recipe.showNotification();
+    public @NotNull PlacementInfo placementInfo() {
+        if (this.placementInfo == null) {
+            this.placementInfo = PlacementInfo.create(this.visualIngredients);
+        }
+        return this.placementInfo;
     }
 
-    public PlacementInfo roughPlacementInfo() {
-        if (this.roughPlacementInfo == null) {
-            this.roughPlacementInfo = PlacementInfo.create(this.roughIngredients);
-        }
-        return this.roughPlacementInfo;
+    @Override
+    public @NotNull List<RecipeDisplay> display() {
+        return List.of(
+                new ShapelessCraftingRecipeDisplay(this.visualIngredients.stream().map(Ingredient::display).toList(),
+                new SlotDisplay.ItemStackSlotDisplay(this.result),
+                new SlotDisplay.ItemSlotDisplay(Items.CRAFTING_TABLE))
+        );
+    }
+
+    @Override
+    public boolean showNotification() {
+        return this.recipe.showNotification();
     }
 }

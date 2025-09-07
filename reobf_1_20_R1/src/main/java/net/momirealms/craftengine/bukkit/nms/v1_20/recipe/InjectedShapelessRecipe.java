@@ -66,10 +66,7 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         if (i != this.roughIngredients.size()) {
             return false;
         }
-        this.isMatching = true;
-        boolean canCraft = sc.canCraft(this, null);
-        this.isMatching = false;
-        return canCraft;
+        return sc.canCraft(this, null);
     }
 
     @Override
@@ -83,7 +80,9 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
 
     @Override
     public boolean matches(@NotNull CraftingContainer inventory, @NotNull Level world) {
+        this.isMatching = true;
         boolean vanillaMatches = this.vanillaMatches(inventory, world);
+        this.isMatching = false;
         if (!vanillaMatches) return false;
         return this.recipe.matches(RecipeHelper.toCraftEngine(inventory));
     }

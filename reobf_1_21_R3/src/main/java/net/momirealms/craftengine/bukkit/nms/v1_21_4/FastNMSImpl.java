@@ -120,7 +120,6 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_4.recipe.*;
 import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
-import net.momirealms.craftengine.core.util.Tristate;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.Particle;
