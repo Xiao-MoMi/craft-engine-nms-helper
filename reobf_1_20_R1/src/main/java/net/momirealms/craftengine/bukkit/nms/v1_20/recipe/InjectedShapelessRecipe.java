@@ -2,7 +2,6 @@ package net.momirealms.craftengine.bukkit.nms.v1_20.recipe;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -17,8 +16,7 @@ import java.util.List;
 
 public class InjectedShapelessRecipe extends ShapelessRecipe {
     private final CustomShapelessRecipe<ItemStack> recipe;
-    private final NonNullList<Ingredient> roughIngredients;
-    private boolean isMatching;
+    private final ShapelessRecipe companionRecipe;
 
     public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
                                    String group,
@@ -28,7 +26,7 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
                                    NonNullList<Ingredient> roughIngredients) {
         super(new ResourceLocation(recipe.id().namespace(), recipe.id().value()), group, category, result, visualIngredients);
         this.recipe = recipe;
-        this.roughIngredients = roughIngredients;
+        this.companionRecipe = new ShapelessRecipe(new ResourceLocation(recipe.id().namespace(), recipe.id().value()), group, category, result, roughIngredients);
     }
 
     public static InjectedShapelessRecipe of(CustomShapelessRecipe<ItemStack> recipe) {
@@ -52,37 +50,9 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         );
     }
 
-    private boolean vanillaMatches(CraftingContainer inventory, Level world) {
-        StackedContents sc = new StackedContents();
-        sc.initialize(this);
-        int i = 0;
-        for(int j = 0; j < inventory.getContainerSize(); ++j) {
-            net.minecraft.world.item.ItemStack itemstack = inventory.getItem(j);
-            if (!itemstack.isEmpty()) {
-                ++i;
-                sc.accountStack(itemstack, 1);
-            }
-        }
-        if (i != this.roughIngredients.size()) {
-            return false;
-        }
-        return sc.canCraft(this, null);
-    }
-
-    @Override
-    public @NotNull NonNullList<Ingredient> getIngredients() {
-        if (this.isMatching) {
-            return this.roughIngredients;
-        } else {
-            return super.getIngredients();
-        }
-    }
-
     @Override
     public boolean matches(@NotNull CraftingContainer inventory, @NotNull Level world) {
-        this.isMatching = true;
-        boolean vanillaMatches = this.vanillaMatches(inventory, world);
-        this.isMatching = false;
+        boolean vanillaMatches = this.companionRecipe.matches(inventory, world);
         if (!vanillaMatches) return false;
         return this.recipe.matches(RecipeHelper.toCraftEngine(inventory));
     }

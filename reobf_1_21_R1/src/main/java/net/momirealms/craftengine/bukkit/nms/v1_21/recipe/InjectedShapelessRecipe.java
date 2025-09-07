@@ -15,8 +15,7 @@ import java.util.List;
 
 public class InjectedShapelessRecipe extends ShapelessRecipe {
     private final CustomShapelessRecipe<ItemStack> recipe;
-    private final NonNullList<Ingredient> roughIngredients;
-    private boolean isMatching = false;
+    private final ShapelessRecipe companionRecipe;
 
     public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
                                    String group,
@@ -26,7 +25,7 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
                                    NonNullList<Ingredient> roughIngredients) {
         super(group, category, result, visualIngredients);
         this.recipe = recipe;
-        this.roughIngredients = roughIngredients;
+        this.companionRecipe = new ShapelessRecipe(group, category, result, roughIngredients);
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -51,33 +50,9 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         );
     }
 
-    private boolean vanillaMatches(CraftingInput input, Level world) {
-        if (input.ingredientCount() != this.roughIngredients.size()) {
-            return false;
-        } else if (input.size() == 1 && this.roughIngredients.size() == 1) {
-            return this.roughIngredients.getFirst().test(input.getItem(0));
-        } else {
-            this.isMatching = true;
-            input.stackedContents().initializeExtras(this, input);
-            boolean canCraft = input.stackedContents().canCraft(this, null);
-            input.stackedContents().resetExtras();
-            this.isMatching = false;
-            return canCraft;
-        }
-    }
-
-    @Override
-    public @NotNull NonNullList<Ingredient> getIngredients() {
-        if (this.isMatching) {
-            return this.roughIngredients;
-        } else {
-            return super.getIngredients();
-        }
-    }
-
     @Override
     public boolean matches(@NotNull CraftingInput input, @NotNull Level level) {
-        boolean vanillaMatches = this.vanillaMatches(input, level);
+        boolean vanillaMatches = this.companionRecipe.matches(input, level);
         if (!vanillaMatches) return false;
         return this.recipe.matches(RecipeHelper.toCraftEngine(input));
     }
