@@ -44,6 +44,8 @@ import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
@@ -2045,5 +2047,35 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundRemoveEntitiesPacket(IntList entities) {
         return new ClientboundRemoveEntitiesPacket(entities);
+    }
+
+    @Override
+    public boolean method$Entity$causeFallDamage(Object entity, Object fallDistance, float damageMultiplier, Object damageSource) {
+        return ((Entity) entity).causeFallDamage((float) fallDistance, damageMultiplier, (DamageSource) damageSource);
+    }
+
+    @Override
+    public Object method$Entity$damageSources(Object entity) {
+        return ((Entity) entity).damageSources();
+    }
+
+    @Override
+    public Object method$DamageSources$fall(Object damageSources) {
+        return ((DamageSources) damageSources).fall();
+    }
+
+    @Override
+    public boolean method$Entity$getSharedFlag(Object entity, int flag) {
+        return ((Entity) entity).getSharedFlag(flag);
+    }
+
+    @Override
+    public Object method$Entity$getDeltaMovement(Object entity) {
+        return ((Entity) entity).getDeltaMovement();
+    }
+
+    @Override
+    public void method$Entity$setDeltaMovement(Object entity, double x, double y, double z) {
+        ((Entity) entity).setDeltaMovement(x, y, z);
     }
 }

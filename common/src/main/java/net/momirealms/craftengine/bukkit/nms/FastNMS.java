@@ -788,4 +788,16 @@ public abstract class FastNMS {
     public abstract Object method$ItemStack$of(Object compoundTag);
 
     public abstract Object constructor$ClientboundRemoveEntitiesPacket(IntList entities);
+
+    public abstract boolean method$Entity$causeFallDamage(Object entity, Object fallDistance, float damageMultiplier, Object damageSource);
+
+    public abstract Object method$Entity$damageSources(Object entity);
+
+    public abstract Object method$DamageSources$fall(Object damageSources);
+
+    public abstract boolean method$Entity$getSharedFlag(Object entity, int flag);
+
+    public abstract Object method$Entity$getDeltaMovement(Object entity);
+
+    public abstract void method$Entity$setDeltaMovement(Object entity, double x, double y, double z);
 }
