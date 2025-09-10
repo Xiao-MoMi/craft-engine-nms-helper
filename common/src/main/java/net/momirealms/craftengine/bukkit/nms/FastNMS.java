@@ -800,4 +800,8 @@ public abstract class FastNMS {
     public abstract Object method$Entity$getDeltaMovement(Object entity);
 
     public abstract void method$Entity$setDeltaMovement(Object entity, double x, double y, double z);
+
+    public abstract boolean field$Entity$hurtMarked(Object entity);
+
+    public abstract void field$Entity$hurtMarked(Object entity, boolean hurtMarked);
 }

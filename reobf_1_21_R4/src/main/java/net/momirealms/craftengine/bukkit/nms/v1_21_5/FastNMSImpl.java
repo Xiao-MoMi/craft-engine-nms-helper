@@ -2113,4 +2113,14 @@ public class FastNMSImpl extends FastNMS {
     public void method$Entity$setDeltaMovement(Object entity, double x, double y, double z) {
         ((Entity) entity).setDeltaMovement(x, y, z);
     }
+
+    @Override
+    public boolean field$Entity$hurtMarked(Object entity) {
+        return ((Entity) entity).hurtMarked;
+    }
+
+    @Override
+    public void field$Entity$hurtMarked(Object entity, boolean hurtMarked) {
+        ((Entity) entity).hurtMarked = hurtMarked;
+    }
 }
