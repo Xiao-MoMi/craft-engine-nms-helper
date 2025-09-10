@@ -39,7 +39,7 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
 
     @Override
     public synchronized void write(@NotNull FriendlyByteBuf buffer, @Nullable ChunkPacketInfo<T> chunkPacketInfo, int chunkSectionIndex) {
-        target.write(buffer, chunkPacketInfo, chunkSectionIndex);
+        this.target.write(buffer, chunkPacketInfo, chunkSectionIndex);
     }
 
     @Override
@@ -85,32 +85,32 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
 
     @Override
     public void acquire() {
-        target.acquire();
+        this.target.acquire();
     }
 
     @Override
     public @NotNull PalettedContainer<T> copy() {
-        return target.copy();
+        return this.target.copy();
     }
 
     @Override
     public void count(@NotNull CountConsumer<T> counter) {
-        target.count(counter);
+        this.target.count(counter);
     }
 
     @Override
     public @NotNull T get(int index) {
-        return target.get(index);
+        return this.target.get(index);
     }
 
     @Override
     public @NotNull T get(int x, int y, int z) {
-        return target.get(x, y, z);
+        return this.target.get(x, y, z);
     }
 
     @Override
     public void getAll(@NotNull Consumer<T> action) {
-        target.getAll(action);
+        this.target.getAll(action);
     }
 
     @SuppressWarnings("unchecked")
@@ -121,51 +121,51 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     
     @Override
     public @NotNull T getAndSetUnchecked(int x, int y, int z, @NotNull T value) {
-        return target.getAndSetUnchecked(x, y, z, value);
+        return this.target.getAndSetUnchecked(x, y, z, value);
     }
 
     @Override
     public int getSerializedSize() {
-        return target.getSerializedSize();
+        return this.target.getSerializedSize();
     }
 
     @Override
     public boolean maybeHas(@NotNull Predicate<T> predicate) {
-        return target.maybeHas(predicate);
+        return this.target.maybeHas(predicate);
     }
 
     @Override
     public synchronized int onResize(int newBits, @NotNull T object) {
-        return target.onResize(newBits, object);
+        return this.target.onResize(newBits, object);
     }
 
     @Override
     public synchronized @NotNull PackedData<T> pack(@NotNull IdMap<T> idList, @NotNull Strategy paletteProvider) {
-        return target.pack(idList, paletteProvider);
+        return this.target.pack(idList, paletteProvider);
     }
 
     @Override
     public synchronized void read(@NotNull FriendlyByteBuf buf) {
-        target.read(buf);
+        this.target.read(buf);
     }
 
     @Override
     public @NotNull PalettedContainer<T> recreate() {
-        return target.recreate();
+        return this.target.recreate();
     }
 
     @Override
     public void release() {
-        target.release();
+        this.target.release();
     }
 
     @Override
     public void write(@NotNull FriendlyByteBuf buf) {
-        target.write(buf);
+        this.target.write(buf);
     }
 
     @Override
     public void set(int x, int y, int z, @NotNull T value) {
-        target.set(x, y, z, value);
+        this.target.set(x, y, z, value);
     }
 }
