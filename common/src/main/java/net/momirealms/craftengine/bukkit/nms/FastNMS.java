@@ -95,6 +95,8 @@ public abstract class FastNMS {
 
     public abstract Object createSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe);
 
+    public abstract Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState);
+
     public abstract Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState);
 
     public abstract BlockData method$CraftBlockData$fromData(Object blockState);

@@ -121,6 +121,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_21_6.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.network.InjectedHashedStack;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.recipe.*;
@@ -248,6 +249,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object createSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe) {
         return InjectedSmithingTrimRecipe.of(recipe);
+    }
+
+    @Override
+    public Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState) {
+        return InjectedFallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
     }
 
     @Override
