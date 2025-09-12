@@ -2091,8 +2091,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean method$Entity$causeFallDamage(Object entity, Object fallDistance, float damageMultiplier, Object damageSource) {
-        return ((Entity) entity).causeFallDamage((double) fallDistance, damageMultiplier, (DamageSource) damageSource);
+    public boolean method$Entity$causeFallDamage(Object entity, Number fallDistance, float damageMultiplier, Object damageSource) {
+        return ((Entity) entity).causeFallDamage(fallDistance.doubleValue(), damageMultiplier, (DamageSource) damageSource);
     }
 
     @Override

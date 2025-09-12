@@ -789,7 +789,7 @@ public abstract class FastNMS {
 
     public abstract Object constructor$ClientboundRemoveEntitiesPacket(IntList entities);
 
-    public abstract boolean method$Entity$causeFallDamage(Object entity, Object fallDistance, float damageMultiplier, Object damageSource);
+    public abstract boolean method$Entity$causeFallDamage(Object entity, Number fallDistance, float damageMultiplier, Object damageSource);
 
     public abstract Object method$Entity$damageSources(Object entity);
 
