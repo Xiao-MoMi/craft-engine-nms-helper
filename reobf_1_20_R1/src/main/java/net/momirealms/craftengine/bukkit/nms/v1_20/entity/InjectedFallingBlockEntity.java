@@ -11,6 +11,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
@@ -28,15 +29,23 @@ import net.momirealms.craftengine.bukkit.api.CraftEngineItems;
 import net.momirealms.craftengine.bukkit.block.behavior.ConcretePowderBlockBehavior;
 import net.momirealms.craftengine.bukkit.plugin.reflection.minecraft.CoreReflections;
 import net.momirealms.craftengine.bukkit.util.BlockStateUtils;
+import net.momirealms.craftengine.bukkit.world.BukkitWorld;
 import net.momirealms.craftengine.core.block.BlockSettings;
 import net.momirealms.craftengine.core.block.ImmutableBlockState;
 import net.momirealms.craftengine.core.block.properties.BooleanProperty;
 import net.momirealms.craftengine.core.block.properties.Property;
 import net.momirealms.craftengine.core.item.BuildableItem;
+import net.momirealms.craftengine.core.item.Item;
+import net.momirealms.craftengine.core.plugin.context.ContextHolder;
+import net.momirealms.craftengine.core.plugin.context.parameter.DirectContextParameters;
+import net.momirealms.craftengine.core.world.World;
+import net.momirealms.craftengine.core.world.WorldPosition;
 import org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+
+import java.util.Optional;
 
 public class InjectedFallingBlockEntity extends FallingBlockEntity {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -77,14 +86,18 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
 
     @Override
     public ItemEntity spawnAtLocation(@NotNull ItemLike item) {
-        return BlockStateUtils.getOptionalCustomBlockState(super.getBlockState())
-                .map(ImmutableBlockState::settings)
-                .map(BlockSettings::itemId)
-                .map(CraftEngineItems::byId)
-                .map(BuildableItem::buildItemStack)
-                .map(it -> ((CraftItemStack) it).handle)
-                .map(super::spawnAtLocation)
-                .orElse(null);
+        Optional<ImmutableBlockState> optionalCustomState = BlockStateUtils.getOptionalCustomBlockState(super.getBlockState());
+        if (optionalCustomState.isEmpty()) return null;
+        ImmutableBlockState customState = optionalCustomState.get();
+        World world = new BukkitWorld(this.level().getWorld());
+        WorldPosition position = new WorldPosition(world, this.xo, this.yo, this.zo);
+        ContextHolder.Builder builder = ContextHolder.builder()
+                .withParameter(DirectContextParameters.FALLING_BLOCK, true)
+                .withParameter(DirectContextParameters.POSITION, position);
+        for (Item<Object> ceitem : customState.getDrops(builder, world, null)) {
+            world.dropItemNaturally(position, ceitem);
+        }
+        return null;
     }
 
     @SuppressWarnings({"all", "removal"})
