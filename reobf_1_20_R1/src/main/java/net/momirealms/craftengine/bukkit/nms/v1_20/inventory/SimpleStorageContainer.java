@@ -1,14 +1,21 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_6.inventory;
+package net.momirealms.craftengine.bukkit.nms.v1_20.inventory;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.momirealms.craftengine.bukkit.block.entity.BlockEntityHolder;
+import net.momirealms.craftengine.bukkit.nms.StorageContainer;
+import net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine;
+import net.momirealms.craftengine.bukkit.plugin.user.BukkitServerPlayer;
+import net.momirealms.craftengine.core.block.entity.BlockEntity;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class CraftEngineWorldlyContainer implements WorldlyContainer {
+public class SimpleStorageContainer implements WorldlyContainer, StorageContainer {
     private final NonNullList<ItemStack> items;
     private int maxStack = MAX_STACK;
     private final List<HumanEntity> viewers;
@@ -26,14 +33,20 @@ public class CraftEngineWorldlyContainer implements WorldlyContainer {
     private final int[] slots;
     private final boolean canPlaceItem;
     private final boolean canTakeItem;
+    private final BlockEntity blockEntity;
 
-    public CraftEngineWorldlyContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
+    public SimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
         this.items = NonNullList.withSize(size, ItemStack.EMPTY);
         this.viewers = new ObjectArrayList<>();
         this.owner = owner;
         this.slots = IntStream.range(0, size).toArray();
         this.canPlaceItem = canPlaceItem;
         this.canTakeItem = canTakeItem;
+        if (owner instanceof BlockEntityHolder blockEntityHolder) {
+            this.blockEntity = blockEntityHolder.blockEntity();
+        } else {
+            this.blockEntity = null;
+        }
     }
 
     @Override
@@ -101,7 +114,10 @@ public class CraftEngineWorldlyContainer implements WorldlyContainer {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return true;
+        if (this.blockEntity == null) return true;
+        BukkitServerPlayer serverPlayer = BukkitCraftEngine.instance().adapt(((ServerPlayer) player).getBukkitEntity());
+        if (serverPlayer == null) return false;
+        return serverPlayer.canInteractWithBlock(this.blockEntity.pos(), 4);
     }
 
     @Override
@@ -148,8 +164,14 @@ public class CraftEngineWorldlyContainer implements WorldlyContainer {
     }
 
     @Override
-    public Location getLocation() {
-        return null;
+    public @NotNull Location getLocation() {
+        if (this.blockEntity == null) return null;
+        return new Location(
+                (World) this.blockEntity.world().world().platformWorld(),
+                this.blockEntity.pos().x(),
+                this.blockEntity.pos().y(),
+                this.blockEntity.pos().z()
+        );
     }
 
     @Override

@@ -113,7 +113,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_5.collision.CollisionInteract
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.entity.InjectedFallingBlockEntity;
-import net.momirealms.craftengine.bukkit.nms.v1_20_5.inventory.CraftEngineWorldlyContainer;
+import net.momirealms.craftengine.bukkit.nms.v1_20_5.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.recipe.*;
 import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
@@ -2317,6 +2317,6 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Inventory createCraftEngineWorldlyContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
-        return new CraftInventory(new CraftEngineWorldlyContainer(owner, size, canPlaceItem, canTakeItem));
+        return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
     }
 }
