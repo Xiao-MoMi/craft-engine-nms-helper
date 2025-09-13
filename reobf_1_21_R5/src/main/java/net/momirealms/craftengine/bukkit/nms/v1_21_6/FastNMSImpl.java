@@ -122,6 +122,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.CollisionInteract
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.entity.InjectedFallingBlockEntity;
+import net.momirealms.craftengine.bukkit.nms.v1_21_6.inventory.CraftEngineWorldlyContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.network.InjectedHashedStack;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.recipe.*;
@@ -152,6 +153,7 @@ import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
@@ -2134,5 +2136,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void field$Entity$hurtMarked(Object entity, boolean hurtMarked) {
         ((Entity) entity).hurtMarked = hurtMarked;
+    }
+
+    @Override
+    public Inventory createCraftEngineWorldlyContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
+        return new CraftInventory(new CraftEngineWorldlyContainer(owner, size, canPlaceItem, canTakeItem));
     }
 }

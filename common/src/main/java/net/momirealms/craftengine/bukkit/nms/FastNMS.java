@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -806,4 +807,6 @@ public abstract class FastNMS {
     public abstract boolean field$Entity$hurtMarked(Object entity);
 
     public abstract void field$Entity$hurtMarked(Object entity, boolean hurtMarked);
+
+    public abstract Inventory createCraftEngineWorldlyContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
 }
