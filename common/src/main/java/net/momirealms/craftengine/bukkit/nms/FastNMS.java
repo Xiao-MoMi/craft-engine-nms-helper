@@ -808,5 +808,7 @@ public abstract class FastNMS {
 
     public abstract void field$Entity$hurtMarked(Object entity, boolean hurtMarked);
 
-    public abstract Inventory createCraftEngineWorldlyContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
+    public abstract Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
+
+    public abstract Object method$FluidState$createLegacyBlock(Object fluidState);
 }

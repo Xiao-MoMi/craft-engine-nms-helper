@@ -2133,7 +2133,12 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Inventory createCraftEngineWorldlyContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
+    public Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
         return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
+    }
+
+    @Override
+    public Object method$FluidState$createLegacyBlock(Object fluidState) {
+        return ((FluidState) fluidState).createLegacyBlock();
     }
 }
