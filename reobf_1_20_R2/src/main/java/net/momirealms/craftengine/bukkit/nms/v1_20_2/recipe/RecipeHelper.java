@@ -85,7 +85,7 @@ public final class RecipeHelper {
                 if (remainder != null) {
                     Optional<? extends BuildableItem<ItemStack>> optionalBuildableItem = BukkitItemManager.instance().getBuildableItem(remainder);
                     if (optionalBuildableItem.isPresent()) {
-                        return (net.minecraft.world.item.ItemStack) optionalBuildableItem.get().buildItem(ItemBuildContext.EMPTY).getLiteralObject();
+                        return (net.minecraft.world.item.ItemStack) optionalBuildableItem.get().buildItem(ItemBuildContext.empty()).getLiteralObject();
                     }
                 }
                 return net.minecraft.world.item.ItemStack.EMPTY;

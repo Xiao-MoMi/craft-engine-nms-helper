@@ -54,7 +54,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
                 shape.length,
                 visualData,
                 roughData,
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.EMPTY).getLiteralObject(),
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getLiteralObject(),
                 recipe.showNotification()
         );
     }

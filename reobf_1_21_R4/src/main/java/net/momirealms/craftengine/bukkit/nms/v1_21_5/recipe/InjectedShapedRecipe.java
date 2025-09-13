@@ -38,7 +38,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
                 RecipeHelper.toMinecraft(recipe.category()),
                 visualPattern,
                 actualPattern,
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.EMPTY).getLiteralObject(),
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getLiteralObject(),
                 recipe.showNotification()
         );
     }
