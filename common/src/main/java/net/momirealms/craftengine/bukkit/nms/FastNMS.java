@@ -819,4 +819,16 @@ public abstract class FastNMS {
     public abstract void method$ThreadedLevelLightEngine$checkBlock(Object levelEngine, Object blockPos);
 
     public abstract Object method$SectionPos$of(int x, int y, int z);
+
+    public abstract Object method$BlockBehaviour$BlockStateBase$getSoundType(Object blockState);
+
+    public abstract Object field$SoundType$breakSound(Object soundType);
+
+    public abstract float field$SoundType$volume(Object soundType);
+
+    public abstract float field$SoundType$pitch(Object soundType);
+
+    public abstract Object method$Holder$direct(Object value);
+
+    public abstract Object constructor$ClientboundSoundPacket(Object sound, Object source, double x, double y, double z, float volume, float pitch, long seed);
 }

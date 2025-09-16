@@ -44,6 +44,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.server.network.config.ServerResourcePackConfigurationTask;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.world.Container;
@@ -70,6 +71,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -79,7 +81,6 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.lighting.LevelLightEngine;
-import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.lighting.LightEventListener;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -2145,5 +2146,35 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$SectionPos$of(int x, int y, int z) {
         return SectionPos.of(x, y, z);
+    }
+
+    @Override
+    public Object method$BlockBehaviour$BlockStateBase$getSoundType(Object blockState) {
+        return ((BlockState) blockState).getSoundType();
+    }
+
+    @Override
+    public Object field$SoundType$breakSound(Object soundType) {
+        return ((SoundType) soundType).getBreakSound();
+    }
+
+    @Override
+    public float field$SoundType$volume(Object soundType) {
+        return ((SoundType) soundType).getVolume();
+    }
+
+    @Override
+    public float field$SoundType$pitch(Object soundType) {
+        return ((SoundType) soundType).getPitch();
+    }
+
+    @Override
+    public Object method$Holder$direct(Object value) {
+        return Holder.direct(value);
+    }
+
+    @Override
+    public Object constructor$ClientboundSoundPacket(Object sound, Object source, double x, double y, double z, float volume, float pitch, long seed) {
+        return new ClientboundSoundPacket((Holder<SoundEvent>) sound, (SoundSource) source, x, y, z, volume, pitch, seed);
     }
 }
