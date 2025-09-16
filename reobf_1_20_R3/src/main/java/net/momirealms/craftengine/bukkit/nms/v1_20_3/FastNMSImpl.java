@@ -81,6 +81,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
+import net.minecraft.world.level.lighting.LightEventListener;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -989,8 +990,10 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState, Object blockGetter, Object blockPos) {
-        return LightEngine.hasDifferentLightProperties((BlockGetter) blockGetter, (BlockPos) blockPos, (BlockState) oldState, (BlockState) newState);
+    public boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState) {
+        BlockState oldBlockState = (BlockState) oldState;
+        BlockState newBlockState = (BlockState) newState;
+        return newBlockState.getLightEmission() != oldBlockState.getLightEmission() || newBlockState.useShapeForLightOcclusion() || oldBlockState.useShapeForLightOcclusion();
     }
 
     @Override
@@ -2121,5 +2124,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$FluidState$createLegacyBlock(Object fluidState) {
         return ((FluidState) fluidState).createLegacyBlock();
+    }
+
+    @Override
+    public boolean method$LevelSection$hasOnlyAir(Object levelSection) {
+        return ((LevelChunkSection) levelSection).hasOnlyAir();
+    }
+
+    @Override
+    public void method$LightEventListener$updateSectionStatus(Object lightEngine, Object sectionPos, boolean hasOnlyAir) {
+        ((LightEventListener) lightEngine).updateSectionStatus((SectionPos) sectionPos, hasOnlyAir);
+    }
+
+    @Override
+    public void method$ThreadedLevelLightEngine$checkBlock(Object lightEngine, Object blockPos) {
+        ((ThreadedLevelLightEngine) lightEngine).checkBlock((BlockPos) blockPos);
+    }
+
+    @Override
+    public Object method$SectionPos$of(int x, int y, int z) {
+        return SectionPos.of(x, y, z);
     }
 }

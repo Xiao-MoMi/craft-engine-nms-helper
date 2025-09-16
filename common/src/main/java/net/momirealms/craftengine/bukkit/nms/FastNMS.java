@@ -374,7 +374,7 @@ public abstract class FastNMS {
 
     public abstract Object method$BlockState$getBlockSupportShape(Object blockState, Object level, Object blockPos);
 
-    public abstract boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState, Object blockGetter, Object blockPos);
+    public abstract boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState);
 
     public abstract Object constructor$FriendlyByteBuf(ByteBuf buf);
 
@@ -811,4 +811,12 @@ public abstract class FastNMS {
     public abstract Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
 
     public abstract Object method$FluidState$createLegacyBlock(Object fluidState);
+
+    public abstract boolean method$LevelSection$hasOnlyAir(Object levelSection);
+
+    public abstract void method$LightEventListener$updateSectionStatus(Object lightEngine, Object sectionPos, boolean hasOnlyAir);
+
+    public abstract void method$ThreadedLevelLightEngine$checkBlock(Object levelEngine, Object blockPos);
+
+    public abstract Object method$SectionPos$of(int x, int y, int z);
 }
