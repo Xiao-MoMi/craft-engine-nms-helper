@@ -50,6 +50,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
@@ -62,6 +63,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.LeadItem;
 import net.minecraft.world.item.armortrim.*;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -70,10 +72,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.SupportType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -2175,5 +2174,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundSoundPacket(Object sound, Object source, double x, double y, double z, float volume, float pitch, long seed) {
         return new ClientboundSoundPacket((Holder<SoundEvent>) sound, (SoundSource) source, x, y, z, volume, pitch, seed);
+    }
+
+    @Override
+    public boolean method$LeadItem$bindPlayerMobs(Object player, Object world, Object pos) {
+        return LeadItem.bindPlayerMobs((net.minecraft.world.entity.player.Player) player, (Level) world, (BlockPos) pos) == InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public boolean method$FenceGateBlock$connectsToDirection(Object state, Object direction) {
+        return FenceGateBlock.connectsToDirection((BlockState) state, (Direction) direction);
     }
 }

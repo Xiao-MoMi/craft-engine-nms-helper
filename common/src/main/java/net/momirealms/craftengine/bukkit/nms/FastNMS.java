@@ -11,6 +11,7 @@ import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
+import net.momirealms.craftengine.core.entity.player.InteractionResult;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
@@ -831,4 +832,8 @@ public abstract class FastNMS {
     public abstract Object method$Holder$direct(Object value);
 
     public abstract Object constructor$ClientboundSoundPacket(Object sound, Object source, double x, double y, double z, float volume, float pitch, long seed);
+
+    public abstract boolean method$LeadItem$bindPlayerMobs(Object player, Object world, Object pos);
+
+    public abstract boolean method$FenceGateBlock$connectsToDirection(Object state, Object direction);
 }
