@@ -59,7 +59,6 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -87,6 +86,7 @@ import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEventListener;
 import net.minecraft.world.level.material.Fluid;
@@ -148,6 +148,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
@@ -1373,8 +1374,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public int method$EntityGetter$getEntitiesOfClass(Object entityGetter, Object aabb, Class entityClass) {
-        return ((EntityGetter) entityGetter).getEntitiesOfClass(entityClass, (AABB) aabb, EntitySelector.NO_SPECTATORS.and(entity -> !entity.isIgnoringBlockTriggers())).size();
+    public List<Object> method$EntityGetter$getEntitiesOfClass(Object entityGetter, Class entityClass, Object area, Predicate filter) {
+        return ((EntityGetter) entityGetter).getEntitiesOfClass(entityClass, (AABB) area, filter);
     }
 
     @Override
@@ -2386,5 +2387,45 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$FenceGateBlock$connectsToDirection(Object state, Object direction) {
         return FenceGateBlock.connectsToDirection((BlockState) state, (Direction) direction);
+    }
+
+    @Override
+    public boolean method$Entity$isSpectator(Object entity) {
+        return ((Entity) entity).isSpectator();
+    }
+
+    @Override
+    public boolean method$Entity$isIgnoringBlockTriggers(Object entity) {
+        return ((Entity) entity).isIgnoringBlockTriggers();
+    }
+
+    @Override
+    public Object method$VoxelShape$bounds(Object voxelShape) {
+        return ((VoxelShape) voxelShape).bounds();
+    }
+
+    @Override
+    public void method$Level$updateNeighborsAt(Object levelAccessor, Object pos, Object block, @Nullable Object orientation) {
+        ((Level) levelAccessor).updateNeighborsAt((BlockPos) pos, (net.minecraft.world.level.block.Block) block);
+    }
+
+    @Override
+    public @Nullable Object method$ExperimentalRedstoneUtils$initialOrientation(Object level, @Nullable Object front, @Nullable Object up) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public void method$LevelAccessor$playSound(Object level, @Nullable Object entity, Object pos, Object sound, Object source, float volume, float pitch) {
+        ((LevelAccessor) level).playSound(entity instanceof net.minecraft.world.entity.player.Player player ? player : null, (BlockPos) pos, (SoundEvent) sound, (SoundSource) source, volume, pitch);
+    }
+
+    @Override
+    public void method$LevelAccessor$gameEvent(Object level, @Nullable Object entity, Object gameEvent, Object pos) {
+        ((LevelAccessor) level).gameEvent((Entity) entity, (Holder<GameEvent>) gameEvent, (BlockPos) pos);
+    }
+
+    @Override
+    public void method$BlockBehaviour$BlockStateBase$tick(Object blockState, Object level, Object pos) {
+        ((BlockBehaviour.BlockStateBase) blockState).tick((ServerLevel) level, (BlockPos) pos, ((ServerLevel) level).random);
     }
 }

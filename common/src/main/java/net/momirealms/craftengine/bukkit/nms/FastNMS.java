@@ -11,7 +11,6 @@ import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
-import net.momirealms.craftengine.core.entity.player.InteractionResult;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
@@ -31,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.function.Predicate;
 
 @SuppressWarnings({"unused", "rawtypes"})
 public abstract class FastNMS {
@@ -517,7 +517,7 @@ public abstract class FastNMS {
 
     public abstract boolean method$BlockStateBase$isFaceSturdy(Object blockState, Object level, Object pos, Object face, Object supportType);
 
-    public abstract int method$EntityGetter$getEntitiesOfClass(Object entityGetter, Object aabb, Class entityClass);
+    public abstract List<Object> method$EntityGetter$getEntitiesOfClass(Object entityGetter, Class entityClass, Object area, Predicate filter);
 
     public abstract Object method$AABB$move(Object aabb, Object pos);
 
@@ -836,4 +836,20 @@ public abstract class FastNMS {
     public abstract boolean method$LeadItem$bindPlayerMobs(Object player, Object world, Object pos);
 
     public abstract boolean method$FenceGateBlock$connectsToDirection(Object state, Object direction);
+
+    public abstract boolean method$Entity$isSpectator(Object entity);
+
+    public abstract boolean method$Entity$isIgnoringBlockTriggers(Object entity);
+
+    public abstract Object method$VoxelShape$bounds(Object voxelShape);
+
+    public abstract void method$Level$updateNeighborsAt(Object levelAccessor, Object pos, Object block, @Nullable Object orientation);
+
+    public abstract @Nullable Object method$ExperimentalRedstoneUtils$initialOrientation(Object level, @Nullable Object front, @Nullable Object up);
+
+    public abstract void method$LevelAccessor$playSound(Object level, @Nullable Object entity, Object pos, Object sound, Object source, float volume, float pitch);
+
+    public abstract void method$LevelAccessor$gameEvent(Object level, @Nullable Object entity, Object gameEvent, Object pos);
+
+    public abstract void method$BlockBehaviour$BlockStateBase$tick(Object blockState, Object level, Object pos);
 }
