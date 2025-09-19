@@ -852,4 +852,8 @@ public abstract class FastNMS {
     public abstract void method$LevelAccessor$gameEvent(Object level, @Nullable Object entity, Object gameEvent, Object pos);
 
     public abstract void method$BlockBehaviour$BlockStateBase$tick(Object blockState, Object level, Object pos);
+
+    public abstract Optional<Object> method$HolderGetter$getResourceKey(Object registry, Object key);
+
+    public abstract Object method$Holder$value(Object holder);
 }

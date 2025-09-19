@@ -2244,4 +2244,14 @@ public class FastNMSImpl extends FastNMS {
     public void method$BlockBehaviour$BlockStateBase$tick(Object blockState, Object level, Object pos) {
         ((BlockBehaviour.BlockStateBase) blockState).tick((ServerLevel) level, (BlockPos) pos, ((ServerLevel) level).random);
     }
+
+    @Override
+    public Optional<Object> method$HolderGetter$getResourceKey(Object registry, Object key) {
+        return ((HolderGetter) registry).get((ResourceKey) key);
+    }
+
+    @Override
+    public Object method$Holder$value(Object holder) {
+        return ((Holder) holder).value();
+    }
 }
