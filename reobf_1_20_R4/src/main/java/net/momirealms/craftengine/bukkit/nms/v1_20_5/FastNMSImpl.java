@@ -2438,4 +2438,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Holder$value(Object holder) {
         return ((Holder) holder).value();
     }
+
+    @Override
+    public Object method$SynchedEntityData$get(Object synchedEntityData, Object dataParameter) {
+        return ((SynchedEntityData) synchedEntityData).get((EntityDataAccessor) dataParameter);
+    }
 }

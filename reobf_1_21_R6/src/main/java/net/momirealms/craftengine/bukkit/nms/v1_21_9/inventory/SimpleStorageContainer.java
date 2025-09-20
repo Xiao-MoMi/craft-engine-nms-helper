@@ -1,0 +1,201 @@
+package net.momirealms.craftengine.bukkit.nms.v1_21_9.inventory;
+
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.momirealms.craftengine.bukkit.block.entity.BlockEntityHolder;
+import net.momirealms.craftengine.bukkit.nms.StorageContainer;
+import net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine;
+import net.momirealms.craftengine.bukkit.plugin.user.BukkitServerPlayer;
+import net.momirealms.craftengine.core.block.entity.BlockEntity;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.inventory.InventoryHolder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.IntStream;
+
+public class SimpleStorageContainer implements WorldlyContainer, StorageContainer {
+    private final NonNullList<ItemStack> items;
+    private int maxStack = MAX_STACK;
+    private final List<HumanEntity> viewers;
+    private final InventoryHolder owner;
+    private final int[] slots;
+    private final boolean canPlaceItem;
+    private final boolean canTakeItem;
+    private final BlockEntity blockEntity;
+
+
+    public SimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
+        this.items = NonNullList.withSize(size, ItemStack.EMPTY);
+        this.viewers = new ObjectArrayList<>();
+        this.owner = owner;
+        this.slots = IntStream.range(0, size).toArray();
+        this.canPlaceItem = canPlaceItem;
+        this.canTakeItem = canTakeItem;
+        if (owner instanceof BlockEntityHolder blockEntityHolder) {
+            this.blockEntity = blockEntityHolder.blockEntity();
+        } else {
+            this.blockEntity = null;
+        }
+    }
+
+    @Override
+    public int getContainerSize() {
+        return this.items.size();
+    }
+
+    @Override
+    public @NotNull ItemStack getItem(int slot) {
+        return this.items.get(slot);
+    }
+
+    @Override
+    public @NotNull ItemStack removeItem(int slot, int amount) {
+        ItemStack stack = this.getItem(slot);
+        ItemStack result;
+        if (stack == ItemStack.EMPTY) return stack;
+        if (stack.getCount() <= amount) {
+            this.setItem(slot, ItemStack.EMPTY);
+            result = stack;
+        } else {
+            result = CraftItemStack.copyNMSStack(stack, amount);
+            stack.shrink(amount);
+        }
+        this.setChanged();
+        return result;
+    }
+
+    @Override
+    public @NotNull ItemStack removeItemNoUpdate(int slot) {
+        ItemStack stack = this.getItem(slot);
+        ItemStack result;
+        if (stack == ItemStack.EMPTY) return stack;
+        if (stack.getCount() <= 1) {
+            this.setItem(slot, ItemStack.EMPTY);
+            result = stack;
+        } else {
+            result = CraftItemStack.copyNMSStack(stack, 1);
+            stack.shrink(1);
+        }
+        return result;
+    }
+
+    @Override
+    public void setItem(int slot, @NotNull ItemStack stack) {
+        this.items.set(slot, stack);
+        if (stack != ItemStack.EMPTY && this.getMaxStackSize() > 0 && stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
+        }
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return this.maxStack;
+    }
+
+    @Override
+    public void setMaxStackSize(int size) {
+        this.maxStack = size;
+    }
+
+    @Override
+    public void setChanged() {
+    }
+
+    @Override
+    public boolean stillValid(@NotNull Player player) {
+        if (this.blockEntity == null) return true;
+        BukkitServerPlayer serverPlayer = BukkitCraftEngine.instance().adapt(((ServerPlayer) player).getBukkitEntity());
+        if (serverPlayer == null) return false;
+        return serverPlayer.canInteractWithBlock(this.blockEntity.pos(), 4);
+    }
+
+    @Override
+    public @NotNull List<ItemStack> getContents() {
+        return this.items;
+    }
+
+    @Override
+    public void onOpen(@NotNull CraftHumanEntity player) {
+        this.viewers.add(player);
+    }
+
+    @Override
+    public void onClose(@NotNull CraftHumanEntity player) {
+        this.viewers.remove(player);
+    }
+
+    @Override
+    public @NotNull List<HumanEntity> getViewers() {
+        return this.viewers;
+    }
+
+    @Override
+    public InventoryHolder getOwner() {
+        return this.owner;
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, @NotNull ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public void clearContent() {
+        this.items.clear();
+    }
+
+    @Override
+    public Location getLocation() {
+        if (this.blockEntity == null) return null;
+        return new Location(
+                (World) this.blockEntity.world().world().platformWorld(),
+                this.blockEntity.pos().x(),
+                this.blockEntity.pos().y(),
+                this.blockEntity.pos().z()
+        );
+    }
+
+    @Override
+    public boolean isEmpty() {
+        Iterator<ItemStack> iterator = this.items.iterator();
+
+        ItemStack itemstack;
+
+        do {
+            if (!iterator.hasNext()) {
+                return true;
+            }
+
+            itemstack = iterator.next();
+        } while (itemstack.isEmpty());
+
+        return false;
+    }
+
+    @Override
+    public int @NotNull [] getSlotsForFace(@NotNull Direction direction) {
+        return this.slots;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int i, @NotNull ItemStack itemStack, @Nullable Direction direction) {
+        return this.canPlaceItem;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int i, @NotNull ItemStack itemStack, @NotNull Direction direction) {
+        return this.canTakeItem;
+    }
+}

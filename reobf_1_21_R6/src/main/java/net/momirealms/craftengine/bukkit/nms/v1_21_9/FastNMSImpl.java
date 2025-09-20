@@ -1,18 +1,22 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21;
+package net.momirealms.craftengine.bukkit.nms.v1_21_9;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
 import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
-import io.papermc.paper.util.DataSanitizationUtil;
+import io.netty.channel.ChannelFutureListener;
+import io.papermc.paper.configuration.GlobalConfiguration;
+import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
@@ -23,11 +27,10 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
-import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.PacketSendListener;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.*;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.StreamDecoder;
 import net.minecraft.network.codec.StreamEncoder;
@@ -37,7 +40,7 @@ import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;
 import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.network.protocol.login.ClientboundGameProfilePacket;
+import net.minecraft.network.protocol.login.ClientboundLoginFinishedPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -53,6 +56,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
+import net.minecraft.util.Mth;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -61,6 +66,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Abilities;
@@ -70,13 +76,16 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.LeadItem;
-import net.minecraft.world.item.armortrim.*;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
@@ -89,12 +98,14 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.lighting.LevelLightEngine;
+import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.lighting.LightEventListener;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.redstone.ExperimentalRedstoneUtils;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -107,19 +118,21 @@ import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
-import net.momirealms.craftengine.bukkit.nms.v1_21.block.PaperStatePropertyAccessor;
-import net.momirealms.craftengine.bukkit.nms.v1_21.chunk.InjectedLevelChunkSection;
-import net.momirealms.craftengine.bukkit.nms.v1_21.chunk.InjectedPalettedContainer;
-import net.momirealms.craftengine.bukkit.nms.v1_21.collision.CollisionBoat;
-import net.momirealms.craftengine.bukkit.nms.v1_21.collision.CollisionInteraction;
-import net.momirealms.craftengine.bukkit.nms.v1_21.collision.NonCollisionBoat;
-import net.momirealms.craftengine.bukkit.nms.v1_21.collision.NonCollisionInteraction;
-import net.momirealms.craftengine.bukkit.nms.v1_21.entity.InjectedFallingBlockEntity;
-import net.momirealms.craftengine.bukkit.nms.v1_21.inventory.SimpleStorageContainer;
-import net.momirealms.craftengine.bukkit.nms.v1_21.loot.CraftEngineItem;
-import net.momirealms.craftengine.bukkit.nms.v1_21.recipe.*;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.block.PaperStatePropertyAccessor;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.chunk.InjectedLevelChunkSection;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.chunk.InjectedPalettedContainer;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.collision.CollisionBoat;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.collision.CollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.collision.NonCollisionBoat;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.entity.InjectedFallingBlockEntity;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.inventory.SimpleStorageContainer;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.loot.CraftEngineItem;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.network.InjectedHashedStack;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.recipe.*;
 import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
+import net.momirealms.craftengine.core.util.GsonHelper;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -185,9 +198,9 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public CollisionEntity createCollisionBoat(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding) {
         if (canCollide) {
-            return new CollisionBoat(EntityType.BOAT, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+            return new CollisionBoat(EntityType.OAK_BOAT, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
         } else {
-            return new NonCollisionBoat(EntityType.BOAT, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+            return new NonCollisionBoat(EntityType.OAK_BOAT, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
         }
     }
 
@@ -470,8 +483,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public void method$Connection$send(Object connection, Object packet, Object sendListener) {
-        ((Connection) connection).send((Packet<?>) packet, ((PacketSendListener) sendListener));
+    public void method$Connection$send(Object connection, Object packet, @Nullable Object sendListener) {
+        ((Connection) connection).send((Packet<?>) packet, ((ChannelFutureListener) sendListener));
     }
 
     @Override
@@ -506,7 +519,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$LevelAccessor$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
-        ((LevelAccessor) level).levelEvent(eventId, (BlockPos) blockPos, stateId);
+        ((Level) level).levelEvent(eventId, (BlockPos) blockPos, stateId);
     }
 
     @Override
@@ -521,7 +534,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$SoundEvent$location(Object soundEvent) {
-        return ((SoundEvent) soundEvent).getLocation();
+        return ((SoundEvent) soundEvent).location();
     }
 
     @Override
@@ -571,17 +584,18 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$Component$Serializer$fromJson(JsonElement element) {
-        return Component.Serializer.fromJson(element, registryAccess());
+        return element == null ? null : ComponentSerialization.CODEC.parse(registryAccess().createSerializationContext(JsonOps.INSTANCE), element).getOrThrow(JsonParseException::new);
     }
 
     @Override
     public Object method$Component$Serializer$fromJson(String json) {
-        return Component.Serializer.fromJson(json, registryAccess());
+        JsonElement jsonElement = GsonHelper.get().fromJson(json, JsonElement.class);
+        return method$Component$Serializer$fromJson(jsonElement);
     }
 
     @Override
     public String method$Component$Serializer$toJson(Object component) {
-        return Component.Serializer.toJson((Component) component, registryAccess());
+        return GsonHelper.get().toJson(ComponentSerialization.CODEC.encodeStart(registryAccess().createSerializationContext(JsonOps.INSTANCE), (Component) component).getOrThrow(JsonParseException::new));
     }
 
     @Override
@@ -626,7 +640,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Optional method$RecipeManager$getRecipeFor(Object recipeManager, Object recipeType, Object recipeInput, Object level, Object resourceKeyOrLocation) {
-        return ((RecipeManager) recipeManager).getRecipeFor((RecipeType) recipeType, (RecipeInput) recipeInput, (Level) level, (ResourceLocation) resourceKeyOrLocation);
+        return ((RecipeManager) recipeManager).getRecipeFor((RecipeType) recipeType, (RecipeInput) recipeInput, (Level) level, (ResourceKey) resourceKeyOrLocation);
     }
 
     @Override
@@ -644,6 +658,8 @@ public class FastNMSImpl extends FastNMS {
                 e.latency(),
                 e.gameMode(),
                 (Component) newDisplayName,
+                e.showHat(),
+                e.listOrder(),
                 e.chatSession()
         );
     }
@@ -788,7 +804,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos) {
         ServerPlayer serverPlayer = (ServerPlayer) player;
-        ServerLevel serverLevel = serverPlayer.serverLevel();
+        ServerLevel serverLevel = serverPlayer.level();
         BlockPos blockPos = (BlockPos) pos;
         BlockState previous = serverLevel.getBlockStateIfLoaded(blockPos);
         if (previous == null) return;
@@ -869,7 +885,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$ItemStack$hasNonDefaultComponent(Object itemStack, Object type) {
-        throw new UnsupportedVersionException();
+        return ((net.minecraft.world.item.ItemStack) itemStack).hasNonDefault((DataComponentType<?>) type);
     }
 
     @Override
@@ -889,8 +905,8 @@ public class FastNMSImpl extends FastNMS {
         CustomData customData = nmsStack.get(DataComponents.CUSTOM_DATA);
         if (customData == null) return null;
         Tag tag = customData.getUnsafe().get("craftengine:id");
-        if (tag instanceof StringTag tag1) {
-            return tag1.getAsString();
+        if (tag instanceof StringTag(String value)) {
+            return value;
         }
         return null;
     }
@@ -912,7 +928,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$LevelChunk$markUnsaved(Object chunk) {
-        ((LevelChunk) chunk).setUnsaved(true);
+        ((LevelChunk) chunk).markUnsaved();
     }
 
     @Override
@@ -972,11 +988,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$Player$containerMenu(Object player) {
-        return ((net.minecraft.world.entity.player.Player) player).containerMenu;
-    }
-
-    @Override
     public Particle method$CraftParticle$toBukkit(Object nmsParticle) {
         return CraftParticle.minecraftToBukkit((ParticleType) nmsParticle);
     }
@@ -1008,9 +1019,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState) {
-        BlockState oldBlockState = (BlockState) oldState;
-        BlockState newBlockState = (BlockState) newState;
-        return newBlockState.getLightEmission() != oldBlockState.getLightEmission() || newBlockState.useShapeForLightOcclusion() || oldBlockState.useShapeForLightOcclusion();
+        return LightEngine.hasDifferentLightProperties((BlockState) oldState, (BlockState) newState);
     }
 
     @Override
@@ -1029,7 +1038,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     private static final StreamCodec<RegistryFriendlyByteBuf, net.minecraft.world.item.ItemStack> ITEM_UNTRUSTED_CODEC =
-            net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC);
+            net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
 
     @Override
     public ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf) {
@@ -1058,7 +1067,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public short method$ShortTag$value(Object shortTag) {
-        return ((ShortTag) shortTag).getAsShort();
+        return ((ShortTag) shortTag).value();
     }
 
     @Override
@@ -1068,7 +1077,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int method$IntTag$value(Object intTag) {
-        return ((IntTag) intTag).getAsInt();
+        return ((IntTag) intTag).value();
     }
 
     @Override
@@ -1078,7 +1087,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public long method$LongTag$value(Object longTag) {
-        return ((LongTag) longTag).getAsLong();
+        return ((LongTag) longTag).value();
     }
 
     @Override
@@ -1088,7 +1097,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public byte method$ByteTag$value(Object byteTag) {
-        return ((ByteTag) byteTag).getAsByte();
+        return ((ByteTag) byteTag).value();
     }
 
     @Override
@@ -1098,7 +1107,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public float method$FloatTag$value(Object floatTag) {
-        return ((FloatTag) floatTag).getAsFloat();
+        return ((FloatTag) floatTag).value();
     }
 
     @Override
@@ -1108,7 +1117,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public double method$DoubleTag$value(Object doubleTag) {
-        return ((DoubleTag) doubleTag).getAsDouble();
+        return ((DoubleTag) doubleTag).value();
     }
 
     @Override
@@ -1148,7 +1157,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public String method$StringTag$value(Object stringTag) {
-        return ((StringTag) stringTag).getAsString();
+        return ((StringTag) stringTag).value();
     }
 
     @Override
@@ -1208,12 +1217,14 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public List<Object> field$SimpleContainer$items(Object simpleContainer) {
-        return (List) ((SimpleContainer) simpleContainer).items;
+        SimpleContainer container = (SimpleContainer) simpleContainer;
+        return (List) container.items;
     }
 
     @Override
     public Object field$SingleRecipeInput$item(Object singleRecipeInput) {
-        return ((SingleRecipeInput) singleRecipeInput).item();
+        SingleRecipeInput recipeInput = (SingleRecipeInput) singleRecipeInput;
+        return recipeInput.item();
     }
 
     @Override
@@ -1223,12 +1234,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$TagParser$parseCompoundFully(String nbt) throws CommandSyntaxException {
-        return TagParser.parseTag(nbt);
+        return TagParser.parseCompoundFully(nbt);
     }
 
     @Override
     public Object method$Registry$getValue(Object registry, Object resourceLocation) {
-        return ((Registry) registry).get((ResourceLocation) resourceLocation);
+        return ((Registry) registry).getValue((ResourceLocation) resourceLocation);
     }
 
     @Override
@@ -1238,7 +1249,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks) {
-        ((LevelAccessor) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
+        ((ScheduledTickAccess) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks);
     }
 
     @Override
@@ -1303,7 +1314,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$ScheduledTickAccess$scheduleFluidTick(Object level, Object blockPos, Object fluid, int ticks) {
-        ((LevelAccessor) level).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
+        ((ScheduledTickAccess) level).scheduleTick((BlockPos) blockPos, (Fluid) fluid, ticks);
     }
 
     @Override
@@ -1329,6 +1340,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public boolean method$BlockStateBase$isCollisionShapeFullBlock(Object blockState, Object level, Object blockPos) {
         return ((BlockState) blockState).isCollisionShapeFullBlock((BlockGetter) level, (BlockPos) blockPos);
+    }
+
+    @Override
+    public Object field$Player$containerMenu(Object player) {
+        return ((net.minecraft.world.entity.player.Player) player).containerMenu;
     }
 
     @Override
@@ -1398,7 +1414,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$AbstractArrow$isInGround(Object entity) {
-        return ((AbstractArrow) entity).inGround;
+        return ((AbstractArrow) entity).isInGround();
     }
 
     @Override
@@ -1459,7 +1475,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$ClientboundSetEntityDataPacket$pack(List<?> dataValues, Object friendlyByteBuf) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf((ByteBuf) friendlyByteBuf, registryAccess());
-        try (DataSanitizationUtil.DataSanitizer ignored = DataSanitizationUtil.start(true)) {
+        try (ItemObfuscationSession ignored = ItemObfuscationSession.start(GlobalConfiguration.get().anticheat.obfuscation.items.binding.level)) {
             for (SynchedEntityData.DataValue<?> dataValue : ((List<SynchedEntityData.DataValue<?>>) dataValues)) {
                 dataValue.write(buf);
             }
@@ -1480,47 +1496,47 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public int method$ClientboundEntityPositionSyncPacket$id(Object packet) {
-        throw new UnsupportedVersionException();
+        return ((ClientboundEntityPositionSyncPacket) packet).id();
     }
 
     @Override
     public Object field$ClientboundEntityPositionSyncPacket$values(Object packet) {
-        throw new UnsupportedVersionException();
+        return ((ClientboundEntityPositionSyncPacket) packet).values();
     }
 
     @Override
     public boolean field$ClientboundEntityPositionSyncPacket$onGround(Object packet) {
-        throw new UnsupportedVersionException();
+        return ((ClientboundEntityPositionSyncPacket) packet).onGround();
     }
 
     @Override
     public Object field$PositionMoveRotation$position(Object values) {
-        throw new UnsupportedVersionException();
+        return ((PositionMoveRotation) values).position();
     }
 
     @Override
     public Object field$PositionMoveRotation$deltaMovement(Object values) {
-        throw new UnsupportedVersionException();
+        return ((PositionMoveRotation) values).deltaMovement();
     }
 
     @Override
     public float field$PositionMoveRotation$yRot(Object values) {
-        throw new UnsupportedVersionException();
+        return ((PositionMoveRotation) values).yRot();
     }
 
     @Override
     public float field$PositionMoveRotation$xRot(Object values) {
-        throw new UnsupportedVersionException();
+        return ((PositionMoveRotation) values).xRot();
     }
 
     @Override
     public Object constructor$PositionMoveRotation(Object position, Object deltaMovement, float yRot, float xRot) {
-        throw new UnsupportedVersionException();
+        return new PositionMoveRotation((Vec3) position, (Vec3) deltaMovement, yRot, xRot);
     }
 
     @Override
     public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, Object values, boolean onGround) {
-        throw new UnsupportedVersionException();
+        return new ClientboundEntityPositionSyncPacket(entityId, (PositionMoveRotation) values, onGround);
     }
 
     @Override
@@ -1540,12 +1556,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public byte field$ClientboundMoveEntityPacket$yRot(Object packet) {
-        return ((ClientboundMoveEntityPacket) packet).getyRot();
+        return Mth.packDegrees(((ClientboundMoveEntityPacket) packet).getYRot());
     }
 
     @Override
     public byte field$ClientboundMoveEntityPacket$xRot(Object packet) {
-        return ((ClientboundMoveEntityPacket) packet).getxRot();
+        return Mth.packDegrees(((ClientboundMoveEntityPacket) packet).getXRot());
     }
 
     @Override
@@ -1610,7 +1626,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$SoundEvent$location(Object soundEvent) {
-        return ((SoundEvent) soundEvent).getLocation();
+        return ((SoundEvent) soundEvent).location();
     }
 
     @Override
@@ -1630,7 +1646,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$LootParams$Builder$getOptionalParameter(Object lootParamsBuilder, Object key) {
-        return ((LootParams.Builder) lootParamsBuilder).getOptionalParameter((LootContextParam) key);
+        return ((LootParams.Builder) lootParamsBuilder).getOptionalParameter((ContextKey) key);
     }
 
     @Override
@@ -1670,12 +1686,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Set method$CompoundTag$entrySet(Object compoundTag) {
-        Map<String, Tag> tags = new HashMap<>();
-        CompoundTag tag = (CompoundTag) compoundTag;
-        for (String key : tag.getAllKeys()) {
-            tags.put(key, tag.get(key));
-        }
-        return tags.entrySet();
+        return ((CompoundTag) compoundTag).entrySet();
     }
 
     @Override
@@ -1710,7 +1721,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$RegistryAccess$lookupOrThrow(Object registryAccess, Object resourceKey) {
-        return ((RegistryAccess) registryAccess).registryOrThrow((ResourceKey) resourceKey);
+        return ((RegistryAccess) registryAccess).lookupOrThrow((ResourceKey) resourceKey);
     }
 
     @Override
@@ -1720,12 +1731,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Optional<Object> method$Registry$getHolderByResourceLocation(Object registry, Object resourceLocation) {
-        return ((Registry) registry).getHolder((ResourceLocation) resourceLocation);
+        return ((Registry) registry).get((ResourceLocation) resourceLocation);
     }
 
     @Override
     public Optional<Object> method$Registry$getHolderByResourceKey(Object registry, Object resourceKey) {
-        return ((Registry) registry).getHolder((ResourceKey) resourceKey);
+        return ((Registry) registry).get((ResourceKey) resourceKey);
     }
 
     @Override
@@ -1770,12 +1781,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$LevelAccessor$levelEvent(Object level, Object entity, int eventId, Object blockPos, int stateId) {
-        ((LevelAccessor) level).levelEvent((net.minecraft.world.entity.player.Player) entity, eventId, (BlockPos) blockPos, stateId);
+        ((LevelAccessor) level).levelEvent((Entity) entity, eventId, (BlockPos) blockPos, stateId);
     }
 
     @Override
     public Object field$Player$abilities(Object player) {
-        return ((net.minecraft.world.entity.player.Player) player).getAbilities();
+        return ((ServerPlayer) player).getAbilities();
     }
 
     @Override
@@ -1785,7 +1796,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public GameProfile field$ClientboundLoginFinishedPacket$gameProfile(Object packet) {
-        return ((ClientboundGameProfilePacket) packet).gameProfile();
+        return ((ClientboundLoginFinishedPacket) packet).gameProfile();
     }
 
     @Override
@@ -1795,7 +1806,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Optional method$TrimPatterns$getFromTemplate(Object itemStack) {
-        return TrimPatterns.getFromTemplate(registryAccess(), (net.minecraft.world.item.ItemStack) itemStack);
+        throw new UnsupportedVersionException();
     }
 
     @Override
@@ -1821,7 +1832,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks, Object priority) {
-        ((LevelAccessor) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
+        ((ScheduledTickAccess) level).scheduleTick((BlockPos) blockPos, (net.minecraft.world.level.block.Block) block, ticks, (TickPriority) priority);
     }
 
     @Override
@@ -1836,7 +1847,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$HashedStack$matches(Object hashedStack, Object itemStack, Object hashGenerator) {
-        throw new UnsupportedVersionException();
+        return ((HashedStack) hashedStack).matches((net.minecraft.world.item.ItemStack) itemStack, (HashedPatchMap.HashGenerator) hashGenerator);
     }
 
     @Override
@@ -1851,12 +1862,15 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$HashedStack$create(Object itemStack, Object hashGenerator) {
-        throw new UnsupportedVersionException();
+        return HashedStack.create((net.minecraft.world.item.ItemStack) itemStack, (HashedPatchMap.HashGenerator) hashGenerator);
     }
 
     @Override
     public Object createDecoratedHashOpsGenerator(DynamicOps<HashCode> value) {
-        throw new UnsupportedVersionException();
+        return (HashedPatchMap.HashGenerator) (typedDataComponent) -> typedDataComponent
+                .encodeValue(value)
+                .getOrThrow((s -> new IllegalArgumentException("Failed to hash " + typedDataComponent + ": " + s)))
+                .asInt();
     }
 
     @Override
@@ -1936,17 +1950,17 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$RecipeMap$removeRecipe(Object recipeMap, Object id) {
-        throw new UnsupportedVersionException();
+        ((RecipeMap) recipeMap).removeRecipe((ResourceKey) id);
     }
 
     @Override
     public void method$RecipeManager$removeRecipe(Object recipeManager, Object id) {
-        ((RecipeManager) recipeManager).removeRecipe((ResourceLocation) id);
+        ((RecipeManager) recipeManager).removeRecipe((ResourceKey) id);
     }
 
     @Override
     public Object constructor$RecipeHolder(Object id, Object recipe) {
-        return new RecipeHolder((ResourceLocation) id, (Recipe<?>) recipe);
+        return new RecipeHolder((ResourceKey<Recipe<?>>) id, (Recipe<?>) recipe);
     }
 
     @Override
@@ -1986,7 +2000,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$RecipeManager$recipes(Object recipeManager) {
-        throw new UnsupportedVersionException();
+        return ((RecipeManager) recipeManager).recipes;
     }
 
     @Override
@@ -1996,47 +2010,47 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player) {
-        throw new UnsupportedVersionException();
+        return new InjectedHashedStack((HashedStack) hashedStack, player);
     }
 
     @Override
     public int field$ServerboundContainerClickPacket$containerId(Object packet) {
-        return ((ServerboundContainerClickPacket) packet).getContainerId();
+        return ((ServerboundContainerClickPacket) packet).containerId();
     }
 
     @Override
     public int field$ServerboundContainerClickPacket$stateId(Object packet) {
-        return ((ServerboundContainerClickPacket) packet).getStateId();
+        return ((ServerboundContainerClickPacket) packet).stateId();
     }
 
     @Override
     public short field$ServerboundContainerClickPacket$slotNum(Object packet) {
-        return (short) ((ServerboundContainerClickPacket) packet).getSlotNum();
+        return ((ServerboundContainerClickPacket) packet).slotNum();
     }
 
     @Override
     public byte field$ServerboundContainerClickPacket$buttonNum(Object packet) {
-        return (byte) ((ServerboundContainerClickPacket) packet).getButtonNum();
+        return ((ServerboundContainerClickPacket) packet).buttonNum();
     }
 
     @Override
     public Object field$ServerboundContainerClickPacket$clickType(Object packet) {
-        return ((ServerboundContainerClickPacket) packet).getClickType();
+        return ((ServerboundContainerClickPacket) packet).clickType();
     }
 
     @Override
     public Int2ObjectMap field$ServerboundContainerClickPacket$changedSlots(Object packet) {
-        return ((ServerboundContainerClickPacket) packet).getChangedSlots();
+        return ((ServerboundContainerClickPacket) packet).changedSlots();
     }
 
     @Override
     public Object field$ServerboundContainerClickPacket$carriedItem(Object packet) {
-        return ((ServerboundContainerClickPacket) packet).getCarriedItem();
+        return ((ServerboundContainerClickPacket) packet).carriedItem();
     }
 
     @Override
     public Object constructor$ServerboundContainerClickPacket(int containerId, int stateId, short slotNum, byte buttonNum, Object clickType, Int2ObjectMap changedSlots, Object carriedItem) {
-        return new ServerboundContainerClickPacket(containerId, stateId, slotNum, buttonNum, (ClickType) clickType, (net.minecraft.world.item.ItemStack) carriedItem, changedSlots);
+        return new ServerboundContainerClickPacket(containerId, stateId, slotNum, buttonNum, (ClickType) clickType, changedSlots, (HashedStack) carriedItem);
     }
 
     @Override
@@ -2091,7 +2105,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$Entity$causeFallDamage(Object entity, Number fallDistance, float damageMultiplier, Object damageSource) {
-        return ((Entity) entity).causeFallDamage(fallDistance.floatValue(), damageMultiplier, (DamageSource) damageSource);
+        return ((Entity) entity).causeFallDamage(fallDistance.doubleValue(), damageMultiplier, (DamageSource) damageSource);
     }
 
     @Override
@@ -2191,7 +2205,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$LeadItem$bindPlayerMobs(Object player, Object world, Object pos) {
-        return LeadItem.bindPlayerMobs((net.minecraft.world.entity.player.Player) player, (Level) world, (BlockPos) pos) == InteractionResult.SUCCESS;
+        return LeadItem.bindPlayerMobs((net.minecraft.world.entity.player.Player) player, (Level) world, (BlockPos) pos) == InteractionResult.SUCCESS_SERVER;
     }
 
     @Override
@@ -2216,17 +2230,17 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$Level$updateNeighborsAt(Object levelAccessor, Object pos, Object block, @Nullable Object orientation) {
-        ((Level) levelAccessor).updateNeighborsAt((BlockPos) pos, (net.minecraft.world.level.block.Block) block);
+        ((Level) levelAccessor).updateNeighborsAt((BlockPos) pos, (net.minecraft.world.level.block.Block) block, (Orientation) orientation);
     }
 
     @Override
     public @Nullable Object method$ExperimentalRedstoneUtils$initialOrientation(Object level, @Nullable Object front, @Nullable Object up) {
-        throw new UnsupportedVersionException();
+        return ExperimentalRedstoneUtils.initialOrientation((Level) level, (Direction) front, (Direction) up);
     }
 
     @Override
     public void method$LevelAccessor$playSound(Object level, @Nullable Object entity, Object pos, Object sound, Object source, float volume, float pitch) {
-        ((LevelAccessor) level).playSound(entity instanceof net.minecraft.world.entity.player.Player player ? player : null, (BlockPos) pos, (SoundEvent) sound, (SoundSource) source, volume, pitch);
+        ((LevelAccessor) level).playSound((Entity) entity, (BlockPos) pos, (SoundEvent) sound, (SoundSource) source, volume, pitch);
     }
 
     @Override
