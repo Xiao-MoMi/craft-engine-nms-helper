@@ -2253,4 +2253,19 @@ public class FastNMSImpl extends FastNMS {
     public Object method$SynchedEntityData$get(Object synchedEntityData, Object dataParameter) {
         return ((SynchedEntityData) synchedEntityData).get((EntityDataAccessor) dataParameter);
     }
+
+    @Override
+    public Object field$BlockBehaviour$BlockStateBase$fluidState(Object blockState) {
+        return ((BlockBehaviour.BlockStateBase) blockState).getFluidState();
+    }
+
+    @Override
+    public boolean field$FluidState$isEmpty(Object fluidState) {
+        return ((FluidState) fluidState).isEmpty();
+    }
+
+    @Override
+    public void method$BlockBehaviour$BlockStateBase$randomTick(Object blockState, Object level, Object pos) {
+        ((BlockBehaviour.BlockStateBase) blockState).randomTick((ServerLevel) level, (BlockPos) pos, ((ServerLevel) level).random);
+    }
 }
