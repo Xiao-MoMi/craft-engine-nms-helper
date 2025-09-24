@@ -2293,4 +2293,19 @@ public class FastNMSImpl extends FastNMS {
     public void method$BlockBehaviour$BlockStateBase$randomTick(Object blockState, Object level, Object pos) {
         ((BlockBehaviour.BlockStateBase) blockState).randomTick((ServerLevel) level, (BlockPos) pos, ((ServerLevel) level).random);
     }
+
+    @Override
+    public Object field$BlockBehaviour$BlockStateBase$fluidState(Object blockState) {
+        return ((BlockBehaviour.BlockStateBase) blockState).getFluidState();
+    }
+
+    @Override
+    public int field$FluidState$amount(Object fluidState) {
+        return ((FluidState) fluidState).getAmount();
+    }
+
+    @Override
+    public Object method$StateHolder$trySetValue(Object stateHolder, Object property, Comparable value) {
+        return ((StateHolder) stateHolder).trySetValue((Property) property, value);
+    }
 }

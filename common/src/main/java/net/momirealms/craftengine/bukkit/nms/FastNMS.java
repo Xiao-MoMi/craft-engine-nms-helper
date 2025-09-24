@@ -859,4 +859,10 @@ public abstract class FastNMS {
     public abstract Object method$SynchedEntityData$get(Object synchedEntityData, Object dataParameter);
 
     public abstract void method$BlockBehaviour$BlockStateBase$randomTick(Object blockState, Object level, Object pos);
+
+    public abstract Object field$BlockBehaviour$BlockStateBase$fluidState(Object blockState);
+
+    public abstract int field$FluidState$amount(Object fluidState);
+
+    public abstract Object method$StateHolder$trySetValue(Object stateHolder, Object property, Comparable value);
 }
