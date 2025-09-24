@@ -2212,11 +2212,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Optional<Object> method$HolderGetter$getResourceKey(Object registry, Object key) {
-        return ((HolderGetter) registry).get((ResourceKey) key);
-    }
-
-    @Override
     public Object method$Holder$value(Object holder) {
         return ((Holder) holder).value();
     }
@@ -2224,16 +2219,6 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$SynchedEntityData$get(Object synchedEntityData, Object dataParameter) {
         return ((SynchedEntityData) synchedEntityData).get((EntityDataAccessor) dataParameter);
-    }
-
-    @Override
-    public Object field$BlockBehaviour$BlockStateBase$fluidState(Object blockState) {
-        return ((BlockBehaviour.BlockStateBase) blockState).getFluidState();
-    }
-
-    @Override
-    public boolean field$FluidState$isEmpty(Object fluidState) {
-        return ((FluidState) fluidState).isEmpty();
     }
 
     @Override
