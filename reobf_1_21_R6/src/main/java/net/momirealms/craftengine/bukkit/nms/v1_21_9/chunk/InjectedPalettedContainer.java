@@ -1,7 +1,10 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_9.chunk;
 
+import io.papermc.paper.antixray.ChunkPacketInfo;
+import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.chunk.PalettedContainerRO;
 import net.minecraft.world.level.chunk.Strategy;
 import net.momirealms.craftengine.bukkit.plugin.injector.WorldStorageInjector;
 import net.momirealms.craftengine.core.world.SectionPos;
@@ -9,10 +12,12 @@ import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@SuppressWarnings("deprecation")
 public class InjectedPalettedContainer<T> extends PalettedContainer<T> implements InjectedHolder.Palette {
     private PalettedContainer<T> target;
     private CESection section;
@@ -20,8 +25,8 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     private SectionPos sectionPos;
     private boolean isActive;
 
-    public InjectedPalettedContainer(T object, Strategy<T> strategy) {
-        super(object, strategy);
+    public InjectedPalettedContainer(IdMap<T> idList, T object, Strategy<T> paletteProvider, T @Nullable [] presetValues) {
+        super(object, paletteProvider, presetValues);
     }
 
     @Override
@@ -32,6 +37,11 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     @Override
     public void setActive(boolean b) {
         this.isActive = b;
+    }
+
+    @Override
+    public synchronized void write(@NotNull FriendlyByteBuf buffer, @Nullable ChunkPacketInfo<T> chunkPacketInfo, int chunkSectionIndex) {
+        this.target.write(buffer, chunkPacketInfo, chunkSectionIndex);
     }
 
     @Override
@@ -110,7 +120,7 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     public @NotNull T getAndSet(int x, int y, int z, @NotNull T value) {
         return (T) WorldStorageInjector.GetAndSetInterceptor.INSTANCE.intercept(this, new Object[]{x,y,z,value});
     }
-    
+
     @Override
     public @NotNull T getAndSetUnchecked(int x, int y, int z, @NotNull T value) {
         return this.target.getAndSetUnchecked(x, y, z, value);
@@ -132,8 +142,8 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     }
 
     @Override
-    public synchronized @NotNull PackedData<T> pack(@NotNull Strategy<T> strategy) {
-        return this.target.pack(strategy);
+    public synchronized @NotNull PalettedContainerRO.PackedData<T> pack(@NotNull Strategy<T> paletteProvider) {
+        return this.target.pack(paletteProvider);
     }
 
     @Override
