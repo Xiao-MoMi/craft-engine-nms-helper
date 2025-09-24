@@ -778,7 +778,7 @@ public abstract class FastNMS {
 
     public abstract boolean method$BlockStateBase$isBlock(Object blockState, Object block);
 
-    public abstract Object field$BlockHitResul$blockPos(Object result);
+    public abstract Object field$BlockHitResult$blockPos(Object result);
 
     public abstract Object field$HitResult$location(Object result);
 

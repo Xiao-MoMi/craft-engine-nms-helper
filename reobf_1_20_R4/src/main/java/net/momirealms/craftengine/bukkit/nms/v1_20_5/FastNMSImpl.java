@@ -2240,7 +2240,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$BlockHitResul$blockPos(Object result) {
+    public Object field$BlockHitResult$blockPos(Object result) {
         return ((BlockHitResult) result).getBlockPos();
     }
 
