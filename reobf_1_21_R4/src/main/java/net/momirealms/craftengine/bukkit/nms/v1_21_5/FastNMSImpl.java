@@ -2178,6 +2178,26 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public Object field$SoundType$placeSound(Object soundType) {
+        return ((SoundType) soundType).getPlaceSound();
+    }
+
+    @Override
+    public Object field$SoundType$hitSound(Object soundType) {
+        return ((SoundType) soundType).getHitSound();
+    }
+
+    @Override
+    public Object field$SoundType$fallSound(Object soundType) {
+        return ((SoundType) soundType).getFallSound();
+    }
+
+    @Override
+    public Object field$SoundType$stepSound(Object soundType) {
+        return ((SoundType) soundType).getStepSound();
+    }
+
+    @Override
     public float field$SoundType$volume(Object soundType) {
         return ((SoundType) soundType).getVolume();
     }

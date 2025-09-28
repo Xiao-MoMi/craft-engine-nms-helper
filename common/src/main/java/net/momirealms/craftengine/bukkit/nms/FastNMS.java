@@ -826,6 +826,14 @@ public abstract class FastNMS {
 
     public abstract Object field$SoundType$breakSound(Object soundType);
 
+    public abstract Object field$SoundType$placeSound(Object soundType);
+
+    public abstract Object field$SoundType$hitSound(Object soundType);
+
+    public abstract Object field$SoundType$fallSound(Object soundType);
+
+    public abstract Object field$SoundType$stepSound(Object soundType);
+
     public abstract float field$SoundType$volume(Object soundType);
 
     public abstract float field$SoundType$pitch(Object soundType);
