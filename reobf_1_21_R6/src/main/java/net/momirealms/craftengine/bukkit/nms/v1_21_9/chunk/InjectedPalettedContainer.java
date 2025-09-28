@@ -25,7 +25,7 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     private SectionPos sectionPos;
     private boolean isActive;
 
-    public InjectedPalettedContainer(IdMap<T> idList, T object, Strategy<T> paletteProvider, T @Nullable [] presetValues) {
+    public InjectedPalettedContainer(T object, Strategy<T> paletteProvider, T @Nullable [] presetValues) {
         super(object, paletteProvider, presetValues);
     }
 
@@ -129,6 +129,11 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     @Override
     public int getSerializedSize() {
         return this.target.getSerializedSize();
+    }
+
+    @Override
+    public int bitsPerEntry() {
+        return this.target.bitsPerEntry();
     }
 
     @Override
