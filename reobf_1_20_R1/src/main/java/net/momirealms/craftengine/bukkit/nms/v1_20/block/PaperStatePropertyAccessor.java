@@ -2,7 +2,7 @@ package net.momirealms.craftengine.bukkit.nms.v1_20.block;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
+import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 
 import java.util.Collection;
 import java.util.Locale;

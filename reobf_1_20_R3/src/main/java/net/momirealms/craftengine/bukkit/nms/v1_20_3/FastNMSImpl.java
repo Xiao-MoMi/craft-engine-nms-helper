@@ -110,7 +110,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_3.entity.InjectedFallingBlock
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.recipe.*;
-import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
+import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;

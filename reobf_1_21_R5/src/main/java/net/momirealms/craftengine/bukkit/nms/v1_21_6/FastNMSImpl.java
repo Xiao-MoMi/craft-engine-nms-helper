@@ -130,7 +130,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_6.inventory.SimpleStorageCont
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.network.InjectedHashedStack;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.recipe.*;
-import net.momirealms.craftengine.core.block.state.StatePropertyAccessor;
+import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.util.GsonHelper;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
