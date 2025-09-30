@@ -55,6 +55,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.*;
@@ -140,6 +141,7 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
@@ -2276,5 +2278,30 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$StateHolder$trySetValue(Object stateHolder, Object property, Comparable value) {
         return ((StateHolder) stateHolder).trySetValue((Property) property, value);
+    }
+
+    @Override
+    public boolean method$Inventory$add(Object inventory, Object itemStack) {
+        return ((net.minecraft.world.entity.player.Inventory) inventory).add((net.minecraft.world.item.ItemStack) itemStack);
+    }
+
+    @Override
+    public Object method$ServerPlayer$drop(Object serverPlayer, Object droppedItem, boolean dropAround, boolean traceItem, boolean callEvent, Consumer operation) {
+        return ((ServerPlayer) serverPlayer).drop((net.minecraft.world.item.ItemStack) droppedItem, dropAround, traceItem, callEvent);
+    }
+
+    @Override
+    public void method$ItemEntity$makeFakeItem(Object itemEntity) {
+        ((ItemEntity) itemEntity).makeFakeItem();
+    }
+
+    @Override
+    public void method$ItemEntity$setNoPickUpDelay(Object itemEntity) {
+        ((ItemEntity) itemEntity).setNoPickUpDelay();
+    }
+
+    @Override
+    public void method$ItemEntity$setTarget(Object itemEntity, UUID uuid) {
+        ((ItemEntity) itemEntity).setTarget(uuid);
     }
 }

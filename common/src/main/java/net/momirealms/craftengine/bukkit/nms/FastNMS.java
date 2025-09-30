@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @SuppressWarnings({"unused", "rawtypes"})
@@ -873,4 +874,14 @@ public abstract class FastNMS {
     public abstract int field$FluidState$amount(Object fluidState);
 
     public abstract Object method$StateHolder$trySetValue(Object stateHolder, Object property, Comparable value);
+
+    public abstract boolean method$Inventory$add(Object inventory, Object itemStack);
+
+    public abstract Object method$ServerPlayer$drop(Object serverPlayer, Object droppedItem, boolean dropAround, boolean traceItem, boolean callEvent, Consumer operation);
+
+    public abstract void method$ItemEntity$makeFakeItem(Object itemEntity);
+
+    public abstract void method$ItemEntity$setNoPickUpDelay(Object itemEntity);
+
+    public abstract void method$ItemEntity$setTarget(Object itemEntity, UUID uuid);
 }
