@@ -884,4 +884,6 @@ public abstract class FastNMS {
     public abstract void method$ItemEntity$setNoPickUpDelay(Object itemEntity);
 
     public abstract void method$ItemEntity$setTarget(Object itemEntity, UUID uuid);
+
+    public abstract void method$AbstractContainerMenu$broadcastChanges(Object menu);
 }

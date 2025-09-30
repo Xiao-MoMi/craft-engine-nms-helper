@@ -2315,4 +2315,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$ItemEntity$setTarget(Object itemEntity, UUID uuid) {
         ((ItemEntity) itemEntity).setTarget(uuid);
     }
+
+    @Override
+    public void method$AbstractContainerMenu$broadcastChanges(Object menu) {
+        ((AbstractContainerMenu) menu).broadcastChanges();
+    }
 }
