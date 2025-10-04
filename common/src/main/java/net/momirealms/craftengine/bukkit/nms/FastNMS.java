@@ -886,4 +886,8 @@ public abstract class FastNMS {
     public abstract void method$ItemEntity$setTarget(Object itemEntity, UUID uuid);
 
     public abstract void method$AbstractContainerMenu$broadcastChanges(Object menu);
+
+    public abstract Object field$Entity$entityData(Object entity);
+
+    public abstract void method$SynchedEntityData$set(Object synchedEntityData, Object dataParameter, Object value, boolean force);
 }

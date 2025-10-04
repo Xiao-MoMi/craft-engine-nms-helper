@@ -2334,4 +2334,14 @@ public class FastNMSImpl extends FastNMS {
     public void method$AbstractContainerMenu$broadcastChanges(Object menu) {
         ((AbstractContainerMenu) menu).broadcastChanges();
     }
+
+    @Override
+    public Object field$Entity$entityData(Object entity) {
+        return ((Entity) entity).getEntityData();
+    }
+
+    @Override
+    public void method$SynchedEntityData$set(Object synchedEntityData, Object dataParameter, Object value, boolean force) {
+        ((SynchedEntityData) synchedEntityData).set((EntityDataAccessor) dataParameter, value, force);
+    }
 }
