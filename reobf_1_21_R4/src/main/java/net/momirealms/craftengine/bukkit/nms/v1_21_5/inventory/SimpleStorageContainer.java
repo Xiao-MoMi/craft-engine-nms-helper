@@ -27,13 +27,13 @@ import java.util.stream.IntStream;
 
 public class SimpleStorageContainer implements WorldlyContainer, StorageContainer {
     private final NonNullList<ItemStack> items;
-    private int maxStack = MAX_STACK;
     private final List<HumanEntity> viewers;
     private final InventoryHolder owner;
     private final int[] slots;
-    private final boolean canPlaceItem;
-    private final boolean canTakeItem;
     private final BlockEntity blockEntity;
+    private int maxStack = MAX_STACK;
+    private boolean canPlaceItem;
+    private boolean canTakeItem;
 
     public SimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
         this.items = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -91,6 +91,11 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public void setItem(int slot, @NotNull Object stack) {
+        this.setItem(slot, (ItemStack) stack);
+    }
+
+    @Override
     public void setItem(int slot, @NotNull ItemStack stack) {
         this.items.set(slot, stack);
         if (stack != ItemStack.EMPTY && this.getMaxStackSize() > 0 && stack.getCount() > this.getMaxStackSize()) {
@@ -113,6 +118,11 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public boolean stillValid(@NotNull Object player) {
+        return this.stillValid((Player) player);
+    }
+
+    @Override
     public boolean stillValid(@NotNull Player player) {
         if (this.blockEntity == null) return true;
         BukkitServerPlayer serverPlayer = BukkitCraftEngine.instance().adapt(((ServerPlayer) player).getBukkitEntity());
@@ -126,8 +136,18 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public void onOpen(@NotNull HumanEntity player) {
+        this.onOpen((CraftHumanEntity) player);
+    }
+
+    @Override
     public void onOpen(@NotNull CraftHumanEntity player) {
         this.viewers.add(player);
+    }
+
+    @Override
+    public void onClose(@NotNull HumanEntity player) {
+        this.onClose((CraftHumanEntity) player);
     }
 
     @Override
@@ -146,12 +166,27 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public boolean canPlaceItem(int slot, @NotNull Object stack) {
+        return this.canPlaceItem(slot, (ItemStack) stack);
+    }
+
+    @Override
     public boolean canPlaceItem(int slot, @NotNull ItemStack stack) {
         return true;
     }
 
     @Override
+    public void startOpen(@NotNull Object player) {
+        this.startOpen((Player) player);
+    }
+
+    @Override
     public void startOpen(@NotNull Player player) {
+    }
+
+    @Override
+    public void stopOpen(@NotNull Object player) {
+        this.stopOpen((Player) player);
     }
 
     @Override
@@ -164,7 +199,7 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
-    public Location getLocation() {
+    public @NotNull Location getLocation() {
         if (this.blockEntity == null) return null;
         return new Location(
                 (World) this.blockEntity.world().world().platformWorld(),
@@ -192,8 +227,18 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public int @NotNull [] getSlotsForFace(@NotNull Object direction) {
+        return this.getSlotsForFace((Direction) direction);
+    }
+
+    @Override
     public int @NotNull [] getSlotsForFace(@NotNull Direction direction) {
         return this.slots;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int i, @NotNull Object itemStack, @Nullable Object direction) {
+        return this.canPlaceItemThroughFace(i, (ItemStack) itemStack, (Direction) direction);
     }
 
     @Override
@@ -202,7 +247,32 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public boolean canTakeItemThroughFace(int i, @NotNull Object itemStack, @NotNull Object direction) {
+        return this.canTakeItemThroughFace(i, (ItemStack) itemStack, (Direction) direction);
+    }
+
+    @Override
     public boolean canTakeItemThroughFace(int i, @NotNull ItemStack itemStack, @NotNull Direction direction) {
+        return this.canTakeItem;
+    }
+
+    @Override
+    public void setCanPlaceItem(boolean canPlaceItem) {
+        this.canPlaceItem = canPlaceItem;
+    }
+
+    @Override
+    public void setCanTakeItem(boolean canTakeItem) {
+        this.canTakeItem = canTakeItem;
+    }
+
+    @Override
+    public boolean canPlaceItem() {
+        return this.canPlaceItem;
+    }
+
+    @Override
+    public boolean canTakeItem() {
         return this.canTakeItem;
     }
 }
