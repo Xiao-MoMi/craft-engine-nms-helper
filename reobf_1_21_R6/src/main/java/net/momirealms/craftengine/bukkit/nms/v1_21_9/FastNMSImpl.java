@@ -20,10 +20,7 @@ import io.papermc.paper.util.sanitizer.ItemObfuscationSession;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
@@ -87,6 +84,7 @@ import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
@@ -1617,16 +1615,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$StreamCodec$decode(Object streamCodec, Object byteBuffer) {
-        return ((StreamCodec) streamCodec).decode(new RegistryFriendlyByteBuf((ByteBuf) byteBuffer, registryAccess()));
-    }
-
-    @Override
-    public void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value) {
-        ((StreamCodec) streamCodec).encode(new RegistryFriendlyByteBuf((ByteBuf) byteBuffer, registryAccess()), value);
-    }
-
-    @Override
     public Object method$SoundEvent$location(Object soundEvent) {
         return ((SoundEvent) soundEvent).location();
     }
@@ -2343,5 +2331,30 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$SynchedEntityData$set(Object synchedEntityData, Object dataParameter, Object value, boolean force) {
         ((SynchedEntityData) synchedEntityData).set((EntityDataAccessor) dataParameter, value, force);
+    }
+
+    @Override
+    public Object method$DataComponentExactPredicate$allOf(Object componentMap) {
+        return DataComponentExactPredicate.allOf((DataComponentMap) componentMap);
+    }
+
+    @Override
+    public Object method$ItemStack$getComponents(Object itemStack) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).getComponents();
+    }
+
+    @Override
+    public Object method$Item$builtInRegistryHolder(Object item) {
+        return ((Item) item).builtInRegistryHolder();
+    }
+
+    @Override
+    public Object field$ItemCost$itemStack(Object itemCost) {
+        return ((ItemCost) itemCost).itemStack();
+    }
+
+    @Override
+    public Object constructor$ItemCost(Object holder, int count, Object predicate) {
+        return new ItemCost((Holder<Item>) holder, count, (DataComponentExactPredicate) predicate);
     }
 }

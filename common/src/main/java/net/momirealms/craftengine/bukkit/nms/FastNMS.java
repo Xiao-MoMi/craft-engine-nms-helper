@@ -603,10 +603,6 @@ public abstract class FastNMS {
 
     public abstract void method$ParticleOptions$writeToNetwork(Object particle, Object buffer);
 
-    public abstract Object method$StreamCodec$decode(Object streamCodec, Object byteBuffer);
-
-    public abstract void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value);
-
     public abstract Object method$SoundEvent$location(Object soundEvent);
 
     public abstract Object constructor$SoundEvent(Object location, Optional<Float> fixedRange);
@@ -890,4 +886,14 @@ public abstract class FastNMS {
     public abstract Object field$Entity$entityData(Object entity);
 
     public abstract void method$SynchedEntityData$set(Object synchedEntityData, Object dataParameter, Object value, boolean force);
+
+    public abstract Object method$DataComponentExactPredicate$allOf(Object componentMap);
+
+    public abstract Object method$ItemStack$getComponents(Object itemStack);
+
+    public abstract Object method$Item$builtInRegistryHolder(Object item);
+
+    public abstract Object field$ItemCost$itemStack(Object itemCost);
+
+    public abstract Object constructor$ItemCost(Object holder, int count, Object predicate);
 }
