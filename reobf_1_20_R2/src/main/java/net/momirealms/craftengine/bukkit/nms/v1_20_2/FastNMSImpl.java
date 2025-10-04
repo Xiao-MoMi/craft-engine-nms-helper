@@ -1592,16 +1592,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$StreamCodec$decode(Object streamCodec, Object byteBuffer) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void method$StreamCodec$encode(Object streamCodec, Object byteBuffer, Object value) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
     public Object method$SoundEvent$location(Object soundEvent) {
         return ((SoundEvent) soundEvent).getLocation();
     }
@@ -2318,5 +2308,30 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public void method$SynchedEntityData$set(Object synchedEntityData, Object dataParameter, Object value, boolean force) {
         ((SynchedEntityData) synchedEntityData).set((EntityDataAccessor) dataParameter, value, force);
+    }
+
+    @Override
+    public Object method$DataComponentExactPredicate$allOf(Object componentMap) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$ItemStack$getComponents(Object itemStack) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$Item$builtInRegistryHolder(Object item) {
+        return ((Item) item).builtInRegistryHolder();
+    }
+
+    @Override
+    public Object field$ItemCost$itemStack(Object itemCost) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$ItemCost(Object holder, int count, Object predicate) {
+        throw new UnsupportedVersionException();
     }
 }
