@@ -144,7 +144,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-@SuppressWarnings({"unchecked", "rawtypes", "unused"})
+@SuppressWarnings({"unchecked", "rawtypes", "unused", "deprecation"})
 public class FastNMSImpl extends FastNMS {
 
     @Override

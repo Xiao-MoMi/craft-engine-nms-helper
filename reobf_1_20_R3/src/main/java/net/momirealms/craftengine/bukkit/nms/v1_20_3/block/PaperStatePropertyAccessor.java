@@ -6,6 +6,7 @@ import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PaperStatePropertyAccessor implements StatePropertyAccessor {
@@ -42,5 +43,23 @@ public class PaperStatePropertyAccessor implements StatePropertyAccessor {
     @Override
     public boolean hasProperty(String s) {
         return this.blockState.getBlock().getStateDefinition().getProperty(s) != null;
+    }
+
+    @Override
+    public BlockState withProperty(String propertyName, String value) {
+        Property<?> property = this.blockState.getBlock().getStateDefinition().getProperty(propertyName);
+        BlockState finalState = this.blockState;
+        if (property != null) {
+            Optional<?> optionalValue = property.getValue(value);
+            if (optionalValue.isPresent()) {
+                finalState = setValue(finalState, property, optionalValue.get());
+            }
+        }
+        return finalState;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Comparable<T>> BlockState setValue(BlockState blockState, Property<T> property, Object value) {
+        return blockState.setValue(property, (T) value);
     }
 }
