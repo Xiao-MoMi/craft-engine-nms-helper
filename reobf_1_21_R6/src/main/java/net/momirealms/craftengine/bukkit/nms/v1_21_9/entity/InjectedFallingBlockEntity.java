@@ -138,7 +138,7 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
                     boolean flag1 = flag && this.level().getFluidState(blockPos).is(FluidTags.WATER);
                     double d = this.getDeltaMovement().lengthSqr();
                     if (flag && d > (double)1.0F) {
-                        BlockHitResult blockHitResult = this.level().clip(new ClipContext(new Vec3(this.xo, this.yo, this.zo), this.position(), net.minecraft.world.level.ClipContext.Block.COLLIDER, ClipContext.Fluid.SOURCE_ONLY, this));
+                        BlockHitResult blockHitResult = this.level().clip(new ClipContext(new Vec3(super.xo, super.yo, super.zo), this.position(), net.minecraft.world.level.ClipContext.Block.COLLIDER, ClipContext.Fluid.SOURCE_ONLY, this));
                         if (blockHitResult.getType() != HitResult.Type.MISS && this.level().getFluidState(blockHitResult.getBlockPos()).is(FluidTags.WATER)) {
                             blockPos = blockHitResult.getBlockPos();
                             flag1 = true;
