@@ -896,4 +896,12 @@ public abstract class FastNMS {
     public abstract Object field$ItemCost$itemStack(Object itemCost);
 
     public abstract Object constructor$ItemCost(Object holder, int count, Object predicate);
+
+    public abstract Iterable method$BundleContents$items(Object bundleContents);
+
+    public abstract Object constructor$BundleContents(List items);
+
+    public abstract List field$ItemContainerContents$items(Object contents);
+
+    public abstract Object method$ItemContainerContents$fromItems(List list);
 }

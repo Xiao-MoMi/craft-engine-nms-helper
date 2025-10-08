@@ -2333,4 +2333,24 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ItemCost(Object holder, int count, Object predicate) {
         throw new UnsupportedVersionException();
     }
+
+    @Override
+    public Iterable method$BundleContents$items(Object bundleContents) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$BundleContents(List items) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public List field$ItemContainerContents$items(Object contents) {
+        throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object method$ItemContainerContents$fromItems(List list) {
+        throw new UnsupportedVersionException();
+    }
 }

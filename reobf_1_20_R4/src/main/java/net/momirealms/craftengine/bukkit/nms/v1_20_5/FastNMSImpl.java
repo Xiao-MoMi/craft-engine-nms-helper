@@ -68,7 +68,9 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.LeadItem;
 import net.minecraft.world.item.armortrim.*;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -2532,5 +2534,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ItemCost(Object holder, int count, Object predicate) {
         return new ItemCost((Holder<Item>) holder, count, (DataComponentPredicate) predicate);
+    }
+
+    @Override
+    public Iterable method$BundleContents$items(Object bundleContents) {
+        return ((BundleContents) bundleContents).items();
+    }
+
+    @Override
+    public Object constructor$BundleContents(List items) {
+        return new BundleContents(items);
+    }
+
+    @Override
+    public List field$ItemContainerContents$items(Object contents) {
+        return ((ItemContainerContents) contents).stream().toList();
+    }
+
+    @Override
+    public Object method$ItemContainerContents$fromItems(List list) {
+        return ItemContainerContents.fromItems(list);
     }
 }

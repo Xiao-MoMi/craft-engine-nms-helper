@@ -3,6 +3,7 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_9.network;
 import net.minecraft.network.HashedPatchMap;
 import net.minecraft.network.HashedStack;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BundleContents;
 import net.momirealms.craftengine.bukkit.item.BukkitItemManager;
 import net.momirealms.craftengine.core.entity.player.Player;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
