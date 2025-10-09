@@ -8,8 +8,6 @@ import net.momirealms.craftengine.core.entity.player.Player;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
 public record InjectedHashedStack(HashedStack hashedStack, Player player) implements HashedStack {
 
     @Override
