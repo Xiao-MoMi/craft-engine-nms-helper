@@ -2372,7 +2372,6 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public List field$ItemContainerContents$items(Object contents) {
-        DataComponents.BLOCK_STATE
         return ((ItemContainerContents) contents).items;
     }
 
