@@ -2397,4 +2397,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Block$getStateForPlacement(Object block, Object blockPlaceContext) {
         return ((net.minecraft.world.level.block.Block) block).getStateForPlacement((BlockPlaceContext) blockPlaceContext);
     }
+
+    @Override
+    public Object constructor$Vec3(double x, double y, double z) {
+        return new Vec3(x, y, z);
+    }
 }

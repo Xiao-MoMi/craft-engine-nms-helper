@@ -912,4 +912,6 @@ public abstract class FastNMS {
     public abstract Object method$BlockItem$getBlock(Object blockItem);
 
     public abstract Object method$Block$getStateForPlacement(Object block, Object blockPlaceContext);
+
+    public abstract Object constructor$Vec3(double x, double y, double z);
 }
