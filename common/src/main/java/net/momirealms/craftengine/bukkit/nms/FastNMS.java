@@ -807,7 +807,7 @@ public abstract class FastNMS {
 
     public abstract void field$Entity$hurtMarked(Object entity, boolean hurtMarked);
 
-    public abstract StorageContainer createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
+    public abstract Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
 
     public abstract Object method$FluidState$createLegacyBlock(Object fluidState);
 
@@ -904,24 +904,4 @@ public abstract class FastNMS {
     public abstract List field$ItemContainerContents$items(Object contents);
 
     public abstract Object method$ItemContainerContents$fromItems(List list);
-
-    public abstract Object createSimpleContainerMenu(StorageContainer storageContainer, int containerId, Object player, @org.jetbrains.annotations.Nullable Object title);
-
-    public abstract int method$ServerPlayer$nextContainerCounter(Object serverPlayer);
-
-    public abstract boolean field$AbstractContainerMenu$checkReachable(Object abstractContainerMenu);
-
-    public abstract void field$AbstractContainerMenu$checkReachable(Object abstractContainerMenu, boolean reachable);
-
-    public abstract Object constructor$ClientboundOpenScreenPacket(int containerId, Object menuType, Object title);
-
-    public abstract void method$ServerPlayer$initMenu(Object serverPlayer, Object menu);
-
-    public abstract Inventory constructor$CraftInventory(Object container);
-
-    public abstract int field$ItemStack$count(Object itemStack);
-
-    public abstract void field$ItemStack$count(Object itemStack, int count);
-
-    public abstract int method$ItemStack$getMaxStackSize(Object itemStack);
 }

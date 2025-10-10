@@ -106,7 +106,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
-import net.momirealms.craftengine.bukkit.nms.StorageContainer;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.block.PaperStatePropertyAccessor;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.chunk.InjectedLevelChunkSection;
@@ -116,7 +115,6 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_5.collision.CollisionInteract
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.entity.InjectedFallingBlockEntity;
-import net.momirealms.craftengine.bukkit.nms.v1_20_5.inventory.SimpleContainerMenu;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.recipe.*;
@@ -2314,8 +2312,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public StorageContainer createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
-        return new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem);
+    public Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
+        return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
     }
 
     @Override
@@ -2556,55 +2554,5 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ItemContainerContents$fromItems(List list) {
         return ItemContainerContents.fromItems(list);
-    }
-
-    @Override
-    public Object createSimpleContainerMenu(StorageContainer storageContainer, int containerId, Object player, @org.jetbrains.annotations.Nullable Object title) {
-        return new SimpleContainerMenu((SimpleStorageContainer) storageContainer, containerId, (net.minecraft.world.entity.player.Player) player, (Component) title);
-    }
-
-    @Override
-    public int method$ServerPlayer$nextContainerCounter(Object serverPlayer) {
-        return ((ServerPlayer) serverPlayer).nextContainerCounter();
-    }
-
-    @Override
-    public boolean field$AbstractContainerMenu$checkReachable(Object abstractContainerMenu) {
-        return ((AbstractContainerMenu) abstractContainerMenu).checkReachable;
-    }
-
-    @Override
-    public void field$AbstractContainerMenu$checkReachable(Object abstractContainerMenu, boolean reachable) {
-        ((AbstractContainerMenu) abstractContainerMenu).checkReachable = reachable;
-    }
-
-    @Override
-    public Object constructor$ClientboundOpenScreenPacket(int containerId, Object menuType, Object title) {
-        return new ClientboundOpenScreenPacket(containerId, (MenuType<?>) menuType, (Component) title);
-    }
-
-    @Override
-    public void method$ServerPlayer$initMenu(Object serverPlayer, Object menu) {
-        ((ServerPlayer) serverPlayer).initMenu((AbstractContainerMenu) menu);
-    }
-
-    @Override
-    public Inventory constructor$CraftInventory(Object container) {
-        return new CraftInventory((Container) container);
-    }
-
-    @Override
-    public int field$ItemStack$count(Object itemStack) {
-        return ((net.minecraft.world.item.ItemStack) itemStack).getCount();
-    }
-
-    @Override
-    public void field$ItemStack$count(Object itemStack, int count) {
-        ((net.minecraft.world.item.ItemStack) itemStack).setCount(count);
-    }
-
-    @Override
-    public int method$ItemStack$getMaxStackSize(Object itemStack) {
-        return ((net.minecraft.world.item.ItemStack) itemStack).getMaxStackSize();
     }
 }

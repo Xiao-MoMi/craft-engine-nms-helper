@@ -6,7 +6,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.momirealms.craftengine.bukkit.block.entity.BlockEntityHolder;
 import net.momirealms.craftengine.bukkit.nms.StorageContainer;
@@ -35,7 +34,7 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     private int maxStack = MAX_STACK;
     private boolean canPlaceItem;
     private boolean canTakeItem;
-    private MenuType<?> menuType;
+
 
     public SimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
         this.items = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -52,28 +51,13 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
-    public int containerSize() {
-        return this.getContainerSize();
-    }
-
-    @Override
     public int getContainerSize() {
         return this.items.size();
     }
 
     @Override
-    public @NotNull Object getItemStack(int slot) {
-        return this.getItem(slot);
-    }
-
-    @Override
     public @NotNull ItemStack getItem(int slot) {
         return this.items.get(slot);
-    }
-
-    @Override
-    public @NotNull Object removeItemStack(int slot, int amount) {
-        return this.removeItem(slot, amount);
     }
 
     @Override
@@ -93,11 +77,6 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
-    public @NotNull Object removeItemStackNoUpdate(int slot) {
-        return this.removeItemNoUpdate(slot);
-    }
-
-    @Override
     public @NotNull ItemStack removeItemNoUpdate(int slot) {
         ItemStack stack = this.getItem(slot);
         ItemStack result;
@@ -113,7 +92,7 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
-    public void setItemStack(int slot, @NotNull Object stack) {
+    public void setItem(int slot, @NotNull Object stack) {
         this.setItem(slot, (ItemStack) stack);
     }
 
@@ -126,28 +105,13 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
-    public int maxItemStackSize() {
-        return this.getMaxStackSize();
-    }
-
-    @Override
     public int getMaxStackSize() {
         return this.maxStack;
     }
 
     @Override
-    public void setMaxItemStackSize(int size) {
-        this.maxStack = size;
-    }
-
-    @Override
     public void setMaxStackSize(int size) {
         this.maxStack = size;
-    }
-
-    @Override
-    public void setContentsChanged() {
-        this.setChanged();
     }
 
     @Override
@@ -165,11 +129,6 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
         BukkitServerPlayer serverPlayer = BukkitCraftEngine.instance().adapt(((ServerPlayer) player).getBukkitEntity());
         if (serverPlayer == null) return false;
         return serverPlayer.canInteractWithBlock(this.blockEntity.pos(), 4);
-    }
-
-    @Override
-    public @NotNull List<ItemStack> contents() {
-        return this.getContents();
     }
 
     @Override
@@ -236,11 +195,6 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
-    public void contentClear() {
-        this.items.clear();
-    }
-
-    @Override
     public void clearContent() {
         this.items.clear();
     }
@@ -254,11 +208,6 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
                 this.blockEntity.pos().y(),
                 this.blockEntity.pos().z()
         );
-    }
-
-    @Override
-    public boolean contentsIsEmpty() {
-        return this.isEmpty();
     }
 
     @Override
@@ -326,25 +275,5 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     @Override
     public boolean canTakeItem() {
         return this.canTakeItem;
-    }
-
-    public MenuType<?> getMenuType() {
-        if (this.menuType == null) {
-            this.menuType = switch (getContainerSize()) {
-                case 9 -> MenuType.GENERIC_9x1;
-                case 18 -> MenuType.GENERIC_9x2;
-                case 27 -> MenuType.GENERIC_9x3;
-                case 36 -> MenuType.GENERIC_9x4;
-                case 45 -> MenuType.GENERIC_9x5;
-                case 54 -> MenuType.GENERIC_9x6;
-                default -> throw new IllegalArgumentException("Unsupported custom inventory size " + getContainerSize());
-            };
-        }
-        return this.menuType;
-    }
-
-    @Override
-    public Object menuType() {
-        return getMenuType();
     }
 }

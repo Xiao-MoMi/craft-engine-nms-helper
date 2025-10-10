@@ -10,25 +10,25 @@ import java.util.List;
 
 public interface StorageContainer {
 
-    int containerSize();
+    int getContainerSize();
 
-    Object getItemStack(int slot);
+    Object getItem(int slot);
 
-    Object removeItemStack(int slot, int amount);
+    Object removeItem(int slot, int amount);
 
-    Object removeItemStackNoUpdate(int slot);
+    Object removeItemNoUpdate(int slot);
 
-    void setItemStack(int slot, @NotNull Object stack);
+    void setItem(int slot, @NotNull Object stack);
 
-    int maxItemStackSize();
+    int getMaxStackSize();
 
-    void setMaxItemStackSize(int size);
+    void setMaxStackSize(int size);
 
-    void setContentsChanged();
+    void setChanged();
 
     boolean stillValid(@NotNull Object player);
 
-    @NotNull List<?> contents();
+    @NotNull List<?> getContents();
 
     void onOpen(@NotNull HumanEntity player);
 
@@ -44,11 +44,11 @@ public interface StorageContainer {
 
     void stopOpen(@NotNull Object player);
 
-    void contentClear();
+    void clearContent();
 
     @Nullable Location getLocation();
 
-    boolean contentsIsEmpty();
+    boolean isEmpty();
 
     int @NotNull [] getSlotsForFace(@NotNull Object direction);
 
@@ -63,6 +63,4 @@ public interface StorageContainer {
     boolean canPlaceItem();
 
     boolean canTakeItem();
-
-    Object menuType();
 }
