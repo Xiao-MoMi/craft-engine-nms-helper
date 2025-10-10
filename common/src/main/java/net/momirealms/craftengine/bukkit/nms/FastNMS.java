@@ -905,7 +905,7 @@ public abstract class FastNMS {
 
     public abstract Object method$ItemContainerContents$fromItems(List list);
 
-    public abstract Object constructor$BlockPlaceContext(Object player, Object interactionHand, Object itemStack, Object hitResult);
+    public abstract Object constructor$BlockPlaceContext(Object level, Object player, Object interactionHand, Object itemStack, Object hitResult);
 
     public abstract Object constructor$BlockHitResult(Object location, Object direction, Object blockPos, boolean inside);
 

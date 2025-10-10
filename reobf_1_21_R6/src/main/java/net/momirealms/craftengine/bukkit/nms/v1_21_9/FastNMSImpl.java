@@ -2379,8 +2379,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object constructor$BlockPlaceContext(Object player, Object interactionHand, Object itemStack, Object hitResult) {
-        return new BlockPlaceContext((net.minecraft.world.entity.player.Player) player, (InteractionHand) interactionHand, (net.minecraft.world.item.ItemStack) itemStack, (BlockHitResult) hitResult);
+    public Object constructor$BlockPlaceContext(Object level, Object player, Object interactionHand, Object itemStack, Object hitResult) {
+        return new BlockPlaceContext((Level) level, (net.minecraft.world.entity.player.Player) player, (InteractionHand) interactionHand, (net.minecraft.world.item.ItemStack) itemStack, (BlockHitResult) hitResult);
     }
 
     @Override
