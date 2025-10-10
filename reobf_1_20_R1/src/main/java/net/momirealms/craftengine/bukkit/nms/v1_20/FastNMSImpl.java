@@ -54,11 +54,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.LeadItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.armortrim.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -2336,5 +2334,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ItemContainerContents$fromItems(List list) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object constructor$BlockPlaceContext(Object player, Object interactionHand, Object itemStack, Object hitResult) {
+        return new BlockPlaceContext((net.minecraft.world.entity.player.Player) player, (InteractionHand) interactionHand, (net.minecraft.world.item.ItemStack) itemStack, (BlockHitResult) hitResult);
+    }
+
+    @Override
+    public Object constructor$BlockHitResult(Object location, Object direction, Object blockPos, boolean inside) {
+        return new BlockHitResult((Vec3) location, (Direction) direction, (BlockPos) blockPos, inside);
+    }
+
+    @Override
+    public Object method$BlockItem$getBlock(Object blockItem) {
+        return ((BlockItem) blockItem).getBlock();
+    }
+
+    @Override
+    public Object method$Block$getStateForPlacement(Object block, Object blockPlaceContext) {
+        return ((net.minecraft.world.level.block.Block) block).getStateForPlacement((BlockPlaceContext) blockPlaceContext);
     }
 }

@@ -904,4 +904,12 @@ public abstract class FastNMS {
     public abstract List field$ItemContainerContents$items(Object contents);
 
     public abstract Object method$ItemContainerContents$fromItems(List list);
+
+    public abstract Object constructor$BlockPlaceContext(Object player, Object interactionHand, Object itemStack, Object hitResult);
+
+    public abstract Object constructor$BlockHitResult(Object location, Object direction, Object blockPos, boolean inside);
+
+    public abstract Object method$BlockItem$getBlock(Object blockItem);
+
+    public abstract Object method$Block$getStateForPlacement(Object block, Object blockPlaceContext);
 }
