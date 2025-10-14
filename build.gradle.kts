@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.0.0-rc2"
+    id("com.gradleup.shadow") version "9.2.2"
 }
 
 val projectVersion : String by project
@@ -20,8 +20,8 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("net.momirealms:craft-engine-core:0.0.64.8")
-        compileOnly("net.momirealms:craft-engine-bukkit:0.0.64.8")
+        compileOnly("net.momirealms:craft-engine-core:0.0.64.10")
+        compileOnly("net.momirealms:craft-engine-bukkit:0.0.64.10")
         compileOnly("com.mojang:brigadier:1.0.18")
     }
 }
