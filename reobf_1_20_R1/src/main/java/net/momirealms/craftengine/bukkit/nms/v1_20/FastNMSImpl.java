@@ -332,7 +332,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$RecipeHolder$id(Object recipeHolder) {
-        throw new UnsupportedVersionException();
+        return ((Recipe) recipeHolder).getId();
     }
 
     @Override
