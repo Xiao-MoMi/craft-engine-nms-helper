@@ -914,4 +914,8 @@ public abstract class FastNMS {
     public abstract Object method$Block$getStateForPlacement(Object block, Object blockPlaceContext);
 
     public abstract Object constructor$Vec3(double x, double y, double z);
+
+    public abstract Object method$AbstractContainerMenu$quickMoveStack(Object menu, Object player, int slot);
+
+    public abstract Object method$CraftingContainer$getCurrentRecipe(Object container);
 }

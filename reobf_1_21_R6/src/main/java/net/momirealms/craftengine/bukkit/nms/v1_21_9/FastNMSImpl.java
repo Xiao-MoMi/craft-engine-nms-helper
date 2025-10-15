@@ -153,7 +153,10 @@ import org.bukkit.craftbukkit.inventory.CraftInventoryCrafting;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -2401,5 +2404,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$Vec3(double x, double y, double z) {
         return new Vec3(x, y, z);
+    }
+
+    @Override
+    public Object method$AbstractContainerMenu$quickMoveStack(Object menu, Object player, int slot) {
+        return ((AbstractContainerMenu) menu).quickMoveStack((net.minecraft.world.entity.player.Player) player, slot);
+    }
+
+    @Override
+    public Object method$CraftingContainer$getCurrentRecipe(Object container) {
+        return ((CraftingContainer) container).getCurrentRecipe();
     }
 }

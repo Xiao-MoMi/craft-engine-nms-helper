@@ -2428,4 +2428,14 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$Vec3(double x, double y, double z) {
         return new Vec3(x, y, z);
     }
+
+    @Override
+    public Object method$AbstractContainerMenu$quickMoveStack(Object menu, Object player, int slot) {
+        return ((AbstractContainerMenu) menu).quickMoveStack((net.minecraft.world.entity.player.Player) player, slot);
+    }
+
+    @Override
+    public Object method$CraftingContainer$getCurrentRecipe(Object container) {
+        return ((CraftingContainer) container).getCurrentRecipe();
+    }
 }
