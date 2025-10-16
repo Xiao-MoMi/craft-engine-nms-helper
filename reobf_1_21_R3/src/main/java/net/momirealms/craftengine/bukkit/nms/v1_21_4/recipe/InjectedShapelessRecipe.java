@@ -50,7 +50,7 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
 
     @Override
     public @NotNull NonNullList<net.minecraft.world.item.ItemStack> getRemainingItems(@NotNull CraftingInput input) {
-        return RecipeHelper.getRemainingItems(input);
+        return RecipeHelper.getRemainingItems(this.recipe.id(), input);
     }
 
     @Override

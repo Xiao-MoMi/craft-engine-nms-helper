@@ -10,12 +10,11 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.momirealms.craftengine.bukkit.item.BukkitItemManager;
 import net.momirealms.craftengine.bukkit.item.recipe.BukkitRecipeManager;
-import net.momirealms.craftengine.core.item.BuildableItem;
 import net.momirealms.craftengine.core.item.CustomItem;
-import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CookingRecipeCategory;
 import net.momirealms.craftengine.core.item.recipe.CraftingRecipeCategory;
 import net.momirealms.craftengine.core.item.recipe.UniqueIdItem;
+import net.momirealms.craftengine.core.item.recipe.remainder.CraftRemainder;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.UniqueKey;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -71,7 +70,7 @@ public final class RecipeHelper {
         return CookingBookCategory.values()[category.ordinal()];
     }
 
-    public static net.minecraft.world.item.ItemStack craftingRemainer(net.minecraft.world.item.ItemStack stack) {
+    public static net.minecraft.world.item.ItemStack craftingRemainer(Key recipeId, net.minecraft.world.item.ItemStack stack) {
         if (stack.isEmpty()) {
             return net.minecraft.world.item.ItemStack.EMPTY;
         }
@@ -80,12 +79,10 @@ public final class RecipeHelper {
         if (optionalCustomItem.isPresent()) {
             CustomItem<ItemStack> customItem = optionalCustomItem.get();
             if (!customItem.isVanillaItem()) {
-                Key remainder = customItem.settings().craftRemainder();
+                CraftRemainder remainder = customItem.settings().craftRemainder();
                 if (remainder != null) {
-                    Optional<? extends BuildableItem<ItemStack>> optionalBuildableItem = BukkitItemManager.instance().getBuildableItem(remainder);
-                    if (optionalBuildableItem.isPresent()) {
-                        return (net.minecraft.world.item.ItemStack) optionalBuildableItem.get().buildItem(ItemBuildContext.empty()).getLiteralObject();
-                    }
+                    net.momirealms.craftengine.core.item.Item<ItemStack> remainingItem = remainder.remainder(recipeId, item);
+                    return remainingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : (net.minecraft.world.item.ItemStack) remainingItem.getLiteralObject();
                 }
                 return net.minecraft.world.item.ItemStack.EMPTY;
             }
@@ -95,10 +92,10 @@ public final class RecipeHelper {
     }
 
     @NotNull
-    public static NonNullList<net.minecraft.world.item.ItemStack> getRemainingItems(CraftingInput input) {
+    public static NonNullList<net.minecraft.world.item.ItemStack> getRemainingItems(Key recipeId, CraftingInput input) {
         NonNullList<net.minecraft.world.item.ItemStack> list = NonNullList.withSize(input.size(), net.minecraft.world.item.ItemStack.EMPTY);
         for (int i = 0; i < list.size(); ++i) {
-            list.set(i, RecipeHelper.craftingRemainer(input.getItem(i)));
+            list.set(i, RecipeHelper.craftingRemainer(recipeId, input.getItem(i)));
         }
         return list;
     }

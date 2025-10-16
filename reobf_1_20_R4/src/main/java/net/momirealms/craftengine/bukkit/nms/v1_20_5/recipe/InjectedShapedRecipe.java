@@ -56,7 +56,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
 
     @Override
     public @NotNull NonNullList<net.minecraft.world.item.ItemStack> getRemainingItems(@NotNull CraftingContainer inventory) {
-        return RecipeHelper.getRemainingItems(inventory);
+        return RecipeHelper.getRemainingItems(this.recipe.id(), inventory);
     }
 
     @Override
