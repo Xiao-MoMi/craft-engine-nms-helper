@@ -109,6 +109,14 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         return this.target.get(x, y, z);
     }
 
+    public T getVirtual(int index) {
+        return this.target.get(index);
+    }
+
+    public T getVirtual(int x, int y, int z) {
+        return this.target.get(x, y, z);
+    }
+
     @Override
     public void getAll(@NotNull Consumer<T> action) {
         this.target.getAll(action);
