@@ -32,8 +32,12 @@ import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
 import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;
 import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
+import net.minecraft.network.protocol.configuration.ConfigurationProtocols;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.handshake.HandshakeProtocols;
 import net.minecraft.network.protocol.login.ClientboundLoginFinishedPacket;
+import net.minecraft.network.protocol.login.LoginProtocols;
+import net.minecraft.network.protocol.status.StatusProtocols;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -127,6 +131,8 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_5.network.InjectedHashedStack
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.recipe.*;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
+import net.momirealms.craftengine.core.plugin.network.ConnectionState;
+import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -158,6 +164,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused", "deprecation"})
 public class FastNMSImpl extends FastNMS {
@@ -1569,13 +1577,40 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz() {
+    public Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz() {
         throw new UnsupportedVersionException();
     }
 
     @Override
-    public Map<String, Map<String, Integer>> gamePacketIdsByName() {
-        throw new UnsupportedVersionException();
+    public Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName() {
+        Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>>> allPacketIdsByName = new HashMap<>();
+        Map<ConnectionProtocol, List<ProtocolInfo.Details>> collect = Stream.of(
+                HandshakeProtocols.SERVERBOUND_TEMPLATE,
+                StatusProtocols.CLIENTBOUND_TEMPLATE,
+                StatusProtocols.SERVERBOUND_TEMPLATE,
+                LoginProtocols.CLIENTBOUND_TEMPLATE,
+                LoginProtocols.SERVERBOUND_TEMPLATE,
+                ConfigurationProtocols.CLIENTBOUND_TEMPLATE,
+                ConfigurationProtocols.SERVERBOUND_TEMPLATE,
+                GameProtocols.CLIENTBOUND_TEMPLATE,
+                GameProtocols.SERVERBOUND_TEMPLATE
+        ).map(ProtocolInfo.DetailsProvider::details).collect(Collectors.groupingBy(ProtocolInfo.Details::id));
+        for (Map.Entry<ConnectionProtocol, List<ProtocolInfo.Details>> entry : collect.entrySet()) {
+            Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>> protocolPacketIdsByName = new HashMap<>();
+            allPacketIdsByName.put(ConnectionState.valueOf(entry.getKey().name().toUpperCase(Locale.ROOT)), protocolPacketIdsByName);
+            Map<String, Integer> serverBoundIds = new HashMap<>();
+            Map<String, Integer> clientBoundIds = new HashMap<>();
+            protocolPacketIdsByName.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.SERVERBOUND, serverBoundIds);
+            protocolPacketIdsByName.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.CLIENTBOUND, clientBoundIds);
+            for (ProtocolInfo.Details protocol : entry.getValue()) {
+                if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.SERVERBOUND) {
+                    protocol.listPackets(((type, protocolId) -> serverBoundIds.put(type.id().toString(), protocolId)));
+                } else if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.CLIENTBOUND) {
+                    protocol.listPackets(((type, protocolId) -> clientBoundIds.put(type.id().toString(), protocolId)));
+                }
+            }
+        }
+        return allPacketIdsByName;
     }
 
     @Override

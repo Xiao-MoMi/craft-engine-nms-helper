@@ -20,20 +20,24 @@ import net.minecraft.core.component.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
-import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.PacketSendListener;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.*;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.IdDispatchCodec;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.StreamDecoder;
 import net.minecraft.network.codec.StreamEncoder;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.common.*;
-import net.minecraft.network.protocol.cookie.CookiePacketTypes;
+import net.minecraft.network.protocol.PacketType;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPopPacket;
+import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+import net.minecraft.network.protocol.common.ClientboundUpdateTagsPacket;
+import net.minecraft.network.protocol.common.ServerboundResourcePackPacket;
+import net.minecraft.network.protocol.configuration.ConfigurationProtocols;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.handshake.HandshakeProtocols;
 import net.minecraft.network.protocol.login.ClientboundGameProfilePacket;
-import net.minecraft.network.protocol.ping.PingPacketTypes;
+import net.minecraft.network.protocol.login.LoginProtocols;
+import net.minecraft.network.protocol.status.StatusProtocols;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -116,8 +120,11 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_5.entity.InjectedFallingBlock
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.recipe.*;
+import net.momirealms.craftengine.bukkit.util.BukkitReflectionUtils;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
+import net.momirealms.craftengine.core.plugin.network.ConnectionState;
+import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -146,9 +153,12 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused", "deprecation"})
 public class FastNMSImpl extends FastNMS {
@@ -1561,202 +1571,62 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz() {
+    public Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz() {
         throw new UnsupportedVersionException();
     }
 
+    private static final Field field$IdDispatchCodec$byId = Objects.requireNonNull(
+            ReflectionUtils.getDeclaredField(IdDispatchCodec.class, List.class, 0)
+    );
+    private static final Class<?> clazz$IdDispatchCodec$Entry = Objects.requireNonNull(BukkitReflectionUtils.findReobfOrMojmapClass(
+            "network.codec.IdDispatchCodec$b",
+            "network.codec.IdDispatchCodec$Entry"
+    ));
+    private static final Field field$IdDispatchCodec$Entry$type = Objects.requireNonNull(
+            ReflectionUtils.getDeclaredField(clazz$IdDispatchCodec$Entry, Object.class, 0)
+    );
+
     @Override
-    public Map<String, Map<String, Integer>> gamePacketIdsByName() {
-        Map<String, Map<String, Integer>> gamePacketIdsByName = new HashMap<>();
-        Map<String, Integer> serverBoundIds = new HashMap<>();
-        Map<String, Integer> clientBoundIds = new HashMap<>();
-        gamePacketIdsByName.put("clientbound", clientBoundIds);
-        gamePacketIdsByName.put("serverbound", serverBoundIds);
-
-        int clientIndex = 0;
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_BUNDLE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_ADD_ENTITY.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_ADD_EXPERIENCE_ORB.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_ANIMATE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_AWARD_STATS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_BLOCK_CHANGED_ACK.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_BLOCK_DESTRUCTION.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_BLOCK_ENTITY_DATA.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_BLOCK_EVENT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_BLOCK_UPDATE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_BOSS_EVENT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CHANGE_DIFFICULTY.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CHUNK_BATCH_FINISHED.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CHUNK_BATCH_START.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CHUNKS_BIOMES.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CLEAR_TITLES.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_COMMAND_SUGGESTIONS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_COMMANDS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CONTAINER_CLOSE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CONTAINER_SET_CONTENT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CONTAINER_SET_DATA.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CONTAINER_SET_SLOT.id().toString(), clientIndex++);
-        clientBoundIds.put(CookiePacketTypes.CLIENTBOUND_COOKIE_REQUEST.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_COOLDOWN.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_CUSTOM_CHAT_COMPLETIONS.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_CUSTOM_PAYLOAD.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_DAMAGE_EVENT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_DEBUG_SAMPLE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_DELETE_CHAT.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_DISCONNECT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_DISGUISED_CHAT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_ENTITY_EVENT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_EXPLODE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_FORGET_LEVEL_CHUNK.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_GAME_EVENT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_HORSE_SCREEN_OPEN.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_HURT_ANIMATION.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_INITIALIZE_BORDER.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_KEEP_ALIVE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_LEVEL_CHUNK_WITH_LIGHT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_LEVEL_EVENT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_LEVEL_PARTICLES.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_LIGHT_UPDATE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_LOGIN.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_MAP_ITEM_DATA.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_MERCHANT_OFFERS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_MOVE_ENTITY_POS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_MOVE_ENTITY_POS_ROT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_MOVE_ENTITY_ROT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_MOVE_VEHICLE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_OPEN_BOOK.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_OPEN_SCREEN.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_OPEN_SIGN_EDITOR.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_PING.id().toString(), clientIndex++);
-        clientBoundIds.put(PingPacketTypes.CLIENTBOUND_PONG_RESPONSE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLACE_GHOST_RECIPE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_ABILITIES.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_CHAT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_COMBAT_END.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_COMBAT_ENTER.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_COMBAT_KILL.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_INFO_REMOVE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_INFO_UPDATE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_LOOK_AT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PLAYER_POSITION.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_RECIPE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_REMOVE_ENTITIES.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_REMOVE_MOB_EFFECT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_RESET_SCORE.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_RESOURCE_PACK_POP.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_RESOURCE_PACK_PUSH.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_RESPAWN.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_ROTATE_HEAD.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SECTION_BLOCKS_UPDATE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SELECT_ADVANCEMENTS_TAB.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SERVER_DATA.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_ACTION_BAR_TEXT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_BORDER_CENTER.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_BORDER_LERP_SIZE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_BORDER_SIZE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_BORDER_WARNING_DELAY.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_BORDER_WARNING_DISTANCE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_CAMERA.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_CARRIED_ITEM.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_CHUNK_CACHE_CENTER.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_CHUNK_CACHE_RADIUS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_DEFAULT_SPAWN_POSITION.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_DISPLAY_OBJECTIVE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_ENTITY_DATA.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_ENTITY_LINK.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_ENTITY_MOTION.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_EQUIPMENT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_EXPERIENCE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_HEALTH.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_OBJECTIVE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_PASSENGERS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_PLAYER_TEAM.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_SCORE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_SIMULATION_DISTANCE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_SUBTITLE_TEXT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_TIME.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_TITLE_TEXT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SET_TITLES_ANIMATION.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SOUND_ENTITY.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SOUND.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_START_CONFIGURATION.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_STOP_SOUND.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_STORE_COOKIE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_SYSTEM_CHAT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_TAB_LIST.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_TAG_QUERY.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_TAKE_ITEM_ENTITY.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_TELEPORT_ENTITY.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_TICKING_STATE.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_TICKING_STEP.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_TRANSFER.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_UPDATE_ADVANCEMENTS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_UPDATE_ATTRIBUTES.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_UPDATE_MOB_EFFECT.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_UPDATE_RECIPES.id().toString(), clientIndex++);
-        clientBoundIds.put(CommonPacketTypes.CLIENTBOUND_UPDATE_TAGS.id().toString(), clientIndex++);
-        clientBoundIds.put(GamePacketTypes.CLIENTBOUND_PROJECTILE_POWER.id().toString(), clientIndex++);
-
-        int serverIndex = 0;
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_ACCEPT_TELEPORTATION.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_BLOCK_ENTITY_TAG_QUERY.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CHANGE_DIFFICULTY.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CHAT_ACK.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CHAT_COMMAND.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CHAT_COMMAND_SIGNED.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CHAT.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CHAT_SESSION_UPDATE.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CHUNK_BATCH_RECEIVED.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CLIENT_COMMAND.id().toString(), serverIndex++);
-        serverBoundIds.put(CommonPacketTypes.SERVERBOUND_CLIENT_INFORMATION.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_COMMAND_SUGGESTION.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CONFIGURATION_ACKNOWLEDGED.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CONTAINER_BUTTON_CLICK.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CONTAINER_CLICK.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CONTAINER_CLOSE.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_CONTAINER_SLOT_STATE_CHANGED.id().toString(), serverIndex++);
-        serverBoundIds.put(CookiePacketTypes.SERVERBOUND_COOKIE_RESPONSE.id().toString(), serverIndex++);
-        serverBoundIds.put(CommonPacketTypes.SERVERBOUND_CUSTOM_PAYLOAD.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_DEBUG_SAMPLE_SUBSCRIPTION.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_EDIT_BOOK.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_ENTITY_TAG_QUERY.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_INTERACT.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_JIGSAW_GENERATE.id().toString(), serverIndex++);
-        serverBoundIds.put(CommonPacketTypes.SERVERBOUND_KEEP_ALIVE.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_LOCK_DIFFICULTY.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_MOVE_PLAYER_POS.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_MOVE_PLAYER_POS_ROT.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_MOVE_PLAYER_ROT.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_MOVE_PLAYER_STATUS_ONLY.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_MOVE_VEHICLE.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_PADDLE_BOAT.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_PICK_ITEM.id().toString(), serverIndex++);
-        serverBoundIds.put(PingPacketTypes.SERVERBOUND_PING_REQUEST.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_PLACE_RECIPE.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_PLAYER_ABILITIES.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_PLAYER_ACTION.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_PLAYER_COMMAND.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_PLAYER_INPUT.id().toString(), serverIndex++);
-        serverBoundIds.put(CommonPacketTypes.SERVERBOUND_PONG.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_RECIPE_BOOK_CHANGE_SETTINGS.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_RECIPE_BOOK_SEEN_RECIPE.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_RENAME_ITEM.id().toString(), serverIndex++);
-        serverBoundIds.put(CommonPacketTypes.SERVERBOUND_RESOURCE_PACK.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SEEN_ADVANCEMENTS.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SELECT_TRADE.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SET_BEACON.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SET_CARRIED_ITEM.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SET_COMMAND_BLOCK.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SET_COMMAND_MINECART.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SET_CREATIVE_MODE_SLOT.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SET_JIGSAW_BLOCK.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SET_STRUCTURE_BLOCK.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SIGN_UPDATE.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_SWING.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_TELEPORT_TO_ENTITY.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_USE_ITEM_ON.id().toString(), serverIndex++);
-        serverBoundIds.put(GamePacketTypes.SERVERBOUND_USE_ITEM.id().toString(), serverIndex++);
-        return gamePacketIdsByName;
+    public Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName() {
+        Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>>> allPacketIdsByName = new HashMap<>();
+        Map<ConnectionProtocol, List<ProtocolInfo<? extends PacketListener>>> collect = Stream.of(
+                HandshakeProtocols.SERVERBOUND,
+                StatusProtocols.CLIENTBOUND,
+                StatusProtocols.SERVERBOUND,
+                LoginProtocols.CLIENTBOUND,
+                LoginProtocols.SERVERBOUND,
+                ConfigurationProtocols.CLIENTBOUND,
+                ConfigurationProtocols.SERVERBOUND,
+                GameProtocols.CLIENTBOUND.bind(b -> new RegistryFriendlyByteBuf(b, registryAccess())),
+                GameProtocols.SERVERBOUND.bind(b -> new RegistryFriendlyByteBuf(b, registryAccess()))
+        ).collect(Collectors.groupingBy(ProtocolInfo::id));
+        try {
+            for (Map.Entry<ConnectionProtocol, List<ProtocolInfo<? extends PacketListener>>> entry : collect.entrySet()) {
+                Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>> protocolPacketIdsByName = new HashMap<>();
+                allPacketIdsByName.put(ConnectionState.valueOf(entry.getKey().name().toUpperCase(Locale.ROOT)), protocolPacketIdsByName);
+                Map<String, Integer> serverBoundIds = new HashMap<>();
+                Map<String, Integer> clientBoundIds = new HashMap<>();
+                protocolPacketIdsByName.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.SERVERBOUND, serverBoundIds);
+                protocolPacketIdsByName.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.CLIENTBOUND, clientBoundIds);
+                for (ProtocolInfo<? extends PacketListener> protocol : entry.getValue()) {
+                    List<?> byId = (List<?>) field$IdDispatchCodec$byId.get(protocol.codec());
+                    if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.SERVERBOUND) {
+                        for (int i = 0; i < byId.size(); ++i) {
+                            PacketType<?> type = (PacketType<?>) field$IdDispatchCodec$Entry$type.get(byId.get(i));
+                            serverBoundIds.put(type.id().toString(), i);
+                        }
+                    } else if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.CLIENTBOUND) {
+                        for (int i = 0; i < byId.size(); ++i) {
+                            PacketType<?> type = (PacketType<?>) field$IdDispatchCodec$Entry$type.get(byId.get(i));
+                            clientBoundIds.put(type.id().toString(), i);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+        return allPacketIdsByName;
     }
 
     @Override

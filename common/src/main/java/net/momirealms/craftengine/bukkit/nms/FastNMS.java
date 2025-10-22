@@ -12,6 +12,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
+import net.momirealms.craftengine.core.plugin.network.ConnectionState;
+import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -587,9 +589,9 @@ public abstract class FastNMS {
 
     public abstract Object constructor$ClientboundMoveEntityPacket$PosRot(int entityId, short xa, short ya, short za, byte yRot, byte xRot, boolean onGround);
 
-    public abstract Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz();
+    public abstract Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz();
 
-    public abstract Map<String, Map<String, Integer>> gamePacketIdsByName();
+    public abstract Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName();
 
     public abstract Object method$FriendlyByteBuf$readById(Object buffer, Object idMap);
 

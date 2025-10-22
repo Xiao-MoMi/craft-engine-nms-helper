@@ -111,6 +111,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_3.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.recipe.*;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
+import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -1538,19 +1539,23 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz() {
-        Map<String, Map<Class<?>, Integer>> gamePacketIdsByClazz = new HashMap<>();
-        Map<Class<?>, Integer> serverBoundIds = new HashMap<>();
-        Map<Class<?>, Integer> clientBoundIds = new HashMap<>();
-        gamePacketIdsByClazz.put("serverbound", serverBoundIds);
-        gamePacketIdsByClazz.put("clientbound", clientBoundIds);
-        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.SERVERBOUND).forEach((id, packet) -> serverBoundIds.put(packet, id));
-        ConnectionProtocol.PLAY.getPacketsByIds(PacketFlow.CLIENTBOUND).forEach((id, packet) -> clientBoundIds.put(packet, id));
-        return gamePacketIdsByClazz;
+    public Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz() {
+        Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<Class<?>, Integer>>> allPacketIdsByClazz = new HashMap<>();
+        for (ConnectionProtocol protocol : ConnectionProtocol.values()) {
+            Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<Class<?>, Integer>> protocolPacketIdsByClazz = new HashMap<>();
+            allPacketIdsByClazz.put(ConnectionState.valueOf(protocol.name().toUpperCase(Locale.ROOT)), protocolPacketIdsByClazz);
+            Map<Class<?>, Integer> serverBoundIds = new HashMap<>();
+            Map<Class<?>, Integer> clientBoundIds = new HashMap<>();
+            protocolPacketIdsByClazz.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.SERVERBOUND, serverBoundIds);
+            protocolPacketIdsByClazz.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.CLIENTBOUND, clientBoundIds);
+            protocol.getPacketsByIds(PacketFlow.SERVERBOUND).forEach((id, packet) -> serverBoundIds.put(packet, id));
+            protocol.getPacketsByIds(PacketFlow.CLIENTBOUND).forEach((id, packet) -> clientBoundIds.put(packet, id));
+        }
+        return allPacketIdsByClazz;
     }
 
     @Override
-    public Map<String, Map<String, Integer>> gamePacketIdsByName() {
+    public Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>>> gamePacketIdsByName() {
         throw new UnsupportedVersionException();
     }
 
