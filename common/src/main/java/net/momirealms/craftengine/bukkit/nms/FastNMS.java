@@ -920,4 +920,6 @@ public abstract class FastNMS {
     public abstract Object method$AbstractContainerMenu$quickMoveStack(Object menu, Object player, int slot);
 
     public abstract Object method$CraftingContainer$getCurrentRecipe(Object container);
+
+    public abstract void method$ItemStack$hurtAndBreak(Object itemStack, int amount, Object livingEntity, Object slot);
 }

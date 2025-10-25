@@ -50,6 +50,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -2375,5 +2377,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$CraftingContainer$getCurrentRecipe(Object container) {
         return ((CraftingContainer) container).getCurrentRecipe();
+    }
+
+    @Override
+    public void method$ItemStack$hurtAndBreak(Object itemStack, int amount, Object livingEntity, Object slot) {
+        ((net.minecraft.world.item.ItemStack) itemStack).hurtAndBreak(amount, (LivingEntity) livingEntity, entity -> entity.broadcastBreakEvent((EquipmentSlot) slot));
     }
 }
