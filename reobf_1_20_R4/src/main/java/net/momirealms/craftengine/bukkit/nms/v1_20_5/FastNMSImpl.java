@@ -2465,9 +2465,4 @@ public class FastNMSImpl extends FastNMS {
     public void method$ItemStack$hurtAndBreak(Object itemStack, int amount, Object livingEntity, Object slot) {
         ((net.minecraft.world.item.ItemStack) itemStack).hurtAndBreak(amount, (LivingEntity) livingEntity, (EquipmentSlot) slot);
     }
-
-    @Override
-    public void method$Entity$setPos(Object entity, double x, double y, double z) {
-        ((Entity) entity).setPos(x, y, z);
-    }
 }
