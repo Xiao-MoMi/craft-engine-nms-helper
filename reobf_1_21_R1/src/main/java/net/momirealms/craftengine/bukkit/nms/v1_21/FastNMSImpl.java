@@ -814,7 +814,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public final boolean checkEntityCollision(Object level, List<Object> aabbs, double x, double y, double z) {
+    public final boolean checkEntityCollision(Object level, List<Object> aabbs) {
         if (aabbs.isEmpty()) return true;
         ServerLevel serverLevel = (ServerLevel) level;
         List<VoxelShape> shapes = Lists.newArrayList();

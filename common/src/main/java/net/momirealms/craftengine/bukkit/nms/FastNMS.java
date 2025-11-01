@@ -319,7 +319,7 @@ public abstract class FastNMS {
 
     public abstract void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos);
 
-    public abstract boolean checkEntityCollision(Object level, List<Object> aabbs, double x, double y, double z);
+    public abstract boolean checkEntityCollision(Object level, List<Object> aabbs);
 
     public abstract void method$ItemStack$applyComponents(Object itemStack, Object component);
 
