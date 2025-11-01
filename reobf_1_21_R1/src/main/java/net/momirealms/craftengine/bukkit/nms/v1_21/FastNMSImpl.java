@@ -1385,7 +1385,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object method$AABB$move(Object aabb, Object pos) {
-        return ((AABB) aabb).move((BlockPos) pos);
+        if (pos instanceof Vec3 vec3) {
+            return ((AABB) aabb).move(vec3);
+        } else if (pos instanceof BlockPos blockPos) {
+            return ((AABB) aabb).move(blockPos);
+        }
+        throw new IllegalArgumentException();
     }
 
     @Override
