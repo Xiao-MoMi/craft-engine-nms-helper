@@ -2442,4 +2442,17 @@ public class FastNMSImpl extends FastNMS {
     public void method$ItemStack$hurtAndBreak(Object itemStack, int amount, Object livingEntity, Object slot) {
         ((net.minecraft.world.item.ItemStack) itemStack).hurtAndBreak(amount, (LivingEntity) livingEntity, (EquipmentSlot) slot);
     }
+
+    @Override
+    public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, double x, double y, double z, float yRot, float xRot, boolean onGround) {
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        buf.writeVarInt(entityId);
+        buf.writeDouble(x);
+        buf.writeDouble(y);
+        buf.writeDouble(z);
+        buf.writeByte((byte) (yRot * 256.0F / 360.0F));
+        buf.writeByte((byte) (xRot * 256.0F / 360.0F));
+        buf.writeBoolean(onGround);
+        return ClientboundTeleportEntityPacket.STREAM_CODEC.decode(buf);
+    }
 }

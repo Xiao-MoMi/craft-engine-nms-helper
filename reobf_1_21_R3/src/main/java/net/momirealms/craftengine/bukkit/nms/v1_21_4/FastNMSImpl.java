@@ -2478,4 +2478,9 @@ public class FastNMSImpl extends FastNMS {
     public void method$ItemStack$hurtAndBreak(Object itemStack, int amount, Object livingEntity, Object slot) {
         ((net.minecraft.world.item.ItemStack) itemStack).hurtAndBreak(amount, (LivingEntity) livingEntity, (EquipmentSlot) slot);
     }
+
+    @Override
+    public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, double x, double y, double z, float yRot, float xRot, boolean onGround) {
+        return new ClientboundEntityPositionSyncPacket(entityId, new PositionMoveRotation(new Vec3(x, y, z), Vec3.ZERO, yRot, xRot), onGround);
+    }
 }

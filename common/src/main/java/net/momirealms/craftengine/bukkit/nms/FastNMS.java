@@ -922,4 +922,6 @@ public abstract class FastNMS {
     public abstract Object method$CraftingContainer$getCurrentRecipe(Object container);
 
     public abstract void method$ItemStack$hurtAndBreak(Object itemStack, int amount, Object livingEntity, Object slot);
+
+    public abstract Object constructor$ClientboundEntityPositionSyncPacket(int entityId, double x, double y, double z, float yRot, float xRot, boolean onGround);
 }
