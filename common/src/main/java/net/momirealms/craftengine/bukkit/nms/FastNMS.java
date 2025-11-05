@@ -15,6 +15,7 @@ import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.VersionHelper;
+import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.Particle;
@@ -76,6 +77,8 @@ public abstract class FastNMS {
     public abstract InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException;
 
     public abstract InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection);
+
+    public abstract void injectedWorldGen(CEWorld world, Object chunkMap);
 
     public abstract CollisionEntity createCollisionBoat(Object world, Object aabb,
                                                         double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding);
@@ -924,4 +927,7 @@ public abstract class FastNMS {
     public abstract void method$ItemStack$hurtAndBreak(Object itemStack, int amount, Object livingEntity, Object slot);
 
     public abstract Object constructor$ClientboundEntityPositionSyncPacket(int entityId, double x, double y, double z, float yRot, float xRot, boolean onGround);
+
+    public abstract Object field$ServerChunkCache$chunkMap(Object chunkSource);
+
 }

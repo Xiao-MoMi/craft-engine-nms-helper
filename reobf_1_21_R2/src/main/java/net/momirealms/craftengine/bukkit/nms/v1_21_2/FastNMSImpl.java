@@ -88,6 +88,7 @@ import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
+import net.minecraft.world.level.chunk.status.WorldGenContext;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
@@ -121,11 +122,15 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_2.entity.InjectedFallingBlock
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.recipe.*;
+import net.momirealms.craftengine.bukkit.nms.v1_21_2.worldgen.InjectedChunkGenerator;
+import net.momirealms.craftengine.bukkit.plugin.reflection.minecraft.CoreReflections;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
+import net.momirealms.craftengine.core.plugin.CraftEngine;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
+import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.Particle;
@@ -188,6 +193,26 @@ public class FastNMSImpl extends FastNMS {
     public InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection) {
         LevelChunkSection section = (LevelChunkSection) levelChunkSection;
         return new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
+    }
+
+    @Override
+    public void injectedWorldGen(CEWorld world, Object chunkMap) {
+        WorldGenContext worldGenContext = ((ChunkMap) chunkMap).worldGenContext;
+        if (!(worldGenContext.generator() instanceof InjectedChunkGenerator)) {
+            WorldGenContext context = new WorldGenContext(
+                    worldGenContext.level(),
+                    new InjectedChunkGenerator(world, worldGenContext.generator()),
+                    worldGenContext.structureManager(),
+                    worldGenContext.lightEngine(),
+                    worldGenContext.mainThreadExecutor(),
+                    worldGenContext.unsavedListener()
+            );
+            try {
+                CoreReflections.field$ChunkMap$worldGenContext.set(chunkMap, context);
+            } catch (ReflectiveOperationException e) {
+                CraftEngine.instance().logger().warn("Failed to inject world gen context", e);
+            }
+        }
     }
 
     @Override
@@ -325,7 +350,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object[] method$ChunkAccess$getSections(Object chunk) {
-        return ((LevelChunk) chunk).getSections();
+        return ((ChunkAccess) chunk).getSections();
     }
 
     @Override
@@ -2449,4 +2474,10 @@ public class FastNMSImpl extends FastNMS {
     public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, double x, double y, double z, float yRot, float xRot, boolean onGround) {
         return new ClientboundEntityPositionSyncPacket(entityId, new PositionMoveRotation(new Vec3(x, y, z), Vec3.ZERO, yRot, xRot), onGround);
     }
+
+    @Override
+    public Object field$ServerChunkCache$chunkMap(Object chunkSource) {
+        return ((ServerChunkCache) chunkSource).chunkMap;
+    }
+
 }

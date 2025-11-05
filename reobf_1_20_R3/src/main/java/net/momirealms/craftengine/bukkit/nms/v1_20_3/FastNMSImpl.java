@@ -111,10 +111,12 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_3.entity.InjectedFallingBlock
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.recipe.*;
+import net.momirealms.craftengine.bukkit.nms.v1_20_3.worldgen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
+import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.Particle;
@@ -175,6 +177,14 @@ public class FastNMSImpl extends FastNMS {
     public InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection) {
         LevelChunkSection section = (LevelChunkSection) levelChunkSection;
         return new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
+    }
+
+    @Override
+    public void injectedWorldGen(CEWorld world, Object chunkMap) {
+        ChunkGenerator generator = ((ChunkMap) chunkMap).generator;
+        if (!(generator instanceof InjectedChunkGenerator)) {
+            ((ChunkMap) chunkMap).generator = new InjectedChunkGenerator(world, generator);
+        }
     }
 
     @Override
@@ -312,7 +322,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object[] method$ChunkAccess$getSections(Object chunk) {
-        return ((LevelChunk) chunk).getSections();
+        return ((ChunkAccess) chunk).getSections();
     }
 
     @Override
@@ -2415,5 +2425,10 @@ public class FastNMSImpl extends FastNMS {
         buf.writeByte((byte) (xRot * 256.0F / 360.0F));
         buf.writeBoolean(onGround);
         return new ClientboundTeleportEntityPacket(buf);
+    }
+
+    @Override
+    public Object field$ServerChunkCache$chunkMap(Object chunkSource) {
+        return ((ServerChunkCache) chunkSource).chunkMap;
     }
 }

@@ -122,12 +122,14 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_5.entity.InjectedFallingBlock
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.recipe.*;
+import net.momirealms.craftengine.bukkit.nms.v1_20_5.worldgen.InjectedChunkGenerator;
 import net.momirealms.craftengine.bukkit.util.BukkitReflectionUtils;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
+import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
 import org.bukkit.Particle;
@@ -191,6 +193,14 @@ public class FastNMSImpl extends FastNMS {
     public InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection) {
         LevelChunkSection section = (LevelChunkSection) levelChunkSection;
         return new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
+    }
+
+    @Override
+    public void injectedWorldGen(CEWorld world, Object chunkMap) {
+        ChunkGenerator generator = ((ChunkMap) chunkMap).generator;
+        if (!(generator instanceof InjectedChunkGenerator)) {
+            ((ChunkMap) chunkMap).generator = new InjectedChunkGenerator(world, generator);
+        }
     }
 
     @Override
@@ -328,7 +338,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object[] method$ChunkAccess$getSections(Object chunk) {
-        return ((LevelChunk) chunk).getSections();
+        return ((ChunkAccess) chunk).getSections();
     }
 
     @Override
@@ -2483,4 +2493,10 @@ public class FastNMSImpl extends FastNMS {
         buf.writeBoolean(onGround);
         return ClientboundTeleportEntityPacket.STREAM_CODEC.decode(buf);
     }
+
+    @Override
+    public Object field$ServerChunkCache$chunkMap(Object chunkSource) {
+        return ((ServerChunkCache) chunkSource).chunkMap.getWorldGenContext();
+    }
+
 }
