@@ -2496,7 +2496,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object field$ServerChunkCache$chunkMap(Object chunkSource) {
-        return ((ServerChunkCache) chunkSource).chunkMap.getWorldGenContext();
+        return ((ServerChunkCache) chunkSource).chunkMap;
     }
 
 }
