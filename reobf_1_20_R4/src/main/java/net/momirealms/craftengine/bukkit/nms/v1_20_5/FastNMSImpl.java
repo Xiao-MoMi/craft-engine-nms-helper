@@ -2499,4 +2499,8 @@ public class FastNMSImpl extends FastNMS {
         return ((ServerChunkCache) chunkSource).chunkMap;
     }
 
+    @Override
+    public Map field$ClientboundUpdateTagsPacket$tags(Object packet) {
+        return ((ClientboundUpdateTagsPacket) packet).getTags();
+    }
 }

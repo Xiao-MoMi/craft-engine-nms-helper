@@ -930,4 +930,5 @@ public abstract class FastNMS {
 
     public abstract Object field$ServerChunkCache$chunkMap(Object chunkSource);
 
+    public abstract Map field$ClientboundUpdateTagsPacket$tags(Object packet);
 }
