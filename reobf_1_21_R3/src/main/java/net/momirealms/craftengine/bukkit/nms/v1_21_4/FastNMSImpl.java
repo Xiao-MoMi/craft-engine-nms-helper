@@ -2518,4 +2518,29 @@ public class FastNMSImpl extends FastNMS {
     public Map field$ClientboundUpdateTagsPacket$tags(Object packet) {
         return ((ClientboundUpdateTagsPacket) packet).getTags();
     }
+
+    @Override
+    public int method$LightEngine$getLightBlockInto(Object level, Object state1, Object pos1, Object state2, Object pos2, Object direction, int defaultReturnValue) {
+        return LightEngine.getLightBlockInto(((BlockState) state1), ((BlockState) state2), ((Direction) direction), defaultReturnValue);
+    }
+
+    @Override
+    public int method$BlockBehaviour$BlockStateBase$getLightBlock(Object blockStateBase, Object level, Object pos) {
+        return ((BlockBehaviour.BlockStateBase) blockStateBase).getLightBlock();
+    }
+
+    @Override
+    public boolean method$FluidState$is(Object fluidState, Object tag) {
+        return ((FluidState) fluidState).is((TagKey) tag);
+    }
+
+    @Override
+    public int method$LevelReader$getMaxLocalRawBrightness(Object level, Object pos) {
+        return ((LevelReader) level).getMaxLocalRawBrightness((BlockPos) pos);
+    }
+
+    @Override
+    public Object method$BlockPos$offset(Object pos, int x, int y, int z) {
+        return ((BlockPos) pos).offset(x, y, z);
+    }
 }

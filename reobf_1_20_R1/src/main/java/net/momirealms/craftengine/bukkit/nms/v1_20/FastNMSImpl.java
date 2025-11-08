@@ -76,6 +76,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.lighting.LevelLightEngine;
+import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.lighting.LightEventListener;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -2420,5 +2421,30 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Map field$ClientboundUpdateTagsPacket$tags(Object packet) {
         return ((ClientboundUpdateTagsPacket) packet).getTags();
+    }
+
+    @Override
+    public int method$LightEngine$getLightBlockInto(Object level, Object state1, Object pos1, Object state2, Object pos2, Object direction, int defaultReturnValue) {
+        return LightEngine.getLightBlockInto(((BlockGetter) level), ((BlockState) state1), ((BlockPos) pos1), ((BlockState) state2), ((BlockPos) pos2), ((Direction) direction), defaultReturnValue);
+    }
+
+    @Override
+    public int method$BlockBehaviour$BlockStateBase$getLightBlock(Object blockStateBase, Object level, Object pos) {
+        return ((BlockBehaviour.BlockStateBase) blockStateBase).getLightBlock((BlockGetter) level, (BlockPos) pos);
+    }
+
+    @Override
+    public boolean method$FluidState$is(Object fluidState, Object tag) {
+        return ((FluidState) fluidState).is((TagKey) tag);
+    }
+
+    @Override
+    public int method$LevelReader$getMaxLocalRawBrightness(Object level, Object pos) {
+        return ((LevelReader) level).getMaxLocalRawBrightness((BlockPos) pos);
+    }
+
+    @Override
+    public Object method$BlockPos$offset(Object pos, int x, int y, int z) {
+        return ((BlockPos) pos).offset(x, y, z);
     }
 }

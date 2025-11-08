@@ -29,8 +29,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.function.Consumer;
@@ -931,4 +931,15 @@ public abstract class FastNMS {
     public abstract Object field$ServerChunkCache$chunkMap(Object chunkSource);
 
     public abstract Map field$ClientboundUpdateTagsPacket$tags(Object packet);
+
+    public abstract int method$LightEngine$getLightBlockInto(@Nullable("1.21.2+") Object level, Object state1, @Nullable("1.21.2+") Object pos1, Object state2, @Nullable("1.21.2+") Object pos2, Object direction, int defaultReturnValue);
+
+    public abstract int method$BlockBehaviour$BlockStateBase$getLightBlock(Object blockStateBase, @Nullable("1.21.2+") Object level, @Nullable("1.21.2+") Object pos);
+
+    public abstract boolean method$FluidState$is(Object fluidState, Object tag);
+
+    public abstract int method$LevelReader$getMaxLocalRawBrightness(Object level, Object pos);
+
+    public abstract Object method$BlockPos$offset(Object pos, int x, int y, int z);
+
 }
