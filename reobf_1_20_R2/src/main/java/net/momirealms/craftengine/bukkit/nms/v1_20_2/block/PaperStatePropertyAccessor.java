@@ -3,6 +3,7 @@ package net.momirealms.craftengine.bukkit.nms.v1_20_2.block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -46,7 +47,7 @@ public class PaperStatePropertyAccessor implements StatePropertyAccessor {
     }
 
     @Override
-    public BlockState withProperty(String propertyName, String value) {
+    public @NotNull BlockState withProperty(String propertyName, String value) {
         Property<?> property = this.blockState.getBlock().getStateDefinition().getProperty(propertyName);
         BlockState finalState = this.blockState;
         if (property != null) {
@@ -56,6 +57,12 @@ public class PaperStatePropertyAccessor implements StatePropertyAccessor {
             }
         }
         return finalState;
+    }
+
+    @Override
+    public @NotNull BlockState cycleProperty(String propertyName) {
+        Property<?> property = this.blockState.getBlock().getStateDefinition().getProperty(propertyName);
+        return property != null ? this.blockState.cycle(property) : this.blockState;
     }
 
     @SuppressWarnings("unchecked")
