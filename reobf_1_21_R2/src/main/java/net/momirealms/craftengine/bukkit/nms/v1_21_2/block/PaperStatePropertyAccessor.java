@@ -3,6 +3,7 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_2.block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
+import net.momirealms.craftengine.core.util.MiscUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -60,9 +61,14 @@ public class PaperStatePropertyAccessor implements StatePropertyAccessor {
     }
 
     @Override
-    public @NotNull BlockState cycleProperty(String propertyName) {
+    public @NotNull BlockState cycleProperty(String propertyName, boolean backwards) {
         Property<?> property = this.blockState.getBlock().getStateDefinition().getProperty(propertyName);
-        return property != null ? this.blockState.cycle(property) : this.blockState;
+        if (property == null) return this.blockState;
+        return cycleState(this.blockState, property, backwards);
+    }
+
+    private static <T extends Comparable<T>> BlockState cycleState(BlockState blockState, Property<T> property, boolean backwards) {
+        return backwards ? blockState.setValue(property, MiscUtils.findPreviousInIterable(property.getPossibleValues(), blockState.getValue(property))) : blockState.cycle(property);
     }
 
     @SuppressWarnings("unchecked")
