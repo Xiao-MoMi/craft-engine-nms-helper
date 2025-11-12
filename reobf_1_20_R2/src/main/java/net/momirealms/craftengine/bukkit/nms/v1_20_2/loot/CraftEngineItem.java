@@ -42,7 +42,7 @@ public class CraftEngineItem extends LootPoolSingletonContainer {
             return;
         }
         BukkitServerPlayer serverPlayer = null;
-        if (lootContext.getParam(LootContextParams.THIS_ENTITY) instanceof Player player) {
+        if (lootContext.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Player player) {
             serverPlayer = BukkitAdaptors.adapt((org.bukkit.entity.Player) player.getBukkitEntity());
         }
         consumer.accept((ItemStack) optionalCustomItem.get().buildItem(serverPlayer).getLiteralObject());
