@@ -76,6 +76,12 @@ public abstract class FastNMS {
 
     public abstract Object getCraftEngineCustomSimpleStateProviderType();
 
+    public abstract Object getCraftEngineCustomWeightedStateProviderType();
+
+    public abstract Object getCraftEngineCustomRotatedBlockProviderType();
+
+    public abstract Object getCraftEngineCustomRandomizedIntStateProviderType();
+
     public abstract InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException;
 
     public abstract InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection);

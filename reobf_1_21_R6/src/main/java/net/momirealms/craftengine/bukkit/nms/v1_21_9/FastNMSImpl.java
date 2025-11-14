@@ -132,8 +132,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_9.inventory.SimpleStorageCont
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.network.InjectedHashedStack;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.recipe.*;
-import net.momirealms.craftengine.bukkit.nms.v1_21_9.worldgen.CustomSimpleStateProvider;
-import net.momirealms.craftengine.bukkit.nms.v1_21_9.worldgen.InjectedChunkGenerator;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.worldgen.*;
 import net.momirealms.craftengine.bukkit.plugin.reflection.minecraft.CoreReflections;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
@@ -201,6 +200,21 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object getCraftEngineCustomSimpleStateProviderType() {
         return CustomSimpleStateProvider.TYPE;
+    }
+
+    @Override
+    public Object getCraftEngineCustomWeightedStateProviderType() {
+        return CustomWeightedStateProvider.TYPE;
+    }
+
+    @Override
+    public Object getCraftEngineCustomRotatedBlockProviderType() {
+        return CustomRotatedBlockProvider.TYPE;
+    }
+
+    @Override
+    public Object getCraftEngineCustomRandomizedIntStateProviderType() {
+        return CustomRandomizedIntStateProvider.TYPE;
     }
 
     @Override
