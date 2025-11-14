@@ -10,6 +10,7 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import net.momirealms.craftengine.core.block.BlockStateWrapper;
 import net.momirealms.craftengine.core.plugin.CraftEngine;
+import net.momirealms.craftengine.core.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unchecked")
@@ -20,7 +21,7 @@ public class CustomSimpleStateProvider extends BlockStateProvider {
 
     static {
         try {
-            TYPE = BlockStateProviderType.class.getDeclaredConstructor(MapCodec.class).newInstance(CODEC);
+            TYPE = ReflectionUtils.setAccessible(BlockStateProviderType.class.getDeclaredConstructor(MapCodec.class)).newInstance(CODEC);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
