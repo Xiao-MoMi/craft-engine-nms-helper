@@ -124,6 +124,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_4.entity.InjectedFallingBlock
 import net.momirealms.craftengine.bukkit.nms.v1_21_4.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_4.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_4.recipe.*;
+import net.momirealms.craftengine.bukkit.nms.v1_21_4.worldgen.CustomSimpleStateProvider;
 import net.momirealms.craftengine.bukkit.nms.v1_21_4.worldgen.InjectedChunkGenerator;
 import net.momirealms.craftengine.bukkit.plugin.reflection.minecraft.CoreReflections;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
@@ -182,6 +183,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object getCraftEngineLootItemType() {
         return CraftEngineItem.TYPE;
+    }
+
+    @Override
+    public Object getCraftEngineCustomSimpleStateProviderType() {
+        return CustomSimpleStateProvider.TYPE;
     }
 
     @Override
