@@ -56,7 +56,17 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public int containerSize() {
+        return this.items.size();
+    }
+
+    @Override
     public @NotNull ItemStack getItem(int slot) {
+        return this.items.get(slot);
+    }
+
+    @Override
+    public @NotNull ItemStack getItemAtSlot(int slot) {
         return this.items.get(slot);
     }
 
@@ -77,6 +87,11 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public @NotNull ItemStack removeItemAtSlot(int slot, int amount) {
+        return this.removeItem(slot, amount);
+    }
+
+    @Override
     public @NotNull ItemStack removeItemNoUpdate(int slot) {
         ItemStack stack = this.getItem(slot);
         ItemStack result;
@@ -89,6 +104,11 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
             stack.shrink(1);
         }
         return result;
+    }
+
+    @Override
+    public @NotNull ItemStack removeItemNoUpdateAtSlot(int slot) {
+        return this.removeItemNoUpdate(slot);
     }
 
     @Override
@@ -110,12 +130,27 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public int maxStackSize() {
+        return this.maxStack;
+    }
+
+    @Override
     public void setMaxStackSize(int size) {
         this.maxStack = size;
     }
 
     @Override
+    public void maxStackSize(int size) {
+        this.maxStack = size;
+    }
+
+    @Override
     public void setChanged() {
+    }
+
+    @Override
+    public void setContentsChanged() {
+        this.setChanged();
     }
 
     @Override
@@ -133,6 +168,11 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
 
     @Override
     public @NotNull List<ItemStack> getContents() {
+        return this.items;
+    }
+
+    @Override
+    public @NotNull List<ItemStack> contents() {
         return this.items;
     }
 
@@ -162,7 +202,17 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
+    public @NotNull List<HumanEntity> viewers() {
+        return this.viewers;
+    }
+
+    @Override
     public InventoryHolder getOwner() {
+        return this.owner;
+    }
+
+    @Override
+    public InventoryHolder owner() {
         return this.owner;
     }
 
@@ -200,7 +250,12 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     }
 
     @Override
-    public @NotNull Location getLocation() {
+    public void clearContents() {
+        this.items.clear();
+    }
+
+    @Override
+    public @Nullable Location getLocation() {
         if (this.blockEntity == null) return null;
         return new Location(
                 (World) this.blockEntity.world().world().platformWorld(),
@@ -208,6 +263,11 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
                 this.blockEntity.pos().y(),
                 this.blockEntity.pos().z()
         );
+    }
+
+    @Override
+    public @Nullable Location location() {
+        return this.getLocation();
     }
 
     @Override
@@ -225,6 +285,11 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
         } while (itemstack.isEmpty());
 
         return false;
+    }
+
+    @Override
+    public boolean contentsIsEmpty() {
+        return this.isEmpty();
     }
 
     @Override
