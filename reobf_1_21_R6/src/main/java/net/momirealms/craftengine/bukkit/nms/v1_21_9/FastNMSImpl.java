@@ -220,7 +220,6 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object getCraftEngineCustomSimpleBlockFeature() {
-        BuiltInRegistries.FEATURE
         return new CustomSimpleBlockFeature();
     }
 
