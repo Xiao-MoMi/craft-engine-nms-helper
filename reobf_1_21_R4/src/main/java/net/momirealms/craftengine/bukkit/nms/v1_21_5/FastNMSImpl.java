@@ -209,6 +209,11 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public Object getCraftEngineCustomSimpleBlockFeature() {
+        return new CustomSimpleBlockFeature();
+    }
+
+    @Override
     public InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException {
         InjectedPalettedContainer injectedObject = (InjectedPalettedContainer) ReflectionUtils.UNSAFE.allocateInstance(InjectedPalettedContainer.class);
         injectedObject.setTarget(palettedContainer);

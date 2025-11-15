@@ -2,7 +2,6 @@ package net.momirealms.craftengine.bukkit.nms.v1_20_3.worldgen;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
