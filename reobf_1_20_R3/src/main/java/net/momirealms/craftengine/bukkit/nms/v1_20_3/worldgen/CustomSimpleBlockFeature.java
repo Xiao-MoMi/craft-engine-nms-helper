@@ -39,6 +39,7 @@ public class CustomSimpleBlockFeature extends Feature<SimpleBlockConfiguration> 
                         return false;
                     }
                     try {
+                        worldGenLevel.setBlock(blockPos, state, 2);
                         behavior.placeMultiState(state.getBlock(), new Object[]{worldGenLevel, blockPos, state, null, ItemStack.EMPTY}, () -> null);
                         return true;
                     } catch (Throwable t) {
