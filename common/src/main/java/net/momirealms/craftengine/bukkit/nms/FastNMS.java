@@ -952,4 +952,11 @@ public abstract class FastNMS {
 
     public abstract Object method$BlockPos$offset(Object pos, int x, int y, int z);
 
+    public abstract Object field$Player$inventoryMenu(Object serverPlayer);
+
+    public abstract Object method$InventoryMenu$getCraftSlots(Object menu);
+
+    public abstract void method$InventoryMenu$slotsChanged(Object menu, Object container);
+
+    public abstract int method$Inventory$clearOrCountMatchingItems(Object inventory, Predicate stackPredicate, int maxCount, Object container);
 }

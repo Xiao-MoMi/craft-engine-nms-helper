@@ -2545,4 +2545,24 @@ public class FastNMSImpl extends FastNMS {
     public Object method$BlockPos$offset(Object pos, int x, int y, int z) {
         return ((BlockPos) pos).offset(x, y, z);
     }
+
+    @Override
+    public Object field$Player$inventoryMenu(Object serverPlayer) {
+        return ((net.minecraft.world.entity.player.Player) serverPlayer).inventoryMenu;
+    }
+
+    @Override
+    public Object method$InventoryMenu$getCraftSlots(Object menu) {
+        return ((InventoryMenu) menu).getCraftSlots();
+    }
+
+    @Override
+    public void method$InventoryMenu$slotsChanged(Object menu, Object container) {
+        ((InventoryMenu) menu).slotsChanged((Container) container);
+    }
+
+    @Override
+    public int method$Inventory$clearOrCountMatchingItems(Object inventory, Predicate stackPredicate, int maxCount, Object container) {
+        return ((net.minecraft.world.entity.player.Inventory) inventory).clearOrCountMatchingItems(stackPredicate, maxCount, (Container) container);
+    }
 }
