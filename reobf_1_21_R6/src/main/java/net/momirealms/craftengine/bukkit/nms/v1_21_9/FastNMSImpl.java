@@ -580,7 +580,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public void method$LevelAccessor$levelEvent(Object level, int eventId, Object blockPos, int stateId) {
-        ((Level) level).levelEvent(eventId, (BlockPos) blockPos, stateId);
+        ((LevelAccessor) level).levelEvent(eventId, (BlockPos) blockPos, stateId);
     }
 
     @Override
@@ -886,7 +886,7 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public final boolean checkEntityCollision(Object level, List<Object> aabbs) {
         if (aabbs.isEmpty()) return true;
-        ServerLevel serverLevel = (ServerLevel) level;
+        CommonLevelAccessor serverLevel = (CommonLevelAccessor) level;
         List<VoxelShape> shapes = Lists.newArrayList();
         for (Object ab : aabbs) {
             AABB aabb = (AABB) ab;
@@ -1430,12 +1430,12 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public boolean method$Block$canSupportRigidBlock(Object level, Object pos) {
-        return net.minecraft.world.level.block.Block.canSupportRigidBlock((Level) level, (BlockPos) pos);
+        return net.minecraft.world.level.block.Block.canSupportRigidBlock((BlockGetter) level, (BlockPos) pos);
     }
 
     @Override
     public boolean method$Block$canSupportCenter(Object level, Object pos, Object direction) {
-        return net.minecraft.world.level.block.Block.canSupportCenter((Level) level, (BlockPos) pos, (Direction) direction);
+        return net.minecraft.world.level.block.Block.canSupportCenter((LevelReader) level, (BlockPos) pos, (Direction) direction);
     }
 
     @Override
@@ -1753,8 +1753,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public boolean method$Level$destroyBlock(Object level, Object pos, boolean drop) {
-        return ((Level) level).destroyBlock((BlockPos) pos, drop);
+    public boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean drop) {
+        return ((LevelWriter) level).destroyBlock((BlockPos) pos, drop);
     }
 
     @Override

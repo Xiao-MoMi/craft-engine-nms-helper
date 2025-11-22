@@ -634,7 +634,7 @@ public abstract class FastNMS {
 
     public abstract BlockRedstoneEvent method$CraftEventFactory$callRedstoneChange(Object world, Object pos, int oldCurrent, int newCurrent);
 
-    public abstract boolean method$Level$destroyBlock(Object level, Object pos, boolean drop);
+    public abstract boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean drop);
 
     public abstract Object method$itemStack$save(Object itemStack, Object compoundTag);
 
