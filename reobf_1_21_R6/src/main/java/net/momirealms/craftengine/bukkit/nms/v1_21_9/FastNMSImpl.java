@@ -23,7 +23,6 @@ import net.minecraft.core.*;
 import net.minecraft.core.component.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
 import net.minecraft.network.*;
 import net.minecraft.network.chat.Component;
