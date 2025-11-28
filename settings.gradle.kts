@@ -2,6 +2,7 @@ rootProject.name = "craft-engine-nms-helper"
 include(":helper")
 include(":helper_mojmap")
 include(":common")
+include(":reobf_1_21_R7")
 include(":reobf_1_21_R6")
 include(":reobf_1_21_R5")
 include(":reobf_1_21_R4")

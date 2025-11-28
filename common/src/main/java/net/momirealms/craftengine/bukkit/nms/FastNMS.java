@@ -54,6 +54,7 @@ public abstract class FastNMS {
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
         return switch (VersionHelper.MINECRAFT_VERSION.version()) {
+            case "1.21.11" -> "v1_21_11";
             case "1.21.9", "1.21.10" -> "v1_21_9";
             case "1.21.6", "1.21.7", "1.21.8" -> "v1_21_6";
             case "1.21.5" -> "v1_21_5";

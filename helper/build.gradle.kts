@@ -3,6 +3,7 @@ val projectGroup : String by project
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(mapOf("path" to ":reobf_1_21_R7"))) // todo 等 spigot 发布映射表
     implementation(project(mapOf("path" to ":reobf_1_21_R6", "configuration" to "reobf")))
     implementation(project(mapOf("path" to ":reobf_1_21_R5", "configuration" to "reobf")))
     implementation(project(mapOf("path" to ":reobf_1_21_R4", "configuration" to "reobf")))
