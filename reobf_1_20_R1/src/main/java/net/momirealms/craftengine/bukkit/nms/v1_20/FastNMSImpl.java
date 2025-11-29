@@ -2492,4 +2492,10 @@ public class FastNMSImpl extends FastNMS {
     public int method$Inventory$clearOrCountMatchingItems(Object inventory, Predicate stackPredicate, int maxCount, Object container) {
         return ((net.minecraft.world.entity.player.Inventory) inventory).clearOrCountMatchingItems(stackPredicate, maxCount, (Container) container);
     }
+
+    @Override
+    public Object method$Entity$getPassengerRidingPosition(Object vehicle, Object passenger) {
+        Entity vehicleEntity = (Entity) vehicle;
+        return new Vec3(vehicleEntity.getX(), vehicleEntity.getY() + vehicleEntity.getPassengersRidingOffset() + ((Entity) passenger).getMyRidingOffset(), vehicleEntity.getZ());
+    }
 }

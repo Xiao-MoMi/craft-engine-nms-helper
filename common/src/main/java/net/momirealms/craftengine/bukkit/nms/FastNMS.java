@@ -960,4 +960,6 @@ public abstract class FastNMS {
     public abstract void method$InventoryMenu$slotsChanged(Object menu, Object container);
 
     public abstract int method$Inventory$clearOrCountMatchingItems(Object inventory, Predicate stackPredicate, int maxCount, Object container);
+
+    public abstract Object method$Entity$getPassengerRidingPosition(Object vehicle, Object passenger);
 }
