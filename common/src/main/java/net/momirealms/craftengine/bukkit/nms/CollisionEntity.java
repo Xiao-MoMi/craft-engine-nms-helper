@@ -4,5 +4,5 @@ public interface CollisionEntity {
 
     void destroy();
 
-    int getId();
+    int getEntityId();
 }

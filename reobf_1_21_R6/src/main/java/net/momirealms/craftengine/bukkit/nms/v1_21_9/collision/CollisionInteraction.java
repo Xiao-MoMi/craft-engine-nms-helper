@@ -47,7 +47,7 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
     }
 
     @Override
-    public int getId() {
+    public int getEntityId() {
         return super.getId();
     }
 

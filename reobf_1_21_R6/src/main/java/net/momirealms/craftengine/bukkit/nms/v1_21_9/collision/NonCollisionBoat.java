@@ -29,4 +29,9 @@ public class NonCollisionBoat extends CollisionBoat {
     public boolean canBeCollidedWith(@Nullable Entity entity) {
         return false;
     }
+
+    @Override
+    public int getEntityId() {
+        return super.getEntityId();
+    }
 }

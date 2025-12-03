@@ -32,4 +32,9 @@ public class NonCollisionBoat extends CollisionBoat {
     public boolean shouldHardCollide() {
         return false;
     }
+
+    @Override
+    public int getEntityId() {
+        return super.getEntityId();
+    }
 }

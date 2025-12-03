@@ -32,4 +32,9 @@ public class NonCollisionInteraction extends CollisionInteraction {
     public boolean shouldHardCollide() {
         return false;
     }
+
+    @Override
+    public int getEntityId() {
+        return super.getEntityId();
+    }
 }

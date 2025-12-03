@@ -52,7 +52,7 @@ public class CollisionBoat extends Boat implements CollisionEntity {
     }
 
     @Override
-    public int getId() {
+    public int getEntityId() {
         return super.getId();
     }
 

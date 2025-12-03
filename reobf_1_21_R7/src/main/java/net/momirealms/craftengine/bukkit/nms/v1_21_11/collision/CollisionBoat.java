@@ -53,7 +53,7 @@ public class CollisionBoat extends net.minecraft.world.entity.vehicle.boat.Boat 
     }
 
     @Override
-    public int getId() {
+    public int getEntityId() {
         return super.getId();
     }
 

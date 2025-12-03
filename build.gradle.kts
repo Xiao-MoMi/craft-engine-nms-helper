@@ -15,13 +15,14 @@ allprojects {
     repositories {
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://repo.momirealms.net/snapshots")
         maven("https://repo.momirealms.net/releases/")
         maven("https://libraries.minecraft.net/")
     }
 
     dependencies {
-        compileOnly("net.momirealms:craft-engine-core:0.0.65.8.2")
-        compileOnly("net.momirealms:craft-engine-bukkit:0.0.65.8.2")
+        compileOnly("net.momirealms:craft-engine-core:0.0.65.15-SNAPSHOT")
+        compileOnly("net.momirealms:craft-engine-bukkit:0.0.65.15-SNAPSHOT")
         compileOnly("com.mojang:brigadier:1.0.18")
     }
 }
