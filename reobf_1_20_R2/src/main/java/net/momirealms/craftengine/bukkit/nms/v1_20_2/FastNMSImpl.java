@@ -2515,4 +2515,9 @@ public class FastNMSImpl extends FastNMS {
         Vec3 passengerRidingPosition = ((Entity) vehicle).getPassengerRidingPosition((Entity) passenger);
         return new Vec3(passengerRidingPosition.x, passengerRidingPosition.y + ((Entity) passenger).getMyRidingOffset((Entity) vehicle), passengerRidingPosition.z);
     }
+
+    @Override
+    public Object method$Entity$getOnPos(Object entity) {
+        return ((Entity) entity).getOnPos();
+    }
 }

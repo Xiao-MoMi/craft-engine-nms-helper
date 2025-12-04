@@ -2581,4 +2581,9 @@ public class FastNMSImpl extends FastNMS {
         Vec3 vehicleAttachmentPoint = ((Entity) passenger).getVehicleAttachmentPoint((Entity) vehicle);
         return passengerRidingPosition.subtract(vehicleAttachmentPoint);
     }
+
+    @Override
+    public Object method$Entity$getOnPos(Object entity) {
+        return ((Entity) entity).getOnPos();
+    }
 }

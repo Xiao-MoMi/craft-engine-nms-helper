@@ -2498,4 +2498,9 @@ public class FastNMSImpl extends FastNMS {
         Entity vehicleEntity = (Entity) vehicle;
         return new Vec3(vehicleEntity.getX(), vehicleEntity.getY() + vehicleEntity.getPassengersRidingOffset() + ((Entity) passenger).getMyRidingOffset(), vehicleEntity.getZ());
     }
+
+    @Override
+    public Object method$Entity$getOnPos(Object entity) {
+        return ((Entity) entity).getOnPos();
+    }
 }
