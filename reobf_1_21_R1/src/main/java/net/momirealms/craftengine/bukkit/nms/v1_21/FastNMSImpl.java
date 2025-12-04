@@ -864,7 +864,7 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public final boolean checkEntityCollision(Object level, List<Object> aabbs) {
+    public final boolean checkEntityCollision(Object level, List<Object> aabbs, Predicate<Object> entityFilter) {
         if (aabbs.isEmpty()) return true;
         CommonLevelAccessor serverLevel = (CommonLevelAccessor) level;
         List<VoxelShape> shapes = Lists.newArrayList();
@@ -887,8 +887,10 @@ public class FastNMSImpl extends FastNMS {
         }
         List<Entity> entities = serverLevel.getEntities(null, finalShape.bounds());
         for (Entity entity : entities) {
-            if (!entity.isRemoved() && entity.blocksBuilding && Shapes.joinIsNotEmpty(finalShape, Shapes.create(entity.getBoundingBox()), BooleanOp.AND)) {
-                return false;
+            if (entityFilter.test(entity)) {
+                if (!entity.isRemoved() && entity.blocksBuilding && Shapes.joinIsNotEmpty(finalShape, Shapes.create(entity.getBoundingBox()), BooleanOp.AND)) {
+                    return false;
+                }
             }
         }
         return true;
