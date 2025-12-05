@@ -116,6 +116,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
@@ -2582,5 +2583,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$Entity$getOnPos(Object entity) {
         return ((Entity) entity).getOnPos();
+    }
+
+    @Override
+    public Object method$ClientboundSetPlayerTeamPacket$createMultiplePlayerPacket(Object team, Collection<String> players, boolean add) {
+        return ClientboundSetPlayerTeamPacket.createMultiplePlayerPacket((PlayerTeam) team, players, add ? ClientboundSetPlayerTeamPacket.Action.ADD : ClientboundSetPlayerTeamPacket.Action.REMOVE);
+    }
+
+    @Override
+    public UUID method$Entity$getUUID(Object entity) {
+        return ((Entity) entity).getUUID();
     }
 }
