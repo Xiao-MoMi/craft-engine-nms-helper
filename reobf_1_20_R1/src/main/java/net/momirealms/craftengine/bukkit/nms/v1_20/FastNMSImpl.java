@@ -2516,4 +2516,9 @@ public class FastNMSImpl extends FastNMS {
     public UUID method$Entity$getUUID(Object entity) {
         return ((Entity) entity).getUUID();
     }
+
+    @Override
+    public Object constructor$ClientboundSetEquipmentPacket(int entityId, List<Object> equipments) {
+        return new ClientboundSetEquipmentPacket(entityId, (List) equipments);
+    }
 }

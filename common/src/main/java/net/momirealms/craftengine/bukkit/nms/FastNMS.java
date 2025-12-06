@@ -968,4 +968,6 @@ public abstract class FastNMS {
     public abstract Object method$ClientboundSetPlayerTeamPacket$createMultiplePlayerPacket(Object team, Collection<String> players, boolean add);
 
     public abstract UUID method$Entity$getUUID(Object entity);
+
+    public abstract Object constructor$ClientboundSetEquipmentPacket(int entityId, List<Object> equipments);
 }
