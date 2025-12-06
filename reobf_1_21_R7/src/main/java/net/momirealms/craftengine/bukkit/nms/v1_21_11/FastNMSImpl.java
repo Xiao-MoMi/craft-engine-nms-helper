@@ -66,6 +66,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -2598,5 +2599,20 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundSetEquipmentPacket(int entityId, List<Object> equipments) {
         return new ClientboundSetEquipmentPacket(entityId, (List) equipments);
+    }
+
+    @Override
+    public Object constructor$AttributeInstance(Object attribute, Consumer consumer) {
+        return new AttributeInstance((Holder<Attribute>) attribute, consumer);
+    }
+
+    @Override
+    public void method$AttributeInstance$setBaseValue(Object attributeInstance, double value) {
+        ((AttributeInstance) attributeInstance).setBaseValue(value);
+    }
+
+    @Override
+    public Object constructor$ClientboundUpdateAttributesPacket(int id, Collection collection) {
+        return new ClientboundUpdateAttributesPacket(id, collection);
     }
 }

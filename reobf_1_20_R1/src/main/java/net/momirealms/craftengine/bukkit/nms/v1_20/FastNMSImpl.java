@@ -52,6 +52,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -2520,5 +2522,20 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundSetEquipmentPacket(int entityId, List<Object> equipments) {
         return new ClientboundSetEquipmentPacket(entityId, (List) equipments);
+    }
+
+    @Override
+    public Object constructor$AttributeInstance(Object attribute, Consumer consumer) {
+        return new AttributeInstance((Attribute) attribute, consumer);
+    }
+
+    @Override
+    public void method$AttributeInstance$setBaseValue(Object attributeInstance, double value) {
+        ((AttributeInstance) attributeInstance).setBaseValue(value);
+    }
+
+    @Override
+    public Object constructor$ClientboundUpdateAttributesPacket(int id, Collection collection) {
+        return new ClientboundUpdateAttributesPacket(id, collection);
     }
 }

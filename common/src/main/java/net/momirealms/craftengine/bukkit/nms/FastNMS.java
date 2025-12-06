@@ -970,4 +970,10 @@ public abstract class FastNMS {
     public abstract UUID method$Entity$getUUID(Object entity);
 
     public abstract Object constructor$ClientboundSetEquipmentPacket(int entityId, List<Object> equipments);
+
+    public abstract Object constructor$AttributeInstance(Object attribute, Consumer consumer);
+
+    public abstract void method$AttributeInstance$setBaseValue(Object attributeInstance, double value);
+
+    public abstract Object constructor$ClientboundUpdateAttributesPacket(int id, Collection collection);
 }
