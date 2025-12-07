@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -113,7 +114,7 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
                     Level var22 = this.level();
                     if (var22 instanceof ServerLevel) {
                         ServerLevel serverLevel = (ServerLevel)var22;
-                        if ((Boolean)serverLevel.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.ENTITY_DROPS)) {
+                        if ((Boolean)serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
                             this.spawnAtLocation(serverLevel, block);
                         }
                     }
@@ -146,7 +147,7 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
 
                     if (!this.onGround() && !flag1) {
                         if (this.time > 100 && this.autoExpire && (blockPos.getY() <= this.level().getMinY() || blockPos.getY() > this.level().getMaxY()) || this.time > 600 && this.autoExpire) {
-                            if (this.dropItem && (Boolean)serverLevel.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.ENTITY_DROPS)) {
+                            if (this.dropItem && (Boolean)serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
                                 this.spawnAtLocation(serverLevel, block);
                             }
 
@@ -198,14 +199,14 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
                                                 blockEntity.setChanged();
                                             }
                                         }
-                                    } else if (this.dropItem && (Boolean)serverLevel.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.ENTITY_DROPS)) {
+                                    } else if (this.dropItem && (Boolean)serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
                                         this.discard(EntityRemoveEvent.Cause.DROP);
                                         this.callOnBrokenAfterFall(block, blockPos);
                                         this.spawnAtLocation(serverLevel, block);
                                     }
                                 } else {
                                     this.discard(EntityRemoveEvent.Cause.DROP);
-                                    if (this.dropItem && (Boolean)serverLevel.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.ENTITY_DROPS)) {
+                                    if (this.dropItem && (Boolean)serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
                                         this.callOnBrokenAfterFall(block, blockPos);
                                         this.spawnAtLocation(serverLevel, block);
                                     }
