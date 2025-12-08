@@ -82,4 +82,9 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
     public boolean shouldHardCollide() {
         return true;
     }
+
+    @Override
+    public boolean shouldBeSaved() {
+        return false;
+    }
 }

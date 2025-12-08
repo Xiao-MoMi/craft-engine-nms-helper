@@ -77,4 +77,9 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
     public boolean canBeCollidedWith() {
         return true;
     }
+
+    @Override
+    public boolean shouldBeSaved() {
+        return false;
+    }
 }

@@ -171,4 +171,9 @@ public class CollisionBoat extends net.minecraft.world.entity.vehicle.boat.Boat 
     @Override
     protected void addPassenger(@NotNull Entity passenger) {
     }
+
+    @Override
+    public boolean shouldBeSaved() {
+        return false;
+    }
 }

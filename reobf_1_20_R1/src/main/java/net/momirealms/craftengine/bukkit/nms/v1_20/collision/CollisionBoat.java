@@ -159,4 +159,9 @@ public class CollisionBoat extends Boat implements CollisionEntity {
     public boolean shouldHardCollide() {
         return true;
     }
+
+    @Override
+    public boolean shouldBeSaved() {
+        return false;
+    }
 }
