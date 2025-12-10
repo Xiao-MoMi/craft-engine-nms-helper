@@ -25,8 +25,10 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
 import net.minecraft.network.*;
+import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.chat.SignedMessageBody;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.StreamDecoder;
@@ -2614,5 +2616,35 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundUpdateAttributesPacket(int id, Collection collection) {
         return new ClientboundUpdateAttributesPacket(id, collection);
+    }
+
+    @Override
+    public Object field$ClientboundPlayerChatPacket$unsignedContent(Object packet) {
+        return ((ClientboundPlayerChatPacket) packet).unsignedContent();
+    }
+
+    @Override
+    public Object field$ClientboundPlayerChatPacket$body(Object packet) {
+        return ((ClientboundPlayerChatPacket) packet).body();
+    }
+
+    @Override
+    public Object field$ClientboundPlayerChatPacket$chatType(Object packet) {
+        return ((ClientboundPlayerChatPacket) packet).chatType();
+    }
+
+    @Override
+    public String field$SignedMessageBody$Packed$content(Object body) {
+        return ((SignedMessageBody.Packed) body).content();
+    }
+
+    @Override
+    public Object method$ChatType$Bound$decorate(Object chatType, Object component) {
+        return ((ChatType.Bound) chatType).decorate((Component) component);
+    }
+
+    @Override
+    public Object method$Component$literal(String text) {
+        return Component.literal(text);
     }
 }

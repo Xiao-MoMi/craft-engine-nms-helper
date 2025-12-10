@@ -976,4 +976,17 @@ public abstract class FastNMS {
     public abstract void method$AttributeInstance$setBaseValue(Object attributeInstance, double value);
 
     public abstract Object constructor$ClientboundUpdateAttributesPacket(int id, Collection collection);
+
+    public abstract Object field$ClientboundPlayerChatPacket$unsignedContent(Object packet);
+
+    public abstract Object field$ClientboundPlayerChatPacket$body(Object packet);
+
+    public abstract Object field$ClientboundPlayerChatPacket$chatType(Object packet);
+
+    public abstract String field$SignedMessageBody$Packed$content(Object body);
+
+    public abstract Object method$ChatType$Bound$decorate(Object chatType, Object component);
+
+    public abstract Object method$Component$literal(String text);
+
 }

@@ -21,7 +21,9 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.nbt.*;
 import net.minecraft.network.*;
+import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.SignedMessageBody;
 import net.minecraft.network.codec.IdDispatchCodec;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.StreamDecoder;
@@ -1635,7 +1637,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName() {
-        Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>>> allPacketIdsByName = new HashMap<>();
+        Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> allPacketIdsByName = new HashMap<>();
         Map<ConnectionProtocol, List<ProtocolInfo<? extends PacketListener>>> collect = Stream.of(
                 HandshakeProtocols.SERVERBOUND,
                 StatusProtocols.CLIENTBOUND,
@@ -1649,12 +1651,12 @@ public class FastNMSImpl extends FastNMS {
         ).collect(Collectors.groupingBy(ProtocolInfo::id));
         try {
             for (Map.Entry<ConnectionProtocol, List<ProtocolInfo<? extends PacketListener>>> entry : collect.entrySet()) {
-                Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>> protocolPacketIdsByName = new HashMap<>();
+                Map<PacketFlow, Map<String, Integer>> protocolPacketIdsByName = new HashMap<>();
                 allPacketIdsByName.put(ConnectionState.valueOf(entry.getKey().name().toUpperCase(Locale.ROOT)), protocolPacketIdsByName);
                 Map<String, Integer> serverBoundIds = new HashMap<>();
                 Map<String, Integer> clientBoundIds = new HashMap<>();
-                protocolPacketIdsByName.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.SERVERBOUND, serverBoundIds);
-                protocolPacketIdsByName.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.CLIENTBOUND, clientBoundIds);
+                protocolPacketIdsByName.put(PacketFlow.SERVERBOUND, serverBoundIds);
+                protocolPacketIdsByName.put(PacketFlow.CLIENTBOUND, clientBoundIds);
                 for (ProtocolInfo<? extends PacketListener> protocol : entry.getValue()) {
                     List<?> byId = (List<?>) field$IdDispatchCodec$byId.get(protocol.codec());
                     if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.SERVERBOUND) {
@@ -2619,5 +2621,35 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object constructor$ClientboundUpdateAttributesPacket(int id, Collection collection) {
         return new ClientboundUpdateAttributesPacket(id, collection);
+    }
+
+    @Override
+    public Object field$ClientboundPlayerChatPacket$unsignedContent(Object packet) {
+        return ((ClientboundPlayerChatPacket) packet).unsignedContent();
+    }
+
+    @Override
+    public Object field$ClientboundPlayerChatPacket$body(Object packet) {
+        return ((ClientboundPlayerChatPacket) packet).body();
+    }
+
+    @Override
+    public Object field$ClientboundPlayerChatPacket$chatType(Object packet) {
+        return ((ClientboundPlayerChatPacket) packet).chatType();
+    }
+
+    @Override
+    public String field$SignedMessageBody$Packed$content(Object body) {
+        return ((SignedMessageBody.Packed) body).content();
+    }
+
+    @Override
+    public Object method$ChatType$Bound$decorate(Object chatType, Object component) {
+        return ((ChatType.Bound) chatType).decorate((Component) component);
+    }
+
+    @Override
+    public Object method$Component$literal(String text) {
+        return Component.literal(text);
     }
 }
