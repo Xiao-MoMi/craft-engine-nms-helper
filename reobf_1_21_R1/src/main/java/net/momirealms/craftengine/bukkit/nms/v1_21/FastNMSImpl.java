@@ -2625,6 +2625,11 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public UUID field$ClientboundPlayerChatPacket$sender(Object packet) {
+        return ((ClientboundPlayerChatPacket) packet).sender();
+    }
+
+    @Override
     public String field$SignedMessageBody$Packed$content(Object body) {
         return ((SignedMessageBody.Packed) body).content();
     }

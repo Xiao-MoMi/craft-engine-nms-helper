@@ -983,6 +983,8 @@ public abstract class FastNMS {
 
     public abstract Object field$ClientboundPlayerChatPacket$chatType(Object packet);
 
+    public abstract UUID field$ClientboundPlayerChatPacket$sender(Object packet);
+
     public abstract String field$SignedMessageBody$Packed$content(Object body);
 
     public abstract Object method$ChatType$Bound$decorate(Object chatType, Object component);
