@@ -2643,4 +2643,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Component$literal(String text) {
         return Component.literal(text);
     }
+
+    @Override
+    public Object method$ChatType$BoundNetwork$resolve(Object chatType) {
+        throw new UnsupportedVersionException();
+    }
 }

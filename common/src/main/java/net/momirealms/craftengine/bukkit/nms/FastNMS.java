@@ -991,4 +991,6 @@ public abstract class FastNMS {
 
     public abstract Object method$Component$literal(String text);
 
+    public abstract Object method$ChatType$BoundNetwork$resolve(Object chatType);
+
 }
