@@ -16,6 +16,7 @@ import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.util.ItemObfuscationSession;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
 import net.minecraft.core.component.*;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -113,6 +114,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
@@ -2675,5 +2677,25 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ChatType$BoundNetwork$resolve(Object chatType) {
         throw new UnsupportedVersionException();
+    }
+
+    @Override
+    public Object field$MinecraftServer$scoreboard() {
+        return MinecraftServer.getServer().getScoreboard();
+    }
+
+    @Override
+    public Object constructor$PlayerTeam(Object scoreboard, String name) {
+        return new PlayerTeam((Scoreboard) scoreboard, name);
+    }
+
+    @Override
+    public void method$PlayerTeam$setColor(Object team, String name) {
+        ((PlayerTeam) team).setColor(ChatFormatting.valueOf(name));
+    }
+
+    @Override
+    public Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd) {
+        return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket((PlayerTeam) team, useAdd);
     }
 }

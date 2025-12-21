@@ -993,4 +993,11 @@ public abstract class FastNMS {
 
     public abstract Object method$ChatType$BoundNetwork$resolve(Object chatType);
 
+    public abstract Object field$MinecraftServer$scoreboard();
+
+    public abstract Object constructor$PlayerTeam(Object scoreboard, String name);
+
+    public abstract void method$PlayerTeam$setColor(Object team, String name);
+
+    public abstract Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd);
 }
