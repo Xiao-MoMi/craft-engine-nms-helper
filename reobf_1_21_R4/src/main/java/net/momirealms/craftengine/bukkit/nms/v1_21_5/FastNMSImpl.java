@@ -98,6 +98,7 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.chunk.status.WorldGenContext;
+import net.minecraft.world.level.entity.LevelCallback;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.lighting.LightEngine;
@@ -129,6 +130,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedEntityCallbacks;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.loot.CraftEngineItem;
@@ -2668,5 +2670,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd) {
         return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket((PlayerTeam) team, useAdd);
+    }
+
+    @Override
+    public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
+        if (worldCallback instanceof InjectedEntityCallbacks) return worldCallback;
+        return new InjectedEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
     }
 }
