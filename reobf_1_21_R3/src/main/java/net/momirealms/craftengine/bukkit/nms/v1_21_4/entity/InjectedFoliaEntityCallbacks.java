@@ -1,4 +1,4 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_9.entity;
+package net.momirealms.craftengine.bukkit.nms.v1_21_4.entity;
 
 import ca.spottedleaf.moonrise.common.list.ReferenceList;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
@@ -9,37 +9,20 @@ import net.minecraft.world.level.entity.LevelCallback;
 import net.momirealms.craftengine.bukkit.api.CraftEngineFurniture;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FoliaReflections;
-import net.momirealms.craftengine.core.util.VersionHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class InjectedEntityCallbacks implements LevelCallback<Entity> {
+public class InjectedFoliaEntityCallbacks implements LevelCallback<Entity> {
     private final LevelCallback<Entity> callback;
     private final ServerEntityLookup entityLookup;
     @Nullable
     private ReferenceList<Entity> trackerEntities;
 
 
-    public InjectedEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
+    public InjectedFoliaEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
         this.entityLookup = (ServerEntityLookup) entityLookup;
-        if (VersionHelper.isFolia()) {
-            foliaInit();
-            return;
-        }
-        for (Entity entity : entityLookup.getAll()) {
-            if (entity instanceof CollisionEntity) {
-                callback.onTickingEnd(entity);
-                entity.moonrise$setTrackedEntity(null);
-                this.entityLookup.trackerEntities.remove(entity);
-            } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
-                callback.onTickingEnd(entity);
-            }
-        }
-    }
-
-    private void foliaInit() {
-        this.trackerEntities = getTrackerEntities(entityLookup);
+        this.trackerEntities = getTrackerEntities();
         if (this.trackerEntities == null) {
             for (Entity entity : entityLookup.getAll()) {
                 if (entity instanceof CollisionEntity) {
@@ -64,9 +47,9 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
 
     @SuppressWarnings("unchecked")
     @Nullable
-    private static ReferenceList<Entity> getTrackerEntities(EntityLookup entityLookup) {
+    private ReferenceList<Entity> getTrackerEntities() {
         try {
-            Object worldData = FoliaReflections.methodHandle$Level$getCurrentWorldData.invokeExact(entityLookup.world);
+            Object worldData = FoliaReflections.methodHandle$Level$getCurrentWorldData.invokeExact(this.entityLookup.world);
             if (worldData == null) return null;
             return (ReferenceList<Entity>) FoliaReflections.methodHandle$RegionizedWorldData$trackerEntitiesGetter.invokeExact(worldData);
         } catch (Throwable e) {
@@ -99,27 +82,17 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
     public void onTrackingStart(@NotNull Entity entity) {
         boolean isCollisionEntity = entity instanceof CollisionEntity;
         if (isCollisionEntity) {
-            if (VersionHelper.isFolia()) {
-                foliaRemoveCollisionEntity(entity);
-                return;
+            if (this.trackerEntities == null) {
+                this.trackerEntities = getTrackerEntities();
             }
-            this.entityLookup.trackerEntities.remove(entity);
+            if (this.trackerEntities != null) {
+                this.trackerEntities.remove(entity);
+            }
             this.callback.onTrackingStart(entity);
             entity.moonrise$setTrackedEntity(null);
         } else  {
             this.callback.onTrackingStart(entity);
         }
-    }
-
-    private void foliaRemoveCollisionEntity(Entity entity) {
-        if (this.trackerEntities == null) {
-            this.trackerEntities = getTrackerEntities(entityLookup);
-        }
-        if (this.trackerEntities != null) {
-            this.trackerEntities.remove(entity);
-        }
-        this.callback.onTrackingStart(entity);
-        entity.moonrise$setTrackedEntity(null);
     }
 
     @Override

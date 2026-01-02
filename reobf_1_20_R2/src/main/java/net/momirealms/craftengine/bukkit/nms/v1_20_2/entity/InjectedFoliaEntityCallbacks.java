@@ -1,4 +1,4 @@
-package net.momirealms.craftengine.bukkit.nms.v1_20_3.entity;
+package net.momirealms.craftengine.bukkit.nms.v1_20_2.entity;
 
 import com.destroystokyo.paper.util.maplist.ReferenceList;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
@@ -8,11 +8,10 @@ import net.minecraft.world.level.entity.LevelCallback;
 import net.momirealms.craftengine.bukkit.api.CraftEngineFurniture;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FoliaReflections;
-import net.momirealms.craftengine.core.util.VersionHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class InjectedEntityCallbacks implements LevelCallback<Entity> {
+public class InjectedFoliaEntityCallbacks implements LevelCallback<Entity> {
     private final LevelCallback<Entity> callback;
     private final EntityLookup entityLookup;
     @Nullable
@@ -20,27 +19,11 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
     @Nullable
     private ReferenceList<Entity> toProcessTrackingUnloading;
 
-    public InjectedEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
+    public InjectedFoliaEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
         this.entityLookup = entityLookup;
-        if (VersionHelper.isFolia()) {
-            foliaInit();
-            return;
-        }
-        for (Entity entity : entityLookup.getAll()) {
-            if (entity instanceof CollisionEntity) {
-                callback.onTickingEnd(entity);
-                entity.tracker = null;
-                entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
-            } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
-                callback.onTickingEnd(entity);
-            }
-        }
-    }
-
-    private void foliaInit() {
-        this.loadedEntities = getLoadedEntities(entityLookup);
-        this.toProcessTrackingUnloading = getToProcessTrackingUnloading(entityLookup);
+        this.loadedEntities = getLoadedEntities();
+        this.toProcessTrackingUnloading = getToProcessTrackingUnloading();
         if (this.loadedEntities == null || this.toProcessTrackingUnloading == null) {
             for (Entity entity : entityLookup.getAll()) {
                 if (entity instanceof CollisionEntity) {
@@ -67,9 +50,9 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
 
     @SuppressWarnings("unchecked")
     @Nullable
-    private static ReferenceList<Entity> getLoadedEntities(EntityLookup entityLookup) {
+    private ReferenceList<Entity> getLoadedEntities() {
         try {
-            Object worldData = FoliaReflections.methodHandle$Level$getCurrentWorldData.invokeExact(entityLookup.world);
+            Object worldData = FoliaReflections.methodHandle$Level$getCurrentWorldData.invokeExact(this.entityLookup.world);
             if (worldData == null) return null;
             return (ReferenceList<Entity>) FoliaReflections.methodHandle$RegionizedWorldData$loadedEntitiesGetter.invokeExact(worldData);
         } catch (Throwable e) {
@@ -79,9 +62,9 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
 
     @SuppressWarnings("unchecked")
     @Nullable
-    private static ReferenceList<Entity> getToProcessTrackingUnloading(EntityLookup entityLookup) {
+    private ReferenceList<Entity> getToProcessTrackingUnloading() {
         try {
-            Object worldData = FoliaReflections.methodHandle$Level$getCurrentWorldData.invokeExact(entityLookup.world);
+            Object worldData = FoliaReflections.methodHandle$Level$getCurrentWorldData.invokeExact(this.entityLookup.world);
             if (worldData == null) return null;
             return (ReferenceList<Entity>) FoliaReflections.methodHandle$RegionizedWorldData$toProcessTrackingUnloadingGetter.invokeExact(worldData);
         } catch (Throwable e) {
@@ -115,23 +98,15 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
         this.callback.onTrackingStart(entity);
         if (entity instanceof CollisionEntity) {
             entity.tracker = null;
-            if (VersionHelper.isFolia()) {
-                foliaRemoveCollisionEntity(entity);
-                return;
+            if (this.loadedEntities == null) {
+                this.loadedEntities = getLoadedEntities();
             }
-            this.entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
-        }
-    }
-
-    private void foliaRemoveCollisionEntity(Entity entity) {
-        if (this.loadedEntities == null) {
-            this.loadedEntities = getLoadedEntities(entityLookup);
-        }
-        if (this.toProcessTrackingUnloading == null) {
-            this.toProcessTrackingUnloading = getToProcessTrackingUnloading(entityLookup);
-        }
-        if (this.loadedEntities != null && this.toProcessTrackingUnloading != null && this.loadedEntities.remove(entity)) {
-            this.toProcessTrackingUnloading.add(entity);
+            if (this.toProcessTrackingUnloading == null) {
+                this.toProcessTrackingUnloading = getToProcessTrackingUnloading();
+            }
+            if (this.loadedEntities != null && this.toProcessTrackingUnloading != null && this.loadedEntities.remove(entity)) {
+                this.toProcessTrackingUnloading.add(entity);
+            }
         }
     }
 

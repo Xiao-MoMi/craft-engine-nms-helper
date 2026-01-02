@@ -1,0 +1,68 @@
+package net.momirealms.craftengine.bukkit.nms.v1_20_2.entity;
+
+import io.papermc.paper.chunk.system.entity.EntityLookup;
+import net.minecraft.world.entity.Display;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.entity.LevelCallback;
+import net.momirealms.craftengine.bukkit.api.CraftEngineFurniture;
+import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
+import org.jetbrains.annotations.NotNull;
+
+public class InjectedPaperEntityCallbacks implements LevelCallback<Entity> {
+    private final LevelCallback<Entity> callback;
+    private final EntityLookup entityLookup;
+
+    public InjectedPaperEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
+        this.callback = callback;
+        this.entityLookup = entityLookup;
+        for (Entity entity : entityLookup.getAll()) {
+            if (entity instanceof CollisionEntity) {
+                callback.onTickingEnd(entity);
+                entity.tracker = null;
+                entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
+            } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
+                callback.onTickingEnd(entity);
+            }
+        }
+    }
+
+    @Override
+    public void onCreated(@NotNull Entity entity) {
+        this.callback.onCreated(entity);
+    }
+
+    @Override
+    public void onDestroyed(@NotNull Entity entity) {
+        this.callback.onDestroyed(entity);
+    }
+
+    @Override
+    public void onTickingStart(@NotNull Entity entity) {
+        if (entity instanceof CollisionEntity || entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) return;
+        this.callback.onTickingStart(entity);
+    }
+
+    @Override
+    public void onTickingEnd(@NotNull Entity entity) {
+        this.callback.onTickingEnd(entity);
+    }
+
+    @Override
+    public void onTrackingStart(@NotNull Entity entity) {
+        this.callback.onTrackingStart(entity);
+        if (entity instanceof CollisionEntity) {
+            entity.tracker = null;
+            this.entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
+        }
+    }
+
+    @Override
+    public void onTrackingEnd(@NotNull Entity entity) {
+        this.callback.onTrackingEnd(entity);
+    }
+
+    @Override
+    public void onSectionChange(@NotNull Entity entity) {
+        this.callback.onSectionChange(entity);
+    }
+}
