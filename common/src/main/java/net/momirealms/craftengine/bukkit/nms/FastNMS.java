@@ -69,6 +69,8 @@ public abstract class FastNMS {
         };
     }
 
+    public abstract Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup);
+
     public abstract StatePropertyAccessor createStatePropertyAccessor(Object blockState);
 
     public abstract Object toMinecraftIngredient(Ingredient<ItemStack> ingredient);
@@ -1000,6 +1002,4 @@ public abstract class FastNMS {
     public abstract void method$PlayerTeam$setColor(Object team, String name);
 
     public abstract Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd);
-
-    public abstract Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup);
 }

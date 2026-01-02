@@ -176,6 +176,12 @@ import java.util.stream.Stream;
 public class FastNMSImpl extends FastNMS {
 
     @Override
+    public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
+        if (worldCallback instanceof InjectedEntityCallbacks) return worldCallback;
+        return new InjectedEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
+    }
+
+    @Override
     public StatePropertyAccessor createStatePropertyAccessor(Object blockState) {
         return new PaperStatePropertyAccessor((BlockState) blockState);
     }
@@ -2671,11 +2677,5 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd) {
         return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket((PlayerTeam) team, useAdd);
-    }
-
-    @Override
-    public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
-        if (worldCallback instanceof InjectedEntityCallbacks) return worldCallback;
-        return new InjectedEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
     }
 }
