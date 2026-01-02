@@ -52,11 +52,11 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
     public void onTrackingStart(@NotNull Entity entity) {
         boolean isCollisionEntity = entity instanceof CollisionEntity;
         if (isCollisionEntity) {
-            entityLookup.trackerEntities.remove(entity);
-        }
-        this.callback.onTrackingStart(entity);
-        if (isCollisionEntity) {
+            this.entityLookup.trackerEntities.remove(entity);
+            this.callback.onTrackingStart(entity);
             entity.moonrise$setTrackedEntity(null);
+        } else  {
+            this.callback.onTrackingStart(entity);
         }
     }
 

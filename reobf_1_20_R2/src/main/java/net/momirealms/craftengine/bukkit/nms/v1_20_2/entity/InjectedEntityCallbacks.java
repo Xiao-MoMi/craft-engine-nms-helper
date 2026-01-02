@@ -52,7 +52,7 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
         this.callback.onTrackingStart(entity);
         if (entity instanceof CollisionEntity) {
             entity.tracker = null;
-            entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
+            this.entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
         }
     }
 
