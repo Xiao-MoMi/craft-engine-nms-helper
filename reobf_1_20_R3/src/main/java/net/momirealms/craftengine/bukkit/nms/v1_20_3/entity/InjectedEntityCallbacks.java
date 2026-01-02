@@ -10,11 +10,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class InjectedEntityCallbacks implements LevelCallback<Entity> {
     private final LevelCallback<Entity> callback;
+    private final EntityLookup entityLookup;
 
     public InjectedEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
+        this.entityLookup = entityLookup;
         for (Entity entity : entityLookup.getAll()) {
-            if (entity instanceof CollisionEntity || entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
+            if (entity instanceof CollisionEntity) {
+                callback.onTickingEnd(entity);
+                entity.tracker = null;
+                entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
+            } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
                 callback.onTickingEnd(entity);
             }
         }
@@ -44,6 +50,10 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
     @Override
     public void onTrackingStart(@NotNull Entity entity) {
         this.callback.onTrackingStart(entity);
+        if (entity instanceof CollisionEntity) {
+            entity.tracker = null;
+            entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
+        }
     }
 
     @Override

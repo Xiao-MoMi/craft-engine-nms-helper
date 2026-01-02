@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_4.entity;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
+import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.server.ServerEntityLookup;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.LevelCallback;
@@ -10,11 +11,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class InjectedEntityCallbacks implements LevelCallback<Entity> {
     private final LevelCallback<Entity> callback;
+    private final ServerEntityLookup entityLookup;
 
     public InjectedEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
+        this.entityLookup = (ServerEntityLookup) entityLookup;
         for (Entity entity : entityLookup.getAll()) {
-            if (entity instanceof CollisionEntity || entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
+            if (entity instanceof CollisionEntity) {
+                callback.onTickingEnd(entity);
+                entity.moonrise$setTrackedEntity(null);
+                this.entityLookup.trackerEntities.remove(entity);
+            } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
                 callback.onTickingEnd(entity);
             }
         }
@@ -43,7 +50,14 @@ public class InjectedEntityCallbacks implements LevelCallback<Entity> {
 
     @Override
     public void onTrackingStart(@NotNull Entity entity) {
+        boolean isCollisionEntity = entity instanceof CollisionEntity;
+        if (isCollisionEntity) {
+            entityLookup.trackerEntities.remove(entity);
+        }
         this.callback.onTrackingStart(entity);
+        if (isCollisionEntity) {
+            entity.moonrise$setTrackedEntity(null);
+        }
     }
 
     @Override
