@@ -18,7 +18,6 @@ public class InjectedFoliaEntityCallbacks implements LevelCallback<Entity> {
     @Nullable
     private ReferenceList<Entity> trackerEntities;
 
-
     public InjectedFoliaEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
         this.entityLookup = (ServerEntityLookup) entityLookup;

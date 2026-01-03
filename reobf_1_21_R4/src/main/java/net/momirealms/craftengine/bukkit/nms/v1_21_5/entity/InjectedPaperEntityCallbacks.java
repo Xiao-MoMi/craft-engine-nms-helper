@@ -13,7 +13,6 @@ public class InjectedPaperEntityCallbacks implements LevelCallback<Entity> {
     private final LevelCallback<Entity> callback;
     private final ServerEntityLookup entityLookup;
 
-
     public InjectedPaperEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
         this.entityLookup = (ServerEntityLookup) entityLookup;

@@ -184,9 +184,10 @@ public class FastNMSImpl extends FastNMS {
         if (VersionHelper.isFolia()) {
             if (worldCallback instanceof InjectedFoliaEntityCallbacks) return worldCallback;
             return new InjectedFoliaEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
+        } else {
+            if (worldCallback instanceof InjectedPaperEntityCallbacks) return worldCallback;
+            return new InjectedPaperEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
         }
-        if (worldCallback instanceof InjectedPaperEntityCallbacks) return worldCallback;
-        return new InjectedPaperEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
     }
 
     @Override
