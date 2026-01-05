@@ -109,6 +109,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.redstone.ExperimentalRedstoneUtils;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.saveddata.maps.MapId;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -166,6 +167,7 @@ import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryCrafting;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.map.RenderData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -2696,4 +2698,28 @@ public class FastNMSImpl extends FastNMS {
         return ((net.minecraft.world.item.ItemStack) itemStack).get(DataComponents.MAP_ID);
     }
 
+    @Override
+    public byte[] field$RenderData$buffer(Object renderData) {
+        return ((RenderData) renderData).buffer;
+    }
+
+    @Override
+    public Object constructor$MapItemSavedData$MapPatch(int startX, int startY, int width, int height, byte[] mapColors) {
+        return new MapItemSavedData.MapPatch(startX, startY, width, height, mapColors);
+    }
+
+    @Override
+    public Object constructor$ClientboundMapItemDataPacket(Object mapId, byte scale, boolean locked, Collection decorations, Object colorPatch) {
+        return new ClientboundMapItemDataPacket((MapId) mapId, scale, locked, decorations, (MapItemSavedData.MapPatch) colorPatch);
+    }
+
+    @Override
+    public byte field$MapItemSavedData$scale(Object mapItemSavedData) {
+        return ((MapItemSavedData) mapItemSavedData).scale;
+    }
+
+    @Override
+    public boolean field$MapItemSavedData$locked(Object mapItemSavedData) {
+        return ((MapItemSavedData) mapItemSavedData).locked;
+    }
 }

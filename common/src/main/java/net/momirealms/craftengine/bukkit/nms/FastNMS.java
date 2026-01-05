@@ -1007,4 +1007,13 @@ public abstract class FastNMS {
 
     public abstract Object method$MapItem$getMapId(Object itemStack);
 
+    public abstract byte[] field$RenderData$buffer(Object renderData);
+
+    public abstract Object constructor$MapItemSavedData$MapPatch(int startX, int startY, int width, int height, byte[] mapColors);
+
+    public abstract Object constructor$ClientboundMapItemDataPacket(Object mapId, byte scale, boolean locked, Collection decorations, Object colorPatch);
+
+    public abstract byte field$MapItemSavedData$scale(Object mapItemSavedData);
+
+    public abstract boolean field$MapItemSavedData$locked(Object mapItemSavedData);
 }

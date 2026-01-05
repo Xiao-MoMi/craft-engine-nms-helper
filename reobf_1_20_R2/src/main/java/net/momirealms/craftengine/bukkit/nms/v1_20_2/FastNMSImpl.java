@@ -92,6 +92,7 @@ import net.minecraft.world.level.lighting.LightEventListener;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.phys.AABB;
@@ -146,6 +147,7 @@ import org.bukkit.craftbukkit.v1_20_R2.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftInventoryCrafting;
 import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R2.map.RenderData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -2645,4 +2647,28 @@ public class FastNMSImpl extends FastNMS {
         return MapItem.getMapId((net.minecraft.world.item.ItemStack) itemStack);
     }
 
+    @Override
+    public byte[] field$RenderData$buffer(Object renderData) {
+        return ((RenderData) renderData).buffer;
+    }
+
+    @Override
+    public Object constructor$MapItemSavedData$MapPatch(int startX, int startY, int width, int height, byte[] mapColors) {
+        return new MapItemSavedData.MapPatch(startX, startY, width, height, mapColors);
+    }
+
+    @Override
+    public Object constructor$ClientboundMapItemDataPacket(Object mapId, byte scale, boolean locked, Collection decorations, Object colorPatch) {
+        return new ClientboundMapItemDataPacket((int) mapId, scale, locked, decorations, (MapItemSavedData.MapPatch) colorPatch);
+    }
+
+    @Override
+    public byte field$MapItemSavedData$scale(Object mapItemSavedData) {
+        return ((MapItemSavedData) mapItemSavedData).scale;
+    }
+
+    @Override
+    public boolean field$MapItemSavedData$locked(Object mapItemSavedData) {
+        return ((MapItemSavedData) mapItemSavedData).locked;
+    }
 }
