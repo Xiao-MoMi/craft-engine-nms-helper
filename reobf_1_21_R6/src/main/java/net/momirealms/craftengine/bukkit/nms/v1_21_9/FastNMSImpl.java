@@ -112,6 +112,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.redstone.ExperimentalRedstoneUtils;
 import net.minecraft.world.level.redstone.Orientation;
+import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -1665,7 +1666,7 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName() {
-        Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>>> allPacketIdsByName = new HashMap<>();
+        Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> allPacketIdsByName = new HashMap<>();
         Map<ConnectionProtocol, List<ProtocolInfo.Details>> collect = Stream.of(
                 HandshakeProtocols.SERVERBOUND_TEMPLATE,
                 StatusProtocols.CLIENTBOUND_TEMPLATE,
@@ -1678,12 +1679,12 @@ public class FastNMSImpl extends FastNMS {
                 GameProtocols.SERVERBOUND_TEMPLATE
         ).map(ProtocolInfo.DetailsProvider::details).collect(Collectors.groupingBy(ProtocolInfo.Details::id));
         for (Map.Entry<ConnectionProtocol, List<ProtocolInfo.Details>> entry : collect.entrySet()) {
-            Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>> protocolPacketIdsByName = new HashMap<>();
+            Map<PacketFlow, Map<String, Integer>> protocolPacketIdsByName = new HashMap<>();
             allPacketIdsByName.put(ConnectionState.valueOf(entry.getKey().name().toUpperCase(Locale.ROOT)), protocolPacketIdsByName);
             Map<String, Integer> serverBoundIds = new HashMap<>();
             Map<String, Integer> clientBoundIds = new HashMap<>();
-            protocolPacketIdsByName.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.SERVERBOUND, serverBoundIds);
-            protocolPacketIdsByName.put(net.momirealms.craftengine.core.plugin.network.PacketFlow.CLIENTBOUND, clientBoundIds);
+            protocolPacketIdsByName.put(PacketFlow.SERVERBOUND, serverBoundIds);
+            protocolPacketIdsByName.put(PacketFlow.CLIENTBOUND, clientBoundIds);
             for (ProtocolInfo.Details protocol : entry.getValue()) {
                 if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.SERVERBOUND) {
                     protocol.listPackets(((type, protocolId) -> serverBoundIds.put(type.id().toString(), protocolId)));
@@ -2690,4 +2691,15 @@ public class FastNMSImpl extends FastNMS {
     public Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd) {
         return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket((PlayerTeam) team, useAdd);
     }
+
+    @Override
+    public Object method$MapItem$getSavedData(Object mapId, Object level) {
+        return MapItem.getSavedData((MapId) mapId, (Level) level);
+    }
+
+    @Override
+    public Object method$MapItem$getMapId(Object itemStack) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).get(DataComponents.MAP_ID);
+    }
+
 }

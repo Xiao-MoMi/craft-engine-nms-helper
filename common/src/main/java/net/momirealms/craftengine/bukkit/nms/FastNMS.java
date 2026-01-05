@@ -1002,4 +1002,9 @@ public abstract class FastNMS {
     public abstract void method$PlayerTeam$setColor(Object team, String name);
 
     public abstract Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd);
+
+    public abstract Object method$MapItem$getSavedData(Object mapId, Object level);
+
+    public abstract Object method$MapItem$getMapId(Object itemStack);
+
 }

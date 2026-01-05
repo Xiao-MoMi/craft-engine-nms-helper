@@ -116,9 +116,9 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_3.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_20_3.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.entity.InjectedFoliaEntityCallbacks;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.entity.InjectedPaperEntityCallbacks;
-import net.momirealms.craftengine.bukkit.nms.v1_20_3.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.recipe.*;
@@ -2632,4 +2632,15 @@ public class FastNMSImpl extends FastNMS {
     public Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd) {
         return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket((PlayerTeam) team, useAdd);
     }
+
+    @Override
+    public Object method$MapItem$getSavedData(Object mapId, Object level) {
+        return MapItem.getSavedData((Integer) mapId, (Level) level);
+    }
+
+    @Override
+    public Object method$MapItem$getMapId(Object itemStack) {
+        return MapItem.getMapId((net.minecraft.world.item.ItemStack) itemStack);
+    }
+
 }

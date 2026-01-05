@@ -2617,4 +2617,15 @@ public class FastNMSImpl extends FastNMS {
     public Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd) {
         return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket((PlayerTeam) team, useAdd);
     }
+
+    @Override
+    public Object method$MapItem$getSavedData(Object mapId, Object level) {
+        return MapItem.getSavedData((Integer) mapId, (Level) level);
+    }
+
+    @Override
+    public Object method$MapItem$getMapId(Object itemStack) {
+        return MapItem.getMapId((net.minecraft.world.item.ItemStack) itemStack);
+    }
+
 }

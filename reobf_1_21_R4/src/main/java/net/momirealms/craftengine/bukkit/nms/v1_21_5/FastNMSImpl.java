@@ -108,6 +108,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.redstone.ExperimentalRedstoneUtils;
 import net.minecraft.world.level.redstone.Orientation;
+import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -130,9 +131,9 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.NonCollisionInteraction;
+import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedFoliaEntityCallbacks;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedPaperEntityCallbacks;
-import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.network.InjectedHashedStack;
@@ -2684,4 +2685,15 @@ public class FastNMSImpl extends FastNMS {
     public Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd) {
         return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket((PlayerTeam) team, useAdd);
     }
+
+    @Override
+    public Object method$MapItem$getSavedData(Object mapId, Object level) {
+        return MapItem.getSavedData((MapId) mapId, (Level) level);
+    }
+
+    @Override
+    public Object method$MapItem$getMapId(Object itemStack) {
+        return ((net.minecraft.world.item.ItemStack) itemStack).get(DataComponents.MAP_ID);
+    }
+
 }
