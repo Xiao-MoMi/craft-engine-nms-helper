@@ -2671,4 +2671,9 @@ public class FastNMSImpl extends FastNMS {
     public boolean field$MapItemSavedData$locked(Object mapItemSavedData) {
         return ((MapItemSavedData) mapItemSavedData).locked;
     }
+
+    @Override
+    public byte[] field$MapItemSavedData$colors(Object mapItemSavedData) {
+        return ((MapItemSavedData) mapItemSavedData).colors;
+    }
 }

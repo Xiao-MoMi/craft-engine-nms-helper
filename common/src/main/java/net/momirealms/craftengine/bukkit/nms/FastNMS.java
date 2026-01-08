@@ -1016,4 +1016,6 @@ public abstract class FastNMS {
     public abstract byte field$MapItemSavedData$scale(Object mapItemSavedData);
 
     public abstract boolean field$MapItemSavedData$locked(Object mapItemSavedData);
+
+    public abstract byte[] field$MapItemSavedData$colors(Object mapItemSavedData);
 }
