@@ -136,9 +136,8 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_9.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.collision.NonCollisionInteraction;
-import net.momirealms.craftengine.bukkit.nms.v1_21_9.entity.InjectedFoliaEntityCallbacks;
-import net.momirealms.craftengine.bukkit.nms.v1_21_9.entity.InjectedPaperEntityCallbacks;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.entity.InjectedFallingBlockEntity;
+import net.momirealms.craftengine.bukkit.nms.v1_21_9.entity.InjectedPaperEntityCallbacks;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_9.network.InjectedHashedStack;
@@ -152,7 +151,6 @@ import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.GsonHelper;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
-import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -193,13 +191,8 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
-        if (VersionHelper.isFolia()) {
-            if (worldCallback instanceof InjectedFoliaEntityCallbacks) return worldCallback;
-            return new InjectedFoliaEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
-        } else {
-            if (worldCallback instanceof InjectedPaperEntityCallbacks) return worldCallback;
-            return new InjectedPaperEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
-        }
+        if (worldCallback instanceof InjectedPaperEntityCallbacks) return worldCallback;
+        return new InjectedPaperEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
     }
 
     @Override
