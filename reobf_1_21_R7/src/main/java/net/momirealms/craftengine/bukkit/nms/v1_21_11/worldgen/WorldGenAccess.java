@@ -39,8 +39,8 @@ public class WorldGenAccess implements BlockAccessor {
     }
 
     @Override
-    public Key getBiome(int x, int y, int z) {
-        Identifier identifier = ((Holder.Reference<Biome>) level.getNoiseBiome(x, y, z)).key().identifier();
+    public Key getNoiseBiome(int x, int y, int z) {
+        Identifier identifier = ((Holder.Reference<Biome>) this.level.getNoiseBiome(x, y, z)).key().identifier();
         return Key.of(identifier.getNamespace(), identifier.getPath());
     }
 }
