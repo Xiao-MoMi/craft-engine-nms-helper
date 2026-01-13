@@ -2652,4 +2652,14 @@ public class FastNMSImpl extends FastNMS {
     public byte[] field$MapItemSavedData$colors(Object mapItemSavedData) {
         return ((MapItemSavedData) mapItemSavedData).colors;
     }
+
+    @Override
+    public Object method$LevelReader$getNoiseBiome(Object world, int x, int y, int z) {
+        return ((LevelReader) world).getNoiseBiome(x, y, z);
+    }
+
+    @Override
+    public Object method$Holder$Reference$identifier(Object holder) {
+        return ((Holder.Reference) holder).key().location();
+    }
 }

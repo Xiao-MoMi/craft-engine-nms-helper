@@ -178,6 +178,8 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -188,6 +190,8 @@ import java.util.stream.Stream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused", "deprecation"})
 public class FastNMSImpl extends FastNMS {
+
+    private static final Logger log = LoggerFactory.getLogger(FastNMSImpl.class);
 
     @Override
     public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
@@ -2725,5 +2729,15 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public byte[] field$MapItemSavedData$colors(Object mapItemSavedData) {
         return ((MapItemSavedData) mapItemSavedData).colors;
+    }
+
+    @Override
+    public Object method$LevelReader$getNoiseBiome(Object world, int x, int y, int z) {
+        return ((LevelReader) world).getNoiseBiome(x, y, z);
+    }
+
+    @Override
+    public Object method$Holder$Reference$identifier(Object holder) {
+        return ((Holder.Reference) holder).key().identifier();
     }
 }

@@ -1018,4 +1018,8 @@ public abstract class FastNMS {
     public abstract boolean field$MapItemSavedData$locked(Object mapItemSavedData);
 
     public abstract byte[] field$MapItemSavedData$colors(Object mapItemSavedData);
+
+    public abstract Object method$LevelReader$getNoiseBiome(Object world, int x, int y, int z);
+
+    public abstract Object method$Holder$Reference$identifier(Object holder);
 }
