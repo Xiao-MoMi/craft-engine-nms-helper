@@ -9,10 +9,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.momirealms.craftengine.bukkit.util.BlockStateUtils;
 import net.momirealms.craftengine.core.block.BlockStateWrapper;
 import net.momirealms.craftengine.core.util.Key;
-import net.momirealms.craftengine.core.world.BlockAccessor;
+import net.momirealms.craftengine.core.world.GeneratingWorld;
 import net.momirealms.craftengine.core.world.WorldHeight;
 
-public class WorldGenAccess implements BlockAccessor {
+public class WorldGenAccess implements GeneratingWorld {
     private final WorldGenLevel level;
     private WorldHeight worldHeight;
 
@@ -42,5 +42,15 @@ public class WorldGenAccess implements BlockAccessor {
     public Key getNoiseBiome(int x, int y, int z) {
         Identifier identifier = ((Holder.Reference<Biome>) this.level.getNoiseBiome(x, y, z)).key().identifier();
         return Key.of(identifier.getNamespace(), identifier.getPath());
+    }
+
+    @Override
+    public Object serverWorld() {
+        return this.level.getLevel();
+    }
+
+    @Override
+    public Object literalObject() {
+        return this.level;
     }
 }
