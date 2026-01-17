@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.momirealms.craftengine.bukkit.util.BlockStateUtils;
 import net.momirealms.craftengine.core.block.BlockStateWrapper;
 import net.momirealms.craftengine.core.util.Key;
-import net.momirealms.craftengine.core.world.BlockAccessor;
 import net.momirealms.craftengine.core.world.GeneratingWorld;
 import net.momirealms.craftengine.core.world.WorldHeight;
 

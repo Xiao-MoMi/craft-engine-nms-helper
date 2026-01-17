@@ -21,8 +21,8 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("net.momirealms:craft-engine-core:0.0.66.23.1-SNAPSHOT")
-        compileOnly("net.momirealms:craft-engine-bukkit:0.0.66.23.1-SNAPSHOT")
+        compileOnly("net.momirealms:craft-engine-core:0.0.66.26-SNAPSHOT")
+        compileOnly("net.momirealms:craft-engine-bukkit:0.0.66.26-SNAPSHOT")
         compileOnly("com.mojang:brigadier:1.0.18")
     }
 }

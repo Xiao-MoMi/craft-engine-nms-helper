@@ -19,10 +19,9 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -162,25 +161,35 @@ public class InjectedChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void addVanillaDecorations(@NotNull WorldGenLevel generatoraccessseed,
-                                      @NotNull ChunkAccess ichunkaccess,
+    public void addVanillaDecorations(@NotNull WorldGenLevel level,
+                                      @NotNull ChunkAccess chunkAccess,
                                       @NotNull StructureManager structuremanager) {
-        this.target.addVanillaDecorations(generatoraccessseed, ichunkaccess, structuremanager);
+        this.target.addVanillaDecorations(level, chunkAccess, structuremanager);
     }
 
     @Override
-    public void applyBiomeDecoration(@NotNull WorldGenLevel world,
-                                     @NotNull ChunkAccess chunk,
+    public void applyBiomeDecoration(@NotNull WorldGenLevel level,
+                                     @NotNull ChunkAccess chunkAccess,
                                      @NotNull StructureManager structureAccessor) {
-        this.target.applyBiomeDecoration(world, chunk, structureAccessor);
+        this.target.applyBiomeDecoration(level, chunkAccess, structureAccessor);
+        List<Object> features = BukkitWorldManager.instance().placedFeatures();
+        if (features != null && !features.isEmpty()) {
+            SectionPos sectionPos = SectionPos.of(chunkAccess.getPos(), level.getMinSection());
+            BlockPos blockPos = sectionPos.origin();
+            WorldgenRandom worldgenRandom = new WorldgenRandom(new XoroshiroRandomSource(RandomSupport.generateUniqueSeed()));
+            for (int i = 0; i < features.size(); ++i) {
+                PlacedFeature feature = (PlacedFeature) features.get(i);
+                feature.place(level, this, worldgenRandom, blockPos);
+            }
+        }
     }
 
     @Override
-    public void applyBiomeDecoration(@NotNull WorldGenLevel generatoraccessseed,
-                                     @NotNull ChunkAccess ichunkaccess,
+    public void applyBiomeDecoration(@NotNull WorldGenLevel level,
+                                     @NotNull ChunkAccess chunkAccess,
                                      @NotNull StructureManager structuremanager,
                                      boolean vanilla) {
-        this.target.applyBiomeDecoration(generatoraccessseed, ichunkaccess, structuremanager, vanilla);
+        this.target.applyBiomeDecoration(level, chunkAccess, structuremanager, vanilla);
     }
 
     @Override
