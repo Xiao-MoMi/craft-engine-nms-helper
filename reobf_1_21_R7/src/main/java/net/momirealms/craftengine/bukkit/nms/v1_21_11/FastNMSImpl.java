@@ -150,6 +150,7 @@ import net.momirealms.craftengine.core.plugin.CraftEngine;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.GsonHelper;
+import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
@@ -178,8 +179,6 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -191,7 +190,10 @@ import java.util.stream.Stream;
 @SuppressWarnings({"unchecked", "rawtypes", "unused", "deprecation"})
 public class FastNMSImpl extends FastNMS {
 
-    private static final Logger log = LoggerFactory.getLogger(FastNMSImpl.class);
+    @Override
+    public Object createBiomePlacementFilter(Predicate<Key> filter) {
+        return new BiomeFilter(filter);
+    }
 
     @Override
     public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
@@ -2744,5 +2746,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public int method$BlockAndTintGetter$getRawBrightness(Object level, Object pos, int ambientDarkness) {
         return ((BlockAndTintGetter) level).getRawBrightness((BlockPos) pos, ambientDarkness);
+    }
+
+    @Override
+    public Object method$Level$dimension(Object level) {
+        return ((Level) level).dimension();
     }
 }

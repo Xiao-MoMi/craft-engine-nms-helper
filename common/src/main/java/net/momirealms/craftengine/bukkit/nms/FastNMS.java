@@ -14,6 +14,7 @@ import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
+import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
@@ -68,6 +69,8 @@ public abstract class FastNMS {
             default -> throw new UnsupportedVersionException();
         };
     }
+
+    public abstract Object createBiomePlacementFilter(Predicate<Key> filter);
 
     public abstract Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup);
 
@@ -1024,4 +1027,6 @@ public abstract class FastNMS {
     public abstract Object method$Holder$Reference$identifier(Object holder);
 
     public abstract int method$BlockAndTintGetter$getRawBrightness(Object level, Object pos, int light);
+
+    public abstract Object method$Level$dimension(Object level);
 }

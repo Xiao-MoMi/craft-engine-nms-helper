@@ -139,6 +139,7 @@ import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.CraftEngine;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
+import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
@@ -177,6 +178,11 @@ import java.util.stream.Stream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused", "deprecation"})
 public class FastNMSImpl extends FastNMS {
+
+    @Override
+    public Object createBiomePlacementFilter(Predicate<Key> filter) {
+        return new BiomeFilter(filter);
+    }
 
     @Override
     public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
@@ -2735,5 +2741,10 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public int method$BlockAndTintGetter$getRawBrightness(Object level, Object pos, int ambientDarkness) {
         return ((BlockAndTintGetter) level).getRawBrightness((BlockPos) pos, ambientDarkness);
+    }
+
+    @Override
+    public Object method$Level$dimension(Object level) {
+        return ((Level) level).dimension();
     }
 }

@@ -2,8 +2,10 @@ package net.momirealms.craftengine.bukkit.nms.v1_21.worldgen;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.core.*;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.random.WeightedRandomList;
@@ -16,9 +18,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
+import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -26,24 +26,39 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.momirealms.craftengine.bukkit.world.BukkitWorldManager;
+import net.momirealms.craftengine.bukkit.world.gen.CraftEngineFeatures;
+import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spigotmc.SpigotWorldConfig;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class InjectedChunkGenerator extends ChunkGenerator {
     private final ChunkGenerator target;
     private final CEWorld world;
+    private long lastUpdateFeatureTime;
+    private CraftEngineFeatures features;
 
     public InjectedChunkGenerator(CEWorld world, ChunkGenerator target) {
         super(target.getBiomeSource());
         this.target = target;
         this.world = world;
+    }
+
+    @Nullable
+    private CraftEngineFeatures getFeatures(WorldGenLevel level) {
+        if (!BukkitWorldManager.instance().hasCustomFeatures()) {
+            return null;
+        }
+        if (this.lastUpdateFeatureTime != BukkitWorldManager.instance().lastReloadFeatureTime) {
+            this.features = BukkitWorldManager.instance().fetchFeatures(level.getLevel());
+            this.lastUpdateFeatureTime = BukkitWorldManager.instance().lastReloadFeatureTime;
+        }
+        return this.features;
     }
 
     @Override
@@ -161,14 +176,32 @@ public class InjectedChunkGenerator extends ChunkGenerator {
                                      @NotNull ChunkAccess chunkAccess,
                                      @NotNull StructureManager structureAccessor) {
         this.target.applyBiomeDecoration(level, chunkAccess, structureAccessor);
-        List<Object> features = BukkitWorldManager.instance().placedFeatures();
-        if (features != null && !features.isEmpty()) {
+        CraftEngineFeatures ceFeatures = getFeatures(level);
+        if (ceFeatures != null && !ceFeatures.features.isEmpty()) {
             SectionPos sectionPos = SectionPos.of(chunkAccess.getPos(), level.getMinSection());
-            BlockPos blockPos = sectionPos.origin();
-            WorldgenRandom worldgenRandom = new WorldgenRandom(new XoroshiroRandomSource(RandomSupport.generateUniqueSeed()));
-            for (int i = 0; i < features.size(); ++i) {
-                PlacedFeature feature = (PlacedFeature) features.get(i);
-                feature.place(level, this, worldgenRandom, blockPos);
+            Set<Holder<Biome>> biomeSet = new ObjectArraySet<>();
+            net.minecraft.world.level.ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((chunkPos) -> {
+                ChunkAccess chunk = level.getChunk(chunkPos.x, chunkPos.z);
+                for (LevelChunkSection section : chunk.getSections()) {
+                    PalettedContainerRO<Holder<Biome>> biomePalette = section.getBiomes();
+                    Objects.requireNonNull(biomeSet);
+                    biomePalette.getAll(biomeSet::add);
+                }
+            });
+            biomeSet.retainAll(this.biomeSource.possibleBiomes());
+            Set<Integer> featureSet = new HashSet<>();
+            for (Holder<Biome> biome : biomeSet) {
+                ResourceLocation identifier = ((Holder.Reference<Biome>) biome).key().location();
+                List<Integer> byBiome = ceFeatures.getFeatureIdsByBiome(new Key(identifier.getNamespace(), identifier.getPath()));
+                featureSet.addAll(byBiome);
+            }
+            if (!featureSet.isEmpty()) {
+                BlockPos blockPos = sectionPos.origin();
+                WorldgenRandom worldgenRandom = new WorldgenRandom(new XoroshiroRandomSource(RandomSupport.generateUniqueSeed()));
+                for (Integer feature : featureSet) {
+                    PlacedFeature placedFeature = (PlacedFeature) ceFeatures.getFeatureById(feature).feature;
+                    placedFeature.place(level, this, worldgenRandom, blockPos);
+                }
             }
         }
     }
