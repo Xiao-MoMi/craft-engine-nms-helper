@@ -1022,4 +1022,6 @@ public abstract class FastNMS {
     public abstract Object method$LevelReader$getNoiseBiome(Object world, int x, int y, int z);
 
     public abstract Object method$Holder$Reference$identifier(Object holder);
+
+    public abstract int method$BlockAndTintGetter$getRawBrightness(Object level, Object pos, int light);
 }

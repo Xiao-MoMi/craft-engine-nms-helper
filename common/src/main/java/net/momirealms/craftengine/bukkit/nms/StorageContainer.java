@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface StorageContainer {
 
@@ -63,4 +64,6 @@ public interface StorageContainer {
     boolean canPlaceItem();
 
     boolean canTakeItem();
+
+    void onContentsChanged(Consumer<StorageContainer> onContentsChanged);
 }

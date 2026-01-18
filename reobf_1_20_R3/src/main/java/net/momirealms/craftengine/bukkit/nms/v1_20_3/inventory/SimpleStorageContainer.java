@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 public class SimpleStorageContainer implements WorldlyContainer, StorageContainer {
@@ -34,6 +35,7 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     private int maxStack = MAX_STACK;
     private boolean canPlaceItem;
     private boolean canTakeItem;
+    private Consumer<StorageContainer> onContentsChanged;
 
     public SimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
         this.items = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -145,6 +147,9 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
 
     @Override
     public void setChanged() {
+        if (this.onContentsChanged != null) {
+            this.onContentsChanged.accept(this);
+        }
     }
 
     @Override
@@ -339,5 +344,10 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     @Override
     public boolean canTakeItem() {
         return this.canTakeItem;
+    }
+
+    @Override
+    public void onContentsChanged(Consumer<StorageContainer> onContentsChanged) {
+        this.onContentsChanged = onContentsChanged;
     }
 }

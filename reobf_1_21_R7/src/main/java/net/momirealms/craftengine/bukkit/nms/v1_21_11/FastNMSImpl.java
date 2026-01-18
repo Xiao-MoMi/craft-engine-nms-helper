@@ -2740,4 +2740,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Holder$Reference$identifier(Object holder) {
         return ((Holder.Reference) holder).key().identifier();
     }
+
+    @Override
+    public int method$BlockAndTintGetter$getRawBrightness(Object level, Object pos, int ambientDarkness) {
+        return ((BlockAndTintGetter) level).getRawBrightness((BlockPos) pos, ambientDarkness);
+    }
 }
