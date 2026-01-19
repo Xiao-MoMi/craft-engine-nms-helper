@@ -44,7 +44,7 @@ public final class RecipeHelper {
         if (ingredient == null) {
             return Ingredient.of();
         }
-        List itemStacks = BukkitRecipeManager.getIngredientLooks(ingredient.items());
+        List itemStacks = BukkitRecipeManager.getIngredientLooks(ingredient);
         return Ingredient.ofStacks(itemStacks);
     }
 

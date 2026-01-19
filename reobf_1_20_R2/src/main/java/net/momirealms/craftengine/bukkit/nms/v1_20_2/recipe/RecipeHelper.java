@@ -44,7 +44,7 @@ public final class RecipeHelper {
         if (ingredient == null) {
             return Ingredient.EMPTY;
         }
-        List itemStacks = BukkitRecipeManager.getIngredientLooks(ingredient.items());
+        List itemStacks = BukkitRecipeManager.getIngredientLooks(ingredient);
         net.minecraft.world.item.ItemStack[] exactItems = new net.minecraft.world.item.ItemStack[itemStacks.size()];
         for (int i = 0; i < itemStacks.size(); i++) {
             exactItems[i] = (net.minecraft.world.item.ItemStack) itemStacks.get(i);
