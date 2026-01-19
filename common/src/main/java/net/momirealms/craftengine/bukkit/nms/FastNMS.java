@@ -1029,4 +1029,6 @@ public abstract class FastNMS {
     public abstract int method$BlockAndTintGetter$getRawBrightness(Object level, Object pos, int light);
 
     public abstract Object method$Level$dimension(Object level);
+
+    public abstract Object method$Level$dimensionTypeRegistration(Object level);
 }

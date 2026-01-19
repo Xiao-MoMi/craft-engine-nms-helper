@@ -2747,4 +2747,9 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Level$dimension(Object level) {
         return ((Level) level).dimension();
     }
+
+    @Override
+    public Object method$Level$dimensionTypeRegistration(Object level) {
+        return ((Level) level).dimensionTypeRegistration();
+    }
 }
