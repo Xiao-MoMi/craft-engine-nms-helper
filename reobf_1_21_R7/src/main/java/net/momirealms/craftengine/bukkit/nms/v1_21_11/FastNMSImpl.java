@@ -348,6 +348,11 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public Object method$PalettedContainer$getAndSetUnchecked(Object palettedContainer, int x, int y, int z, Object blockState) {
+        return ((PalettedContainer) palettedContainer).getAndSetUnchecked(x, y, z, blockState);
+    }
+
+    @Override
     public BlockData method$CraftBlockData$fromData(Object blockState) {
         return CraftBlockData.fromData((BlockState) blockState);
     }

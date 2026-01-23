@@ -94,6 +94,7 @@ import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
+import net.minecraft.world.level.chunk.status.ChunkPyramid;
 import net.minecraft.world.level.chunk.status.WorldGenContext;
 import net.minecraft.world.level.entity.LevelCallback;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -333,6 +334,11 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState) {
         return ((PalettedContainer) palettedContainer).getAndSet(x, y, z, blockState);
+    }
+
+    @Override
+    public Object method$PalettedContainer$getAndSetUnchecked(Object palettedContainer, int x, int y, int z, Object blockState) {
+        return ((PalettedContainer) palettedContainer).getAndSetUnchecked(x, y, z, blockState);
     }
 
     @Override

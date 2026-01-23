@@ -124,6 +124,8 @@ public abstract class FastNMS {
 
     public abstract Object method$PalettedContainer$getAndSet(Object palettedContainer, int x, int y, int z, Object blockState);
 
+    public abstract Object method$PalettedContainer$getAndSetUnchecked(Object palettedContainer, int x, int y, int z, Object blockState);
+
     public abstract BlockData method$CraftBlockData$fromData(Object blockState);
 
     public abstract int method$IdMapper$getId(Object idMapper, Object t);

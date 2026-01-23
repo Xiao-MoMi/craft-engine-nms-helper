@@ -119,9 +119,10 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         return (T) WorldStorageInjector.GetAndSetInterceptor.INSTANCE.intercept(this, new Object[]{x,y,z,value});
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @NotNull T getAndSetUnchecked(int x, int y, int z, @NotNull T value) {
-        return target.getAndSetUnchecked(x, y, z, value);
+        return (T) WorldStorageInjector.GetAndSetUncheckedInterceptor.INSTANCE.intercept(this, new Object[]{x,y,z,value});
     }
 
     @Override
