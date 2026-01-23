@@ -25,6 +25,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.network.*;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.chat.SignedMessageBody;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -2785,4 +2786,38 @@ public class FastNMSImpl extends FastNMS {
     public Object method$Level$dimensionTypeRegistration(Object level) {
         return ((Level) level).dimensionTypeRegistration();
     }
+
+    @Override
+    public Object constructor$ClientboundPlayerInfoUpdatePacket$Entry1(UUID profileId, @Nullable GameProfile profile, boolean listed, int latency, Object gameMode, @Nullable Object displayName, boolean showHat, int listOrder, @Nullable Object chatSession) {
+        return new ClientboundPlayerInfoUpdatePacket.Entry(profileId, profile, listed, latency, (GameType) gameMode, (Component) displayName, showHat, listOrder, (RemoteChatSession.Data) chatSession);
+    }
+
+    @Override
+    public Object constructor$ClientboundPlayerInfoRemovePacket(List<UUID> profileIds) {
+        return new ClientboundPlayerInfoRemovePacket(profileIds);
+    }
+
+    @Override
+    public float method$LivingEntity$getScale(Object livingEntity) {
+        return ((LivingEntity) livingEntity).getScale();
+    }
+
+    @Override
+    public double field$AABB$maxY(Object aabb) {
+        return ((AABB) aabb).maxY;
+    }
+
+    @Override
+    public List method$SynchedEntityData$getNonDefaultValues(Object data) {
+        return ((SynchedEntityData) data).getNonDefaultValues();
+    }
+
+    @Override
+    public Object constructor$ClientboundAnimatePacket(int entityId, int action) {
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeVarInt(entityId);
+        byteBuf.writeByte(action);
+        return ClientboundAnimatePacket.STREAM_CODEC.decode(byteBuf);
+    }
+
 }

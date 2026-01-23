@@ -1033,4 +1033,17 @@ public abstract class FastNMS {
     public abstract Object method$Level$dimension(Object level);
 
     public abstract Object method$Level$dimensionTypeRegistration(Object level);
+
+    public abstract Object constructor$ClientboundPlayerInfoUpdatePacket$Entry1(UUID profileId, @Nullable GameProfile profile, boolean listed, int latency, Object gameMode, @Nullable Object displayName, boolean showHat, int listOrder, @Nullable Object chatSession);
+
+    public abstract Object constructor$ClientboundPlayerInfoRemovePacket(List<UUID> profileIds);
+
+    public abstract float method$LivingEntity$getScale(Object livingEntity);
+
+    public abstract double field$AABB$maxY(Object aabb);
+
+    public abstract List method$SynchedEntityData$getNonDefaultValues(Object data);
+
+    public abstract Object constructor$ClientboundAnimatePacket(int entityId, int action);
+
 }
