@@ -69,6 +69,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -149,6 +150,7 @@ import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.GsonHelper;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.ReflectionUtils;
+import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.Chunk;
@@ -336,6 +338,9 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState) {
+        if (VersionHelper.isFolia()) {
+            return FallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
+        }
         return InjectedFallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
     }
 
