@@ -15,7 +15,6 @@ import io.netty.channel.Channel;
 import io.papermc.paper.util.DataSanitizationUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
 import net.minecraft.core.component.*;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -24,7 +23,6 @@ import net.minecraft.nbt.*;
 import net.minecraft.network.*;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.chat.SignedMessageBody;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.StreamDecoder;
@@ -117,7 +115,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
@@ -163,7 +160,6 @@ import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryCrafting;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.map.RenderData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -2674,26 +2670,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$MinecraftServer$scoreboard() {
-        return MinecraftServer.getServer().getScoreboard();
-    }
-
-    @Override
-    public Object constructor$PlayerTeam(Object scoreboard, String name) {
-        return new PlayerTeam((Scoreboard) scoreboard, name);
-    }
-
-    @Override
-    public void method$PlayerTeam$setColor(Object team, String name) {
-        ((PlayerTeam) team).setColor(ChatFormatting.valueOf(name));
-    }
-
-    @Override
-    public Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd) {
-        return ClientboundSetPlayerTeamPacket.createAddOrModifyPacket((PlayerTeam) team, useAdd);
-    }
-
-    @Override
     public Object method$MapItem$getSavedData(Object mapId, Object level) {
         return MapItem.getSavedData((MapId) mapId, (Level) level);
     }
@@ -2701,11 +2677,6 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public Object method$MapItem$getMapId(Object itemStack) {
         return ((net.minecraft.world.item.ItemStack) itemStack).get(DataComponents.MAP_ID);
-    }
-
-    @Override
-    public byte[] field$RenderData$buffer(Object renderData) {
-        return ((RenderData) renderData).buffer;
     }
 
     @Override
@@ -2731,64 +2702,6 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public byte[] field$MapItemSavedData$colors(Object mapItemSavedData) {
         return ((MapItemSavedData) mapItemSavedData).colors;
-    }
-
-    @Override
-    public Object method$LevelReader$getNoiseBiome(Object world, int x, int y, int z) {
-        return ((LevelReader) world).getNoiseBiome(x, y, z);
-    }
-
-    @Override
-    public Object method$Holder$Reference$identifier(Object holder) {
-        return ((Holder.Reference) holder).key().location();
-    }
-
-    @Override
-    public int method$BlockAndTintGetter$getRawBrightness(Object level, Object pos, int ambientDarkness) {
-        return ((BlockAndTintGetter) level).getRawBrightness((BlockPos) pos, ambientDarkness);
-    }
-
-    @Override
-    public Object method$Level$dimension(Object level) {
-        return ((Level) level).dimension();
-    }
-
-    @Override
-    public Object method$Level$dimensionTypeRegistration(Object level) {
-        return ((Level) level).dimensionTypeRegistration();
-    }
-
-    @Override
-    public Object constructor$ClientboundPlayerInfoUpdatePacket$Entry1(UUID profileId, @Nullable GameProfile profile, boolean listed, int latency, Object gameMode, @Nullable Object displayName, boolean showHat, int listOrder, @Nullable Object chatSession) {
-        return new ClientboundPlayerInfoUpdatePacket.Entry(profileId, profile, listed, latency, (GameType) gameMode, (Component) displayName, listOrder, (RemoteChatSession.Data) chatSession);
-    }
-
-    @Override
-    public Object constructor$ClientboundPlayerInfoRemovePacket(List<UUID> profileIds) {
-        return new ClientboundPlayerInfoRemovePacket(profileIds);
-    }
-
-    @Override
-    public float method$LivingEntity$getScale(Object livingEntity) {
-        return ((LivingEntity) livingEntity).getScale();
-    }
-
-    @Override
-    public double field$AABB$maxY(Object aabb) {
-        return ((AABB) aabb).maxY;
-    }
-
-    @Override
-    public List method$SynchedEntityData$getNonDefaultValues(Object data) {
-        return ((SynchedEntityData) data).getNonDefaultValues();
-    }
-
-    @Override
-    public Object constructor$ClientboundAnimatePacket(int entityId, int action) {
-        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        byteBuf.writeVarInt(entityId);
-        byteBuf.writeByte(action);
-        return ClientboundAnimatePacket.STREAM_CODEC.decode(byteBuf);
     }
 
 }

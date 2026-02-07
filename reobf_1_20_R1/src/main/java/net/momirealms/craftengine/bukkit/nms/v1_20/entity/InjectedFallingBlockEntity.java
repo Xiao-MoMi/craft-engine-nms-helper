@@ -36,6 +36,7 @@ import net.momirealms.craftengine.core.plugin.context.ContextHolder;
 import net.momirealms.craftengine.core.plugin.context.parameter.DirectContextParameters;
 import net.momirealms.craftengine.core.world.World;
 import net.momirealms.craftengine.core.world.WorldPosition;
+import net.momirealms.craftengine.proxy.minecraft.world.entity.item.FallingBlockEntityProxy;
 import org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -160,11 +161,7 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
                                 boolean flag4 = this.getBlockState().canSurvive(this.level(), blockposition) && !flag3;
                                 if (flag2 && flag4) {
                                     if (this.getBlockState().hasProperty(BlockStateProperties.WATERLOGGED) && this.level().getFluidState(blockposition).getType() == Fluids.WATER) {
-                                        try {
-                                            CoreReflections.field$FallingBlockEntity$blockState.set(this, this.getBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
-                                        } catch (ReflectiveOperationException e) {
-                                            LOGGER.warn("Failed to set block state", e);
-                                        }
+                                        FallingBlockEntityProxy.INSTANCE.setBlockState(this, this.getBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
                                     }
 
                                     if (!CraftEventFactory.callEntityChangeBlockEvent(this, blockposition, this.getBlockState())) {

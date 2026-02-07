@@ -1000,19 +1000,9 @@ public abstract class FastNMS {
 
     public abstract Object method$ChatType$BoundNetwork$resolve(Object chatType);
 
-    public abstract Object field$MinecraftServer$scoreboard();
-
-    public abstract Object constructor$PlayerTeam(Object scoreboard, String name);
-
-    public abstract void method$PlayerTeam$setColor(Object team, String name);
-
-    public abstract Object method$ClientboundSetPlayerTeamPacket$createAddOrModifyPacket(Object team, boolean useAdd);
-
     public abstract Object method$MapItem$getSavedData(Object mapId, Object level);
 
     public abstract Object method$MapItem$getMapId(Object itemStack);
-
-    public abstract byte[] field$RenderData$buffer(Object renderData);
 
     public abstract Object constructor$MapItemSavedData$MapPatch(int startX, int startY, int width, int height, byte[] mapColors);
 
@@ -1023,27 +1013,5 @@ public abstract class FastNMS {
     public abstract boolean field$MapItemSavedData$locked(Object mapItemSavedData);
 
     public abstract byte[] field$MapItemSavedData$colors(Object mapItemSavedData);
-
-    public abstract Object method$LevelReader$getNoiseBiome(Object world, int x, int y, int z);
-
-    public abstract Object method$Holder$Reference$identifier(Object holder);
-
-    public abstract int method$BlockAndTintGetter$getRawBrightness(Object level, Object pos, int light);
-
-    public abstract Object method$Level$dimension(Object level);
-
-    public abstract Object method$Level$dimensionTypeRegistration(Object level);
-
-    public abstract Object constructor$ClientboundPlayerInfoUpdatePacket$Entry1(UUID profileId, @Nullable GameProfile profile, boolean listed, int latency, Object gameMode, @Nullable Object displayName, boolean showHat, int listOrder, @Nullable Object chatSession);
-
-    public abstract Object constructor$ClientboundPlayerInfoRemovePacket(List<UUID> profileIds);
-
-    public abstract float method$LivingEntity$getScale(Object livingEntity);
-
-    public abstract double field$AABB$maxY(Object aabb);
-
-    public abstract List method$SynchedEntityData$getNonDefaultValues(Object data);
-
-    public abstract Object constructor$ClientboundAnimatePacket(int entityId, int action);
 
 }
