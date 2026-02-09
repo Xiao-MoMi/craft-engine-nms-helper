@@ -1,19 +1,21 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_9.recipe;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingRecipeInput;
 import net.minecraft.world.item.crafting.SmithingTrimRecipe;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.bukkit.item.BukkitItemManager;
-import net.momirealms.craftengine.bukkit.nms.FastNMS;
-import net.momirealms.craftengine.bukkit.plugin.reflection.minecraft.MRegistries;
-import net.momirealms.craftengine.bukkit.util.KeyUtils;
 import net.momirealms.craftengine.core.item.Item;
 import net.momirealms.craftengine.core.item.recipe.CustomSmithingTrimRecipe;
 import net.momirealms.craftengine.core.item.recipe.UniqueIdItem;
 import net.momirealms.craftengine.core.item.recipe.input.SmithingInput;
+import net.momirealms.craftengine.core.util.Key;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -28,14 +30,14 @@ public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
         this.recipe = recipe;
     }
 
-    @SuppressWarnings("unchecked")
     public static InjectedSmithingTrimRecipe of(CustomSmithingTrimRecipe<ItemStack> recipe) {
-        Object registry = FastNMS.INSTANCE.method$RegistryAccess$lookupOrThrow(FastNMS.INSTANCE.registryAccess(), MRegistries.TRIM_PATTERN);
+        Registry<TrimPattern> registry = MinecraftServer.getServer().registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
+        Key pattern = Objects.requireNonNull(recipe.pattern(), "pattern should not be null");
         return new InjectedSmithingTrimRecipe(recipe,
                 RecipeHelper.toMinecraft(recipe.template()),
                 RecipeHelper.toMinecraft(recipe.base()),
                 RecipeHelper.toMinecraft(recipe.addition()),
-                (Holder<TrimPattern>) FastNMS.INSTANCE.method$Registry$getHolderByResourceLocation(registry, KeyUtils.toResourceLocation(Objects.requireNonNull(recipe.pattern(), "pattern should not be null")))
+                registry.get(ResourceLocation.fromNamespaceAndPath(pattern.namespace(), pattern.value()))
                         .orElseThrow(() -> new NullPointerException("Pattern " + recipe.pattern() + " doesn't exist.")),
                 true
         );

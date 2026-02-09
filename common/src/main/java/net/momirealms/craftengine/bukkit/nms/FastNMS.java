@@ -1,14 +1,10 @@
 package net.momirealms.craftengine.bukkit.nms;
 
-import com.google.common.hash.HashCode;
 import com.google.gson.JsonElement;
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DynamicOps;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
@@ -23,13 +19,10 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -52,7 +45,8 @@ public abstract class FastNMS {
     }
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
-        return switch (VersionHelper.MINECRAFT_VERSION.version()) {
+        String version = VersionHelper.MINECRAFT_VERSION.version();
+        return switch (version) {
             case "1.21.11" -> "v1_21_11";
             case "1.21.9", "1.21.10" -> "v1_21_9";
             case "1.21.6", "1.21.7", "1.21.8" -> "v1_21_6";
@@ -64,7 +58,7 @@ public abstract class FastNMS {
             case "1.20.3", "1.20.4" -> "v1_20_3";
             case "1.20.2" -> "v1_20_2";
             case "1.20", "1.20.1" -> "v1_20";
-            default -> throw new UnsupportedVersionException();
+            default -> throw new UnsupportedVersionException(version);
         };
     }
 
@@ -634,179 +628,9 @@ public abstract class FastNMS {
 
     public abstract Object method$LootParams$Builder$getLevel(Object lootParamsBuilder);
 
-    public abstract Player method$ServerPlayer$getBukkitEntity(Object player);
-
-    public abstract void method$Block$dropResources(Object state, Object level, Object pos);
-
-    public abstract BlockRedstoneEvent method$CraftEventFactory$callRedstoneChange(Object world, Object pos, int oldCurrent, int newCurrent);
-
-    public abstract boolean method$LevelWriter$destroyBlock(Object level, Object pos, boolean drop);
-
-    public abstract Object method$itemStack$save(Object itemStack, Object compoundTag);
-
-    public abstract Object method$ItemStack$getTag(Object itemStack);
-
-    public abstract Set<Map.Entry> method$CompoundTag$entrySet(Object compoundTag);
-
-    public abstract Object method$CompoundTag$merge(Object tag1, Object tag2);
-
-    public abstract Object method$CompoundTag$copy(Object compoundTag);
-
-    public abstract void method$Player$startSleepInBed(Object player, Object pos, boolean force);
-
-    public abstract Object field$ServerboundResourcePackPacket$action(Object packet);
-
-    public abstract UUID field$ServerboundResourcePackPacket$id(Object packet);
-
-    public abstract Object method$Block$asItem(Object block);
-
-    public abstract Object method$RegistryAccess$lookupOrThrow(Object registryAccess, Object resourceKey);
-
-    public abstract int method$Registry$getId(Object registry, Object value);
-
-    public abstract Optional<Object> method$Registry$getHolderByResourceLocation(Object registry, Object resourceLocation);
-
-    public abstract Optional<Object> method$Registry$getHolderByResourceKey(Object registry, Object resourceKey);
-
     public abstract Object method$ServerLevel$getEntityLookup(Object serverLevel);
 
-    public abstract Object method$EntityLookup$get(Object entityLookup, int id);
-
-    public abstract boolean field$BlockBehavior$hasCollision(Object block);
-
-    public abstract Object method$Connection$getPacketListener(Object connection);
-
-    public abstract Object constructor$ServerResourcePackConfigurationTask(Object info);
-
-    public abstract Object constructor$ServerResourcePackInfo(UUID id, String url, String hash, boolean isRequired, @Nullable Object prompt);
-
-    public abstract void method$ServerConfigurationPacketListenerImpl$returnToWorld(Object packetListener);
-
-    public abstract boolean method$BlockStateBase$isPathFindable(Object blockState, Object blockGetter, Object blockPos, Object type);
-
-    public abstract void method$LevelAccessor$levelEvent(Object level, Object entity, int eventId, Object blockPos, int stateId);
-
-    public abstract Object field$Player$abilities(Object player);
-
-    public abstract boolean field$Abilities$instabuild(Object abilities);
-
-    public abstract GameProfile field$ClientboundLoginFinishedPacket$gameProfile(Object packet);
-
-    public abstract Optional method$TrimMaterials$getFromIngredient(Object itemStack);
-
-    public abstract Optional method$TrimPatterns$getFromTemplate(Object itemStack);
-
-    public abstract Object constructor$ArmorTrim(Object trimMaterial, Object trimPattern);
-
-    public abstract Object method$CustomData$getUnsafe(Object customData);
-
-    public abstract boolean method$ServerLevel$setChunkForced(Object serverLevel, int chunkX, int chunkZ, boolean add);
-
-    public abstract boolean method$LevelReader$isClientSide(Object level);
-
-    public abstract void method$ScheduledTickAccess$scheduleBlockTick(Object level, Object blockPos, Object block, int ticks, Object priority);
-
-    public abstract Object method$StreamDecoder$decode(Object streamDecoder, Object buf);
-
-    public abstract void method$StreamEncoder$encode(Object streamEncoder, Object buf, Object value);
-
-    public abstract boolean method$HashedStack$matches(Object hashedStack, Object itemStack, Object hashGenerator);
-
-    public abstract Object method$Player$getInventory(Object player);
-
-    public abstract Object method$Container$getItem(Object container, int slot);
-
-    public abstract Object method$HashedStack$create(Object itemStack, Object hashGenerator);
-
-    public abstract Object createDecoratedHashOpsGenerator(DynamicOps<HashCode> value);
-
-    public abstract Object method$StateHolder$getValue(Object stateHolder, Object property);
-
-    public abstract Object method$Entity$getType(Object entity);
-
-    public abstract void method$BlockableEventLoop$scheduleOnMain(Runnable runnable);
-
-    public abstract void method$Connection$handleDisconnection(Object connection);
-
-    public abstract Object method$PacketSendListener$thenRun(Runnable runnable);
-
-    public abstract void method$Connection$disconnect(Object connection, Object disconnectReason);
-
-    public abstract boolean method$ItemStack$is(Object itemStack, Object tag);
-
-    public abstract Object method$DyeItem$getDyeColor(Object dyeItem);
-
-    public abstract int method$DyeColor$getTextureDiffuseColor(Object dyeColor);
-
-    public abstract Object method$CraftInventoryCrafting$getMatrixInventory(CraftingInventory inventory);
-
-    public abstract void method$CraftingContainer$setCurrentRecipe(Object container, Object recipe);
-
-    public abstract Object method$CraftInventoryCrafting$getResultInventory(CraftingInventory inventory);
-
-    public abstract void method$ResultContainer$setRecipeUsed(Object container, Object recipe);
-
-    public abstract void method$RecipeManager$addRecipe(Object recipeManager, Object recipeHolder);
-
-    public abstract Object method$Ingredient$of(Object[] items);
-
-    public abstract void method$RecipeMap$removeRecipe(Object recipeMap, Object id);
-
-    public abstract void method$RecipeManager$removeRecipe(Object recipeManager, Object id);
-
-    public abstract Object constructor$RecipeHolder(Object id, Object recipe);
-
-    public abstract int method$CraftingInput$ingredientCount(Object input);
-
-    public abstract int method$CraftingInput$size(Object input);
-
-    public abstract Object method$CraftingInput$getItem(Object input, int index);
-
-    public abstract int method$Container$getContainerSize(Object container);
-
-    public abstract boolean method$Item$canBeDepleted(Object item);
-
-    public abstract int method$DyeColor$getFireworkColor(Object dyeColor);
-
-    public abstract Object method$MinecraftServer$getRecipeManager(Object server);
-
-    public abstract Object field$RecipeManager$recipes(Object recipeManager);
-
-    public abstract Object method$MinecraftServer$getServer();
-
     public abstract Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
-
-    public abstract int field$ServerboundContainerClickPacket$containerId(Object packet);
-
-    public abstract int field$ServerboundContainerClickPacket$stateId(Object packet);
-
-    public abstract short field$ServerboundContainerClickPacket$slotNum(Object packet);
-
-    public abstract byte field$ServerboundContainerClickPacket$buttonNum(Object packet);
-
-    public abstract Object field$ServerboundContainerClickPacket$clickType(Object packet);
-
-    public abstract Int2ObjectMap field$ServerboundContainerClickPacket$changedSlots(Object packet);
-
-    public abstract Object field$ServerboundContainerClickPacket$carriedItem(Object packet);
-
-    public abstract Object constructor$ServerboundContainerClickPacket(int containerId, int stateId, short slotNum, byte buttonNum, Object clickType, Int2ObjectMap changedSlots, Object carriedItem);
-
-    public abstract Object method$CraftInventory$getInventory(Inventory inventory);
-
-    public abstract boolean method$BlockStateBase$isBlock(Object blockState, Object block);
-
-    public abstract Object field$BlockHitResult$blockPos(Object result);
-
-    public abstract Object field$HitResult$location(Object result);
-
-    public abstract boolean field$BlockHitResul$miss(Object result);
-
-    public abstract Object field$BlockHitResul$direction(Object result);
-
-    public abstract Object method$ChunkSource$getLightEngine(Object chunkSource);
-
-    public abstract void method$Level$updateNeighbourForOutputSignal(Object level, Object pos, Object block);
 
     public abstract Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
 
