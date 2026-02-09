@@ -2173,11 +2173,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$DamageSources$fall(Object damageSources) {
-        return ((DamageSources) damageSources).fall();
-    }
-
-    @Override
     public Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
         return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
     }
