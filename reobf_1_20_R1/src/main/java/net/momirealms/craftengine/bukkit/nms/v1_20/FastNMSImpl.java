@@ -13,7 +13,6 @@ import io.netty.channel.Channel;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
 import io.papermc.paper.world.ChunkEntitySlices;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -24,9 +23,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketSendListener;
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.SignedMessageBody;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
@@ -41,29 +38,20 @@ import net.minecraft.server.level.*;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagNetworkSerialization;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.armortrim.*;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -80,14 +68,10 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.entity.LevelCallback;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.lighting.LevelLightEngine;
-import net.minecraft.world.level.lighting.LightEngine;
-import net.minecraft.world.level.lighting.LightEventListener;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.phys.AABB;
@@ -98,7 +82,6 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.ticks.TickPriority;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
@@ -151,7 +134,6 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused", "deprecation"})
@@ -2123,522 +2105,13 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object method$ItemStack$of(Object compoundTag) {
-        return net.minecraft.world.item.ItemStack.of((CompoundTag) compoundTag);
-    }
-
-    @Override
-    public Object constructor$ClientboundRemoveEntitiesPacket(IntList entities) {
-        return new ClientboundRemoveEntitiesPacket(entities);
-    }
-
-    @Override
-    public boolean method$Entity$causeFallDamage(Object entity, Number fallDistance, float damageMultiplier, Object damageSource) {
-        return ((Entity) entity).causeFallDamage(fallDistance.floatValue(), damageMultiplier, (DamageSource) damageSource);
-    }
-
-    @Override
-    public Object method$Entity$damageSources(Object entity) {
-        return ((Entity) entity).damageSources();
-    }
-
-    @Override
     public Object method$DamageSources$fall(Object damageSources) {
         return ((DamageSources) damageSources).fall();
     }
 
     @Override
-    public boolean method$Entity$getSharedFlag(Object entity, int flag) {
-        return ((Entity) entity).getSharedFlag(flag);
-    }
-
-    @Override
-    public Object method$Entity$getDeltaMovement(Object entity) {
-        return ((Entity) entity).getDeltaMovement();
-    }
-
-    @Override
-    public void method$Entity$setDeltaMovement(Object entity, double x, double y, double z) {
-        ((Entity) entity).setDeltaMovement(x, y, z);
-    }
-
-    @Override
-    public boolean field$Entity$hurtMarked(Object entity) {
-        return ((Entity) entity).hurtMarked;
-    }
-
-    @Override
-    public void field$Entity$hurtMarked(Object entity, boolean hurtMarked) {
-        ((Entity) entity).hurtMarked = hurtMarked;
-    }
-
-    @Override
     public Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
         return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
-    }
-
-    @Override
-    public Object method$FluidState$createLegacyBlock(Object fluidState) {
-        return ((FluidState) fluidState).createLegacyBlock();
-    }
-
-    @Override
-    public boolean method$LevelSection$hasOnlyAir(Object levelSection) {
-        return ((LevelChunkSection) levelSection).hasOnlyAir();
-    }
-
-    @Override
-    public void method$LightEventListener$updateSectionStatus(Object lightEngine, Object sectionPos, boolean hasOnlyAir) {
-        ((LightEventListener) lightEngine).updateSectionStatus((SectionPos) sectionPos, hasOnlyAir);
-    }
-
-    @Override
-    public void method$ThreadedLevelLightEngine$checkBlock(Object lightEngine, Object blockPos) {
-        ((ThreadedLevelLightEngine) lightEngine).checkBlock((BlockPos) blockPos);
-    }
-
-    @Override
-    public Object method$SectionPos$of(int x, int y, int z) {
-        return SectionPos.of(x, y, z);
-    }
-
-    @Override
-    public Object method$BlockBehaviour$BlockStateBase$getSoundType(Object blockState) {
-        return ((BlockState) blockState).getSoundType();
-    }
-
-    @Override
-    public Object field$SoundType$breakSound(Object soundType) {
-        return ((SoundType) soundType).getBreakSound();
-    }
-
-    @Override
-    public Object field$SoundType$placeSound(Object soundType) {
-        return ((SoundType) soundType).getPlaceSound();
-    }
-
-    @Override
-    public Object field$SoundType$hitSound(Object soundType) {
-        return ((SoundType) soundType).getHitSound();
-    }
-
-    @Override
-    public Object field$SoundType$fallSound(Object soundType) {
-        return ((SoundType) soundType).getFallSound();
-    }
-
-    @Override
-    public Object field$SoundType$stepSound(Object soundType) {
-        return ((SoundType) soundType).getStepSound();
-    }
-
-    @Override
-    public float field$SoundType$volume(Object soundType) {
-        return ((SoundType) soundType).getVolume();
-    }
-
-    @Override
-    public float field$SoundType$pitch(Object soundType) {
-        return ((SoundType) soundType).getPitch();
-    }
-
-    @Override
-    public Object method$Holder$direct(Object value) {
-        return Holder.direct(value);
-    }
-
-    @Override
-    public Object constructor$ClientboundSoundPacket(Object sound, Object source, double x, double y, double z, float volume, float pitch, long seed) {
-        return new ClientboundSoundPacket((Holder<SoundEvent>) sound, (SoundSource) source, x, y, z, volume, pitch, seed);
-    }
-
-    @Override
-    public boolean method$LeadItem$bindPlayerMobs(Object player, Object world, Object pos) {
-        return LeadItem.bindPlayerMobs((net.minecraft.world.entity.player.Player) player, (Level) world, (BlockPos) pos) == InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public boolean method$FenceGateBlock$connectsToDirection(Object state, Object direction) {
-        return FenceGateBlock.connectsToDirection((BlockState) state, (Direction) direction);
-    }
-
-    @Override
-    public boolean method$Entity$isSpectator(Object entity) {
-        return ((Entity) entity).isSpectator();
-    }
-
-    @Override
-    public boolean method$Entity$isIgnoringBlockTriggers(Object entity) {
-        return ((Entity) entity).isIgnoringBlockTriggers();
-    }
-
-    @Override
-    public Object method$VoxelShape$bounds(Object voxelShape) {
-        return ((VoxelShape) voxelShape).bounds();
-    }
-
-    @Override
-    public void method$Level$updateNeighborsAt(Object levelAccessor, Object pos, Object block, @Nullable Object orientation) {
-        ((Level) levelAccessor).updateNeighborsAt((BlockPos) pos, (net.minecraft.world.level.block.Block) block);
-    }
-
-    @Override
-    public @Nullable Object method$ExperimentalRedstoneUtils$initialOrientation(Object level, @Nullable Object front, @Nullable Object up) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void method$LevelAccessor$playSound(Object level, @Nullable Object entity, Object pos, Object sound, Object source, float volume, float pitch) {
-        ((LevelAccessor) level).playSound(entity instanceof net.minecraft.world.entity.player.Player player ? player : null, (BlockPos) pos, (SoundEvent) sound, (SoundSource) source, volume, pitch);
-    }
-
-    @Override
-    public void method$LevelAccessor$gameEvent(Object level, @Nullable Object entity, Object gameEvent, Object pos) {
-        ((LevelAccessor) level).gameEvent((Entity) entity, (GameEvent) gameEvent, (BlockPos) pos);
-    }
-
-    @Override
-    public void method$BlockBehaviour$BlockStateBase$tick(Object blockState, Object level, Object pos) {
-        ((BlockBehaviour.BlockStateBase) blockState).tick((ServerLevel) level, (BlockPos) pos, ((ServerLevel) level).random);
-    }
-
-    @Override
-    public Object method$Holder$value(Object holder) {
-        return ((Holder) holder).value();
-    }
-
-    @Override
-    public Object method$SynchedEntityData$get(Object synchedEntityData, Object dataParameter) {
-        return ((SynchedEntityData) synchedEntityData).get((EntityDataAccessor) dataParameter);
-    }
-
-    @Override
-    public void method$BlockBehaviour$BlockStateBase$randomTick(Object blockState, Object level, Object pos) {
-        ((BlockBehaviour.BlockStateBase) blockState).randomTick((ServerLevel) level, (BlockPos) pos, ((ServerLevel) level).random);
-    }
-
-    @Override
-    public Object field$BlockBehaviour$BlockStateBase$fluidState(Object blockState) {
-        return ((BlockBehaviour.BlockStateBase) blockState).getFluidState();
-    }
-
-    @Override
-    public int field$FluidState$amount(Object fluidState) {
-        return ((FluidState) fluidState).getAmount();
-    }
-
-    @Override
-    public Object method$StateHolder$trySetValue(Object stateHolder, Object property, Comparable value) {
-        return ((StateHolder) stateHolder).trySetValue((Property) property, value);
-    }
-
-    @Override
-    public boolean method$Inventory$add(Object inventory, Object itemStack) {
-        return ((net.minecraft.world.entity.player.Inventory) inventory).add((net.minecraft.world.item.ItemStack) itemStack);
-    }
-
-    @Override
-    public Object method$ServerPlayer$drop(Object serverPlayer, Object droppedItem, boolean dropAround, boolean traceItem, boolean callEvent, Consumer operation) {
-        return ((ServerPlayer) serverPlayer).drop((net.minecraft.world.item.ItemStack) droppedItem, dropAround, traceItem, callEvent);
-    }
-
-    @Override
-    public void method$ItemEntity$makeFakeItem(Object itemEntity) {
-        ((ItemEntity) itemEntity).makeFakeItem();
-    }
-
-    @Override
-    public void method$ItemEntity$setNoPickUpDelay(Object itemEntity) {
-        ((ItemEntity) itemEntity).setNoPickUpDelay();
-    }
-
-    @Override
-    public void method$ItemEntity$setTarget(Object itemEntity, UUID uuid) {
-        ((ItemEntity) itemEntity).setTarget(uuid);
-    }
-
-    @Override
-    public void method$AbstractContainerMenu$broadcastChanges(Object menu) {
-        ((AbstractContainerMenu) menu).broadcastChanges();
-    }
-
-    @Override
-    public Object field$Entity$entityData(Object entity) {
-        return ((Entity) entity).getEntityData();
-    }
-
-    @Override
-    public void method$SynchedEntityData$set(Object synchedEntityData, Object dataParameter, Object value, boolean force) {
-        ((SynchedEntityData) synchedEntityData).set((EntityDataAccessor) dataParameter, value, force);
-    }
-
-    @Override
-    public Object method$DataComponentExactPredicate$allOf(Object componentMap) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$ItemStack$getComponents(Object itemStack) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$Item$builtInRegistryHolder(Object item) {
-        return ((Item) item).builtInRegistryHolder();
-    }
-
-    @Override
-    public Object field$ItemCost$itemStack(Object itemCost) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object constructor$ItemCost(Object holder, int count, Object predicate) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Iterable method$BundleContents$items(Object bundleContents) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object constructor$BundleContents(List items) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public List field$ItemContainerContents$items(Object contents) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object method$ItemContainerContents$fromItems(List list) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object constructor$BlockPlaceContext(Object level, Object player, Object interactionHand, Object itemStack, Object hitResult) {
-        return new BlockPlaceContext((Level) level, (net.minecraft.world.entity.player.Player) player, (InteractionHand) interactionHand, (net.minecraft.world.item.ItemStack) itemStack, (BlockHitResult) hitResult);
-    }
-
-    @Override
-    public Object constructor$BlockHitResult(Object location, Object direction, Object blockPos, boolean inside) {
-        return new BlockHitResult((Vec3) location, (Direction) direction, (BlockPos) blockPos, inside);
-    }
-
-    @Override
-    public Object method$BlockItem$getBlock(Object blockItem) {
-        return ((BlockItem) blockItem).getBlock();
-    }
-
-    @Override
-    public Object method$Block$getStateForPlacement(Object block, Object blockPlaceContext) {
-        return ((net.minecraft.world.level.block.Block) block).getStateForPlacement((BlockPlaceContext) blockPlaceContext);
-    }
-
-    @Override
-    public Object constructor$Vec3(double x, double y, double z) {
-        return new Vec3(x, y, z);
-    }
-
-    @Override
-    public Object method$AbstractContainerMenu$quickMoveStack(Object menu, Object player, int slot) {
-        return ((AbstractContainerMenu) menu).quickMoveStack((net.minecraft.world.entity.player.Player) player, slot);
-    }
-
-    @Override
-    public Object method$CraftingContainer$getCurrentRecipe(Object container) {
-        return ((CraftingContainer) container).getCurrentRecipe();
-    }
-
-    @Override
-    public void method$ItemStack$hurtAndBreak(Object itemStack, int amount, Object livingEntity, Object slot) {
-        ((net.minecraft.world.item.ItemStack) itemStack).hurtAndBreak(amount, (LivingEntity) livingEntity, entity -> entity.broadcastBreakEvent((EquipmentSlot) slot));
-    }
-
-    @Override
-    public Object constructor$ClientboundEntityPositionSyncPacket(int entityId, double x, double y, double z, float yRot, float xRot, boolean onGround) {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        buf.writeVarInt(entityId);
-        buf.writeDouble(x);
-        buf.writeDouble(y);
-        buf.writeDouble(z);
-        buf.writeByte((byte) (yRot * 256.0F / 360.0F));
-        buf.writeByte((byte) (xRot * 256.0F / 360.0F));
-        buf.writeBoolean(onGround);
-        return new ClientboundTeleportEntityPacket(buf);
-    }
-
-    @Override
-    public Object field$ServerChunkCache$chunkMap(Object chunkSource) {
-        return ((ServerChunkCache) chunkSource).chunkMap;
-    }
-
-    @Override
-    public Map field$ClientboundUpdateTagsPacket$tags(Object packet) {
-        return ((ClientboundUpdateTagsPacket) packet).getTags();
-    }
-
-    @Override
-    public int method$LightEngine$getLightBlockInto(Object level, Object state1, Object pos1, Object state2, Object pos2, Object direction, int defaultReturnValue) {
-        return LightEngine.getLightBlockInto(((BlockGetter) level), ((BlockState) state1), ((BlockPos) pos1), ((BlockState) state2), ((BlockPos) pos2), ((Direction) direction), defaultReturnValue);
-    }
-
-    @Override
-    public int method$BlockBehaviour$BlockStateBase$getLightBlock(Object blockStateBase, Object level, Object pos) {
-        return ((BlockBehaviour.BlockStateBase) blockStateBase).getLightBlock((BlockGetter) level, (BlockPos) pos);
-    }
-
-    @Override
-    public boolean method$FluidState$is(Object fluidState, Object tag) {
-        return ((FluidState) fluidState).is((TagKey) tag);
-    }
-
-    @Override
-    public int method$LevelReader$getMaxLocalRawBrightness(Object level, Object pos) {
-        return ((LevelReader) level).getMaxLocalRawBrightness((BlockPos) pos);
-    }
-
-    @Override
-    public Object method$BlockPos$offset(Object pos, int x, int y, int z) {
-        return ((BlockPos) pos).offset(x, y, z);
-    }
-
-    @Override
-    public Object field$Player$inventoryMenu(Object serverPlayer) {
-        return ((net.minecraft.world.entity.player.Player) serverPlayer).inventoryMenu;
-    }
-
-    @Override
-    public Object method$InventoryMenu$getCraftSlots(Object menu) {
-        return ((InventoryMenu) menu).getCraftSlots();
-    }
-
-    @Override
-    public void method$InventoryMenu$slotsChanged(Object menu, Object container) {
-        ((InventoryMenu) menu).slotsChanged((Container) container);
-    }
-
-    @Override
-    public int method$Inventory$clearOrCountMatchingItems(Object inventory, Predicate stackPredicate, int maxCount, Object container) {
-        return ((net.minecraft.world.entity.player.Inventory) inventory).clearOrCountMatchingItems(stackPredicate, maxCount, (Container) container);
-    }
-
-    @Override
-    public Object method$Entity$getPassengerRidingPosition(Object vehicle, Object passenger) {
-        Entity vehicleEntity = (Entity) vehicle;
-        return new Vec3(vehicleEntity.getX(), vehicleEntity.getY() + vehicleEntity.getPassengersRidingOffset() + ((Entity) passenger).getMyRidingOffset(), vehicleEntity.getZ());
-    }
-
-    @Override
-    public Object method$Entity$getOnPos(Object entity) {
-        return ((Entity) entity).getOnPos();
-    }
-
-    @Override
-    public Object method$ClientboundSetPlayerTeamPacket$createMultiplePlayerPacket(Object team, Collection<String> players, boolean add) {
-        return ClientboundSetPlayerTeamPacket.createMultiplePlayerPacket((PlayerTeam) team, players, add ? ClientboundSetPlayerTeamPacket.Action.ADD : ClientboundSetPlayerTeamPacket.Action.REMOVE);
-    }
-
-    @Override
-    public UUID method$Entity$getUUID(Object entity) {
-        return ((Entity) entity).getUUID();
-    }
-
-    @Override
-    public Object constructor$ClientboundSetEquipmentPacket(int entityId, List<Object> equipments) {
-        return new ClientboundSetEquipmentPacket(entityId, (List) equipments);
-    }
-
-    @Override
-    public Object constructor$AttributeInstance(Object attribute, Consumer consumer) {
-        return new AttributeInstance((Attribute) attribute, consumer);
-    }
-
-    @Override
-    public void method$AttributeInstance$setBaseValue(Object attributeInstance, double value) {
-        ((AttributeInstance) attributeInstance).setBaseValue(value);
-    }
-
-    @Override
-    public Object constructor$ClientboundUpdateAttributesPacket(int id, Collection collection) {
-        return new ClientboundUpdateAttributesPacket(id, collection);
-    }
-
-    @Override
-    public Object field$ClientboundPlayerChatPacket$unsignedContent(Object packet) {
-        return ((ClientboundPlayerChatPacket) packet).unsignedContent();
-    }
-
-    @Override
-    public Object field$ClientboundPlayerChatPacket$body(Object packet) {
-        return ((ClientboundPlayerChatPacket) packet).body();
-    }
-
-    @Override
-    public Object field$ClientboundPlayerChatPacket$chatType(Object packet) {
-        return ((ClientboundPlayerChatPacket) packet).chatType();
-    }
-
-    @Override
-    public UUID field$ClientboundPlayerChatPacket$sender(Object packet) {
-        return ((ClientboundPlayerChatPacket) packet).sender();
-    }
-
-    @Override
-    public String field$SignedMessageBody$Packed$content(Object body) {
-        return ((SignedMessageBody.Packed) body).content();
-    }
-
-    @Override
-    public Object method$ChatType$Bound$decorate(Object chatType, Object component) {
-        return ((ChatType.Bound) chatType).decorate((Component) component);
-    }
-
-    @Override
-    public Object method$Component$literal(String text) {
-        return Component.literal(text);
-    }
-
-    @Override
-    public Object method$ChatType$BoundNetwork$resolve(Object chatType) {
-        return ((ChatType.BoundNetwork) chatType).resolve(registryAccess()).orElseThrow();
-    }
-
-    @Override
-    public Object method$MapItem$getSavedData(Object mapId, Object level) {
-        return MapItem.getSavedData((Integer) mapId, (Level) level);
-    }
-
-    @Override
-    public Object method$MapItem$getMapId(Object itemStack) {
-        return MapItem.getMapId((net.minecraft.world.item.ItemStack) itemStack);
-    }
-
-    @Override
-    public Object constructor$MapItemSavedData$MapPatch(int startX, int startY, int width, int height, byte[] mapColors) {
-        return new MapItemSavedData.MapPatch(startX, startY, width, height, mapColors);
-    }
-
-    @Override
-    public Object constructor$ClientboundMapItemDataPacket(Object mapId, byte scale, boolean locked, Collection decorations, Object colorPatch) {
-        return new ClientboundMapItemDataPacket((int) mapId, scale, locked, decorations, (MapItemSavedData.MapPatch) colorPatch);
-    }
-
-    @Override
-    public byte field$MapItemSavedData$scale(Object mapItemSavedData) {
-        return ((MapItemSavedData) mapItemSavedData).scale;
-    }
-
-    @Override
-    public boolean field$MapItemSavedData$locked(Object mapItemSavedData) {
-        return ((MapItemSavedData) mapItemSavedData).locked;
-    }
-
-    @Override
-    public byte[] field$MapItemSavedData$colors(Object mapItemSavedData) {
-        return ((MapItemSavedData) mapItemSavedData).colors;
     }
 
 }
