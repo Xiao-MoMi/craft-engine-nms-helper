@@ -18,7 +18,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
-import net.minecraft.world.level.levelgen.feature.OreFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
