@@ -1,34 +1,22 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonElement;
-import io.netty.buffer.ByteBuf;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
-import io.papermc.paper.world.ChunkEntitySlices;
 import net.minecraft.core.*;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
-import net.minecraft.network.Connection;
 import net.minecraft.network.ConnectionProtocol;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.PacketSendListener;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.*;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.entity.LevelCallback;
 import net.minecraft.world.phys.AABB;
@@ -62,7 +50,6 @@ import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftInventory;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -211,57 +198,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$RecipeHolder$id(Object recipeHolder) {
-        return ((Recipe) recipeHolder).getId();
-    }
-
-    @Override
-    public boolean method$ServerLevel$isPreventingStatusUpdates(Object world, int x, int z) {
-        ChunkEntitySlices slices = ((ServerLevel) world).getEntityLookup().getChunk(x, z);
-        return slices != null && slices.isPreventingStatusUpdates();
-    }
-
-    @Override
-    public void method$Connection$send(Object connection, Object packet, Object sendListener) {
-        ((Connection) connection).send((Packet<?>) packet, ((PacketSendListener) sendListener));
-    }
-
-    @Override
-    public Object method$Component$Serializer$fromJson(JsonElement element) {
-        return Component.Serializer.fromJson(element);
-    }
-
-    @Override
-    public Object method$Component$Serializer$fromJson(String json) {
-        return Component.Serializer.fromJson(json);
-    }
-
-    @Override
-    public String method$Component$Serializer$toJson(Object component) {
-        return Component.Serializer.toJson((Component) component);
-    }
-
-    @Override
-    public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
-        ((SoundEvent) soundEvent).writeToNetwork(new FriendlyByteBuf(buffer));
-    }
-
-    @Override
-    public double method$Player$getInteractionRange(Object player) {
-        return 4.5d;
-    }
-
-    @Override
-    public boolean method$ItemStack$canBreakInAdventureMode(Object itemStack, Object blockInWorld) {
-        return ((net.minecraft.world.item.ItemStack) itemStack).hasAdventureModeBreakTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
-    }
-
-    @Override
-    public boolean method$ItemStack$canPlaceInAdventureMode(Object itemStack, Object blockInWorld) {
-        return ((net.minecraft.world.item.ItemStack) itemStack).hasAdventureModePlaceTagForBlock(BuiltInRegistries.BLOCK, (BlockInWorld) blockInWorld);
-    }
-
-    @Override
     public void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos) {
         ServerPlayer serverPlayer = (ServerPlayer) player;
         ServerLevel serverLevel = serverPlayer.serverLevel();
@@ -328,33 +264,6 @@ public class FastNMSImpl extends FastNMS {
         net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
         CompoundTag tag = nmsStack.getOrCreateTag();
         tag.putString("craftengine:id", id);
-    }
-
-    @Override
-    public boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState) {
-        BlockState oldBlockState = (BlockState) oldState;
-        BlockState newBlockState = (BlockState) newState;
-        return newBlockState.getLightEmission() != oldBlockState.getLightEmission() || newBlockState.useShapeForLightOcclusion() || oldBlockState.useShapeForLightOcclusion();
-    }
-
-    @Override
-    public ItemStack method$FriendlyByteBuf$readItem(Object buf) {
-        return CraftItemStack.asCraftMirror(((FriendlyByteBuf) buf).readItem());
-    }
-
-    @Override
-    public void method$FriendlyByteBuf$writeItem(Object buf, ItemStack itemStack) {
-        ((FriendlyByteBuf) buf).writeItem(CraftItemStack.unwrap(itemStack));
-    }
-
-    @Override
-    public ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf) {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack) {
-        throw new UnsupportedVersionException();
     }
 
     @Override

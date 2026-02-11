@@ -1,17 +1,13 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21;
 
-import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.ChunkEntitySlices;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import com.google.common.collect.Lists;
-import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.*;
 import net.minecraft.network.*;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.configuration.ConfigurationProtocols;
 import net.minecraft.network.protocol.game.*;
@@ -20,21 +16,16 @@ import net.minecraft.network.protocol.login.LoginProtocols;
 import net.minecraft.network.protocol.status.StatusProtocols;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.*;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.chunk.status.WorldGenContext;
@@ -71,7 +62,6 @@ import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
 import net.momirealms.craftengine.proxy.minecraft.server.level.ChunkMapProxy;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -235,57 +225,6 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object field$RecipeHolder$id(Object recipeHolder) {
-        return ((RecipeHolder) recipeHolder).id();
-    }
-
-    @Override
-    public boolean method$ServerLevel$isPreventingStatusUpdates(Object world, int x, int z) {
-        ChunkEntitySlices slices = ((ServerLevel) world).moonrise$getEntityLookup().getChunk(x, z);
-        return slices != null && slices.isPreventingStatusUpdates();
-    }
-
-    @Override
-    public void method$Connection$send(Object connection, Object packet, Object sendListener) {
-        ((Connection) connection).send((Packet<?>) packet, ((PacketSendListener) sendListener));
-    }
-
-    @Override
-    public Object method$Component$Serializer$fromJson(JsonElement element) {
-        return Component.Serializer.fromJson(element, registryAccess());
-    }
-
-    @Override
-    public Object method$Component$Serializer$fromJson(String json) {
-        return Component.Serializer.fromJson(json, registryAccess());
-    }
-
-    @Override
-    public String method$Component$Serializer$toJson(Object component) {
-        return Component.Serializer.toJson((Component) component, registryAccess());
-    }
-
-    @Override
-    public void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent) {
-        SoundEvent.DIRECT_STREAM_CODEC.encode(buffer, (SoundEvent) soundEvent);
-    }
-
-    @Override
-    public double method$Player$getInteractionRange(Object player) {
-        return Optional.ofNullable(((net.minecraft.world.entity.player.Player) player).getAttribute(Attributes.BLOCK_INTERACTION_RANGE)).map(AttributeInstance::getValue).orElse(4.5d);
-    }
-
-    @Override
-    public boolean method$ItemStack$canBreakInAdventureMode(Object itemStack, Object blockInWorld) {
-        return ((net.minecraft.world.item.ItemStack) itemStack).canBreakBlockInAdventureMode((BlockInWorld) blockInWorld);
-    }
-
-    @Override
-    public boolean method$ItemStack$canPlaceInAdventureMode(Object itemStack, Object blockInWorld) {
-        return ((net.minecraft.world.item.ItemStack) itemStack).canPlaceOnBlockInAdventureMode((BlockInWorld) blockInWorld);
-    }
-
-    @Override
     public void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos) {
         ServerPlayer serverPlayer = (ServerPlayer) player;
         ServerLevel serverLevel = serverPlayer.serverLevel();
@@ -367,35 +306,8 @@ public class FastNMSImpl extends FastNMS {
         }
     }
 
-    @Override
-    public boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState) {
-        BlockState oldBlockState = (BlockState) oldState;
-        BlockState newBlockState = (BlockState) newState;
-        return newBlockState.getLightEmission() != oldBlockState.getLightEmission() || newBlockState.useShapeForLightOcclusion() || oldBlockState.useShapeForLightOcclusion();
-    }
-
-    @Override
-    public ItemStack method$FriendlyByteBuf$readItem(Object buf) {
-        return CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC.decode((RegistryFriendlyByteBuf) buf));
-    }
-
-    @Override
-    public void method$FriendlyByteBuf$writeItem(Object buf, ItemStack itemStack) {
-        net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC.encode((RegistryFriendlyByteBuf) buf, CraftItemStack.unwrap(itemStack));
-    }
-
     private static final StreamCodec<RegistryFriendlyByteBuf, net.minecraft.world.item.ItemStack> ITEM_UNTRUSTED_CODEC =
             net.minecraft.world.item.ItemStack.validatedStreamCodec(net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC);
-
-    @Override
-    public ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf) {
-        return CraftItemStack.asCraftMirror(ITEM_UNTRUSTED_CODEC.decode((RegistryFriendlyByteBuf) buf));
-    }
-
-    @Override
-    public void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack) {
-        ITEM_UNTRUSTED_CODEC.encode((RegistryFriendlyByteBuf) buf, CraftItemStack.unwrap(itemStack));
-    }
 
     private RegistryAccess registryAccess() {
         return MinecraftServer.getServer().registryAccess();

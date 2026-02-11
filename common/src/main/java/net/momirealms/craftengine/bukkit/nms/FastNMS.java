@@ -1,7 +1,5 @@
 package net.momirealms.craftengine.bukkit.nms;
 
-import com.google.gson.JsonElement;
-import io.netty.buffer.ByteBuf;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
@@ -122,37 +120,5 @@ public abstract class FastNMS {
     public abstract Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
 
     public abstract Object method$StatePredicate$always(boolean trueOrFalse);
-
-    // todo 修改下面的
-
-    public abstract Object field$RecipeHolder$id(Object recipeHolder);
-
-    public abstract boolean method$ServerLevel$isPreventingStatusUpdates(Object serverLevel, int x, int z);
-
-    public abstract void method$Connection$send(Object connection, Object packet, Object sendListener);
-
-    public abstract Object method$Component$Serializer$fromJson(JsonElement element);
-
-    public abstract Object method$Component$Serializer$fromJson(String json);
-
-    public abstract String method$Component$Serializer$toJson(Object component);
-
-    public abstract void method$SoundEvent$directEncode(ByteBuf buffer, Object soundEvent);
-
-    public abstract double method$Player$getInteractionRange(Object player);
-
-    public abstract boolean method$ItemStack$canBreakInAdventureMode(Object itemStack, Object blockInWorld);
-
-    public abstract boolean method$ItemStack$canPlaceInAdventureMode(Object itemStack, Object blockInWorld);
-
-    public abstract boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState);
-
-    public abstract ItemStack method$FriendlyByteBuf$readItem(Object buf);
-
-    public abstract void method$FriendlyByteBuf$writeItem(Object buf, ItemStack itemStack);
-
-    public abstract ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf);
-
-    public abstract void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack);
 
 }
