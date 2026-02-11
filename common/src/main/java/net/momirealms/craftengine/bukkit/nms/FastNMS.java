@@ -105,6 +105,24 @@ public abstract class FastNMS {
 
     public abstract Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState);
 
+    public abstract void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos);
+
+    public abstract boolean checkEntityCollision(Object level, List<Object> aabbs, Predicate<Object> entityFilter);
+
+    public abstract String getCustomItemId(Object itemStack);
+
+    public abstract void setCustomItemId(Object itemStack, String id);
+
+    public abstract Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz();
+
+    public abstract Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName();
+
+    public abstract Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
+
+    public abstract Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
+
+    public abstract Object method$StatePredicate$always(boolean trueOrFalse);
+
     // todo 修改下面的
 
     public abstract Object field$RecipeHolder$id(Object recipeHolder);
@@ -127,14 +145,6 @@ public abstract class FastNMS {
 
     public abstract boolean method$ItemStack$canPlaceInAdventureMode(Object itemStack, Object blockInWorld);
 
-    public abstract void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos);
-
-    public abstract boolean checkEntityCollision(Object level, List<Object> aabbs, Predicate<Object> entityFilter);
-
-    public abstract String getCustomItemId(Object itemStack);
-
-    public abstract void setCustomItemId(Object itemStack, String id);
-
     public abstract boolean method$LightEngine$hasDifferentLightProperties(Object oldState, Object newState);
 
     public abstract ItemStack method$FriendlyByteBuf$readItem(Object buf);
@@ -144,15 +154,5 @@ public abstract class FastNMS {
     public abstract ItemStack method$FriendlyByteBuf$readUntrustedItem(Object buf);
 
     public abstract void method$FriendlyByteBuf$writeUntrustedItem(Object buf, ItemStack itemStack);
-
-    public abstract Object method$StatePredicate$always(boolean trueOrFalse);
-
-    public abstract Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz();
-
-    public abstract Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName();
-
-    public abstract Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
-
-    public abstract Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
 
 }
