@@ -1,11 +1,11 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_6.worldgen;
+package net.momirealms.craftengine.bukkit.nms.v1_21_11.worldgen;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.core.*;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.random.WeightedList;
@@ -24,6 +24,7 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.momirealms.craftengine.bukkit.world.BukkitWorldManager;
 import net.momirealms.craftengine.bukkit.world.gen.CraftEngineFeatures;
+import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.ChunkPos;
@@ -34,13 +35,13 @@ import org.spigotmc.SpigotWorldConfig;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public class InjectedChunkGenerator extends ChunkGenerator {
+public class InjectedCustomChunkGenerator extends ChunkGenerator implements InjectedChunkGenerator {
     private final ChunkGenerator target;
     private final CEWorld world;
     private long lastUpdateFeatureTime;
     private CraftEngineFeatures features;
 
-    public InjectedChunkGenerator(CEWorld world, ChunkGenerator target) {
+    public InjectedCustomChunkGenerator(CEWorld world, ChunkGenerator target) {
         super(target.getBiomeSource());
         this.target = target;
         this.world = world;
@@ -152,10 +153,11 @@ public class InjectedChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void addVanillaDecorations(@NotNull WorldGenLevel generatoraccessseed,
-                                      @NotNull ChunkAccess ichunkaccess,
+    public void addVanillaDecorations(@NotNull WorldGenLevel level,
+                                      @NotNull ChunkAccess chunkAccess,
                                       @NotNull StructureManager structuremanager) {
-        this.target.addVanillaDecorations(generatoraccessseed, ichunkaccess, structuremanager);
+        this.target.addVanillaDecorations(level, chunkAccess, structuremanager);
+
     }
 
     @Override
@@ -178,7 +180,7 @@ public class InjectedChunkGenerator extends ChunkGenerator {
             biomeSet.retainAll(this.biomeSource.possibleBiomes());
             Set<Integer> featureSet = new HashSet<>();
             for (Holder<Biome> biome : biomeSet) {
-                ResourceLocation identifier = ((Holder.Reference<Biome>) biome).key().location();
+                Identifier identifier = ((Holder.Reference<Biome>) biome).key().identifier();
                 List<Integer> byBiome = ceFeatures.getFeatureIdsByBiome(new Key(identifier.getNamespace(), identifier.getPath()));
                 featureSet.addAll(byBiome);
             }

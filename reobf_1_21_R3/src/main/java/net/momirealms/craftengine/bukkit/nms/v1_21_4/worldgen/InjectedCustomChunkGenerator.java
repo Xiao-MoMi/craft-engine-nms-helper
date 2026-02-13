@@ -1,4 +1,4 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21.worldgen;
+package net.momirealms.craftengine.bukkit.nms.v1_21_4.worldgen;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
@@ -10,10 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.NoiseColumn;
-import net.minecraft.world.level.StructureManager;
-import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -27,6 +24,7 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.momirealms.craftengine.bukkit.world.BukkitWorldManager;
 import net.momirealms.craftengine.bukkit.world.gen.CraftEngineFeatures;
+import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.ChunkPos;
@@ -37,13 +35,13 @@ import org.spigotmc.SpigotWorldConfig;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public class InjectedChunkGenerator extends ChunkGenerator {
+public class InjectedCustomChunkGenerator extends ChunkGenerator implements InjectedChunkGenerator {
     private final ChunkGenerator target;
     private final CEWorld world;
     private long lastUpdateFeatureTime;
     private CraftEngineFeatures features;
 
-    public InjectedChunkGenerator(CEWorld world, ChunkGenerator target) {
+    public InjectedCustomChunkGenerator(CEWorld world, ChunkGenerator target) {
         super(target.getBiomeSource());
         this.target = target;
         this.world = world;
@@ -72,9 +70,8 @@ public class InjectedChunkGenerator extends ChunkGenerator {
                              @NotNull RandomState randomState,
                              @NotNull BiomeManager biomeManager,
                              @NotNull StructureManager structureManager,
-                             @NotNull ChunkAccess chunkAccess,
-                             GenerationStep.@NotNull Carving carving) {
-        this.target.applyCarvers(worldGenRegion, seed, randomState, biomeManager, structureManager, chunkAccess, carving);
+                             @NotNull ChunkAccess chunkAccess) {
+        this.target.applyCarvers(worldGenRegion, seed, randomState, biomeManager, structureManager, chunkAccess);
     }
 
     @Override
@@ -139,15 +136,6 @@ public class InjectedChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void createStructures(@NotNull RegistryAccess registryManager,
-                                 @NotNull ChunkGeneratorStructureState placementCalculator,
-                                 @NotNull StructureManager structureAccessor,
-                                 @NotNull ChunkAccess chunk,
-                                 @NotNull StructureTemplateManager structureTemplateManager) {
-        this.target.createStructures(registryManager, placementCalculator, structureAccessor, chunk, structureTemplateManager);
-    }
-
-    @Override
     public @NotNull ChunkGeneratorStructureState createState(@NotNull HolderLookup<StructureSet> holderlookup,
                                                              @NotNull RandomState randomstate,
                                                              long seed,
@@ -178,7 +166,7 @@ public class InjectedChunkGenerator extends ChunkGenerator {
         this.target.applyBiomeDecoration(level, chunkAccess, structureAccessor);
         CraftEngineFeatures ceFeatures = getFeatures(level);
         if (ceFeatures != null && !ceFeatures.features.isEmpty()) {
-            SectionPos sectionPos = SectionPos.of(chunkAccess.getPos(), level.getMinSection());
+            SectionPos sectionPos = SectionPos.of(chunkAccess.getPos(), level.getMinSectionY());
             Set<Holder<Biome>> biomeSet = new ObjectArraySet<>();
             net.minecraft.world.level.ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((chunkPos) -> {
                 ChunkAccess chunk = level.getChunk(chunkPos.x, chunkPos.z);
@@ -273,5 +261,15 @@ public class InjectedChunkGenerator extends ChunkGenerator {
                                                                 @NotNull StructureManager structureAccessor,
                                                                 @NotNull ChunkAccess chunk) {
         return this.target.createBiomes(noiseConfig, blender, structureAccessor, chunk);
+    }
+
+    @Override
+    public void createStructures(@NotNull RegistryAccess registryAccess,
+                                 @NotNull ChunkGeneratorStructureState structureState,
+                                 @NotNull StructureManager structureManager,
+                                 @NotNull ChunkAccess chunk,
+                                 @NotNull StructureTemplateManager structureTemplateManager,
+                                 @NotNull ResourceKey<Level> level) {
+        this.target.createStructures(registryAccess, structureState, structureManager, chunk, structureTemplateManager, level);
     }
 }

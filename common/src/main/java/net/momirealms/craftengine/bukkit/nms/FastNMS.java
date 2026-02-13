@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
@@ -71,11 +72,11 @@ public abstract class FastNMS {
 
     public abstract Object getCraftEngineCustomSimpleBlockFeature();
 
-    public abstract InjectedStorage.Palette createInjectedPalettedContainerHolder(Object palettedContainer);
+    public abstract InjectedStorage.Palette createInjectedPalettedContainer(Object palettedContainer);
 
-    public abstract InjectedStorage.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection);
+    public abstract InjectedStorage.Section createInjectedLevelChunkSection(Object levelChunkSection);
 
-    public abstract void injectedWorldGen(CEWorld world, Object chunkMap);
+    public abstract InjectedChunkGenerator createInjectedChunkGenerator(CEWorld world, Object generator);
 
     public abstract CollisionEntity createCollisionBoat(Object world, Object aabb,
                                                         double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding);
@@ -102,10 +103,6 @@ public abstract class FastNMS {
     public abstract Object createSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe);
 
     public abstract Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState);
-
-    public abstract String getCustomItemId(Object itemStack);
-
-    public abstract void setCustomItemId(Object itemStack, String id);
 
     public abstract Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz();
 

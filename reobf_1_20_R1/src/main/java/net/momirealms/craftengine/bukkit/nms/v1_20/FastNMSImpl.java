@@ -3,10 +3,8 @@ package net.momirealms.craftengine.bukkit.nms.v1_20;
 import io.papermc.paper.chunk.system.entity.EntityLookup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.server.level.ChunkMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -35,6 +33,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20.inventory.SimpleStorageContai
 import net.momirealms.craftengine.bukkit.nms.v1_20.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v1_20.worldgen.*;
+import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
@@ -53,7 +52,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
-@SuppressWarnings({"unchecked", "rawtypes", "unused", "deprecation"})
+@SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class FastNMSImpl extends FastNMS {
 
     @Override
@@ -104,28 +103,25 @@ public class FastNMSImpl extends FastNMS {
 
     @Override
     public Object getCraftEngineCustomSimpleBlockFeature() {
-        return new CustomSimpleBlockFeature();
+        return CustomSimpleBlockFeature.INSTANCE;
     }
 
     @Override
-    public InjectedStorage.Palette createInjectedPalettedContainerHolder(Object palettedContainer) {
+    public InjectedStorage.Palette createInjectedPalettedContainer(Object palettedContainer) {
         InjectedPalettedContainer injectedObject = SReflection.allocateInstance(InjectedPalettedContainer.class);
         injectedObject.delegated = (PalettedContainer) palettedContainer;
         return injectedObject;
     }
 
     @Override
-    public InjectedStorage.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection) {
+    public InjectedStorage.Section createInjectedLevelChunkSection(Object levelChunkSection) {
         LevelChunkSection section = (LevelChunkSection) levelChunkSection;
         return new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
     }
 
     @Override
-    public void injectedWorldGen(CEWorld world, Object chunkMap) {
-        ChunkGenerator generator = ((ChunkMap) chunkMap).generator;
-        if (!(generator instanceof InjectedChunkGenerator)) {
-            ((ChunkMap) chunkMap).generator = new InjectedChunkGenerator(world, generator);
-        }
+    public InjectedChunkGenerator createInjectedChunkGenerator(CEWorld world, Object generator) {
+        return new InjectedCustomChunkGenerator(world, (ChunkGenerator) generator);
     }
 
     @Override
@@ -191,21 +187,6 @@ public class FastNMSImpl extends FastNMS {
             return FallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
         }
         return InjectedFallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
-    }
-
-    @Override
-    public String getCustomItemId(Object itemStack) {
-        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
-        CompoundTag tag = nmsStack.getTag();
-        if (tag == null) return null;
-        return tag.getString("craftengine:id");
-    }
-
-    @Override
-    public void setCustomItemId(Object itemStack, String id) {
-        net.minecraft.world.item.ItemStack nmsStack = (net.minecraft.world.item.ItemStack) itemStack;
-        CompoundTag tag = nmsStack.getOrCreateTag();
-        tag.putString("craftengine:id", id);
     }
 
     @Override

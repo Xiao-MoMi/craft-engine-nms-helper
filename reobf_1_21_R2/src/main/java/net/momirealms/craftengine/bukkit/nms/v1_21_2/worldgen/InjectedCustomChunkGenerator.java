@@ -1,4 +1,4 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_5.worldgen;
+package net.momirealms.craftengine.bukkit.nms.v1_21_2.worldgen;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
@@ -8,9 +8,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.util.random.WeightedList;
+import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -24,6 +27,7 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.momirealms.craftengine.bukkit.world.BukkitWorldManager;
 import net.momirealms.craftengine.bukkit.world.gen.CraftEngineFeatures;
+import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.ChunkPos;
@@ -34,13 +38,13 @@ import org.spigotmc.SpigotWorldConfig;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public class InjectedChunkGenerator extends ChunkGenerator {
+public class InjectedCustomChunkGenerator extends ChunkGenerator implements InjectedChunkGenerator {
     private final ChunkGenerator target;
     private final CEWorld world;
     private long lastUpdateFeatureTime;
     private CraftEngineFeatures features;
 
-    public InjectedChunkGenerator(CEWorld world, ChunkGenerator target) {
+    public InjectedCustomChunkGenerator(CEWorld world, ChunkGenerator target) {
         super(target.getBiomeSource());
         this.target = target;
         this.world = world;
@@ -135,6 +139,15 @@ public class InjectedChunkGenerator extends ChunkGenerator {
     }
 
     @Override
+    public void createStructures(@NotNull RegistryAccess registryManager,
+                                 @NotNull ChunkGeneratorStructureState placementCalculator,
+                                 @NotNull StructureManager structureAccessor,
+                                 @NotNull ChunkAccess chunk,
+                                 @NotNull StructureTemplateManager structureTemplateManager) {
+        this.target.createStructures(registryManager, placementCalculator, structureAccessor, chunk, structureTemplateManager);
+    }
+
+    @Override
     public @NotNull ChunkGeneratorStructureState createState(@NotNull HolderLookup<StructureSet> holderlookup,
                                                              @NotNull RandomState randomstate,
                                                              long seed,
@@ -212,6 +225,14 @@ public class InjectedChunkGenerator extends ChunkGenerator {
     }
 
     @Override
+    public @NotNull WeightedRandomList<MobSpawnSettings.SpawnerData> getMobsAt(@NotNull Holder<Biome> biome,
+                                                                               @NotNull StructureManager accessor,
+                                                                               @NotNull MobCategory group,
+                                                                               @NotNull BlockPos pos) {
+        return this.target.getMobsAt(biome, accessor, group, pos);
+    }
+
+    @Override
     public void createReferences(@NotNull WorldGenLevel world,
                                  @NotNull StructureManager structureAccessor,
                                  @NotNull ChunkAccess chunk) {
@@ -252,23 +273,5 @@ public class InjectedChunkGenerator extends ChunkGenerator {
                                                                 @NotNull StructureManager structureAccessor,
                                                                 @NotNull ChunkAccess chunk) {
         return this.target.createBiomes(noiseConfig, blender, structureAccessor, chunk);
-    }
-
-    @Override
-    public void createStructures(@NotNull RegistryAccess registryAccess,
-                                 @NotNull ChunkGeneratorStructureState structureState,
-                                 @NotNull StructureManager structureManager,
-                                 @NotNull ChunkAccess chunk,
-                                 @NotNull StructureTemplateManager structureTemplateManager,
-                                 @NotNull ResourceKey<Level> level) {
-        this.target.createStructures(registryAccess, structureState, structureManager, chunk, structureTemplateManager, level);
-    }
-
-    @Override
-    public @NotNull WeightedList<MobSpawnSettings.SpawnerData> getMobsAt(@NotNull Holder<Biome> biome,
-                                                                         @NotNull StructureManager structureManager,
-                                                                         @NotNull MobCategory category,
-                                                                         @NotNull BlockPos pos) {
-        return this.target.getMobsAt(biome, structureManager, category, pos);
     }
 }
