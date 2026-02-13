@@ -19,8 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class CustomSimpleBlockFeature extends Feature<@NotNull SimpleBlockConfiguration> {
+    public static final CustomSimpleBlockFeature INSTANCE = new CustomSimpleBlockFeature();
 
-    public CustomSimpleBlockFeature() {
+    private CustomSimpleBlockFeature() {
         super(SimpleBlockConfiguration.CODEC);
     }
 

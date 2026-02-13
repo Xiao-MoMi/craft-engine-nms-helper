@@ -9,10 +9,10 @@ import net.momirealms.craftengine.bukkit.plugin.injector.WorldStorageInjector;
 import net.momirealms.craftengine.core.world.SectionPos;
 import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
-import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
+import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import org.jetbrains.annotations.NotNull;
 
-public class InjectedLevelChunkSection extends LevelChunkSection implements InjectedHolder.Section {
+public class InjectedLevelChunkSection extends LevelChunkSection implements InjectedStorage.Section {
     private CESection section;
     private CEChunk chunk;
     private SectionPos sectionPos;
@@ -40,33 +40,33 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
     }
 
     @Override
-    public CEChunk ceChunk() {
-        return this.chunk;
-    }
-
-    @Override
-    public void ceChunk(CEChunk ceChunk) {
-        this.chunk = ceChunk;
-    }
-
-    @Override
-    public SectionPos cePos() {
-        return this.sectionPos;
-    }
-
-    @Override
-    public void cePos(SectionPos sectionPos) {
-        this.sectionPos = sectionPos;
-    }
-
-    @Override
-    public CESection ceSection() {
+    public CESection section() {
         return this.section;
     }
 
     @Override
-    public void ceSection(CESection ceSection) {
+    public void setSection(CESection ceSection) {
         this.section = ceSection;
+    }
+
+    @Override
+    public CEChunk chunk() {
+        return this.chunk;
+    }
+
+    @Override
+    public void setChunk(CEChunk ceChunk) {
+        this.chunk = ceChunk;
+    }
+
+    @Override
+    public SectionPos pos() {
+        return this.sectionPos;
+    }
+
+    @Override
+    public void setPos(SectionPos sectionPos) {
+        this.sectionPos = sectionPos;
     }
 
 //    @Override
@@ -77,10 +77,6 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
     @Override
     @NotNull
     public BlockState setBlockState(int x, int y, int z, @NotNull BlockState state, boolean useLocks) {
-        try {
-            return (BlockState) WorldStorageInjector.SetBlockStateInterceptor.INSTANCE.intercept(this, new Object[]{x, y, z, state, useLocks}, () -> super.setBlockState(x, y, z, state, useLocks));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return (BlockState) WorldStorageInjector.setBlockState(this, x, y, z, state, useLocks);
     }
 }

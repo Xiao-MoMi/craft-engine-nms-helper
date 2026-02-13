@@ -7,14 +7,14 @@ import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
-import net.momirealms.craftengine.core.world.chunk.InjectedHolder;
+import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.Map;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
@@ -71,9 +71,9 @@ public abstract class FastNMS {
 
     public abstract Object getCraftEngineCustomSimpleBlockFeature();
 
-    public abstract InjectedHolder.Palette createInjectedPalettedContainerHolder(Object palettedContainer) throws InstantiationException;
+    public abstract InjectedStorage.Palette createInjectedPalettedContainerHolder(Object palettedContainer);
 
-    public abstract InjectedHolder.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection);
+    public abstract InjectedStorage.Section createInjectedLevelChunkSectionHolder(Object levelChunkSection);
 
     public abstract void injectedWorldGen(CEWorld world, Object chunkMap);
 
@@ -103,10 +103,6 @@ public abstract class FastNMS {
 
     public abstract Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState);
 
-    public abstract void simulateInteraction(Object player, Object direction, double x, double y, double z, Object pos);
-
-    public abstract boolean checkEntityCollision(Object level, List<Object> aabbs, Predicate<Object> entityFilter);
-
     public abstract String getCustomItemId(Object itemStack);
 
     public abstract void setCustomItemId(Object itemStack, String id);
@@ -117,8 +113,8 @@ public abstract class FastNMS {
 
     public abstract Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
 
-    public abstract Object constructor$InjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
+    public abstract Object createInjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
 
-    public abstract Object method$StatePredicate$always(boolean trueOrFalse);
+    public abstract Object createAlwaysStatePredicate(boolean trueOrFalse);
 
 }

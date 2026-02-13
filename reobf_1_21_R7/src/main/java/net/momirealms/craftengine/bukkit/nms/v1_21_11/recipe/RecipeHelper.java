@@ -17,6 +17,7 @@ import net.momirealms.craftengine.core.item.recipe.UniqueIdItem;
 import net.momirealms.craftengine.core.item.recipe.remainder.CraftRemainder;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.UniqueKey;
+import net.momirealms.craftengine.proxy.minecraft.world.item.crafting.CraftingBookCategoryProxy;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 public final class RecipeHelper {
+    private RecipeHelper() {}
 
     public static Ingredient toMinecraft(net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack> ingredient) {
         if (ingredient == null) {
