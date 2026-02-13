@@ -8,6 +8,7 @@ import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
+import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -54,7 +55,7 @@ public abstract class FastNMS {
 
     public abstract Object createBiomePlacementFilter(Predicate<Key> filter);
 
-    public abstract Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup);
+    public abstract InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup);
 
     public abstract StatePropertyAccessor createStatePropertyAccessor(Object blockState);
 

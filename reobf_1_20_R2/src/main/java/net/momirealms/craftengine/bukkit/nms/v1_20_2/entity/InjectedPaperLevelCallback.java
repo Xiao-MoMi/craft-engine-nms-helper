@@ -1,26 +1,26 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_11.entity;
+package net.momirealms.craftengine.bukkit.nms.v1_20_2.entity;
 
-import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
-import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.server.ServerEntityLookup;
+import io.papermc.paper.chunk.system.entity.EntityLookup;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.LevelCallback;
 import net.momirealms.craftengine.bukkit.api.CraftEngineFurniture;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
+import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import org.jetbrains.annotations.NotNull;
 
-public class InjectedPaperEntityCallbacks implements LevelCallback<Entity> {
+public class InjectedPaperLevelCallback implements LevelCallback<Entity>, InjectedWorldCallback {
     private final LevelCallback<Entity> callback;
-    private final ServerEntityLookup entityLookup;
+    private final EntityLookup entityLookup;
 
-    public InjectedPaperEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
+    public InjectedPaperLevelCallback(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
-        this.entityLookup = (ServerEntityLookup) entityLookup;
+        this.entityLookup = entityLookup;
         for (Entity entity : entityLookup.getAll()) {
             if (entity instanceof CollisionEntity) {
                 callback.onTickingEnd(entity);
-                entity.moonrise$setTrackedEntity(null);
-                this.entityLookup.trackerEntities.remove(entity);
+                entity.tracker = null;
+                entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
             } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
                 callback.onTickingEnd(entity);
             }
@@ -50,13 +50,10 @@ public class InjectedPaperEntityCallbacks implements LevelCallback<Entity> {
 
     @Override
     public void onTrackingStart(@NotNull Entity entity) {
-        boolean isCollisionEntity = entity instanceof CollisionEntity;
-        if (isCollisionEntity) {
-            this.entityLookup.trackerEntities.remove(entity);
-            this.callback.onTrackingStart(entity);
-            entity.moonrise$setTrackedEntity(null);
-        } else  {
-            this.callback.onTrackingStart(entity);
+        this.callback.onTrackingStart(entity);
+        if (entity instanceof CollisionEntity) {
+            entity.tracker = null;
+            this.entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
         }
     }
 

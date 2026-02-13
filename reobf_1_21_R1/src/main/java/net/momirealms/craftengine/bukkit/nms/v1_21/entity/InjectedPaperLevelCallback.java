@@ -1,4 +1,4 @@
-package net.momirealms.craftengine.bukkit.nms.v1_21_6.entity;
+package net.momirealms.craftengine.bukkit.nms.v1_21.entity;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.server.ServerEntityLookup;
@@ -7,13 +7,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.LevelCallback;
 import net.momirealms.craftengine.bukkit.api.CraftEngineFurniture;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
+import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import org.jetbrains.annotations.NotNull;
 
-public class InjectedPaperEntityCallbacks implements LevelCallback<Entity> {
+public class InjectedPaperLevelCallback implements LevelCallback<Entity>, InjectedWorldCallback {
     private final LevelCallback<Entity> callback;
     private final ServerEntityLookup entityLookup;
 
-    public InjectedPaperEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
+    public InjectedPaperLevelCallback(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
         this.entityLookup = (ServerEntityLookup) entityLookup;
         for (Entity entity : entityLookup.getAll()) {

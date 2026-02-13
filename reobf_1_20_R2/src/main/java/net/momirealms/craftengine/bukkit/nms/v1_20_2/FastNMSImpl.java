@@ -8,7 +8,6 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.server.level.ChunkMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -32,7 +31,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_2.collision.CollisionInteract
 import net.momirealms.craftengine.bukkit.nms.v1_20_2.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20_2.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_20_2.entity.InjectedFallingBlockEntity;
-import net.momirealms.craftengine.bukkit.nms.v1_20_2.entity.InjectedPaperEntityCallbacks;
+import net.momirealms.craftengine.bukkit.nms.v1_20_2.entity.InjectedPaperLevelCallback;
 import net.momirealms.craftengine.bukkit.nms.v1_20_2.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20_2.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_2.recipe.*;
@@ -44,7 +43,9 @@ import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
+import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
+import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSectionProxy;
 import net.momirealms.sparrow.reflection.SReflection;
 import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
@@ -57,7 +58,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
-public class FastNMSImpl extends FastNMS {
+public final class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createBiomePlacementFilter(Predicate<Key> filter) {
@@ -65,9 +66,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
-        if (worldCallback instanceof InjectedPaperEntityCallbacks) return worldCallback;
-        return new InjectedPaperEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
+    public InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup) {
+        return new InjectedPaperLevelCallback((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
     }
 
     @Override
@@ -120,7 +120,13 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public InjectedStorage.Section createInjectedLevelChunkSection(Object levelChunkSection) {
         LevelChunkSection section = (LevelChunkSection) levelChunkSection;
-        return new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
+        InjectedLevelChunkSection newSection = new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
+        LevelChunkSectionProxy.INSTANCE.setNonEmptyBlockCount(newSection, LevelChunkSectionProxy.INSTANCE.getNonEmptyBlockCount(section));
+        LevelChunkSectionProxy.INSTANCE.setTickingBlockCount(newSection, LevelChunkSectionProxy.INSTANCE.getTickingBlockCount(section));
+        LevelChunkSectionProxy.INSTANCE.setTickingFluidCount(newSection, LevelChunkSectionProxy.INSTANCE.getTickingFluidCount(section));
+        LevelChunkSectionProxy.INSTANCE.setSpecialCollidingBlocks$legacy(newSection, LevelChunkSectionProxy.INSTANCE.getSpecialCollidingBlocks$legacy(section));
+        LevelChunkSectionProxy.INSTANCE.setTickingBlocks(newSection, LevelChunkSectionProxy.INSTANCE.getTickingBlocks(section));
+        return newSection;
     }
 
     @Override

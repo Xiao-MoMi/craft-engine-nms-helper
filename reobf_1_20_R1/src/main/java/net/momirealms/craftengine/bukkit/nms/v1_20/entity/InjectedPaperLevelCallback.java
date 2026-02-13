@@ -6,13 +6,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.LevelCallback;
 import net.momirealms.craftengine.bukkit.api.CraftEngineFurniture;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
+import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import org.jetbrains.annotations.NotNull;
 
-public class InjectedPaperEntityCallbacks implements LevelCallback<Entity> {
+public class InjectedPaperLevelCallback implements LevelCallback<Entity>, InjectedWorldCallback {
     private final LevelCallback<Entity> callback;
     private final EntityLookup entityLookup;
 
-    public InjectedPaperEntityCallbacks(LevelCallback<Entity> callback, EntityLookup entityLookup) {
+    public InjectedPaperLevelCallback(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
         this.entityLookup = entityLookup;
         for (Entity entity : entityLookup.getAll()) {

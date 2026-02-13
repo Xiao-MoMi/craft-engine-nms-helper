@@ -17,9 +17,18 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
     private CEChunk chunk;
     private SectionPos sectionPos;
     private boolean isActive;
+    private final boolean canRecalcBlockCounts;
 
     public InjectedLevelChunkSection(PalettedContainer<BlockState> states, PalettedContainer<Holder<Biome>> biomes) {
         super(states, biomes);
+        this.canRecalcBlockCounts = true;
+    }
+
+    @Override
+    public void recalcBlockCounts() {
+        if (this.canRecalcBlockCounts) {
+            super.recalcBlockCounts();
+        }
     }
 
     @Override

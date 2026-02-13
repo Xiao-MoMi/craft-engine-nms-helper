@@ -16,7 +16,6 @@ import net.minecraft.network.protocol.handshake.HandshakeProtocols;
 import net.minecraft.network.protocol.login.LoginProtocols;
 import net.minecraft.network.protocol.status.StatusProtocols;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ChunkMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -27,7 +26,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.minecraft.world.level.chunk.status.WorldGenContext;
 import net.minecraft.world.level.entity.LevelCallback;
 import net.minecraft.world.phys.AABB;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
@@ -41,7 +39,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_2.collision.CollisionInteract
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.entity.InjectedFallingBlockEntity;
-import net.momirealms.craftengine.bukkit.nms.v1_21_2.entity.InjectedPaperEntityCallbacks;
+import net.momirealms.craftengine.bukkit.nms.v1_21_2.entity.InjectedPaperLevelCallback;
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_2.recipe.*;
@@ -54,8 +52,9 @@ import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
+import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
-import net.momirealms.craftengine.proxy.minecraft.server.level.ChunkMapProxy;
+import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSectionProxy;
 import net.momirealms.sparrow.reflection.SReflection;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
@@ -71,7 +70,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
-public class FastNMSImpl extends FastNMS {
+public final class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createBiomePlacementFilter(Predicate<Key> filter) {
@@ -79,9 +78,8 @@ public class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object createInjectedEntityCallbacks(Object worldCallback, Object entityLookup) {
-        if (worldCallback instanceof InjectedPaperEntityCallbacks) return worldCallback;
-        return new InjectedPaperEntityCallbacks((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
+    public InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup) {
+        return new InjectedPaperLevelCallback((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
     }
 
     @Override
@@ -134,7 +132,13 @@ public class FastNMSImpl extends FastNMS {
     @Override
     public InjectedStorage.Section createInjectedLevelChunkSection(Object levelChunkSection) {
         LevelChunkSection section = (LevelChunkSection) levelChunkSection;
-        return new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
+        InjectedLevelChunkSection newSection = new InjectedLevelChunkSection(section.getStates(), (PalettedContainer<Holder<Biome>>) section.getBiomes());
+        LevelChunkSectionProxy.INSTANCE.setNonEmptyBlockCount(newSection, LevelChunkSectionProxy.INSTANCE.getNonEmptyBlockCount(section));
+        LevelChunkSectionProxy.INSTANCE.setTickingBlockCount(newSection, LevelChunkSectionProxy.INSTANCE.getTickingBlockCount(section));
+        LevelChunkSectionProxy.INSTANCE.setTickingFluidCount(newSection, LevelChunkSectionProxy.INSTANCE.getTickingFluidCount(section));
+        LevelChunkSectionProxy.INSTANCE.setSpecialCollidingBlocks(newSection, LevelChunkSectionProxy.INSTANCE.getSpecialCollidingBlocks(section));
+        LevelChunkSectionProxy.INSTANCE.setTickingBlocks(newSection, LevelChunkSectionProxy.INSTANCE.getTickingBlocks(section));
+        return newSection;
     }
 
     @Override
