@@ -79,6 +79,10 @@ public class InjectedLevelChunkSection extends LevelChunkSection implements Inje
     @Override
     @NotNull
     public BlockState setBlockState(int x, int y, int z, @NotNull BlockState state, boolean useLocks) {
-        return (BlockState) WorldStorageInjector.setBlockState(this, x, y, z, state, useLocks);
+        BlockState blockState = super.setBlockState(x, y, z, state, useLocks);
+        if (this.isActive) {
+            WorldStorageInjector.compareAndUpdateBlockState(x, y, z, state, blockState, this);
+        }
+        return blockState;
     }
 }

@@ -107,16 +107,22 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         delegated.getAll(action);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NotNull T getAndSet(int x, int y, int z, @NotNull T value) {
-        return (T) WorldStorageInjector.getAndSet(this, x, y, z, value);
+        T old = this.delegated.getAndSet(x, y, z, value);
+        if (this.isActive) {
+            WorldStorageInjector.compareAndUpdateBlockState(x, y, z, value, old, this);
+        }
+        return old;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NotNull T getAndSetUnchecked(int x, int y, int z, @NotNull T value) {
-        return (T) WorldStorageInjector.getAndSetUnchecked(this, x, y, z, value);
+        T old = this.delegated.getAndSetUnchecked(x, y, z, value);
+        if (this.isActive) {
+            WorldStorageInjector.compareAndUpdateBlockState(x, y, z, value, old, this);
+        }
+        return old;
     }
 
     @Override
