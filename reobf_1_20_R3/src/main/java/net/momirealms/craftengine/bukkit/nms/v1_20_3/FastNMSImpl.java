@@ -50,7 +50,6 @@ import net.momirealms.sparrow.reflection.SReflection;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -245,4 +244,8 @@ public final class FastNMSImpl extends FastNMS {
         return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
     }
 
+    @Override
+    public Object createUntrustedItemCodec() {
+        return null;
+    }
 }

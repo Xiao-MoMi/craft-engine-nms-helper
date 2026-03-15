@@ -12,7 +12,6 @@ import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
@@ -115,4 +114,5 @@ public abstract class FastNMS {
 
     public abstract Object createAlwaysStatePredicate(boolean trueOrFalse);
 
+    public abstract Object createUntrustedItemCodec();
 }

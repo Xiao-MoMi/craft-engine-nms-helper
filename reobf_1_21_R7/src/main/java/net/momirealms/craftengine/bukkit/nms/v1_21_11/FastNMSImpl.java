@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.HashedStack;
 import net.minecraft.network.ProtocolInfo;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.protocol.configuration.ConfigurationProtocols;
 import net.minecraft.network.protocol.game.GameProtocols;
 import net.minecraft.network.protocol.handshake.HandshakeProtocols;
@@ -14,6 +15,7 @@ import net.minecraft.network.protocol.status.StatusProtocols;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -262,5 +264,10 @@ public final class FastNMSImpl extends FastNMS {
             }
         }
         return allPacketIdsByName;
+    }
+
+    @Override
+    public Object createUntrustedItemCodec() {
+        return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
     }
 }

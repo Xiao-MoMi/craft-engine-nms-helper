@@ -20,6 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -62,7 +63,6 @@ import net.momirealms.sparrow.reflection.SReflection;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -299,4 +299,8 @@ public final class FastNMSImpl extends FastNMS {
         return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
     }
 
+    @Override
+    public Object createUntrustedItemCodec() {
+        return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_STREAM_CODEC);
+    }
 }

@@ -12,7 +12,6 @@ import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CustomCampfireRecipe;
 import net.momirealms.craftengine.core.item.recipe.UniqueIdItem;
 import net.momirealms.craftengine.core.item.recipe.input.SingleItemInput;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class InjectedCampfireCookingRecipe extends CampfireCookingRecipe {

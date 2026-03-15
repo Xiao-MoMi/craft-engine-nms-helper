@@ -9,8 +9,6 @@ import net.momirealms.craftengine.core.item.Item;
 import net.momirealms.craftengine.core.item.recipe.CustomSmithingTrimRecipe;
 import net.momirealms.craftengine.core.item.recipe.UniqueIdItem;
 import net.momirealms.craftengine.core.item.recipe.input.SmithingInput;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
