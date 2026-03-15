@@ -7,9 +7,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
 import net.momirealms.craftengine.bukkit.block.entity.BlockEntityHolder;
 import net.momirealms.craftengine.bukkit.nms.StorageContainer;
-import net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine;
 import net.momirealms.craftengine.bukkit.plugin.user.BukkitServerPlayer;
 import net.momirealms.craftengine.core.block.entity.BlockEntity;
 import org.bukkit.Location;
@@ -165,7 +165,7 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     @Override
     public boolean stillValid(@NotNull Player player) {
         if (this.blockEntity == null) return true;
-        BukkitServerPlayer serverPlayer = BukkitCraftEngine.instance().adapt(((ServerPlayer) player).getBukkitEntity());
+        BukkitServerPlayer serverPlayer = BukkitAdaptor.adapt(((ServerPlayer) player).getBukkitEntity());
         if (serverPlayer == null) return false;
         return serverPlayer.canInteractWithBlock(this.blockEntity.pos(), 4);
     }

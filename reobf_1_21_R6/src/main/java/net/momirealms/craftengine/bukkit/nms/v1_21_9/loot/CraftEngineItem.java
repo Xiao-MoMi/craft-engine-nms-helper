@@ -11,7 +11,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.momirealms.craftengine.bukkit.api.BukkitAdaptors;
+import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
 import net.momirealms.craftengine.bukkit.item.BukkitItemManager;
 import net.momirealms.craftengine.bukkit.plugin.user.BukkitServerPlayer;
 import net.momirealms.craftengine.bukkit.util.KeyUtils;
@@ -44,7 +44,7 @@ public class CraftEngineItem extends LootPoolSingletonContainer {
         }
         BukkitServerPlayer serverPlayer = null;
         if (lootContext.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof Player player) {
-            serverPlayer = BukkitAdaptors.adapt((org.bukkit.entity.Player) player.getBukkitEntity());
+            serverPlayer = BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity());
         }
         consumer.accept((ItemStack) optionalCustomItem.get().buildItem(serverPlayer).getLiteralObject());
     }

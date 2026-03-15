@@ -26,7 +26,7 @@ public class BiomeFilter extends PlacementFilter {
                                   @NotNull BlockPos pos) {
         Holder<Biome> biome = context.getLevel().getBiome(pos);
         Identifier identifier = ((Holder.Reference<Biome>) biome).key().identifier();
-        Key biomeId = new Key(identifier.getNamespace(), identifier.getPath());
+        Key biomeId = Key.of(identifier.getNamespace(), identifier.getPath());
         return this.filter.test(biomeId);
     }
 

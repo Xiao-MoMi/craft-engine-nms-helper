@@ -181,7 +181,7 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
             Set<Integer> featureSet = new HashSet<>();
             for (Holder<Biome> biome : biomeSet) {
                 Identifier identifier = ((Holder.Reference<Biome>) biome).key().identifier();
-                List<Integer> byBiome = ceFeatures.getFeatureIdsByBiome(new Key(identifier.getNamespace(), identifier.getPath()));
+                List<Integer> byBiome = ceFeatures.getFeatureIdsByBiome(Key.of(identifier.getNamespace(), identifier.getPath()));
                 featureSet.addAll(byBiome);
             }
             if (!featureSet.isEmpty()) {
