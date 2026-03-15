@@ -23,14 +23,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
-    private final CustomSmithingTrimRecipe<ItemStack> recipe;
+    private final CustomSmithingTrimRecipe recipe;
 
-    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe, Ingredient template, Ingredient base, Ingredient addition, Holder<TrimPattern> pattern, boolean copyDataComponents) {
+    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, Holder<TrimPattern> pattern, boolean copyDataComponents) {
         super(template, base, addition, pattern, copyDataComponents);
         this.recipe = recipe;
     }
 
-    public static InjectedSmithingTrimRecipe of(CustomSmithingTrimRecipe<ItemStack> recipe) {
+    public static InjectedSmithingTrimRecipe of(CustomSmithingTrimRecipe recipe) {
         Registry<TrimPattern> registry = MinecraftServer.getServer().registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
         Key pattern = Objects.requireNonNull(recipe.pattern(), "pattern should not be null");
         return new InjectedSmithingTrimRecipe(recipe,
@@ -47,10 +47,10 @@ public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
     public boolean matches(@NotNull SmithingRecipeInput input, @NotNull Level level) {
         boolean vanillaMatches = super.matches(input, level);
         if (!vanillaMatches) return false;
-        Item<ItemStack> template = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(input.template()));
-        Item<ItemStack> base = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(input.base()));
-        Item<ItemStack> addition = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(input.addition()));
-        SmithingInput<ItemStack> smithingInput = new SmithingInput<>(UniqueIdItem.of(base), UniqueIdItem.of(template), UniqueIdItem.of(addition));
+        Item template = BukkitItemManager.instance().wrap(input.template());
+        Item base = BukkitItemManager.instance().wrap(input.base());
+        Item addition = BukkitItemManager.instance().wrap(input.addition());
+        SmithingInput smithingInput = new SmithingInput(UniqueIdItem.of(base), UniqueIdItem.of(template), UniqueIdItem.of(addition));
         return this.recipe.matches(smithingInput);
     }
 

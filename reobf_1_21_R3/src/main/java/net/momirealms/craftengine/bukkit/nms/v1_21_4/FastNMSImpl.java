@@ -91,7 +91,7 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object toMinecraftIngredient(net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack> ingredient) {
+    public Object toMinecraftIngredient(net.momirealms.craftengine.core.item.recipe.Ingredient ingredient) {
         return RecipeHelper.toMinecraft(ingredient);
     }
 
@@ -168,47 +168,47 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object createShapedRecipe(CustomShapedRecipe<ItemStack> recipe) {
+    public Object createShapedRecipe(CustomShapedRecipe recipe) {
         return InjectedShapedRecipe.of(recipe);
     }
 
     @Override
-    public Object createShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe) {
+    public Object createShapelessRecipe(CustomShapelessRecipe recipe) {
         return InjectedShapelessRecipe.of(recipe);
     }
 
     @Override
-    public Object createSmokingRecipe(CustomSmokingRecipe<ItemStack> recipe) {
+    public Object createSmokingRecipe(CustomSmokingRecipe recipe) {
         return InjectedSmokingRecipe.of(recipe);
     }
 
     @Override
-    public Object createSmeltingRecipe(CustomSmeltingRecipe<ItemStack> recipe) {
+    public Object createSmeltingRecipe(CustomSmeltingRecipe recipe) {
         return InjectedSmeltingRecipe.of(recipe);
     }
 
     @Override
-    public Object createBlastingRecipe(CustomBlastingRecipe<ItemStack> recipe) {
+    public Object createBlastingRecipe(CustomBlastingRecipe recipe) {
         return InjectedBlastingRecipe.of(recipe);
     }
 
     @Override
-    public Object createCampfireRecipe(CustomCampfireRecipe<ItemStack> recipe) {
+    public Object createCampfireRecipe(CustomCampfireRecipe recipe) {
         return InjectedCampfireCookingRecipe.of(recipe);
     }
 
     @Override
-    public Object createStonecuttingRecipe(CustomStoneCuttingRecipe<ItemStack> recipe) {
+    public Object createStonecuttingRecipe(CustomStoneCuttingRecipe recipe) {
         return InjectedStonecuttingRecipe.of(recipe);
     }
 
     @Override
-    public Object createSmithingTransformRecipe(CustomSmithingTransformRecipe<ItemStack> recipe) {
+    public Object createSmithingTransformRecipe(CustomSmithingTransformRecipe recipe) {
         return InjectedSmithingTransformRecipe.of(recipe);
     }
 
     @Override
-    public Object createSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe) {
+    public Object createSmithingTrimRecipe(CustomSmithingTrimRecipe recipe) {
         return InjectedSmithingTrimRecipe.of(recipe);
     }
 

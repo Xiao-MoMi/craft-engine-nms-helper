@@ -16,10 +16,10 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class InjectedCampfireCookingRecipe extends CampfireCookingRecipe {
-    private final CustomCampfireRecipe<org.bukkit.inventory.ItemStack> recipe;
+    private final CustomCampfireRecipe recipe;
     private final Ingredient roughInput;
 
-    public InjectedCampfireCookingRecipe(CustomCampfireRecipe<org.bukkit.inventory.ItemStack> recipe,
+    public InjectedCampfireCookingRecipe(CustomCampfireRecipe recipe,
                                          String group,
                                          CookingBookCategory category,
                                          Ingredient visualingredient,
@@ -32,13 +32,13 @@ public class InjectedCampfireCookingRecipe extends CampfireCookingRecipe {
         this.roughInput = roughIngredient;
     }
 
-    public static InjectedCampfireCookingRecipe of(CustomCampfireRecipe<org.bukkit.inventory.ItemStack> recipe) {
+    public static InjectedCampfireCookingRecipe of(CustomCampfireRecipe recipe) {
         return new InjectedCampfireCookingRecipe(recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.category()),
                 RecipeHelper.toMinecraftVisual(recipe.ingredient()),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
-                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).getLiteralObject(),
+                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).getMinecraftItem(),
                 recipe.experience(),
                 recipe.cookingTime()
         );
@@ -52,8 +52,8 @@ public class InjectedCampfireCookingRecipe extends CampfireCookingRecipe {
     public boolean matches(@NotNull SingleRecipeInput input, @NotNull Level level) {
         boolean vanillaMatches = this.vanillaMatches(input, level);
         if (!vanillaMatches) return false;
-        Item<org.bukkit.inventory.ItemStack> wrapped = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(input.item()));
-        SingleItemInput<org.bukkit.inventory.ItemStack> singleItemInput = new SingleItemInput<>(UniqueIdItem.of(wrapped));
+        Item wrapped = BukkitItemManager.instance().wrap(input.item());
+        SingleItemInput singleItemInput = new SingleItemInput(UniqueIdItem.of(wrapped));
         return this.recipe.matches(singleItemInput);
     }
 

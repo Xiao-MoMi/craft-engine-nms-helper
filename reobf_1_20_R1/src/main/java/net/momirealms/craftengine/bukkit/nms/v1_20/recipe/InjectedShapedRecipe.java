@@ -13,10 +13,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class InjectedShapedRecipe extends ShapedRecipe {
-    private final CustomShapedRecipe<ItemStack> recipe;
+    private final CustomShapedRecipe recipe;
     private final NonNullList<Ingredient> roughIngredients;
 
-    public InjectedShapedRecipe(CustomShapedRecipe<ItemStack> recipe,
+    public InjectedShapedRecipe(CustomShapedRecipe recipe,
                                 String group,
                                 CraftingBookCategory category,
                                 int width,
@@ -30,7 +30,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
         this.roughIngredients = roughIngredients;
     }
 
-    public static InjectedShapedRecipe of(CustomShapedRecipe<ItemStack> recipe) {
+    public static InjectedShapedRecipe of(CustomShapedRecipe recipe) {
         String[] shape = recipe.pattern().pattern();
         int width = shape[0].length();
         NonNullList<Ingredient> visualData = NonNullList.withSize(shape.length * width, Ingredient.EMPTY);
@@ -55,7 +55,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
                 shape.length,
                 visualData,
                 roughData,
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getLiteralObject(),
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getMinecraftItem(),
                 recipe.showNotification()
         );
     }

@@ -27,7 +27,7 @@ import java.util.Optional;
 
 public final class RecipeHelper {
 
-    public static Ingredient toMinecraft(net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack> ingredient) {
+    public static Ingredient toMinecraft(net.momirealms.craftengine.core.item.recipe.Ingredient ingredient) {
         if (ingredient == null) {
             return Ingredient.EMPTY;
         }
@@ -40,7 +40,7 @@ public final class RecipeHelper {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static Ingredient toMinecraftVisual(net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack> ingredient) {
+    public static Ingredient toMinecraftVisual(net.momirealms.craftengine.core.item.recipe.Ingredient ingredient) {
         if (ingredient == null) {
             return Ingredient.EMPTY;
         }
@@ -56,9 +56,9 @@ public final class RecipeHelper {
     }
 
 
-    public static net.momirealms.craftengine.core.item.recipe.input.CraftingInput<ItemStack> toCraftEngine(CraftingContainer input) {
+    public static net.momirealms.craftengine.core.item.recipe.input.CraftingInput toCraftEngine(CraftingContainer input) {
         return net.momirealms.craftengine.core.item.recipe.input.CraftingInput
-                .of(input.getWidth(), input.getHeight(), input.getItems().stream().map(it -> UniqueIdItem.of(BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(it)))).toList());
+                .of(input.getWidth(), input.getHeight(), input.getItems().stream().map(it -> UniqueIdItem.of(BukkitItemManager.instance().wrap(it))).toList());
     }
 
     public static CraftingBookCategory toMinecraft(CraftingRecipeCategory category) {
@@ -75,15 +75,15 @@ public final class RecipeHelper {
         if (stack.isEmpty()) {
             return net.minecraft.world.item.ItemStack.EMPTY;
         }
-        net.momirealms.craftengine.core.item.Item<ItemStack> item = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(stack));
-        Optional<CustomItem<ItemStack>> optionalCustomItem = item.getCustomItem();
+        net.momirealms.craftengine.core.item.Item item = BukkitItemManager.instance().wrap(stack);
+        Optional<CustomItem> optionalCustomItem = item.getCustomItem();
         if (optionalCustomItem.isPresent()) {
-            CustomItem<ItemStack> customItem = optionalCustomItem.get();
+            CustomItem customItem = optionalCustomItem.get();
             if (!customItem.isVanillaItem()) {
                 CraftRemainder remainder = customItem.settings().craftRemainder();
                 if (remainder != null) {
-                    net.momirealms.craftengine.core.item.Item<ItemStack> remainingItem = remainder.remainder(recipeId, item);
-                    return remainingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : (net.minecraft.world.item.ItemStack) remainingItem.getLiteralObject();
+                    net.momirealms.craftengine.core.item.Item remainingItem = remainder.remainder(recipeId, item);
+                    return remainingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : (net.minecraft.world.item.ItemStack) remainingItem.getMinecraftItem();
                 }
                 return net.minecraft.world.item.ItemStack.EMPTY;
             }

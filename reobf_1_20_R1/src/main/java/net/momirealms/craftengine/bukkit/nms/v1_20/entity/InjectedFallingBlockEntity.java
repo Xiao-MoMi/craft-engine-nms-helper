@@ -89,7 +89,7 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
         ContextHolder.Builder builder = ContextHolder.builder()
                 .withParameter(DirectContextParameters.FALLING_BLOCK, true)
                 .withParameter(DirectContextParameters.POSITION, position);
-        for (Item<Object> ceitem : customState.getDrops(builder, world, null)) {
+        for (Item ceitem : customState.getDrops(builder, world, null)) {
             world.dropItemNaturally(position, ceitem);
         }
         return null;

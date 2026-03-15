@@ -38,7 +38,7 @@ public class CraftEngineItem extends LootPoolSingletonContainer {
 
     @Override
     public void createItemStack(@NotNull Consumer<ItemStack> consumer, @NotNull LootContext context) {
-        Optional<CustomItem<org.bukkit.inventory.ItemStack>> optionalCustomItem = BukkitItemManager.instance().getCustomItem(KeyUtils.identifierToKey(this.item));
+        Optional<CustomItem> optionalCustomItem = BukkitItemManager.instance().getCustomItem(KeyUtils.identifierToKey(this.item));
         if (optionalCustomItem.isEmpty()) {
             return;
         }
@@ -46,7 +46,7 @@ public class CraftEngineItem extends LootPoolSingletonContainer {
         if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Player player) {
             serverPlayer = BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity());
         }
-        consumer.accept((ItemStack) optionalCustomItem.get().buildItem(serverPlayer).getLiteralObject());
+        consumer.accept((ItemStack) optionalCustomItem.get().buildItem(serverPlayer).getMinecraftItem());
     }
 
     public static class Serializer extends LootPoolSingletonContainer.Serializer<CraftEngineItem> {

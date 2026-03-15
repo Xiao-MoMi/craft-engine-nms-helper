@@ -15,15 +15,15 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
-    private final CustomSmithingTransformRecipe<ItemStack> recipe;
+    private final CustomSmithingTransformRecipe recipe;
 
-    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe<ItemStack> recipe, Ingredient template, Ingredient base, Ingredient addition, net.minecraft.world.item.ItemStack result, boolean copyDataComponents) {
+    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, net.minecraft.world.item.ItemStack result, boolean copyDataComponents) {
         super(template, base, addition, result, copyDataComponents);
         this.recipe = recipe;
     }
 
-    public static InjectedSmithingTransformRecipe of(CustomSmithingTransformRecipe<ItemStack> recipe) {
-        net.minecraft.world.item.ItemStack result = (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getLiteralObject();
+    public static InjectedSmithingTransformRecipe of(CustomSmithingTransformRecipe recipe) {
+        net.minecraft.world.item.ItemStack result = (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getMinecraftItem();
         return new InjectedSmithingTransformRecipe(recipe,
                 RecipeHelper.toMinecraft(recipe.template()),
                 RecipeHelper.toMinecraft(recipe.base()),
@@ -37,10 +37,10 @@ public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
     public boolean matches(@NotNull Container inventory, @NotNull Level world) {
         boolean vanillaMatches = super.matches(inventory, world);
         if (!vanillaMatches) return false;
-        Item<ItemStack> template = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(inventory.getItem(0)));
-        Item<ItemStack> base = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(inventory.getItem(1)));
-        Item<ItemStack> addition = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(inventory.getItem(2)));
-        SmithingInput<ItemStack> smithingInput = new SmithingInput<>(UniqueIdItem.of(base), UniqueIdItem.of(template), UniqueIdItem.of(addition));
+        Item template = BukkitItemManager.instance().wrap(inventory.getItem(0));
+        Item base = BukkitItemManager.instance().wrap(inventory.getItem(1));
+        Item addition = BukkitItemManager.instance().wrap(inventory.getItem(2));
+        SmithingInput smithingInput = new SmithingInput(UniqueIdItem.of(base), UniqueIdItem.of(template), UniqueIdItem.of(addition));
         return this.recipe.matches(smithingInput);
     }
 

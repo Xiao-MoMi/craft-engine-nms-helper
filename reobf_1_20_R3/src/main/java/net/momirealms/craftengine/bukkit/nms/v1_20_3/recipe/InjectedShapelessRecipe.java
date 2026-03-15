@@ -14,10 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class InjectedShapelessRecipe extends ShapelessRecipe {
-    private final CustomShapelessRecipe<ItemStack> recipe;
+    private final CustomShapelessRecipe recipe;
     private final ShapelessRecipe companionRecipe;
 
-    public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
+    public InjectedShapelessRecipe(CustomShapelessRecipe recipe,
                                    String group,
                                    CraftingBookCategory category,
                                    net.minecraft.world.item.ItemStack result,
@@ -28,13 +28,13 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         this.companionRecipe = new ShapelessRecipe(group, category, result, roughIngredients);
     }
 
-    public static InjectedShapelessRecipe of(CustomShapelessRecipe<ItemStack> recipe) {
-        List<net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack>> visualIngredients = recipe.ingredientsInUse();
+    public static InjectedShapelessRecipe of(CustomShapelessRecipe recipe) {
+        List<net.momirealms.craftengine.core.item.recipe.Ingredient> visualIngredients = recipe.ingredientsInUse();
         NonNullList<Ingredient> visualData = NonNullList.withSize(visualIngredients.size(), Ingredient.EMPTY);
         for (int i = 0; i < visualIngredients.size(); i++) {
             visualData.set(i, RecipeHelper.toMinecraftVisual(visualIngredients.get(i)));
         }
-        List<net.momirealms.craftengine.core.item.recipe.Ingredient<ItemStack>> roughIngredients = recipe.ingredientsInUse();
+        List<net.momirealms.craftengine.core.item.recipe.Ingredient> roughIngredients = recipe.ingredientsInUse();
         NonNullList<Ingredient> roughData = NonNullList.withSize(roughIngredients.size(), Ingredient.EMPTY);
         for (int i = 0; i < roughIngredients.size(); i++) {
             roughData.set(i, RecipeHelper.toMinecraft(roughIngredients.get(i)));
@@ -43,7 +43,7 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
                 recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.category()),
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getLiteralObject(),
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getMinecraftItem(),
                 visualData,
                 roughData
         );

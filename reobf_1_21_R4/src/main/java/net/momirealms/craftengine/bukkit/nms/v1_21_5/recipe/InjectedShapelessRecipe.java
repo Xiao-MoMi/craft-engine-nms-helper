@@ -14,10 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class InjectedShapelessRecipe extends ShapelessRecipe {
-    private final CustomShapelessRecipe<ItemStack> recipe;
+    private final CustomShapelessRecipe recipe;
     private final ShapelessRecipe companionRecipe;
 
-    public InjectedShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe,
+    public InjectedShapelessRecipe(CustomShapelessRecipe recipe,
                                    String group,
                                    CraftingBookCategory category,
                                    net.minecraft.world.item.ItemStack result,
@@ -28,14 +28,14 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         this.companionRecipe = new ShapelessRecipe(group, category, result, roughIngredients);
     }
 
-    public static InjectedShapelessRecipe of(CustomShapelessRecipe<ItemStack> recipe) {
+    public static InjectedShapelessRecipe of(CustomShapelessRecipe recipe) {
         List<Ingredient> visualIngredients = recipe.ingredientsInUse().stream().map(RecipeHelper::toMinecraftVisual).toList();
         List<Ingredient> roughIngredients = recipe.ingredientsInUse().stream().map(RecipeHelper::toMinecraft).toList();
         return new InjectedShapelessRecipe(
                 recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.category()),
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getLiteralObject(),
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getMinecraftItem(),
                 visualIngredients,
                 roughIngredients
         );

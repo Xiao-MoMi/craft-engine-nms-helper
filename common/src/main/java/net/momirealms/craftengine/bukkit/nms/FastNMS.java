@@ -59,7 +59,7 @@ public abstract class FastNMS {
 
     public abstract StatePropertyAccessor createStatePropertyAccessor(Object blockState);
 
-    public abstract Object toMinecraftIngredient(Ingredient<ItemStack> ingredient);
+    public abstract Object toMinecraftIngredient(Ingredient ingredient);
 
     public abstract Object getCraftEngineLootItemType();
 
@@ -85,23 +85,23 @@ public abstract class FastNMS {
     public abstract CollisionEntity createCollisionInteraction(Object world, Object aabb,
                                                                double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding);
 
-    public abstract Object createShapedRecipe(CustomShapedRecipe<ItemStack> recipe);
+    public abstract Object createShapedRecipe(CustomShapedRecipe recipe);
 
-    public abstract Object createShapelessRecipe(CustomShapelessRecipe<ItemStack> recipe);
+    public abstract Object createShapelessRecipe(CustomShapelessRecipe recipe);
 
-    public abstract Object createSmokingRecipe(CustomSmokingRecipe<ItemStack> recipe);
+    public abstract Object createSmokingRecipe(CustomSmokingRecipe recipe);
 
-    public abstract Object createSmeltingRecipe(CustomSmeltingRecipe<ItemStack> recipe);
+    public abstract Object createSmeltingRecipe(CustomSmeltingRecipe recipe);
 
-    public abstract Object createBlastingRecipe(CustomBlastingRecipe<ItemStack> recipe);
+    public abstract Object createBlastingRecipe(CustomBlastingRecipe recipe);
 
-    public abstract Object createCampfireRecipe(CustomCampfireRecipe<ItemStack> recipe);
+    public abstract Object createCampfireRecipe(CustomCampfireRecipe recipe);
 
-    public abstract Object createStonecuttingRecipe(CustomStoneCuttingRecipe<ItemStack> recipe);
+    public abstract Object createStonecuttingRecipe(CustomStoneCuttingRecipe recipe);
 
-    public abstract Object createSmithingTransformRecipe(CustomSmithingTransformRecipe<ItemStack> recipe);
+    public abstract Object createSmithingTransformRecipe(CustomSmithingTransformRecipe recipe);
 
-    public abstract Object createSmithingTrimRecipe(CustomSmithingTrimRecipe<ItemStack> recipe);
+    public abstract Object createSmithingTrimRecipe(CustomSmithingTrimRecipe recipe);
 
     public abstract Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState);
 

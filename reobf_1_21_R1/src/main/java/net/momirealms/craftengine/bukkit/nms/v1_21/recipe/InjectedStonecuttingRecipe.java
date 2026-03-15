@@ -15,18 +15,18 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class InjectedStonecuttingRecipe extends StonecutterRecipe {
-    private final CustomStoneCuttingRecipe<org.bukkit.inventory.ItemStack> recipe;
+    private final CustomStoneCuttingRecipe recipe;
 
-    public InjectedStonecuttingRecipe(CustomStoneCuttingRecipe<org.bukkit.inventory.ItemStack> recipe, String group, Ingredient ingredient, ItemStack result) {
+    public InjectedStonecuttingRecipe(CustomStoneCuttingRecipe recipe, String group, Ingredient ingredient, ItemStack result) {
         super(group, ingredient, result);
         this.recipe = recipe;
     }
 
-    public static InjectedStonecuttingRecipe of(CustomStoneCuttingRecipe<org.bukkit.inventory.ItemStack> recipe) {
+    public static InjectedStonecuttingRecipe of(CustomStoneCuttingRecipe recipe) {
         return new InjectedStonecuttingRecipe(recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
-                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).getLiteralObject()
+                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).getMinecraftItem()
         );
     }
 
@@ -34,8 +34,8 @@ public class InjectedStonecuttingRecipe extends StonecutterRecipe {
     public boolean matches(@NotNull SingleRecipeInput input, @NotNull Level level) {
         boolean vanillaMatches = super.matches(input, level);
         if (!vanillaMatches) return false;
-        Item<org.bukkit.inventory.ItemStack> wrapped = BukkitItemManager.instance().wrap(CraftItemStack.asCraftMirror(input.item()));
-        SingleItemInput<org.bukkit.inventory.ItemStack> singleItemInput = new SingleItemInput<>(UniqueIdItem.of(wrapped));
+        Item wrapped = BukkitItemManager.instance().wrap(input.item());
+        SingleItemInput singleItemInput = new SingleItemInput(UniqueIdItem.of(wrapped));
         return this.recipe.matches(singleItemInput);
     }
 

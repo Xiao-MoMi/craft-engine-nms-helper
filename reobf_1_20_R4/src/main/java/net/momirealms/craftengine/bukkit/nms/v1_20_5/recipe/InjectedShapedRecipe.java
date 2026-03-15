@@ -16,10 +16,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class InjectedShapedRecipe extends ShapedRecipe {
-    private final CustomShapedRecipe<ItemStack> recipe;
+    private final CustomShapedRecipe recipe;
     private final ShapedRecipePattern roughPattern;
 
-    public InjectedShapedRecipe(CustomShapedRecipe<ItemStack> recipe,
+    public InjectedShapedRecipe(CustomShapedRecipe recipe,
                                 String group,
                                 CraftingBookCategory category,
                                 ShapedRecipePattern visualPattern,
@@ -31,7 +31,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
         this.roughPattern = roughPattern;
     }
 
-    public static InjectedShapedRecipe of(CustomShapedRecipe<ItemStack> recipe) {
+    public static InjectedShapedRecipe of(CustomShapedRecipe recipe) {
         Map<Character, Ingredient> visualData = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraftVisual));
         ShapedRecipePattern visualPattern = ShapedRecipePattern.of(visualData, recipe.pattern().pattern());
         Map<Character, Ingredient> roughData = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraft));
@@ -42,7 +42,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
                 RecipeHelper.toMinecraft(recipe.category()),
                 visualPattern,
                 roughPattern,
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getLiteralObject(),
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getMinecraftItem(),
                 recipe.showNotification()
         );
     }
