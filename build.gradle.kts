@@ -21,9 +21,9 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("net.momirealms:craft-engine-core:26.3-20260315.124807-2")
-        compileOnly("net.momirealms:craft-engine-bukkit:26.3-20260315.124807-2")
-        compileOnly("net.momirealms:craft-engine-bukkit-proxy:26.3-20260315.124807-2")
+        compileOnly("net.momirealms:craft-engine-core:26.3-20260317.180407-3")
+        compileOnly("net.momirealms:craft-engine-bukkit:26.3-20260317.180407-3")
+        compileOnly("net.momirealms:craft-engine-bukkit-proxy:26.3-20260317.180407-3")
         compileOnly("com.mojang:brigadier:1.0.18")
         compileOnly("net.momirealms:sparrow-reflection:0.21")
     }

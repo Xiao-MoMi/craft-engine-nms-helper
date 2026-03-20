@@ -10,12 +10,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.entity.LevelCallback;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.phys.AABB;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
@@ -35,6 +37,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_20.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v1_20.worldgen.*;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
+import net.momirealms.craftengine.core.entity.player.Player;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.util.Key;
@@ -72,7 +75,7 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object toMinecraftIngredient(net.momirealms.craftengine.core.item.recipe.Ingredient ingredient) {
+    public Object toMinecraftIngredient(Ingredient ingredient) {
         return RecipeHelper.toMinecraft(ingredient);
     }
 
@@ -197,6 +200,11 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public Object createInjectedFurnaceCachedCheck(Object recipeType, Object blockEntity) {
+        return new InjectedFurnaceCachedCheck<>((RecipeType<?>) recipeType, (BlockEntity) blockEntity);
+    }
+
+    @Override
     public Object createAlwaysStatePredicate(boolean trueOrFalse) {
         return (BlockBehaviour.StatePredicate) (blockState, blockGetter, blockPos) -> trueOrFalse;
     }
@@ -224,7 +232,7 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object createInjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player) {
+    public Object createInjectedHashedStack(Object hashedStack, Player player) {
         throw new UnsupportedVersionException();
     }
 

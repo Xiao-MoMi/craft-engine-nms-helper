@@ -20,8 +20,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -216,6 +218,11 @@ public final class FastNMSImpl extends FastNMS {
             return FallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
         }
         return InjectedFallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
+    }
+
+    @Override
+    public Object createInjectedFurnaceCachedCheck(Object recipeType, Object blockEntity) {
+        return new InjectedFurnaceCachedCheck<>((RecipeType<?>) recipeType, (BlockEntity) blockEntity);
     }
 
     private static final StreamCodec<RegistryFriendlyByteBuf, net.minecraft.world.item.ItemStack> ITEM_UNTRUSTED_CODEC =
