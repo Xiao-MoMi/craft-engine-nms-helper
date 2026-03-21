@@ -61,7 +61,7 @@ public class InjectedFurnaceCachedCheck<I extends RecipeInput, T extends Recipe<
                 isFailure = false;
             }
             // 查到配方, 检查条件
-            if (recipe != null && recipe.hasCondition()) {
+            else if (recipe.hasCondition()) {
                 // 从 PDC 取出需要检查条件的玩家;
                 // todo: NamespacedKey 换成 RecipeEventListener.FURNACE_PLAYER_KEY.
                 long[] uuidLongs = blockEntity.persistentDataContainer.get(new NamespacedKey("craftengine", "furnace-player"), PersistentDataType.LONG_ARRAY);
