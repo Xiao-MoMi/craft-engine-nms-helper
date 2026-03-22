@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
+import net.momirealms.craftengine.bukkit.item.recipe.BukkitRecipeManager;
 import net.momirealms.craftengine.bukkit.nms.Clearable;
 import net.momirealms.craftengine.core.item.Item;
 import net.momirealms.craftengine.core.item.recipe.ConditionalRecipe;
@@ -18,7 +19,6 @@ import net.momirealms.craftengine.core.item.recipe.input.SingleItemInput;
 import net.momirealms.craftengine.core.plugin.CraftEngine;
 import net.momirealms.craftengine.core.plugin.context.PlayerOptionalContext;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -67,8 +67,7 @@ public class InjectedFurnaceCachedCheck<C extends Container, T extends Recipe<C>
             // 查到配方, 检查条件
             else if (recipe.hasCondition()) {
                 // 从 PDC 取出需要检查条件的玩家;
-                // todo: NamespacedKey 换成 RecipeEventListener.FURNACE_PLAYER_KEY.
-                long[] uuidLongs = blockEntity.persistentDataContainer.get(new NamespacedKey("craftengine", "furnace-player"), PersistentDataType.LONG_ARRAY);
+                long[] uuidLongs = blockEntity.persistentDataContainer.get(BukkitRecipeManager.FURNACE_LAST_USER, PersistentDataType.LONG_ARRAY);
                 if (uuidLongs != null) {
                     UUID playerUuid = new UUID(uuidLongs[0], uuidLongs[1]);
                     Player conditionPlayer = Bukkit.getPlayer(playerUuid);
