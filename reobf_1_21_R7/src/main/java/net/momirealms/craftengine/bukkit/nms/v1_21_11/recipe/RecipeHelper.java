@@ -70,13 +70,10 @@ public final class RecipeHelper {
         Optional<CustomItem> optionalCustomItem = item.getCustomItem();
         if (optionalCustomItem.isPresent()) {
             CustomItem customItem = optionalCustomItem.get();
-            if (!customItem.isVanillaItem()) {
-                CraftRemainder remainder = customItem.settings().craftRemainder();
-                if (remainder != null) {
-                    net.momirealms.craftengine.core.item.Item remainingItem = remainder.remainder(recipeId, item);
-                    return remainingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : (net.minecraft.world.item.ItemStack) remainingItem.getMinecraftItem();
-                }
-                return net.minecraft.world.item.ItemStack.EMPTY;
+            CraftRemainder remainder = customItem.settings().craftRemainder();
+            if (remainder != null) {
+                net.momirealms.craftengine.core.item.Item remainingItem = remainder.remainder(recipeId, item);
+                return remainingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : (net.minecraft.world.item.ItemStack) remainingItem.getMinecraftItem();
             }
         }
         return stack.getItem().getCraftingRemainder();
