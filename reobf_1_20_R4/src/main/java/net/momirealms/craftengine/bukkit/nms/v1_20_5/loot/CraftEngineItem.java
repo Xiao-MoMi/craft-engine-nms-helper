@@ -15,7 +15,7 @@ import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
 import net.momirealms.craftengine.bukkit.item.BukkitItemManager;
 import net.momirealms.craftengine.bukkit.plugin.user.BukkitServerPlayer;
 import net.momirealms.craftengine.bukkit.util.KeyUtils;
-import net.momirealms.craftengine.core.item.CustomItem;
+import net.momirealms.craftengine.core.item.ItemDefinition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -38,15 +38,15 @@ public class CraftEngineItem extends LootPoolSingletonContainer {
 
     @Override
     protected void createItemStack(@NotNull Consumer<ItemStack> consumer, @NotNull LootContext lootContext) {
-        Optional<CustomItem> optionalCustomItem = BukkitItemManager.instance().getCustomItem(KeyUtils.identifierToKey(this.name));
-        if (optionalCustomItem.isEmpty()) {
+        Optional<ItemDefinition> optionalItemDefinition = BukkitItemManager.instance().getCustomItem(KeyUtils.identifierToKey(this.name));
+        if (optionalItemDefinition.isEmpty()) {
             return;
         }
         BukkitServerPlayer serverPlayer = null;
         if (lootContext.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Player player) {
             serverPlayer = BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity());
         }
-        consumer.accept((ItemStack) optionalCustomItem.get().buildItem(serverPlayer).getMinecraftItem());
+        consumer.accept((ItemStack) optionalItemDefinition.get().buildItem(serverPlayer).getMinecraftItem());
     }
 
     @Override
