@@ -8,12 +8,11 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
-import net.momirealms.craftengine.bukkit.block.entity.BlockEntityHolder;
 import net.momirealms.craftengine.bukkit.nms.StorageContainer;
 import net.momirealms.craftengine.bukkit.plugin.user.BukkitServerPlayer;
-import net.momirealms.craftengine.core.block.entity.BlockEntity;
+import net.momirealms.craftengine.bukkit.util.LocationUtils;
+import net.momirealms.craftengine.bukkit.world.WorldlyContainerHolder;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
@@ -31,7 +30,6 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
     private final List<HumanEntity> viewers;
     private final InventoryHolder owner;
     private final int[] slots;
-    private final BlockEntity blockEntity;
     private int maxStack = MAX_STACK;
     private boolean canPlaceItem;
     private boolean canTakeItem;
@@ -44,11 +42,6 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
         this.slots = IntStream.range(0, size).toArray();
         this.canPlaceItem = canPlaceItem;
         this.canTakeItem = canTakeItem;
-        if (owner instanceof BlockEntityHolder blockEntityHolder) {
-            this.blockEntity = blockEntityHolder.blockEntity();
-        } else {
-            this.blockEntity = null;
-        }
     }
 
     @Override
@@ -164,10 +157,12 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        if (this.blockEntity == null) return true;
-        BukkitServerPlayer serverPlayer = BukkitAdaptor.adapt(((ServerPlayer) player).getBukkitEntity());
-        if (serverPlayer == null) return false;
-        return serverPlayer.canInteractWithBlock(this.blockEntity.pos(), 4);
+        if (this.owner instanceof WorldlyContainerHolder holder) {
+            BukkitServerPlayer serverPlayer = BukkitAdaptor.adapt(((ServerPlayer) player).getBukkitEntity());
+            if (serverPlayer == null) return false;
+            return serverPlayer.canInteractPoint(holder.pos().toVec3d(), serverPlayer.getCachedInteractionRange());
+        }
+        return true;
     }
 
     @Override
@@ -260,13 +255,10 @@ public class SimpleStorageContainer implements WorldlyContainer, StorageContaine
 
     @Override
     public @NotNull Location getLocation() {
-        if (this.blockEntity == null) return null;
-        return new Location(
-                (World) this.blockEntity.world().world().platformWorld(),
-                this.blockEntity.pos().x(),
-                this.blockEntity.pos().y(),
-                this.blockEntity.pos().z()
-        );
+        if (this.owner instanceof WorldlyContainerHolder holder) {
+            return LocationUtils.toLocation(holder.pos());
+        }
+        return null;
     }
 
     @Override

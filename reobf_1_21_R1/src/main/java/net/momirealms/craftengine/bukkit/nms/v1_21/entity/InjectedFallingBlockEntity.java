@@ -117,7 +117,7 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
                 BlockPos blockposition = this.blockPosition();
                 ConcretePowderBlockBehavior behavior = BlockStateUtils.getOptionalCustomBlockState(this.getBlockState())
                         .map(ImmutableBlockState::behavior)
-                        .map(it -> it.getAs(ConcretePowderBlockBehavior.class).orElse(null))
+                        .map(it -> it.getFirst(ConcretePowderBlockBehavior.class))
                         .orElse(null);
                 boolean flag = this.blockState.getBlock() instanceof ConcretePowderBlock || behavior != null;
                 boolean flag1 = flag && this.level().getFluidState(blockposition).is(FluidTags.WATER);
