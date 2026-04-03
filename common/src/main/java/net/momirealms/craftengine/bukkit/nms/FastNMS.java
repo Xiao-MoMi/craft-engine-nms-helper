@@ -1,8 +1,10 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
+import net.momirealms.craftengine.core.plugin.CraftEngine;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.Key;
@@ -13,6 +15,8 @@ import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
@@ -21,6 +25,7 @@ import java.util.function.Predicate;
 @SuppressWarnings("unused")
 public abstract class FastNMS {
     public static final FastNMS INSTANCE = instance();
+    private static final Logger log = LoggerFactory.getLogger(FastNMS.class);
 
     private static FastNMS instance() {
         try {
@@ -35,21 +40,34 @@ public abstract class FastNMS {
     }
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
-        String version = VersionHelper.MINECRAFT_VERSION.version();
-        return switch (version) {
-            case "1.21.11" -> "v1_21_11";
-            case "1.21.9", "1.21.10" -> "v1_21_9";
-            case "1.21.6", "1.21.7", "1.21.8" -> "v1_21_6";
-            case "1.21.5" -> "v1_21_5";
-            case "1.21.4" -> "v1_21_4";
-            case "1.21.2", "1.21.3" -> "v1_21_2";
-            case "1.21", "1.21.1" -> "v1_21";
-            case "1.20.5", "1.20.6" -> "v1_20_5";
-            case "1.20.3", "1.20.4" -> "v1_20_3";
-            case "1.20.2" -> "v1_20_2";
-            case "1.20", "1.20.1" -> "v1_20";
-            default -> throw new UnsupportedVersionException(version);
-        };
+        if (VersionHelper.isOrAbove26_1()) {
+            return "v26_1";
+        } else if (VersionHelper.isOrAbove1_21_11()) {
+            return "v1_21_11";
+        } else if (VersionHelper.isOrAbove1_21_9()) {
+            return "v1_21_9";
+        } else if (VersionHelper.isOrAbove1_21_6()) {
+            return "v1_21_6";
+        } else if (VersionHelper.isOrAbove1_21_5()) {
+            return "v1_21_5";
+        } else if (VersionHelper.isOrAbove1_21_4()) {
+            return "v1_21_4";
+        } else if (VersionHelper.isOrAbove1_21_2()) {
+            return "v1_21_2";
+        } else if (VersionHelper.isOrAbove1_21()) {
+            return "v1_21";
+        } else if (VersionHelper.isOrAbove1_20_5()) {
+            return "v1_20_5";
+        } else if (VersionHelper.isOrAbove1_20_3()) {
+            return "v1_20_3";
+        } else if (VersionHelper.isOrAbove1_20_2()) {
+            return "v1_20_2";
+        } else if (VersionHelper.isOrAbove1_20()) {
+            return "v1_20";
+        } else {
+            log.warn("Unsupported Minecraft version! Falling back to v26_1");
+            return "v26_1";
+        }
     }
 
     public abstract Object createBiomePlacementFilter(Predicate<Key> filter);

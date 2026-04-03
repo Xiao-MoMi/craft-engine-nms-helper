@@ -1,0 +1,65 @@
+package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
+
+import com.google.common.collect.Maps;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
+import net.momirealms.craftengine.core.item.ItemBuildContext;
+import net.momirealms.craftengine.core.item.recipe.CustomShapedRecipe;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
+
+public class InjectedShapedRecipe extends ShapedRecipe {
+    private final CustomShapedRecipe recipe;
+    private final ShapedRecipePattern roughPattern;
+
+    public InjectedShapedRecipe(CustomShapedRecipe recipe,
+                                String group,
+                                CraftingBookCategory category,
+                                ShapedRecipePattern visualPattern,
+                                ShapedRecipePattern roughPattern,
+                                net.minecraft.world.item.ItemStack result,
+                                boolean showNotification) {
+        CommonInfo commonInfo = new CommonInfo(showNotification);
+        CraftingRecipe.CraftingBookInfo bookInfo = new CraftingRecipe.CraftingBookInfo(category, group);
+        ItemStackTemplate template = ItemStackTemplate.fromNonEmptyStack(result);
+        this.recipe = recipe;
+        this.roughPattern = roughPattern;
+        super(commonInfo, bookInfo, visualPattern, template);
+    }
+
+    public static InjectedShapedRecipe of(CustomShapedRecipe recipe) {
+        Map<Character, Ingredient> visual = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraftVisual));
+        ShapedRecipePattern visualPattern = ShapedRecipePattern.of(visual, recipe.pattern().pattern());
+        Map<Character, Ingredient> actual = Maps.transformValues(recipe.pattern().ingredients(), (RecipeHelper::toMinecraft));
+        ShapedRecipePattern actualPattern = ShapedRecipePattern.of(actual, recipe.pattern().pattern());
+        return new InjectedShapedRecipe(
+                recipe,
+                recipe.group(),
+                RecipeHelper.toMinecraft(recipe.category()),
+                visualPattern,
+                actualPattern,
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getMinecraftItem(),
+                recipe.showNotification()
+        );
+    }
+
+    @Override
+    public boolean matches(@NotNull CraftingInput input, @NotNull Level level) {
+        // 先进行粗略匹配
+        boolean vanillaMatches = this.roughPattern.matches(input);
+        if (!vanillaMatches) return false;
+        // 再进行细节匹配
+        return this.recipe.matches(RecipeHelper.toCraftEngine(input));
+    }
+
+    @Override
+    public @NotNull NonNullList<net.minecraft.world.item.ItemStack> getRemainingItems(@NotNull CraftingInput input) {
+        if (this.recipe.ingredientCountSupport()) {
+            this.recipe.takeInput(RecipeHelper.toCraftEngine(input), 1);
+        }
+        return RecipeHelper.getRemainingItems(this.recipe.id(), input);
+    }
+}

@@ -37,6 +37,7 @@ tasks.withType<JavaCompile> {
 
 tasks {
     shadowJar {
+        from(zipTree(project(":reobf_26_R1").tasks.jar.get().archiveFile))
         archiveClassifier = ""
         archiveFileName = "${rootProject.name}-${projectVersion}-mojmap.jar"
         destinationDirectory.set(file("$rootDir/target"))
