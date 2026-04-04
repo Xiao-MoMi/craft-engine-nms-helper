@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v26_1;
 
+import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.ConnectionProtocol;
@@ -11,6 +12,7 @@ import net.minecraft.network.protocol.game.GameProtocols;
 import net.minecraft.network.protocol.handshake.HandshakeProtocols;
 import net.minecraft.network.protocol.login.LoginProtocols;
 import net.minecraft.network.protocol.status.StatusProtocols;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.entity.LevelCallback;
 import net.minecraft.world.phys.AABB;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
@@ -35,6 +38,7 @@ import net.momirealms.craftengine.bukkit.nms.v26_1.collision.CollisionInteractio
 import net.momirealms.craftengine.bukkit.nms.v26_1.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v26_1.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v26_1.entity.InjectedFallingBlockEntity;
+import net.momirealms.craftengine.bukkit.nms.v26_1.entity.InjectedPaperLevelCallback;
 import net.momirealms.craftengine.bukkit.nms.v26_1.inventory.SimpleStorageContainer;
 import net.momirealms.craftengine.bukkit.nms.v26_1.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v26_1.network.InjectedHashedStack;
@@ -76,8 +80,7 @@ public final class FastNMSImpl extends FastNMS {
 
     @Override
     public InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup) {
-        throw new UnsupportedOperationException("Not supported yet."); // todo 等待 paper 打全补丁
-        // return new InjectedPaperLevelCallback((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
+        return new InjectedPaperLevelCallback((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
     }
 
     @Override

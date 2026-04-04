@@ -1,10 +1,8 @@
 package net.momirealms.craftengine.bukkit.nms;
 
-import net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
-import net.momirealms.craftengine.core.plugin.CraftEngine;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.Key;
@@ -65,7 +63,7 @@ public abstract class FastNMS {
         } else if (VersionHelper.isOrAbove1_20()) {
             return "v1_20";
         } else {
-            log.warn("Unsupported Minecraft version! Falling back to v26_1");
+            log.warn("Unsupported Minecraft version {}, Falling back to v26_1", VersionHelper.MINECRAFT_VERSION.version());
             return "v26_1";
         }
     }

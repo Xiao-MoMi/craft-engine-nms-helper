@@ -9,16 +9,12 @@ import net.momirealms.craftengine.core.world.SectionPos;
 import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
-import net.momirealms.sparrow.reflection.clazz.SparrowClass;
-import net.momirealms.sparrow.reflection.method.SMethod1;
-import net.momirealms.sparrow.reflection.method.matcher.MethodMatcher;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class InjectedPalettedContainer<T> extends PalettedContainer<T> implements InjectedStorage.Palette {
-    private static final SMethod1 method$PalettedContainer$get = SparrowClass.of(PalettedContainer.class).getSparrowMethod(MethodMatcher.named("get").and(MethodMatcher.takeArguments(int.class))).asm$1();
     public PalettedContainer<T> delegated;
     private CESection section;
     private CEChunk chunk;
@@ -89,10 +85,9 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         this.delegated.count(counter);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NotNull T get(int index) {
-        return (T) method$PalettedContainer$get.invoke(this.delegated, index);
+        return this.delegated.get(index);
     }
 
     @Override
@@ -100,9 +95,8 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         return this.delegated.get(x, y, z);
     }
 
-    @SuppressWarnings("unchecked")
     public T getVirtual(int index) {
-        return (T) method$PalettedContainer$get.invoke(this.delegated, index);
+        return this.delegated.get(index);
     }
 
     public T getVirtual(int x, int y, int z) {
