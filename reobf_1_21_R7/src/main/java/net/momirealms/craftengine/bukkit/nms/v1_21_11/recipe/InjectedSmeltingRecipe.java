@@ -37,7 +37,7 @@ public class InjectedSmeltingRecipe extends SmeltingRecipe {
                 RecipeHelper.toMinecraft(recipe.category()),
                 RecipeHelper.toMinecraftVisual(recipe.ingredient()),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
-                (net.minecraft.world.item.ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).getMinecraftItem(),
+                (net.minecraft.world.item.ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem(),
                 recipe.experience(),
                 recipe.cookingTime()
         );

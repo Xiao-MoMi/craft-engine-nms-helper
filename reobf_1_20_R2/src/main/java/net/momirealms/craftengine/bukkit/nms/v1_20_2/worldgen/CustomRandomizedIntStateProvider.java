@@ -68,7 +68,7 @@ public class CustomRandomizedIntStateProvider extends BlockStateProvider {
                 if (integerProperty == null) return state;
                 this.customProperty = integerProperty;
             }
-            return (BlockState) immutableBlockState.with(this.customProperty, this.values.sample(randomSource)).customBlockState().literalObject();
+            return (BlockState) immutableBlockState.with(this.customProperty, this.values.sample(randomSource)).customBlockState().minecraftState();
         } else {
             if (this.property == null || !state.hasProperty(this.property)) {
                 net.minecraft.world.level.block.state.properties.IntegerProperty integerProperty = findProperty(state, this.propertyName);

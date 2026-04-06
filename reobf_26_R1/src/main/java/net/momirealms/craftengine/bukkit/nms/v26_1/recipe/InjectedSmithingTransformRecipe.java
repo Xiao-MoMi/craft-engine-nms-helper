@@ -25,7 +25,7 @@ public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
     }
 
     public static InjectedSmithingTransformRecipe of(CustomSmithingTransformRecipe recipe) {
-        net.minecraft.world.item.ItemStack result = (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getMinecraftItem();
+        net.minecraft.world.item.ItemStack result = (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).minecraftItem();
         return new InjectedSmithingTransformRecipe(recipe,
                 Optional.ofNullable(recipe.template()).map(RecipeHelper::toMinecraft),
                 RecipeHelper.toMinecraft(recipe.base()),

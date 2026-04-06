@@ -46,7 +46,7 @@ public class CraftEngineItem extends LootPoolSingletonContainer {
         if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Player player) {
             serverPlayer = BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity());
         }
-        consumer.accept((ItemStack) optionalItemDefinition.get().buildItem(serverPlayer).getMinecraftItem());
+        consumer.accept((ItemStack) optionalItemDefinition.get().buildItem(serverPlayer).minecraftItem());
     }
 
     public static class Serializer extends LootPoolSingletonContainer.Serializer<CraftEngineItem> {

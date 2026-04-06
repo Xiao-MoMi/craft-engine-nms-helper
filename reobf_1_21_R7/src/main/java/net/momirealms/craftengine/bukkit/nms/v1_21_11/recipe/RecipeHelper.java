@@ -73,7 +73,7 @@ public final class RecipeHelper {
             CraftRemainder remainder = ItemDefinition.settings().craftRemainder();
             if (remainder != null) {
                 net.momirealms.craftengine.core.item.Item remainingItem = remainder.remainder(recipeId, item);
-                return remainingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : (net.minecraft.world.item.ItemStack) remainingItem.getMinecraftItem();
+                return remainingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : (net.minecraft.world.item.ItemStack) remainingItem.minecraftItem();
             }
         }
         return stack.getItem().getCraftingRemainder();

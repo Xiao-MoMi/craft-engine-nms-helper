@@ -41,7 +41,7 @@ public class InjectedCampfireCookingRecipe extends CampfireCookingRecipe {
                 RecipeHelper.toMinecraft(recipe.category()),
                 RecipeHelper.toMinecraftVisual(recipe.ingredient()),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
-                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).getMinecraftItem(),
+                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem(),
                 recipe.experience(),
                 recipe.cookingTime()
         );

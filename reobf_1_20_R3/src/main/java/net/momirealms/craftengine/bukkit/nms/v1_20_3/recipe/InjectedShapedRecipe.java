@@ -41,7 +41,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
                 RecipeHelper.toMinecraft(recipe.category()),
                 visualPattern,
                 roughPattern,
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).getMinecraftItem(),
+                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).minecraftItem(),
                 recipe.showNotification()
         );
     }

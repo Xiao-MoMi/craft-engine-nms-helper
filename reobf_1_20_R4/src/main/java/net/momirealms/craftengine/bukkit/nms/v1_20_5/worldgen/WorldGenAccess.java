@@ -27,7 +27,7 @@ public class WorldGenAccess implements GeneratingWorld {
 
     @Override
     public void setBlockState(int x, int y, int z, BlockStateWrapper stateWrapper, int flags) {
-        this.level.setBlock(new BlockPos(x, y, z), (BlockState) stateWrapper.literalObject(), flags);
+        this.level.setBlock(new BlockPos(x, y, z), (BlockState) stateWrapper.minecraftState(), flags);
     }
 
     @Override
@@ -45,12 +45,11 @@ public class WorldGenAccess implements GeneratingWorld {
     }
 
     @Override
-    public Object serverWorld() {
+    public Object minecraftWorld() {
         return this.level.getLevel();
     }
 
     @Override
-    public Object literalObject() {
+    public Object generatingWorld() {
         return this.level;
-    }
-}
+    }}

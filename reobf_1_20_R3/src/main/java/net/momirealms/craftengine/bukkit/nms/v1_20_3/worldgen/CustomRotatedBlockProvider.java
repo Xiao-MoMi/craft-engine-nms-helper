@@ -49,10 +49,10 @@ public class CustomRotatedBlockProvider extends BlockStateProvider {
             if (immutableBlockState == null || immutableBlockState.isEmpty()) return state;
             Property<?> property = immutableBlockState.owner().value().getProperty("axis");
             if (property == null || property.valueClass() != Direction.Axis.class) {
-                return (BlockState) immutableBlockState.customBlockState().literalObject();
+                return (BlockState) immutableBlockState.customBlockState().minecraftState();
             }
             Direction.Axis axis = Direction.Axis.values()[randomSource.nextInt(Direction.Axis.VALUES.length)];
-            return (BlockState) immutableBlockState.with((Property<Direction.Axis>)property, axis).customBlockState().literalObject();
+            return (BlockState) immutableBlockState.with((Property<Direction.Axis>)property, axis).customBlockState().minecraftState();
         } else {
             net.minecraft.core.Direction.Axis axis = net.minecraft.core.Direction.Axis.getRandom(randomSource);
             return state.getBlock().defaultBlockState().trySetValue(RotatedPillarBlock.AXIS, axis);

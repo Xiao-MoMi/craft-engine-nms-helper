@@ -25,7 +25,7 @@ public class InjectedStonecuttingRecipe extends StonecutterRecipe {
         return new InjectedStonecuttingRecipe(recipe,
                 recipe.group(),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
-                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).getMinecraftItem()
+                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem()
         );
     }
 

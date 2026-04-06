@@ -55,7 +55,7 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
             for (Property<?> property : customBlockState.getProperties()) {
                 if (!property.name().equals("waterlogged") && property.valueClass() != Boolean.class) continue;
                 finalBlockState = customBlockState.get((BooleanProperty) property)
-                        ? (BlockState) customBlockState.with((BooleanProperty) property, false).customBlockState().literalObject()
+                        ? (BlockState) customBlockState.with((BooleanProperty) property, false).customBlockState().minecraftState()
                         : blockState;
                 break;
             }

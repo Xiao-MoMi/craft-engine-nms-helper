@@ -72,13 +72,13 @@ public class CustomSimpleStateProvider extends BlockStateProvider {
 
     @Override
     public @NotNull BlockState getState(@NotNull RandomSource randomSource, @NotNull BlockPos blockPos) {
-        if (this.cached != null) return (BlockState) this.cached.literalObject();
+        if (this.cached != null) return (BlockState) this.cached.minecraftState();
         BlockStateWrapper deserialized = CraftEngine.instance().blockManager().createBlockState(this.name);
         if (deserialized == null) return Blocks.STONE.defaultBlockState();
         for (Map.Entry<String, String> entry : this.properties.entrySet()) {
             deserialized = deserialized.withProperty(entry.getKey(), entry.getValue());
         }
         this.cached = deserialized;
-        return (BlockState) deserialized.literalObject();
+        return (BlockState) deserialized.minecraftState();
     }
 }
