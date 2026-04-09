@@ -42,7 +42,7 @@ public class CustomSimpleBlockFeature extends Feature<@NotNull SimpleBlockConfig
                     }
                     try {
                         worldGenLevel.setBlock(blockPos, state, 2);
-                        behavior.placeMultiState(state.getBlock(), new Object[]{worldGenLevel, blockPos, state, null, ItemStack.EMPTY}, () -> null);
+                        behavior.placeMultiState(state.getBlock(), new Object[]{worldGenLevel, blockPos, state, null, ItemStack.EMPTY});
                         return true;
                     } catch (Throwable t) {
                         CraftEngine.instance().logger().warn("Failed to run placeMultiState", t);

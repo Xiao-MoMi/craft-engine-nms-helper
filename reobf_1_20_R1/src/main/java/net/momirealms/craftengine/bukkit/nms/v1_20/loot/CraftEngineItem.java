@@ -38,7 +38,7 @@ public class CraftEngineItem extends LootPoolSingletonContainer {
 
     @Override
     public void createItemStack(@NotNull Consumer<ItemStack> consumer, @NotNull LootContext context) {
-        Optional<ItemDefinition> optionalItemDefinition = BukkitItemManager.instance().getCustomItem(KeyUtils.identifierToKey(this.item));
+        Optional<ItemDefinition> optionalItemDefinition = BukkitItemManager.instance().getItemDefinition(KeyUtils.identifierToKey(this.item));
         if (optionalItemDefinition.isEmpty()) {
             return;
         }

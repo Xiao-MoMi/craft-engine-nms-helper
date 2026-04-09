@@ -67,7 +67,7 @@ public final class RecipeHelper {
             return net.minecraft.world.item.ItemStack.EMPTY;
         }
         net.momirealms.craftengine.core.item.Item item = BukkitItemManager.instance().wrap(stack);
-        Optional<ItemDefinition> optionalItemDefinition = item.getCustomItem();
+        Optional<ItemDefinition> optionalItemDefinition = item.getDefinition();
         if (optionalItemDefinition.isPresent()) {
             ItemDefinition ItemDefinition = optionalItemDefinition.get();
             CraftRemainder remainder = ItemDefinition.settings().craftRemainder();
