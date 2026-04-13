@@ -2,8 +2,8 @@ package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
-import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -20,28 +20,24 @@ public class InjectedCampfireCookingRecipe extends CampfireCookingRecipe {
     private final Ingredient roughInput;
 
     public InjectedCampfireCookingRecipe(CustomCampfireRecipe recipe,
-                                         String group,
-                                         CookingBookCategory category,
-                                         Ingredient visualingredient,
+                                         ItemStackTemplate template,
+                                         CommonInfo commonInfo,
+                                         CookingBookInfo cookingBookInfo,
+                                         Ingredient visualIngredient,
                                          Ingredient roughIngredient,
-                                         ItemStack result,
                                          float experience,
                                          int cookingTime) {
-        CommonInfo commonInfo = new CommonInfo(recipe.showNotification());
-        CookingBookInfo bookInfo = new CookingBookInfo(category, group);
-        ItemStackTemplate template = ItemStackTemplate.fromNonEmptyStack(result);
+        super(commonInfo, cookingBookInfo, visualIngredient, template, experience, cookingTime);
         this.recipe = recipe;
         this.roughInput = roughIngredient;
-        super(commonInfo, bookInfo, visualingredient, template, experience, cookingTime);
     }
 
     public static InjectedCampfireCookingRecipe of(CustomCampfireRecipe recipe) {
         return new InjectedCampfireCookingRecipe(recipe,
-                recipe.group(),
-                RecipeHelper.toMinecraft(recipe.category()),
+                ItemStackTemplate.fromNonEmptyStack((ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem()), new CommonInfo(recipe.showNotification()),
+                new AbstractCookingRecipe.CookingBookInfo(RecipeHelper.toMinecraft(recipe.category()), recipe.group()),
                 RecipeHelper.toMinecraftVisual(recipe.ingredient()),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
-                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem(),
                 recipe.experience(),
                 recipe.cookingTime()
         );

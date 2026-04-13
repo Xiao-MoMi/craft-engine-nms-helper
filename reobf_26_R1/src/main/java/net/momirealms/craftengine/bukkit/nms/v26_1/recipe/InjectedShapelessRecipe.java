@@ -2,7 +2,10 @@ package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CustomShapelessRecipe;
@@ -15,17 +18,14 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
     private final ShapelessRecipe companionRecipe;
 
     public InjectedShapelessRecipe(CustomShapelessRecipe recipe,
-                                   String group,
-                                   CraftingBookCategory category,
-                                   net.minecraft.world.item.ItemStack result,
+                                   ItemStackTemplate template,
+                                   CommonInfo commonInfo,
+                                   CraftingRecipe.CraftingBookInfo craftingBookInfo,
                                    List<Ingredient> visualIngredients,
                                    List<Ingredient> roughIngredients) {
-        CommonInfo commonInfo = new CommonInfo(recipe.showNotification());
-        CraftingRecipe.CraftingBookInfo bookInfo = new CraftingRecipe.CraftingBookInfo(category, group);
-        ItemStackTemplate template = ItemStackTemplate.fromNonEmptyStack(result);
+        super(commonInfo, craftingBookInfo, template, visualIngredients);
         this.recipe = recipe;
-        this.companionRecipe = new ShapelessRecipe(commonInfo, bookInfo, template, roughIngredients);
-        super(commonInfo, bookInfo, template, visualIngredients);
+        this.companionRecipe = new ShapelessRecipe(commonInfo, craftingBookInfo, template, roughIngredients);
     }
 
     public static InjectedShapelessRecipe of(CustomShapelessRecipe recipe) {
@@ -33,9 +33,9 @@ public class InjectedShapelessRecipe extends ShapelessRecipe {
         List<Ingredient> roughIngredients = recipe.ingredientsInUse().stream().map(RecipeHelper::toMinecraft).toList();
         return new InjectedShapelessRecipe(
                 recipe,
-                recipe.group(),
-                RecipeHelper.toMinecraft(recipe.category()),
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).minecraftItem(),
+                ItemStackTemplate.fromNonEmptyStack((net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).minecraftItem()),
+                new CommonInfo(recipe.showNotification()),
+                new CraftingBookInfo(RecipeHelper.toMinecraft(recipe.category()), recipe.group()),
                 visualIngredients,
                 roughIngredients
         );

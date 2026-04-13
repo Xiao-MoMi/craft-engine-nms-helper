@@ -3,7 +3,10 @@ package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
 import com.google.common.collect.Maps;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CustomShapedRecipe;
@@ -16,18 +19,14 @@ public class InjectedShapedRecipe extends ShapedRecipe {
     private final ShapedRecipePattern roughPattern;
 
     public InjectedShapedRecipe(CustomShapedRecipe recipe,
-                                String group,
-                                CraftingBookCategory category,
+                                ItemStackTemplate template,
+                                CommonInfo commonInfo,
+                                CraftingBookInfo craftingBookInfo,
                                 ShapedRecipePattern visualPattern,
-                                ShapedRecipePattern roughPattern,
-                                net.minecraft.world.item.ItemStack result,
-                                boolean showNotification) {
-        CommonInfo commonInfo = new CommonInfo(showNotification);
-        CraftingRecipe.CraftingBookInfo bookInfo = new CraftingRecipe.CraftingBookInfo(category, group);
-        ItemStackTemplate template = ItemStackTemplate.fromNonEmptyStack(result);
+                                ShapedRecipePattern roughPattern) {
+        super(commonInfo, craftingBookInfo, visualPattern, template);
         this.recipe = recipe;
         this.roughPattern = roughPattern;
-        super(commonInfo, bookInfo, visualPattern, template);
     }
 
     public static InjectedShapedRecipe of(CustomShapedRecipe recipe) {
@@ -37,12 +36,7 @@ public class InjectedShapedRecipe extends ShapedRecipe {
         ShapedRecipePattern actualPattern = ShapedRecipePattern.of(actual, recipe.pattern().pattern());
         return new InjectedShapedRecipe(
                 recipe,
-                recipe.group(),
-                RecipeHelper.toMinecraft(recipe.category()),
-                visualPattern,
-                actualPattern,
-                (net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).minecraftItem(),
-                recipe.showNotification()
+                ItemStackTemplate.fromNonEmptyStack((net.minecraft.world.item.ItemStack) recipe.buildVisualOrActualResult(ItemBuildContext.empty()).minecraftItem()), new CommonInfo(recipe.showNotification()), new CraftingBookInfo(RecipeHelper.toMinecraft(recipe.category()), recipe.group()), visualPattern, actualPattern
         );
     }
 

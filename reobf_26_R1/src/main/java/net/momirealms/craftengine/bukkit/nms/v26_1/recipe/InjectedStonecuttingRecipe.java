@@ -1,6 +1,5 @@
 package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -17,18 +16,15 @@ import org.jetbrains.annotations.NotNull;
 public class InjectedStonecuttingRecipe extends StonecutterRecipe {
     private final CustomStoneCuttingRecipe recipe;
 
-    public InjectedStonecuttingRecipe(CustomStoneCuttingRecipe recipe, String group, Ingredient ingredient, ItemStack result) {
-        CommonInfo commonInfo = new CommonInfo(recipe.showNotification());
-        ItemStackTemplate template = ItemStackTemplate.fromNonEmptyStack(result);
+    public InjectedStonecuttingRecipe(CustomStoneCuttingRecipe recipe, ItemStackTemplate result, CommonInfo commonInfo, Ingredient ingredient) {
+        super(commonInfo, ingredient, result);
         this.recipe = recipe;
-        super(commonInfo, ingredient, template);
     }
 
     public static InjectedStonecuttingRecipe of(CustomStoneCuttingRecipe recipe) {
         return new InjectedStonecuttingRecipe(recipe,
-                recipe.group(),
-                RecipeHelper.toMinecraft(recipe.ingredient()),
-                (net.minecraft.world.item.ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem()
+                ItemStackTemplate.fromNonEmptyStack((net.minecraft.world.item.ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem()), new CommonInfo(recipe.showNotification()),
+                RecipeHelper.toMinecraft(recipe.ingredient())
         );
     }
 

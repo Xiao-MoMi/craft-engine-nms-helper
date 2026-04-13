@@ -23,16 +23,22 @@ import java.util.Objects;
 public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
     private final CustomSmithingTrimRecipe recipe;
 
-    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, Holder<TrimPattern> pattern, boolean copyDataComponents) {
-        CommonInfo commonInfo = new CommonInfo(recipe.showNotification());
-        this.recipe = recipe;
+    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe,
+                                      CommonInfo commonInfo,
+                                      Ingredient template,
+                                      Ingredient base,
+                                      Ingredient addition,
+                                      Holder<TrimPattern> pattern,
+                                      boolean copyDataComponents) {
         super(commonInfo, template, base, addition, pattern, copyDataComponents);
+        this.recipe = recipe;
     }
 
     public static InjectedSmithingTrimRecipe of(CustomSmithingTrimRecipe recipe) {
         Registry<TrimPattern> registry = MinecraftServer.getServer().registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
         Key pattern = Objects.requireNonNull(recipe.pattern(), "pattern should not be null");
         return new InjectedSmithingTrimRecipe(recipe,
+                new CommonInfo(recipe.showNotification()),
                 RecipeHelper.toMinecraft(recipe.template()),
                 RecipeHelper.toMinecraft(recipe.base()),
                 RecipeHelper.toMinecraft(recipe.addition()),

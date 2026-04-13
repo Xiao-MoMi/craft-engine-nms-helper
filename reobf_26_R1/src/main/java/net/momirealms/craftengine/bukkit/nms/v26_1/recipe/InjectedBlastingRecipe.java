@@ -2,7 +2,10 @@ package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.BlastingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.bukkit.item.BukkitItemManager;
 import net.momirealms.craftengine.core.item.Item;
@@ -17,28 +20,24 @@ public class InjectedBlastingRecipe extends BlastingRecipe {
     private final Ingredient roughInput;
 
     public InjectedBlastingRecipe(CustomBlastingRecipe recipe,
-                                  String group,
-                                  CookingBookCategory category,
+                                  ItemStackTemplate template,
+                                  CommonInfo commonInfo,
+                                  CookingBookInfo cookingBookInfo,
                                   Ingredient visualIngredient,
                                   Ingredient roughIngredient,
-                                  ItemStack result,
                                   float experience,
                                   int cookingTime) {
-        CommonInfo commonInfo = new CommonInfo(recipe.showNotification());
-        CookingBookInfo bookInfo = new CookingBookInfo(category, group);
-        ItemStackTemplate template = ItemStackTemplate.fromNonEmptyStack(result);
+        super(commonInfo, cookingBookInfo, visualIngredient, template, experience, cookingTime);
         this.recipe = recipe;
         this.roughInput = roughIngredient;
-        super(commonInfo, bookInfo, visualIngredient, template, experience, cookingTime);
     }
 
     public static InjectedBlastingRecipe of(CustomBlastingRecipe recipe) {
         return new InjectedBlastingRecipe(recipe,
-                recipe.group(),
-                RecipeHelper.toMinecraft(recipe.category()),
+                ItemStackTemplate.fromNonEmptyStack((ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem()), new CommonInfo(recipe.showNotification()),
+                new AbstractCookingRecipe.CookingBookInfo(RecipeHelper.toMinecraft(recipe.category()), recipe.group()),
                 RecipeHelper.toMinecraftVisual(recipe.ingredient()),
                 RecipeHelper.toMinecraft(recipe.ingredient()),
-                (ItemStack) recipe.result().buildItem(ItemBuildContext.empty()).minecraftItem(),
                 recipe.experience(),
                 recipe.cookingTime()
         );
