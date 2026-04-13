@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.DyeRecipe;
@@ -36,6 +37,11 @@ public class InjectedDyeRecipe extends DyeRecipe {
                 RecipeHelper.toMinecraftVisual(recipe.target()),
                 RecipeHelper.toMinecraftVisual(recipe.dye())
         );
+    }
+
+    @Override
+    public @NotNull ItemStack assemble(@NotNull CraftingInput input) {
+        return (ItemStack) this.recipe.assemble(RecipeHelper.toCraftEngine(input), ItemBuildContext.EMPTY).minecraftItem();
     }
 
     @Override
