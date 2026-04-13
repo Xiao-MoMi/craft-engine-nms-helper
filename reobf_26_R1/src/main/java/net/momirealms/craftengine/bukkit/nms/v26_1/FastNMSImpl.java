@@ -224,6 +224,11 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public Object createDyeRecipe(CustomDyeRecipe recipe) {
+        return InjectedDyeRecipe.of(recipe);
+    }
+
+    @Override
     public Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState) {
         if (VersionHelper.isFolia()) {
             return FallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
