@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -17,15 +18,21 @@ import java.util.List;
 
 public class InjectedDyeRecipe extends DyeRecipe {
     private final CustomDyeRecipe recipe;
+    private final Ingredient target;
+    private final Ingredient dye;
 
     public InjectedDyeRecipe(CustomDyeRecipe recipe,
                              ItemStackTemplate template,
                              CommonInfo commonInfo,
                              CraftingBookInfo craftingBookInfo,
                              Ingredient visualTarget,
-                             Ingredient visualDye) {
+                             Ingredient roughTarget,
+                             Ingredient visualDye,
+                             Ingredient roughDye) {
         super(commonInfo, craftingBookInfo, visualTarget, visualDye, template);
         this.recipe = recipe;
+        this.target = roughTarget;
+        this.dye = roughDye;
     }
 
     public static InjectedDyeRecipe of(CustomDyeRecipe recipe) {
@@ -35,7 +42,9 @@ public class InjectedDyeRecipe extends DyeRecipe {
                 new CommonInfo(recipe.showNotification()),
                 new CraftingBookInfo(RecipeHelper.toMinecraft(recipe.category()), recipe.group()),
                 RecipeHelper.toMinecraftVisual(recipe.target()),
-                RecipeHelper.toMinecraftVisual(recipe.dye())
+                RecipeHelper.toMinecraft(recipe.target()),
+                RecipeHelper.toMinecraftVisual(recipe.dye()),
+                RecipeHelper.toMinecraft(recipe.dye())
         );
     }
 
@@ -46,7 +55,34 @@ public class InjectedDyeRecipe extends DyeRecipe {
 
     @Override
     public boolean matches(@NotNull CraftingInput input, @NotNull Level level) {
+        if (!vanillaMatches(input, level)) return false;
         return this.recipe.matches(RecipeHelper.toCraftEngine(input));
+    }
+
+    public boolean vanillaMatches(CraftingInput input, Level level) {
+        if (input.ingredientCount() < 2) {
+            return false;
+        } else {
+            boolean hasTarget = false;
+            boolean hasDyes = false;
+            for(int slot = 0; slot < input.size(); ++slot) {
+                ItemStack itemStack = input.getItem(slot);
+                if (!itemStack.isEmpty()) {
+                    if (this.target.test(itemStack)) {
+                        if (hasTarget) {
+                            return false;
+                        }
+                        hasTarget = true;
+                    } else {
+                        if (!this.dye.test(itemStack)) {
+                            return false;
+                        }
+                        hasDyes = true;
+                    }
+                }
+            }
+            return hasDyes && hasTarget;
+        }
     }
 
     @Override
