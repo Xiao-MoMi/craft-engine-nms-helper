@@ -50,7 +50,7 @@ public class InjectedDyeRecipe extends DyeRecipe {
 
     @Override
     public @NotNull ItemStack assemble(@NotNull CraftingInput input) {
-        return (ItemStack) this.recipe.assemble(RecipeHelper.toCraftEngine(input), ItemBuildContext.EMPTY).minecraftItem();
+        return (ItemStack) this.recipe.assemble(RecipeHelper.toCraftEngine(input), ItemBuildContext.empty()).minecraftItem();
     }
 
     @Override
