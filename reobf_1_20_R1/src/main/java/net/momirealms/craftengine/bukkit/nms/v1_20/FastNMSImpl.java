@@ -31,10 +31,12 @@ import net.momirealms.craftengine.bukkit.nms.v1_20.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_20.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_20.entity.InjectedPaperLevelCallback;
-import net.momirealms.craftengine.bukkit.nms.v1_20.inventory.SimpleStorageContainer;
+import net.momirealms.craftengine.bukkit.nms.v1_20.inventory.CustomContainer;
+import net.momirealms.craftengine.bukkit.nms.v1_20.inventory.CustomWorldlyContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v1_20.worldgen.*;
+import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.entity.player.Player;
@@ -44,12 +46,10 @@ import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
+import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSectionProxy;
 import net.momirealms.sparrow.reflection.SReflection;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -242,12 +242,16 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
-        return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
+    public Object createUntrustedItemCodec() {
+        return null;
     }
 
     @Override
-    public Object createUntrustedItemCodec() {
-        return null;
+    public Object createContainer(BukkitContainer container) {
+        if (container instanceof WorldlyContainer worldlyContainer) {
+            return new CustomWorldlyContainer(worldlyContainer);
+        } else {
+            return new CustomContainer(container);
+        }
     }
 }

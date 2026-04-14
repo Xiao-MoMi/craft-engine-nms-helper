@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
@@ -10,8 +11,6 @@ import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,11 +127,11 @@ public abstract class FastNMS {
 
     public abstract Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName();
 
-    public abstract Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem);
-
     public abstract Object createInjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
 
     public abstract Object createAlwaysStatePredicate(boolean trueOrFalse);
 
     public abstract Object createUntrustedItemCodec();
+
+    public abstract Object createContainer(BukkitContainer container);
 }

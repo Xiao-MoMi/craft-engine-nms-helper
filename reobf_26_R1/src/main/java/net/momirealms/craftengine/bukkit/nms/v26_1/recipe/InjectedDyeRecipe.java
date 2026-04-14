@@ -1,20 +1,15 @@
 package net.momirealms.craftengine.bukkit.nms.v26_1.recipe;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.DyeRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.Level;
 import net.momirealms.craftengine.core.item.ItemBuildContext;
 import net.momirealms.craftengine.core.item.recipe.CustomDyeRecipe;
-import net.momirealms.craftengine.core.item.recipe.CustomShapelessRecipe;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class InjectedDyeRecipe extends DyeRecipe {
     private final CustomDyeRecipe recipe;

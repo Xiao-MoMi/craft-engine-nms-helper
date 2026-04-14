@@ -39,11 +39,13 @@ import net.momirealms.craftengine.bukkit.nms.v26_1.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v26_1.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v26_1.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v26_1.entity.InjectedPaperLevelCallback;
-import net.momirealms.craftengine.bukkit.nms.v26_1.inventory.SimpleStorageContainer;
+import net.momirealms.craftengine.bukkit.nms.v26_1.inventory.CustomContainer;
+import net.momirealms.craftengine.bukkit.nms.v26_1.inventory.CustomWorldlyContainer;
 import net.momirealms.craftengine.bukkit.nms.v26_1.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v26_1.network.InjectedHashedStack;
 import net.momirealms.craftengine.bukkit.nms.v26_1.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v26_1.worldgen.*;
+import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
@@ -53,12 +55,10 @@ import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
+import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSectionProxy;
 import net.momirealms.sparrow.reflection.SReflection;
-import org.bukkit.craftbukkit.inventory.CraftInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -94,11 +94,6 @@ public final class FastNMSImpl extends FastNMS {
     @Override
     public Object createAlwaysStatePredicate(boolean trueOrFalse) {
         return (BlockBehaviour.StatePredicate) (blockState, blockGetter, blockPos) -> trueOrFalse;
-    }
-
-    @Override
-    public Inventory createSimpleStorageContainer(InventoryHolder owner, int size, boolean canPlaceItem, boolean canTakeItem) {
-        return new CraftInventory(new SimpleStorageContainer(owner, size, canPlaceItem, canTakeItem));
     }
 
     @Override
@@ -281,5 +276,14 @@ public final class FastNMSImpl extends FastNMS {
     @Override
     public Object createUntrustedItemCodec() {
         return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
+    }
+
+    @Override
+    public Object createContainer(BukkitContainer container) {
+        if (container instanceof WorldlyContainer worldlyContainer) {
+            return new CustomWorldlyContainer(worldlyContainer);
+        } else {
+            return new CustomContainer(container);
+        }
     }
 }
