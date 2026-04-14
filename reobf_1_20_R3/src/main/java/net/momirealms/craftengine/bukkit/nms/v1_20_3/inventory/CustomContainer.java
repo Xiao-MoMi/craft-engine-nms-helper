@@ -19,6 +19,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class CustomContainer implements Container, ContainerMarker {
     private final BukkitContainer container;
@@ -118,5 +119,30 @@ public class CustomContainer implements Container, ContainerMarker {
             return null;
         }
         return LocationUtils.toLocation(position);
+    }
+
+    @Override
+    public void startOpen(Player player) {
+        this.container.startOpen(BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity()));
+    }
+
+    @Override
+    public void stopOpen(Player player) {
+        this.container.stopOpen(BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity()));
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, @NotNull ItemStack itemStack) {
+        return this.container.canPlaceItem(slot, ItemStackUtils.wrap(itemStack));
+    }
+
+    @Override
+    public boolean canTakeItem(@NotNull Container into, int slot, @NotNull ItemStack itemStack) {
+        return this.container.canTakeItem(into, slot, ItemStackUtils.wrap(itemStack));
+    }
+
+    @Override
+    public boolean hasAnyMatching(@NotNull Predicate<ItemStack> predicate) {
+        return this.container.hasAnyMatching(item -> predicate.test((ItemStack) item.minecraftItem()));
     }
 }

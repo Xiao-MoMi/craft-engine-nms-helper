@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v26_1.inventory;
 
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.ContainerUser;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
@@ -19,6 +20,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class CustomContainer implements Container, ContainerMarker {
     private final BukkitContainer container;
@@ -118,5 +120,39 @@ public class CustomContainer implements Container, ContainerMarker {
             return null;
         }
         return LocationUtils.toLocation(position);
+    }
+
+    @Override
+    public int getMaxStackSize(@NotNull ItemStack itemStack) {
+        return this.container.getMaxStackSize(ItemStackUtils.wrap(itemStack));
+    }
+
+    @Override
+    public void startOpen(@NotNull ContainerUser containerUser) {
+        if (containerUser instanceof Player player) {
+            this.container.startOpen(BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity()));
+        }
+    }
+
+    @Override
+    public void stopOpen(@NotNull ContainerUser containerUser) {
+        if (containerUser instanceof Player player) {
+            this.container.stopOpen(BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity()));
+        }
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, @NotNull ItemStack itemStack) {
+        return this.container.canPlaceItem(slot, ItemStackUtils.wrap(itemStack));
+    }
+
+    @Override
+    public boolean canTakeItem(@NotNull Container into, int slot, @NotNull ItemStack itemStack) {
+        return this.container.canTakeItem(into, slot, ItemStackUtils.wrap(itemStack));
+    }
+
+    @Override
+    public boolean hasAnyMatching(@NotNull Predicate<ItemStack> predicate) {
+        return this.container.hasAnyMatching(item -> predicate.test((ItemStack) item.minecraftItem()));
     }
 }
