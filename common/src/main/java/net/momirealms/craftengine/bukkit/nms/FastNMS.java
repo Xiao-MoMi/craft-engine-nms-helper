@@ -133,5 +133,5 @@ public abstract class FastNMS {
 
     public abstract Object createUntrustedItemCodec();
 
-    public abstract Object createContainer(BukkitContainer container);
+    public abstract DelegatingContainer createContainer(BukkitContainer container);
 }

@@ -4,7 +4,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
-import net.momirealms.craftengine.bukkit.nms.ContainerMarker;
+import net.momirealms.craftengine.bukkit.nms.DelegatingContainer;
 import net.momirealms.craftengine.bukkit.util.ItemStackUtils;
 import net.momirealms.craftengine.bukkit.util.LocationUtils;
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
@@ -21,11 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CustomContainer implements Container, ContainerMarker {
+public class CustomContainer implements Container, DelegatingContainer {
     private final BukkitContainer container;
 
     public CustomContainer(BukkitContainer container) {
         this.container = container;
+    }
+
+    @Override
+    public net.momirealms.craftengine.core.world.Container getContainer() {
+        return this.container;
     }
 
     @Override

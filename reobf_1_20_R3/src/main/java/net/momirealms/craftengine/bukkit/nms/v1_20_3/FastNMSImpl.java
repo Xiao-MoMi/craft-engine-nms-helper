@@ -23,6 +23,7 @@ import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.entity.LevelCallback;
 import net.minecraft.world.phys.AABB;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
+import net.momirealms.craftengine.bukkit.nms.DelegatingContainer;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import net.momirealms.craftengine.bukkit.nms.v1_20_3.block.PaperStatePropertyAccessor;
@@ -257,7 +258,7 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object createContainer(BukkitContainer container) {
+    public DelegatingContainer createContainer(BukkitContainer container) {
         if (container instanceof WorldlyContainer worldlyContainer) {
             return new CustomWorldlyContainer(worldlyContainer);
         } else {
