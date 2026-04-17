@@ -52,4 +52,5 @@ public class WorldGenAccess implements GeneratingWorld {
     @Override
     public Object generatingWorld() {
         return this.level;
-    }}
+    }
+}

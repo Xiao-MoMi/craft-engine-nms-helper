@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v26_1.chunk;
 
+import io.papermc.paper.antixray.ChunkPacketInfo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.chunk.PalettedContainerRO;
@@ -10,10 +11,12 @@ import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@SuppressWarnings("deprecation")
 public class InjectedPalettedContainer<T> extends PalettedContainer<T> implements InjectedStorage.Palette {
     public PalettedContainer<T> delegated;
     private CESection section;
@@ -21,8 +24,8 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     private SectionPos sectionPos;
     private boolean isActive;
 
-    public InjectedPalettedContainer(T object, Strategy<T> paletteProvider) {
-        super(object, paletteProvider);
+    public InjectedPalettedContainer(T object, Strategy<T> paletteProvider, T @Nullable [] presetValues) {
+        super(object, paletteProvider, presetValues);
     }
 
     @Override
@@ -174,5 +177,10 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     @Override
     public void set(int x, int y, int z, @NotNull T value) {
         this.delegated.set(x, y, z, value);
+    }
+
+    @Override
+    public synchronized void write(@NotNull FriendlyByteBuf buffer, ChunkPacketInfo<T> chunkPacketInfo, int chunkSectionIndex) {
+        this.delegated.write(buffer, chunkPacketInfo, chunkSectionIndex);
     }
 }
