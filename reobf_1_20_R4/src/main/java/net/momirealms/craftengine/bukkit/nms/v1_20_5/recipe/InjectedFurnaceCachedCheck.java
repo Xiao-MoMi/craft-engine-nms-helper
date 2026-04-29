@@ -47,12 +47,12 @@ public class InjectedFurnaceCachedCheck<C extends Container, T extends Recipe<C>
     public @NotNull Optional<RecipeHolder<T>> getRecipeFor(@NotNull C inventory, @NotNull Level world) {
         ItemStack inputItemStack = inventory.getItem(0);
         // 缓存提前返回
-        if (inputItemStack == itemStackCache && isFailure) {
+        if (inputItemStack == this.itemStackCache && this.isFailure) {
             return Optional.empty();
         }
 
         // 缓存变动
-        if (inputItemStack != itemStackCache) {
+        if (inputItemStack != this.itemStackCache) {
             // 更新缓存
             this.itemStackCache = inputItemStack;
             // 查配方
@@ -62,34 +62,34 @@ public class InjectedFurnaceCachedCheck<C extends Container, T extends Recipe<C>
                     .recipeByInput(net.momirealms.craftengine.core.item.recipe.RecipeType.SMELTING, itemInput);
             // 没查到, 走原版逻辑, 标记查询成功.
             if (recipe == null) {
-                isFailure = false;
+                this.isFailure = false;
             }
             // 查到配方, 检查条件
             else if (recipe.hasCondition()) {
                 // 从 PDC 取出需要检查条件的玩家;
-                long[] uuidLongs = blockEntity.persistentDataContainer.get(BukkitRecipeManager.FURNACE_LAST_USER, PersistentDataType.LONG_ARRAY);
+                long[] uuidLongs = this.blockEntity.persistentDataContainer.get(BukkitRecipeManager.FURNACE_LAST_USER, PersistentDataType.LONG_ARRAY);
                 if (uuidLongs != null) {
                     UUID playerUuid = new UUID(uuidLongs[0], uuidLongs[1]);
                     Player conditionPlayer = Bukkit.getPlayer(playerUuid);
                     // 如果玩家不在线, 默认条件失败.
                     if (conditionPlayer == null || !conditionPlayer.isConnected()) {
-                        isFailure = true;
+                        this.isFailure = true;
                         return Optional.empty();
                     }
                     // 检查配方条件.
                     boolean result = recipe.canUse(PlayerOptionalContext.of(BukkitAdaptor.adapt(conditionPlayer)));
                     if (!result) {
-                        isFailure = true;
+                        this.isFailure = true;
                         return Optional.empty();
                     }
-                    isFailure = false;
+                    this.isFailure = false;
                 }
             }
         }
 
         // 默认逻辑
         RecipeManager craftingManager = world.getRecipeManager();
-        Optional<RecipeHolder<T>> optional = craftingManager.getRecipeFor(type, inventory, world, this.lastRecipe);
+        Optional<RecipeHolder<T>> optional = craftingManager.getRecipeFor(this.type, inventory, world, this.lastRecipe);
 
         if (optional.isPresent()) {
             RecipeHolder<T> recipeholder = optional.get();

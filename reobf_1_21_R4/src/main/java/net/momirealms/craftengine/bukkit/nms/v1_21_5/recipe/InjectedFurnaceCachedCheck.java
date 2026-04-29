@@ -69,23 +69,23 @@ public class InjectedFurnaceCachedCheck<I extends RecipeInput, T extends Recipe<
                     Player conditionPlayer = Bukkit.getPlayer(playerUuid);
                     // 如果玩家不在线, 默认条件失败.
                     if (conditionPlayer == null || !conditionPlayer.isConnected()) {
-                        isFailure = true;
+                        this.isFailure = true;
                         return Optional.empty();
                     }
                     // 检查配方条件.
                     boolean result = recipe.canUse(PlayerOptionalContext.of(BukkitAdaptor.adapt(conditionPlayer)));
                     if (!result) {
-                        isFailure = true;
+                        this.isFailure = true;
                         return Optional.empty();
                     }
-                    isFailure = false;
+                    this.isFailure = false;
                 }
             }
         }
 
         // 默认逻辑
         RecipeManager craftingManager = world.recipeAccess();
-        Optional<RecipeHolder<T>> optional = craftingManager.getRecipeFor(type, input, world, this.lastRecipe);
+        Optional<RecipeHolder<T>> optional = craftingManager.getRecipeFor(this.type, input, world, this.lastRecipe);
 
         if (optional.isPresent()) {
             RecipeHolder<T> recipeholder = optional.get();
