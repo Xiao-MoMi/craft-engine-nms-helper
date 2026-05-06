@@ -50,7 +50,6 @@ import net.momirealms.craftengine.bukkit.nms.v1_20_5.inventory.CustomWorldlyCont
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v1_20_5.worldgen.*;
-import net.momirealms.craftengine.bukkit.util.BukkitReflectionUtils;
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.block.StatePropertyAccessor;
@@ -58,7 +57,6 @@ import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.Key;
-import net.momirealms.craftengine.core.util.ReflectionUtils;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
@@ -66,8 +64,10 @@ import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSectionProxy;
 import net.momirealms.sparrow.reflection.SReflection;
+import net.momirealms.sparrow.reflection.clazz.SparrowClass;
+import net.momirealms.sparrow.reflection.field.SField;
+import net.momirealms.sparrow.reflection.field.matcher.FieldMatcher;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -248,16 +248,9 @@ public final class FastNMSImpl extends FastNMS {
         throw new UnsupportedVersionException();
     }
 
-    private static final Field field$IdDispatchCodec$byId = Objects.requireNonNull(
-            ReflectionUtils.getDeclaredField(IdDispatchCodec.class, List.class, 0)
-    );
-    private static final Class<?> clazz$IdDispatchCodec$Entry = Objects.requireNonNull(BukkitReflectionUtils.findReobfOrMojmapClass(
-            "network.codec.IdDispatchCodec$b",
-            "network.codec.IdDispatchCodec$Entry"
-    ));
-    private static final Field field$IdDispatchCodec$Entry$type = Objects.requireNonNull(
-            ReflectionUtils.getDeclaredField(clazz$IdDispatchCodec$Entry, Object.class, 0)
-    );
+    private static final SField field$IdDispatchCodec$byId = SparrowClass.of(IdDispatchCodec.class).getDeclaredSparrowField(FieldMatcher.named("byId")).asm();
+    private static final Class<?> clazz$IdDispatchCodec$Entry = SparrowClass.find("net.minecraft.network.codec.IdDispatchCodec$Entry");
+    private static final SField field$IdDispatchCodec$Entry$type = SparrowClass.of(clazz$IdDispatchCodec$Entry).getDeclaredSparrowField(FieldMatcher.named("type")).asm();
 
     @Override
     public Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName() {
@@ -273,31 +266,27 @@ public final class FastNMSImpl extends FastNMS {
                 GameProtocols.CLIENTBOUND.bind(b -> new RegistryFriendlyByteBuf(b, registryAccess())),
                 GameProtocols.SERVERBOUND.bind(b -> new RegistryFriendlyByteBuf(b, registryAccess()))
         ).collect(Collectors.groupingBy(ProtocolInfo::id));
-        try {
-            for (Map.Entry<ConnectionProtocol, List<ProtocolInfo<? extends PacketListener>>> entry : collect.entrySet()) {
-                Map<PacketFlow, Map<String, Integer>> protocolPacketIdsByName = new HashMap<>();
-                allPacketIdsByName.put(ConnectionState.valueOf(entry.getKey().name().toUpperCase(Locale.ROOT)), protocolPacketIdsByName);
-                Map<String, Integer> serverBoundIds = new HashMap<>();
-                Map<String, Integer> clientBoundIds = new HashMap<>();
-                protocolPacketIdsByName.put(PacketFlow.SERVERBOUND, serverBoundIds);
-                protocolPacketIdsByName.put(PacketFlow.CLIENTBOUND, clientBoundIds);
-                for (ProtocolInfo<? extends PacketListener> protocol : entry.getValue()) {
-                    List<?> byId = (List<?>) field$IdDispatchCodec$byId.get(protocol.codec());
-                    if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.SERVERBOUND) {
-                        for (int i = 0; i < byId.size(); ++i) {
-                            PacketType<?> type = (PacketType<?>) field$IdDispatchCodec$Entry$type.get(byId.get(i));
-                            serverBoundIds.put(type.id().toString(), i);
-                        }
-                    } else if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.CLIENTBOUND) {
-                        for (int i = 0; i < byId.size(); ++i) {
-                            PacketType<?> type = (PacketType<?>) field$IdDispatchCodec$Entry$type.get(byId.get(i));
-                            clientBoundIds.put(type.id().toString(), i);
-                        }
+        for (Map.Entry<ConnectionProtocol, List<ProtocolInfo<? extends PacketListener>>> entry : collect.entrySet()) {
+            Map<PacketFlow, Map<String, Integer>> protocolPacketIdsByName = new HashMap<>();
+            allPacketIdsByName.put(ConnectionState.valueOf(entry.getKey().name().toUpperCase(Locale.ROOT)), protocolPacketIdsByName);
+            Map<String, Integer> serverBoundIds = new HashMap<>();
+            Map<String, Integer> clientBoundIds = new HashMap<>();
+            protocolPacketIdsByName.put(PacketFlow.SERVERBOUND, serverBoundIds);
+            protocolPacketIdsByName.put(PacketFlow.CLIENTBOUND, clientBoundIds);
+            for (ProtocolInfo<? extends PacketListener> protocol : entry.getValue()) {
+                List<?> byId = (List<?>) field$IdDispatchCodec$byId.get(protocol.codec());
+                if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.SERVERBOUND) {
+                    for (int i = 0; i < byId.size(); ++i) {
+                        PacketType<?> type = (PacketType<?>) field$IdDispatchCodec$Entry$type.get(byId.get(i));
+                        serverBoundIds.put(type.id().toString(), i);
+                    }
+                } else if (protocol.flow() == net.minecraft.network.protocol.PacketFlow.CLIENTBOUND) {
+                    for (int i = 0; i < byId.size(); ++i) {
+                        PacketType<?> type = (PacketType<?>) field$IdDispatchCodec$Entry$type.get(byId.get(i));
+                        clientBoundIds.put(type.id().toString(), i);
                     }
                 }
             }
-        } catch (Exception e) {
-            throw new RuntimeException();
         }
         return allPacketIdsByName;
     }
