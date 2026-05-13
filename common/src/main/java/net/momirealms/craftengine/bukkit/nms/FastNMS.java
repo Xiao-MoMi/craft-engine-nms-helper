@@ -37,29 +37,29 @@ public abstract class FastNMS {
     }
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
-        if (VersionHelper.isOrAbove26_1()) {
+        if (VersionHelper.isOrAbove26_1) {
             return "v26_1";
-        } else if (VersionHelper.isOrAbove1_21_11()) {
+        } else if (VersionHelper.isOrAbove1_21_11) {
             return "v1_21_11";
-        } else if (VersionHelper.isOrAbove1_21_9()) {
+        } else if (VersionHelper.isOrAbove1_21_9) {
             return "v1_21_9";
-        } else if (VersionHelper.isOrAbove1_21_6()) {
+        } else if (VersionHelper.isOrAbove1_21_6) {
             return "v1_21_6";
-        } else if (VersionHelper.isOrAbove1_21_5()) {
+        } else if (VersionHelper.isOrAbove1_21_5) {
             return "v1_21_5";
-        } else if (VersionHelper.isOrAbove1_21_4()) {
+        } else if (VersionHelper.isOrAbove1_21_4) {
             return "v1_21_4";
-        } else if (VersionHelper.isOrAbove1_21_2()) {
+        } else if (VersionHelper.isOrAbove1_21_2) {
             return "v1_21_2";
-        } else if (VersionHelper.isOrAbove1_21()) {
+        } else if (VersionHelper.isOrAbove1_21) {
             return "v1_21";
-        } else if (VersionHelper.isOrAbove1_20_5()) {
+        } else if (VersionHelper.isOrAbove1_20_5) {
             return "v1_20_5";
-        } else if (VersionHelper.isOrAbove1_20_3()) {
+        } else if (VersionHelper.isOrAbove1_20_3) {
             return "v1_20_3";
-        } else if (VersionHelper.isOrAbove1_20_2()) {
+        } else if (VersionHelper.isOrAbove1_20_2) {
             return "v1_20_2";
-        } else if (VersionHelper.isOrAbove1_20()) {
+        } else if (VersionHelper.isOrAbove1_20) {
             return "v1_20";
         } else {
             log.warn("Unsupported Minecraft version {}, Falling back to v26_1", VersionHelper.MINECRAFT_VERSION.version());
