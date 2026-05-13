@@ -49,8 +49,8 @@ import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
+import net.momirealms.craftengine.libraries.reflection.SReflection;
 import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSectionProxy;
-import net.momirealms.sparrow.reflection.SReflection;
 
 import java.util.HashMap;
 import java.util.Locale;
