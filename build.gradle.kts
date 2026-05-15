@@ -26,4 +26,17 @@ allprojects {
         compileOnly("net.momirealms:craft-engine-bukkit-proxy:26.5-20260513.200851-9")
         compileOnly("com.mojang:brigadier:1.0.18")
     }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+        }
+        disableAutoTargetJvm()
+    }
+
+
+    tasks.withType<JavaCompile> {
+        options.encoding = "UTF-8"
+        options.release.set(21)
+    }
 }
