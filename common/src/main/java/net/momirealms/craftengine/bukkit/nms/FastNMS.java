@@ -134,4 +134,6 @@ public abstract class FastNMS {
     public abstract Object createUntrustedItemCodec();
 
     public abstract DelegatingContainer createContainer(BukkitContainer container);
+
+    public abstract Object createInjectedProjectileDispenseBehavior(Object item);
 }

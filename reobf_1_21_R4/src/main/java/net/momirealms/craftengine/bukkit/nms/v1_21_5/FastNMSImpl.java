@@ -19,6 +19,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -44,6 +45,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.collision.NonCollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedPaperLevelCallback;
+import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedProjectileDispenseBehavior;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.inventory.CustomContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.inventory.CustomWorldlyContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.loot.CraftEngineItem;
@@ -297,5 +299,10 @@ public final class FastNMSImpl extends FastNMS {
         } else {
             return new CustomContainer(container);
         }
+    }
+
+    @Override
+    public Object createInjectedProjectileDispenseBehavior(Object item) {
+        return new InjectedProjectileDispenseBehavior((Item) item);
     }
 }

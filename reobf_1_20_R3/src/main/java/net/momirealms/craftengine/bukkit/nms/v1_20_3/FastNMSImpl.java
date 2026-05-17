@@ -265,4 +265,9 @@ public final class FastNMSImpl extends FastNMS {
             return new CustomContainer(container);
         }
     }
+
+    @Override
+    public Object createInjectedProjectileDispenseBehavior(Object item) {
+        throw new UnsupportedVersionException();
+    }
 }
