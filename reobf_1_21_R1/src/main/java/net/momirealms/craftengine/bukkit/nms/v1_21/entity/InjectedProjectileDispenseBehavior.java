@@ -61,11 +61,12 @@ public class InjectedProjectileDispenseBehavior extends DefaultDispenseItemBehav
             }
 
             Projectile iprojectile = this.projectileItem.asProjectile(worldserver, iposition, CraftItemStack.unwrap(event.getItem()), enumdirection);
+            BlockDispenseProjectileEvent e = new BlockDispenseProjectileEvent(block, craftItem, (org.bukkit.entity.Projectile) iprojectile.getBukkitEntity());
+            Bukkit.getPluginManager().callEvent(e);
             this.projectileItem.shoot(iprojectile, event.getVelocity().getX(), event.getVelocity().getY(), event.getVelocity().getZ(), this.dispenseConfig.power(), this.dispenseConfig.uncertainty());
             iprojectile.projectileSource = new CraftBlockProjectileSource(pointer.blockEntity());
             worldserver.addFreshEntity(iprojectile);
-            BlockDispenseProjectileEvent e = new BlockDispenseProjectileEvent(block, craftItem, (org.bukkit.entity.Projectile) iprojectile.getBukkitEntity());
-            Bukkit.getPluginManager().callEvent(e);
+
             if (shrink) {
                 stack.shrink(1);
             }

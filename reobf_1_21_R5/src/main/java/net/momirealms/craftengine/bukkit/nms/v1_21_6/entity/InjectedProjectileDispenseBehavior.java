@@ -58,10 +58,12 @@ public class InjectedProjectileDispenseBehavior extends DefaultDispenseItemBehav
             }
 
             if (!singleItemStack.isEmpty()) {
-                Projectile projectile = Projectile.spawnProjectileUsingShoot(this.projectileItem.asProjectile(serverLevel, dispensePosition, CraftItemStack.unwrap(event.getItem()), direction), serverLevel, singleItemStack, event.getVelocity().getX(), event.getVelocity().getY(), event.getVelocity().getZ(), this.dispenseConfig.power(), this.dispenseConfig.uncertainty());
+                Projectile.Delayed<Projectile> delayed = Projectile.spawnProjectileUsingShootDelayed(this.projectileItem.asProjectile(serverLevel, dispensePosition, CraftItemStack.unwrap(event.getItem()), direction), serverLevel, singleItemStack, event.getVelocity().getX(), event.getVelocity().getY(), event.getVelocity().getZ(), this.dispenseConfig.power(), this.dispenseConfig.uncertainty());
+                Projectile projectile = delayed.projectile();
                 projectile.projectileSource = new CraftBlockProjectileSource(blockSource.blockEntity());
                 BlockDispenseProjectileEvent e = new BlockDispenseProjectileEvent(block, craftItem, (org.bukkit.entity.Projectile) projectile.getBukkitEntity());
                 Bukkit.getPluginManager().callEvent(e);
+                delayed.spawn();
             }
 
             if (shrink) {
