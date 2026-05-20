@@ -31,6 +31,7 @@ import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.ChunkPos;
+import net.momirealms.craftengine.core.world.chunk.ChunkGenerationStage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spigotmc.SpigotWorldConfig;
@@ -75,7 +76,11 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
                              @NotNull StructureManager structureManager,
                              @NotNull ChunkAccess chunkAccess,
                              GenerationStep.@NotNull Carving carving) {
+        Runnable runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, ChunkGenerationStage.CARVER);
         this.target.applyCarvers(worldGenRegion, seed, randomState, biomeManager, structureManager, chunkAccess, carving);
+        if (runnable != null) {
+            runnable.run();
+        }
     }
 
     @Override
@@ -83,7 +88,11 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
                              @NotNull StructureManager structureManager,
                              @NotNull RandomState randomState,
                              @NotNull ChunkAccess chunkAccess) {
+        Runnable runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, ChunkGenerationStage.SURFACE);
         this.target.buildSurface(worldGenRegion, structureManager, randomState, chunkAccess);
+        if (runnable != null) {
+            runnable.run();
+        }
     }
 
     @Override
@@ -101,8 +110,15 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
                                                                  @NotNull RandomState randomState,
                                                                  @NotNull StructureManager structureManager,
                                                                  @NotNull ChunkAccess chunkAccess) {
-        BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess);
-        return this.target.fillFromNoise(blender, randomState, structureManager, chunkAccess);
+        Runnable runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, ChunkGenerationStage.NOISE);
+        CompletableFuture<ChunkAccess> fillFromNoise = this.target.fillFromNoise(blender, randomState, structureManager, chunkAccess);
+        if (runnable != null) {
+            return fillFromNoise.thenApply(it -> {
+                runnable.run();
+                return it;
+            });
+        }
+        return fillFromNoise;
     }
 
     @Override
@@ -143,9 +159,13 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
     public void createStructures(@NotNull RegistryAccess registryManager,
                                  @NotNull ChunkGeneratorStructureState placementCalculator,
                                  @NotNull StructureManager structureAccessor,
-                                 @NotNull ChunkAccess chunk,
+                                 @NotNull ChunkAccess chunkAccess,
                                  @NotNull StructureTemplateManager structureTemplateManager) {
-        this.target.createStructures(registryManager, placementCalculator, structureAccessor, chunk, structureTemplateManager);
+        Runnable runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, ChunkGenerationStage.STRUCTURE);
+        this.target.createStructures(registryManager, placementCalculator, structureAccessor, chunkAccess, structureTemplateManager);
+        if (runnable != null) {
+            runnable.run();
+        }
     }
 
     @Override
@@ -176,6 +196,7 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
     public void applyBiomeDecoration(@NotNull WorldGenLevel level,
                                      @NotNull ChunkAccess chunkAccess,
                                      @NotNull StructureManager structureAccessor) {
+        Runnable runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, ChunkGenerationStage.FEATURE);
         this.target.applyBiomeDecoration(level, chunkAccess, structureAccessor);
         CraftEngineFeatures ceFeatures = getFeatures(level);
         if (ceFeatures != null && !ceFeatures.features.isEmpty()) {
@@ -204,6 +225,9 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
                     placedFeature.place(level, this, worldgenRandom, blockPos);
                 }
             }
+        }
+        if (runnable != null) {
+            runnable.run();
         }
     }
 
