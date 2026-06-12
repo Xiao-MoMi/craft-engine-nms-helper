@@ -2,7 +2,6 @@ package net.momirealms.craftengine.bukkit.nms;
 
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
-import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
@@ -70,8 +69,6 @@ public abstract class FastNMS {
     public abstract Object createBiomePlacementFilter(Predicate<Key> filter);
 
     public abstract InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup);
-
-    public abstract StatePropertyAccessor createStatePropertyAccessor(Object blockState);
 
     public abstract Object toMinecraftIngredient(Ingredient ingredient);
 

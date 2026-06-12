@@ -23,7 +23,6 @@ import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
 import net.momirealms.craftengine.bukkit.nms.DelegatingContainer;
 import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
-import net.momirealms.craftengine.bukkit.nms.v1_20.block.PaperStatePropertyAccessor;
 import net.momirealms.craftengine.bukkit.nms.v1_20.chunk.InjectedLevelChunkSection;
 import net.momirealms.craftengine.bukkit.nms.v1_20.chunk.InjectedPalettedContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_20.collision.CollisionBoat;
@@ -39,7 +38,6 @@ import net.momirealms.craftengine.bukkit.nms.v1_20.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v1_20.worldgen.*;
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
-import net.momirealms.craftengine.core.block.StatePropertyAccessor;
 import net.momirealms.craftengine.core.entity.player.Player;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
@@ -68,11 +66,6 @@ public final class FastNMSImpl extends FastNMS {
     @Override
     public InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup) {
         return new InjectedPaperLevelCallback((LevelCallback<Entity>) worldCallback, (EntityLookup) entityLookup);
-    }
-
-    @Override
-    public StatePropertyAccessor createStatePropertyAccessor(Object blockState) {
-        return new PaperStatePropertyAccessor((BlockState) blockState);
     }
 
     @Override
