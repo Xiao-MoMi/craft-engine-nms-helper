@@ -36,7 +36,9 @@ public abstract class FastNMS {
     }
 
     private static @NotNull String getImplPath() throws IllegalAccessException {
-        if (VersionHelper.isOrAbove26_1) {
+        if (VersionHelper.isOrAbove26_2) {
+          return "v26_2";
+        } else if (VersionHelper.isOrAbove26_1) {
             return "v26_1";
         } else if (VersionHelper.isOrAbove1_21_11) {
             return "v1_21_11";
@@ -61,8 +63,8 @@ public abstract class FastNMS {
         } else if (VersionHelper.isOrAbove1_20) {
             return "v1_20";
         } else {
-            log.warn("Unsupported Minecraft version {}, Falling back to v26_1", VersionHelper.MINECRAFT_VERSION.version());
-            return "v26_1";
+            log.warn("Unsupported Minecraft version {}, Falling back to v26_2", VersionHelper.MINECRAFT_VERSION.version());
+            return "v26_2";
         }
     }
 
