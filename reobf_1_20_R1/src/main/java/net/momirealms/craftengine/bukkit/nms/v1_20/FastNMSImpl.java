@@ -120,7 +120,6 @@ public final class FastNMSImpl extends FastNMS {
         LevelChunkSectionProxy.INSTANCE.setSpecialCollidingBlocks$legacy(newSection, LevelChunkSectionProxy.INSTANCE.getSpecialCollidingBlocks$legacy(section));
         LevelChunkSectionProxy.INSTANCE.setTickingBlocks(newSection, LevelChunkSectionProxy.INSTANCE.getTickingBlocks(section));
         LevelChunkSectionProxy.INSTANCE.setKnownBlockCollisionData(newSection, LevelChunkSectionProxy.INSTANCE.getKnownBlockCollisionData(section));
-        LevelChunkSectionProxy.INSTANCE.setFluidCount(newSection, LevelChunkSectionProxy.INSTANCE.getFluidCount(section));
         return newSection;
     }
 
