@@ -12,6 +12,7 @@ import net.momirealms.craftengine.core.world.chunk.CESection;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -182,5 +183,10 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     @Override
     public synchronized void write(@NotNull FriendlyByteBuf buffer, ChunkPacketInfo<T> chunkPacketInfo, int chunkSectionIndex) {
         this.delegated.write(buffer, chunkPacketInfo, chunkSectionIndex);
+    }
+
+    @Override
+    public void forEachInPalette(@NonNull Consumer<T> consumer) {
+        this.delegated.forEachInPalette(consumer);
     }
 }
