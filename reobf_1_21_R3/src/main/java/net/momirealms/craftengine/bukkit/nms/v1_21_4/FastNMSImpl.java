@@ -19,6 +19,7 @@ import net.minecraft.network.protocol.handshake.HandshakeProtocols;
 import net.minecraft.network.protocol.login.LoginProtocols;
 import net.minecraft.network.protocol.status.StatusProtocols;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -66,6 +67,8 @@ import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import net.momirealms.craftengine.libraries.reflection.SReflection;
 import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSectionProxy;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 
 import java.util.HashMap;
 import java.util.List;
@@ -309,7 +312,14 @@ public final class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createUntrustedItemCodec() {
-        return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
+        MinecraftServer server = MinecraftServer.getServer();
+        DedicatedServer server1;
+        server1.getLevel()
+        if (VersionHelper.isPaper) {
+            return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
+        } else {
+            return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_STREAM_CODEC);
+        }
     }
 
     @Override

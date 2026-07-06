@@ -276,7 +276,11 @@ public final class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createUntrustedItemCodec() {
-        return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
+        if (VersionHelper.isPaper) {
+            return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
+        } else {
+            return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC);
+        }
     }
 
     @Override
