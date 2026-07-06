@@ -23,9 +23,8 @@ public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
                                            Optional<Ingredient> template,
                                            Ingredient base,
                                            Optional<Ingredient> addition,
-                                           ItemStackTemplate result,
-                                           boolean copyDataComponents) {
-        super(commonInfo, template, base, addition, result, copyDataComponents);
+                                           ItemStackTemplate result) {
+        super(commonInfo, template, base, addition, result);
         this.recipe = recipe;
     }
 
@@ -36,8 +35,7 @@ public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
                 Optional.ofNullable(recipe.template()).map(RecipeHelper::toMinecraft),
                 RecipeHelper.toMinecraft(recipe.base()),
                 Optional.ofNullable(recipe.addition()).map(RecipeHelper::toMinecraft),
-                new ItemStackTemplate(result.typeHolder(), result.getCount(), result.getComponentsPatch()),
-                true
+                new ItemStackTemplate(result.typeHolder(), result.getCount(), result.getComponentsPatch())
         );
     }
 

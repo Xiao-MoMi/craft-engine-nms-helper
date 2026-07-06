@@ -18,8 +18,8 @@ import java.util.Optional;
 public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
     private final CustomSmithingTransformRecipe recipe;
 
-    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Optional<Ingredient> template, Ingredient base, Optional<Ingredient> addition, TransmuteResult result, boolean copyDataComponents) {
-        super(template, base, addition, result, copyDataComponents);
+    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Optional<Ingredient> template, Ingredient base, Optional<Ingredient> addition, TransmuteResult result) {
+        super(template, base, addition, result);
         this.recipe = recipe;
     }
 
@@ -29,8 +29,7 @@ public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
                 Optional.ofNullable(recipe.template()).map(RecipeHelper::toMinecraft),
                 RecipeHelper.toMinecraft(recipe.base()),
                 Optional.ofNullable(recipe.addition()).map(RecipeHelper::toMinecraft),
-                new TransmuteResult(result.getItemHolder(), result.getCount(), result.getComponentsPatch()),
-                true
+                new TransmuteResult(result.getItemHolder(), result.getCount(), result.getComponentsPatch())
         );
     }
 

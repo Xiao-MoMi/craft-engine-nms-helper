@@ -28,9 +28,8 @@ public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
                                       Ingredient template,
                                       Ingredient base,
                                       Ingredient addition,
-                                      Holder<TrimPattern> pattern,
-                                      boolean copyDataComponents) {
-        super(commonInfo, template, base, addition, pattern, copyDataComponents);
+                                      Holder<TrimPattern> pattern) {
+        super(commonInfo, template, base, addition, pattern);
         this.recipe = recipe;
     }
 
@@ -43,8 +42,7 @@ public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
                 RecipeHelper.toMinecraft(recipe.base()),
                 RecipeHelper.toMinecraft(recipe.addition()),
                 registry.get(Identifier.fromNamespaceAndPath(pattern.namespace(), pattern.value()))
-                        .orElseThrow(() -> new NullPointerException("Pattern " + recipe.pattern() + " doesn't exist.")),
-                true
+                        .orElseThrow(() -> new NullPointerException("Pattern " + recipe.pattern() + " doesn't exist."))
         );
     }
 

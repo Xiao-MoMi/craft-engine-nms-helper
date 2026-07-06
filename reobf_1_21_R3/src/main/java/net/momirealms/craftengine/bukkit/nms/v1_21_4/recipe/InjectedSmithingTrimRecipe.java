@@ -16,8 +16,8 @@ import java.util.Optional;
 public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
     private final CustomSmithingTrimRecipe recipe;
 
-    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe, Optional<Ingredient> template, Optional<Ingredient> base, Optional<Ingredient> addition, boolean copyDataComponents) {
-        super(template, base, addition, copyDataComponents);
+    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe, Optional<Ingredient> template, Optional<Ingredient> base, Optional<Ingredient> addition) {
+        super(template, base, addition);
         this.recipe = recipe;
     }
 
@@ -25,8 +25,7 @@ public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
         return new InjectedSmithingTrimRecipe(recipe,
                 Optional.ofNullable(recipe.template()).map(RecipeHelper::toMinecraft),
                 Optional.ofNullable(recipe.base()).map(RecipeHelper::toMinecraft),
-                Optional.ofNullable(recipe.addition()).map(RecipeHelper::toMinecraft),
-                true
+                Optional.ofNullable(recipe.addition()).map(RecipeHelper::toMinecraft)
         );
     }
 

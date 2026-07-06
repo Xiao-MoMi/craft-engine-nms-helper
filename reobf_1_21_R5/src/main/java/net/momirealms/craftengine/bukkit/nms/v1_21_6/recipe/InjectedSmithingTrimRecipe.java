@@ -23,8 +23,8 @@ import java.util.Objects;
 public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
     private final CustomSmithingTrimRecipe recipe;
 
-    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, Holder<TrimPattern> pattern, boolean copyDataComponents) {
-        super(template, base, addition, pattern, copyDataComponents);
+    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, Holder<TrimPattern> pattern) {
+        super(template, base, addition, pattern);
         this.recipe = recipe;
     }
 
@@ -36,8 +36,7 @@ public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
                 RecipeHelper.toMinecraft(recipe.base()),
                 RecipeHelper.toMinecraft(recipe.addition()),
                 registry.get(ResourceLocation.fromNamespaceAndPath(pattern.namespace(), pattern.value()))
-                        .orElseThrow(() -> new NullPointerException("Pattern " + recipe.pattern() + " doesn't exist.")),
-                true
+                        .orElseThrow(() -> new NullPointerException("Pattern " + recipe.pattern() + " doesn't exist."))
         );
     }
 

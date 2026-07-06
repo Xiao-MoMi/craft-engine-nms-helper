@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
     private final CustomSmithingTransformRecipe recipe;
 
-    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, net.minecraft.world.item.ItemStack result, boolean copyDataComponents) {
-        super(new ResourceLocation(recipe.id().namespace(), recipe.id().value()), template, base, addition, result, copyDataComponents);
+    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, net.minecraft.world.item.ItemStack result) {
+        super(new ResourceLocation(recipe.id().namespace(), recipe.id().value()), template, base, addition, result);
         this.recipe = recipe;
     }
 
@@ -27,8 +27,7 @@ public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
                 RecipeHelper.toMinecraft(recipe.template()),
                 RecipeHelper.toMinecraft(recipe.base()),
                 RecipeHelper.toMinecraft(recipe.addition()),
-                result,
-                true
+                result
         );
     }
 

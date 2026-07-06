@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_5.recipe;
 
 import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 import net.minecraft.world.level.Level;
@@ -15,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
     private final CustomSmithingTransformRecipe recipe;
 
-    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, net.minecraft.world.item.ItemStack result, boolean copyDataComponents) {
-        super(template, base, addition, result, copyDataComponents);
+    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, ItemStack result) {
+        super(template, base, addition, result);
         this.recipe = recipe;
     }
 
@@ -26,8 +27,7 @@ public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
                 RecipeHelper.toMinecraft(recipe.template()),
                 RecipeHelper.toMinecraft(recipe.base()),
                 RecipeHelper.toMinecraft(recipe.addition()),
-                result,
-                true
+                result
         );
     }
 

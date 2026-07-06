@@ -1,5 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v1_21_4.recipe;
 
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingRecipeInput;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
@@ -17,8 +18,8 @@ import java.util.Optional;
 public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
     private final CustomSmithingTransformRecipe recipe;
 
-    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Optional<Ingredient> template, Optional<Ingredient> base, Optional<Ingredient> addition, net.minecraft.world.item.ItemStack result, boolean copyDataComponents) {
-        super(template, base, addition, result, copyDataComponents);
+    public InjectedSmithingTransformRecipe(CustomSmithingTransformRecipe recipe, Optional<Ingredient> template, Optional<Ingredient> base, Optional<Ingredient> addition, ItemStack result) {
+        super(template, base, addition, result);
         this.recipe = recipe;
     }
 
@@ -28,8 +29,7 @@ public class InjectedSmithingTransformRecipe extends SmithingTransformRecipe {
                 Optional.ofNullable(recipe.template()).map(RecipeHelper::toMinecraft),
                 Optional.ofNullable(recipe.base()).map(RecipeHelper::toMinecraft),
                 Optional.ofNullable(recipe.addition()).map(RecipeHelper::toMinecraft),
-                result,
-                true
+                result
         );
     }
 

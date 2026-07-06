@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
 public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
     private final CustomSmithingTrimRecipe recipe;
 
-    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe, Ingredient template, Ingredient base, Ingredient addition, boolean copyDataComponents) {
-        super(new ResourceLocation(recipe.id().namespace(), recipe.id().value()), template, base, addition, copyDataComponents);
+    public InjectedSmithingTrimRecipe(CustomSmithingTrimRecipe recipe, Ingredient template, Ingredient base, Ingredient addition) {
+        super(new ResourceLocation(recipe.id().namespace(), recipe.id().value()), template, base, addition);
         this.recipe = recipe;
     }
 
@@ -24,8 +24,7 @@ public class InjectedSmithingTrimRecipe extends SmithingTrimRecipe {
         return new InjectedSmithingTrimRecipe(recipe,
                 RecipeHelper.toMinecraft(recipe.template()),
                 RecipeHelper.toMinecraft(recipe.base()),
-                RecipeHelper.toMinecraft(recipe.addition()),
-                true
+                RecipeHelper.toMinecraft(recipe.addition())
         );
     }
 
