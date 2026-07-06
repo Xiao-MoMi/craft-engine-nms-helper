@@ -214,7 +214,7 @@ public final class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState) {
-        if (VersionHelper.isFolia) {
+        if (VersionHelper.hasFoliaPatch) {
             return FallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
         }
         return InjectedFallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);

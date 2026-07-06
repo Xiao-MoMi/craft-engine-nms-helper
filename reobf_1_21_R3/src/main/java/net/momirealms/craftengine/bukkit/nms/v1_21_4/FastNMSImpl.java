@@ -217,7 +217,7 @@ public final class FastNMSImpl extends FastNMS {
 
     @Override
     public Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState) {
-        if (VersionHelper.isFolia) {
+        if (VersionHelper.hasFoliaPatch) {
             return FallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
         }
         return InjectedFallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
@@ -310,7 +310,7 @@ public final class FastNMSImpl extends FastNMS {
     @Override
     public Object createUntrustedItemCodec() {
         MinecraftServer server = MinecraftServer.getServer();
-        if (VersionHelper.isPaper) {
+        if (VersionHelper.hasPaperPatch) {
             return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
         } else {
             return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_STREAM_CODEC);
