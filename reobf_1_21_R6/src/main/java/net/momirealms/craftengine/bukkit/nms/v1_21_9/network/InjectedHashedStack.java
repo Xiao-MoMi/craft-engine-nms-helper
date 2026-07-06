@@ -18,7 +18,7 @@ public record InjectedHashedStack(HashedStack hashedStack, Player player) implem
     public boolean matches(@NotNull ItemStack stack, HashedPatchMap.@NotNull HashGenerator hashGenerator) {
         if (this.hashedStack instanceof HashedStack.ActualItem actualItem && actualItem.count() != stack.getCount()) return false;
         if (!stack.isEmpty()) {
-            Optional<Item> optional = BukkitItemManager.instance().s2c(ItemStackUtils.wrap(stack), this.player);
+            Optional<Item> optional = BukkitItemManager.instance().s2c(ItemStackUtils.wrap(stack.copy()), this.player);;
             if (optional.isPresent()) {
                 stack = (ItemStack) optional.get().minecraftItem();
             }
