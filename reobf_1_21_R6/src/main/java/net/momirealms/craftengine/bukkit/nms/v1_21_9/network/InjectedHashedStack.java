@@ -6,6 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.momirealms.craftengine.bukkit.item.BukkitItemManager;
 import net.momirealms.craftengine.bukkit.util.ItemStackUtils;
 import net.momirealms.craftengine.core.entity.player.Player;
+import net.momirealms.craftengine.core.item.Item;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,9 +18,9 @@ public record InjectedHashedStack(HashedStack hashedStack, Player player) implem
     public boolean matches(@NotNull ItemStack stack, HashedPatchMap.@NotNull HashGenerator hashGenerator) {
         if (this.hashedStack instanceof HashedStack.ActualItem actualItem && actualItem.count() != stack.getCount()) return false;
         if (!stack.isEmpty()) {
-            Optional<org.bukkit.inventory.ItemStack> optional = BukkitItemManager.instance().s2c(ItemStackUtils.getBukkitStack(stack.copy()), this.player);
+            Optional<Item> optional = BukkitItemManager.instance().s2c(ItemStackUtils.wrap(stack), this.player);
             if (optional.isPresent()) {
-                stack = ((CraftItemStack) optional.get()).handle;
+                stack = (ItemStack) optional.get().minecraftItem();
             }
         }
         return this.hashedStack.matches(stack, hashGenerator);
