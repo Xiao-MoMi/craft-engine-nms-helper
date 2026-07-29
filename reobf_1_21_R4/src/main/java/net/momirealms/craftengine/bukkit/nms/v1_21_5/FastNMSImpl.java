@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.ConnectionProtocol;
-import net.minecraft.network.HashedStack;
 import net.minecraft.network.ProtocolInfo;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -25,7 +24,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -48,7 +46,6 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_5.entity.InjectedProjectileDi
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.inventory.CustomContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.inventory.CustomWorldlyContainer;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.loot.CraftEngineItem;
-import net.momirealms.craftengine.bukkit.nms.v1_21_5.network.InjectedHashedStack;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v1_21_5.worldgen.*;
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
@@ -234,11 +231,6 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object createAlwaysStatePredicate(boolean trueOrFalse) {
-        return (BlockBehaviour.StatePredicate) (blockState, blockGetter, blockPos) -> trueOrFalse;
-    }
-
-    @Override
     public Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz() {
         throw new UnsupportedVersionException();
     }
@@ -273,11 +265,6 @@ public final class FastNMSImpl extends FastNMS {
             }
         }
         return allPacketIdsByName;
-    }
-
-    @Override
-    public Object createInjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player) {
-        return new InjectedHashedStack((HashedStack) hashedStack, player);
     }
 
     @Override

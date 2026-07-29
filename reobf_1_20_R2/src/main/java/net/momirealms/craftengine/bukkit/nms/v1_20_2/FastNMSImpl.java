@@ -15,7 +15,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -211,11 +210,6 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object createAlwaysStatePredicate(boolean trueOrFalse) {
-        return (BlockBehaviour.StatePredicate) (blockState, blockGetter, blockPos) -> trueOrFalse;
-    }
-
-    @Override
     public Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz() {
         Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<Class<?>, Integer>>> allPacketIdsByClazz = new HashMap<>();
         for (ConnectionProtocol protocol : ConnectionProtocol.values()) {
@@ -239,11 +233,6 @@ public final class FastNMSImpl extends FastNMS {
 
     private <T extends ParticleOptions> T readParticle(FriendlyByteBuf buf, ParticleType<T> type) {
         return type.getDeserializer().fromNetwork(type, buf);
-    }
-
-    @Override
-    public Object createInjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player) {
-        throw new UnsupportedVersionException();
     }
 
     @Override

@@ -126,10 +126,6 @@ public abstract class FastNMS {
 
     public abstract Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName();
 
-    public abstract Object createInjectedHashedStack(Object hashedStack, net.momirealms.craftengine.core.entity.player.Player player);
-
-    public abstract Object createAlwaysStatePredicate(boolean trueOrFalse);
-
     public abstract Object createUntrustedItemCodec();
 
     public abstract DelegatingContainer createContainer(BukkitContainer container);

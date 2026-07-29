@@ -12,7 +12,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -38,7 +37,6 @@ import net.momirealms.craftengine.bukkit.nms.v1_20.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v1_20.worldgen.*;
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
-import net.momirealms.craftengine.core.entity.player.Player;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.util.Key;
@@ -204,11 +202,6 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public Object createAlwaysStatePredicate(boolean trueOrFalse) {
-        return (BlockBehaviour.StatePredicate) (blockState, blockGetter, blockPos) -> trueOrFalse;
-    }
-
-    @Override
     public Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz() {
         Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<Class<?>, Integer>>> allPacketIdsByClazz = new HashMap<>();
         for (ConnectionProtocol protocol : ConnectionProtocol.values()) {
@@ -227,11 +220,6 @@ public final class FastNMSImpl extends FastNMS {
 
     @Override
     public Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>>> gamePacketIdsByName() {
-        throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object createInjectedHashedStack(Object hashedStack, Player player) {
         throw new UnsupportedVersionException();
     }
 
