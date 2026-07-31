@@ -5,7 +5,6 @@ import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
-import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
-import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
 public abstract class FastNMS {
@@ -67,8 +65,6 @@ public abstract class FastNMS {
             return "v26_2";
         }
     }
-
-    public abstract Object createBiomePlacementFilter(Predicate<Key> filter);
 
     public abstract InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup);
 
@@ -125,8 +121,6 @@ public abstract class FastNMS {
     public abstract Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz();
 
     public abstract Map<ConnectionState, Map<PacketFlow, Map<String, Integer>>> gamePacketIdsByName();
-
-    public abstract Object createUntrustedItemCodec();
 
     public abstract DelegatingContainer createContainer(BukkitContainer container);
 

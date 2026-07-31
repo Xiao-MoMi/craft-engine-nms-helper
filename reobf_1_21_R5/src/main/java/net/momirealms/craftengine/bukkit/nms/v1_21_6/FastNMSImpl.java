@@ -17,7 +17,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -51,7 +50,6 @@ import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
-import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
@@ -64,17 +62,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public final class FastNMSImpl extends FastNMS {
-
-    @Override
-    public Object createBiomePlacementFilter(Predicate<Key> filter) {
-        return new BiomeFilter(filter);
-    }
 
     @Override
     public InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup) {
@@ -259,15 +251,6 @@ public final class FastNMSImpl extends FastNMS {
             }
         }
         return allPacketIdsByName;
-    }
-
-    @Override
-    public Object createUntrustedItemCodec() {
-        if (VersionHelper.hasPaperPatch) {
-            return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC).apply(ByteBufCodecs::trackDepth);
-        } else {
-            return ItemStack.validatedStreamCodec(ItemStack.OPTIONAL_UNTRUSTED_STREAM_CODEC);
-        }
     }
 
     @Override

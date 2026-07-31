@@ -39,7 +39,6 @@ import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
-import net.momirealms.craftengine.core.util.Key;
 import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
@@ -51,15 +50,9 @@ import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSe
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Predicate;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public final class FastNMSImpl extends FastNMS {
-
-    @Override
-    public Object createBiomePlacementFilter(Predicate<Key> filter) {
-        return new BiomeFilter(filter);
-    }
 
     @Override
     public InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup) {
@@ -221,11 +214,6 @@ public final class FastNMSImpl extends FastNMS {
     @Override
     public Map<ConnectionState, Map<net.momirealms.craftengine.core.plugin.network.PacketFlow, Map<String, Integer>>> gamePacketIdsByName() {
         throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object createUntrustedItemCodec() {
-        return null;
     }
 
     @Override
