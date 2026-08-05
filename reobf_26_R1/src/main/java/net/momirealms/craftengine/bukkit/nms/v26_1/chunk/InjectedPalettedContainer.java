@@ -180,7 +180,7 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     }
 
     @Override
-    public synchronized void write(@NotNull FriendlyByteBuf buffer, ChunkPacketInfo<T> chunkPacketInfo, int chunkSectionIndex) {
+    public synchronized void write(@NotNull FriendlyByteBuf buffer, io.papermc.paper.antixray.@Nullable ChunkPacketInfo<T> chunkPacketInfo, int chunkSectionIndex) {
         this.delegated.write(buffer, chunkPacketInfo, chunkSectionIndex);
     }
 }

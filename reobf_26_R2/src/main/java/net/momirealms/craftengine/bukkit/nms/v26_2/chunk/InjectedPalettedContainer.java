@@ -1,6 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v26_2.chunk;
 
-import io.papermc.paper.antixray.ChunkPacketInfo;
+import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.chunk.PalettedContainerRO;
@@ -10,6 +10,7 @@ import net.momirealms.craftengine.core.world.SectionPos;
 import net.momirealms.craftengine.core.world.chunk.CEChunk;
 import net.momirealms.craftengine.core.world.chunk.CESection;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
+import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.PalettedContainerProxy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -181,8 +182,14 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
     }
 
     @Override
-    public synchronized void write(@NotNull FriendlyByteBuf buffer, ChunkPacketInfo<T> chunkPacketInfo, int chunkSectionIndex) {
+    public synchronized void write(@NotNull FriendlyByteBuf buffer, io.papermc.paper.antixray.@Nullable ChunkPacketInfo<T> chunkPacketInfo, int chunkSectionIndex) {
         this.delegated.write(buffer, chunkPacketInfo, chunkSectionIndex);
+    }
+
+    public void write(final com.universeprojects.util.io.DirectChunkWriter writer,
+                      final io.papermc.paper.antixray.@Nullable ChunkPacketInfo<T> chunkPacketInfo,
+                      final int chunkSectionIndex) {
+        PalettedContainerProxy.INSTANCE.write(this.delegated, writer, chunkPacketInfo, chunkSectionIndex);
     }
 
     @Override
