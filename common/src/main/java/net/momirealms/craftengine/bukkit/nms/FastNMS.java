@@ -7,7 +7,6 @@ import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.VersionHelper;
-import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import org.bukkit.World;
@@ -90,7 +89,7 @@ public abstract class FastNMS {
 
     public abstract InjectedStorage.Section createInjectedLevelChunkSection(Object levelChunkSection);
 
-    public abstract InjectedChunkGenerator createInjectedChunkGenerator(CEWorld world, Object generator);
+    public abstract InjectedChunkGenerator createInjectedChunkGenerator(BukkitWorld world, Object generator);
 
     public abstract CollisionEntity createCollisionBoat(Object world, Object aabb,
                                                         double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding);

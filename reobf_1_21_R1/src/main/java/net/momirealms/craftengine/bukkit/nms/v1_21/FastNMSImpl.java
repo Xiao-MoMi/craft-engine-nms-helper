@@ -56,7 +56,6 @@ import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.util.VersionHelper;
-import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
@@ -140,7 +139,7 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public InjectedChunkGenerator createInjectedChunkGenerator(CEWorld world, Object generator) {
+    public InjectedChunkGenerator createInjectedChunkGenerator(BukkitWorld world, Object generator) {
         return new InjectedCustomChunkGenerator(world, (ChunkGenerator) generator);
     }
 

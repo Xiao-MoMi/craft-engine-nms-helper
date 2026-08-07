@@ -25,11 +25,11 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.momirealms.craftengine.bukkit.world.BukkitWorld;
 import net.momirealms.craftengine.bukkit.world.BukkitWorldManager;
 import net.momirealms.craftengine.bukkit.world.gen.CraftEngineFeatures;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.util.Key;
-import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.ChunkPos;
 import net.momirealms.craftengine.core.world.chunk.ChunkGenerationStage;
 import org.jetbrains.annotations.NotNull;
@@ -41,11 +41,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class InjectedCustomChunkGenerator extends ChunkGenerator implements InjectedChunkGenerator {
     private final ChunkGenerator target;
-    private final CEWorld world;
+    private final BukkitWorld world;
     private long lastUpdateFeatureTime;
     private CraftEngineFeatures features;
 
-    public InjectedCustomChunkGenerator(CEWorld world, ChunkGenerator target) {
+    public InjectedCustomChunkGenerator(BukkitWorld world, ChunkGenerator target) {
         super(target.getBiomeSource());
         this.target = target;
         this.world = world;
