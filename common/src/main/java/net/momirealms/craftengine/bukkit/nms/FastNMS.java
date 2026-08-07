@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms;
 
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
+import net.momirealms.craftengine.bukkit.world.BukkitWorld;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
@@ -9,6 +10,7 @@ import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +67,8 @@ public abstract class FastNMS {
             return "v26_2";
         }
     }
+
+    public abstract BukkitWorld createInjectedWorld(World world);
 
     public abstract InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup);
 

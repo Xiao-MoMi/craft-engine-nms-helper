@@ -28,9 +28,9 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
 import net.momirealms.craftengine.bukkit.block.behavior.ConcretePowderBlockBehavior;
 import net.momirealms.craftengine.bukkit.util.BlockStateUtils;
-import net.momirealms.craftengine.bukkit.world.BukkitWorld;
 import net.momirealms.craftengine.core.block.ImmutableBlockState;
 import net.momirealms.craftengine.core.block.property.BooleanProperty;
 import net.momirealms.craftengine.core.block.property.Property;
@@ -87,7 +87,7 @@ public class InjectedFallingBlockEntity extends FallingBlockEntity {
         Optional<ImmutableBlockState> optionalCustomState = BlockStateUtils.getOptionalCustomBlockState(super.getBlockState());
         if (optionalCustomState.isEmpty()) return null;
         ImmutableBlockState customState = optionalCustomState.get();
-        World world = new BukkitWorld(this.level().getWorld());
+        World world = BukkitAdaptor.adapt(this.level().getWorld());
         WorldPosition position = new WorldPosition(world, this.xo, this.yo, this.zo);
         ContextHolder.Builder builder = ContextHolder.builder()
                 .withParameter(DirectContextParameters.FALLING_BLOCK, true)

@@ -1,6 +1,5 @@
 package net.momirealms.craftengine.bukkit.nms.v26_1.chunk;
 
-import io.papermc.paper.antixray.ChunkPacketInfo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.chunk.PalettedContainerRO;

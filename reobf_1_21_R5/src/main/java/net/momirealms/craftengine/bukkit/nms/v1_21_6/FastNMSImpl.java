@@ -33,6 +33,7 @@ import net.momirealms.craftengine.bukkit.nms.FastNMS;
 import net.momirealms.craftengine.bukkit.nms.UnsupportedVersionException;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.chunk.InjectedLevelChunkSection;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.chunk.InjectedPalettedContainer;
+import net.momirealms.craftengine.bukkit.nms.v1_21_6.chunk.InjectedWorldBorder;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.collision.NonCollisionBoat;
@@ -46,6 +47,7 @@ import net.momirealms.craftengine.bukkit.nms.v1_21_6.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v1_21_6.worldgen.*;
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
+import net.momirealms.craftengine.bukkit.world.BukkitWorld;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
@@ -57,6 +59,8 @@ import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
 import net.momirealms.craftengine.libraries.reflection.SReflection;
 import net.momirealms.craftengine.proxy.minecraft.world.level.chunk.LevelChunkSectionProxy;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.CraftWorld;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +71,11 @@ import java.util.stream.Stream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public final class FastNMSImpl extends FastNMS {
+
+    @Override
+    public BukkitWorld createInjectedWorld(World world) {
+        return new InjectedWorldBorder((CraftWorld) world);
+    }
 
     @Override
     public InjectedWorldCallback createInjectedWorldCallbacks(Object worldCallback, Object entityLookup) {
