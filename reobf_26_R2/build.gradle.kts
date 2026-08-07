@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:26.2.build.+")
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:26.2.build.110-stable")
     compileOnly(project(":common"))
 }

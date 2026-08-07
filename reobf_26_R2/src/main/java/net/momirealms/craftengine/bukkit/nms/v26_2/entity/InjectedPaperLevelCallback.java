@@ -1,7 +1,6 @@
 package net.momirealms.craftengine.bukkit.nms.v26_2.entity;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
-import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.server.ServerEntityLookup;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.LevelCallback;
@@ -12,16 +11,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class InjectedPaperLevelCallback implements LevelCallback<Entity>, InjectedWorldCallback {
     private final LevelCallback<Entity> callback;
-    private final ServerEntityLookup entityLookup;
 
     public InjectedPaperLevelCallback(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
-        this.entityLookup = (ServerEntityLookup) entityLookup;
         for (Entity entity : entityLookup.getAll()) {
             if (entity instanceof CollisionEntity) {
                 callback.onTickingEnd(entity);
                 entity.moonrise$setTrackedEntity(null);
-                this.entityLookup.trackerEntities.remove(entity);
             } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
                 callback.onTickingEnd(entity);
             }
@@ -52,12 +48,9 @@ public class InjectedPaperLevelCallback implements LevelCallback<Entity>, Inject
     @Override
     public void onTrackingStart(@NotNull Entity entity) {
         boolean isCollisionEntity = entity instanceof CollisionEntity;
+        this.callback.onTrackingStart(entity);
         if (isCollisionEntity) {
-            this.entityLookup.trackerEntities.remove(entity);
-            this.callback.onTrackingStart(entity);
             entity.moonrise$setTrackedEntity(null);
-        } else  {
-            this.callback.onTrackingStart(entity);
         }
     }
 
