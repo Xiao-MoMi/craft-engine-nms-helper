@@ -9,18 +9,25 @@ import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorldBorder;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+import java.util.UUID;
+
 public class InjectedWorldBorder extends CraftWorldBorder implements BukkitWorld, WorldHolder {
-    private final CraftWorld craftWorld;
-    private final ServerLevel serverLevel;
+    private final WeakReference<CraftWorld> craftWorld;
+    private final WeakReference<ServerLevel> serverLevel;
     private final WorldHeight worldHeight;
+    private final UUID uuid;
+    private final String name;
     @Nullable
     private CEWorld ceWorld;
 
     public InjectedWorldBorder(CraftWorld craftWorld) {
         super(craftWorld);
-        this.craftWorld = craftWorld;
-        this.serverLevel = craftWorld.getHandle();
+        this.craftWorld = new WeakReference<>(craftWorld);
+        this.serverLevel = new WeakReference<>(craftWorld.getHandle());
         this.worldHeight = WorldHeight.create(craftWorld.getMinHeight(), craftWorld.getMaxHeight() - craftWorld.getMinHeight());
+        this.uuid = craftWorld.getUID();
+        this.name = craftWorld.getName();
     }
 
     @Override
@@ -35,16 +42,26 @@ public class InjectedWorldBorder extends CraftWorldBorder implements BukkitWorld
 
     @Override
     public Object minecraftWorld() {
-        return this.serverLevel;
+        return this.serverLevel.get();
     }
 
     @Override
     public Object platformWorld() {
-        return this.craftWorld;
+        return this.craftWorld.get();
     }
 
     @Override
     public WorldHeight worldHeight() {
         return this.worldHeight;
+    }
+
+    @Override
+    public UUID uuid() {
+        return this.uuid;
+    }
+
+    @Override
+    public String name() {
+        return this.name;
     }
 }
