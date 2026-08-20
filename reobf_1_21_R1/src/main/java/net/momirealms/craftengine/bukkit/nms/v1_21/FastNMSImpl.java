@@ -19,7 +19,6 @@ import net.minecraft.network.protocol.status.StatusProtocols;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -42,7 +41,6 @@ import net.momirealms.craftengine.bukkit.nms.v1_21.collision.CollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21.collision.CollisionInteraction;
 import net.momirealms.craftengine.bukkit.nms.v1_21.collision.NonCollisionBoat;
 import net.momirealms.craftengine.bukkit.nms.v1_21.collision.NonCollisionInteraction;
-import net.momirealms.craftengine.bukkit.nms.v1_21.entity.InjectedFallingBlockEntity;
 import net.momirealms.craftengine.bukkit.nms.v1_21.entity.InjectedPaperLevelCallback;
 import net.momirealms.craftengine.bukkit.nms.v1_21.entity.InjectedProjectileDispenseBehavior;
 import net.momirealms.craftengine.bukkit.nms.v1_21.inventory.CustomContainer;
@@ -55,7 +53,6 @@ import net.momirealms.craftengine.bukkit.world.BukkitWorld;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
-import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
@@ -209,14 +206,6 @@ public final class FastNMSImpl extends FastNMS {
     @Override
     public Object createDyeRecipe(CustomDyeRecipe recipe) {
         throw new UnsupportedVersionException();
-    }
-
-    @Override
-    public Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState) {
-        if (VersionHelper.hasFoliaPatch || !VersionHelper.hasPaperPatch) {
-            return FallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
-        }
-        return InjectedFallingBlockEntity.fall((Level) level, (BlockPos) pos, (BlockState) blockState);
     }
 
     @Override

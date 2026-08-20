@@ -117,8 +117,6 @@ public abstract class FastNMS {
 
     public abstract Object createDyeRecipe(CustomDyeRecipe recipe);
 
-    public abstract Object createInjectedFallingBlockEntity(Object level, Object pos, Object blockState);
-
     public abstract Object createInjectedFurnaceCachedCheck(Object recipeType, Object blockEntity);
 
     public abstract Map<ConnectionState, Map<PacketFlow, Map<Class<?>, Integer>>> gamePacketIdsByClazz();
