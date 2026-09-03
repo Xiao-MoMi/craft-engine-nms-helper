@@ -79,6 +79,11 @@ public class CustomContainer implements Container, DelegatingContainer {
         return this.container.stillValid(BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity()));
     }
 
+    // UniverseSpigot adds this no-argument method to the Container ABI.
+    public boolean stillValid() {
+        return true;
+    }
+
     @Override
     public @NotNull List<ItemStack> getContents() {
         List<ItemStack> contents = new ArrayList<>(this.getContainerSize());
