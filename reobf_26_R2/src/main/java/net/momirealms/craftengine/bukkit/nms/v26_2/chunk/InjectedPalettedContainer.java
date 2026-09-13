@@ -185,14 +185,26 @@ public class InjectedPalettedContainer<T> extends PalettedContainer<T> implement
         this.delegated.write(buffer, chunkPacketInfo, chunkSectionIndex);
     }
 
+    @Override
+    public void forEachInPalette(@NonNull Consumer<T> consumer) {
+        this.delegated.forEachInPalette(consumer);
+    }
+
+    // us
     public void write(final com.universeprojects.util.io.DirectChunkWriter writer,
                       final io.papermc.paper.antixray.@Nullable ChunkPacketInfo<T> chunkPacketInfo,
                       final int chunkSectionIndex) {
         PalettedContainerProxy.INSTANCE.write(this.delegated, writer, chunkPacketInfo, chunkSectionIndex);
     }
 
-    @Override
-    public void forEachInPalette(@NonNull Consumer<T> consumer) {
-        this.delegated.forEachInPalette(consumer);
+    // leaf
+    @SuppressWarnings("unchecked")
+    public final T leaf$getFromData(final PalettedContainer.Data<T> data, final int index) {
+         return (T) PalettedContainerProxy.INSTANCE.leaf$getFromData(this.delegated, data, index);
+    }
+
+    @SuppressWarnings("unchecked")
+    public PalettedContainer.Data<T> leaf$getDataAcquire() {
+         return (Data<T>) PalettedContainerProxy.INSTANCE.leaf$getDataAcquire(this.delegated);
     }
 }

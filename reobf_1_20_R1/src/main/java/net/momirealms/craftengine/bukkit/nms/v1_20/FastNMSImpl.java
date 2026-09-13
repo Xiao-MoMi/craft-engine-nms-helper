@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20;
 
 import io.papermc.paper.chunk.system.entity.EntityLookup;
+import io.papermc.paper.event.player.PlayerStonecutterRecipeSelectEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.ConnectionProtocol;
@@ -103,6 +104,7 @@ public final class FastNMSImpl extends FastNMS {
     public InjectedStorage.Palette createInjectedPalettedContainer(Object palettedContainer) {
         InjectedPalettedContainer injectedObject = SReflection.allocateInstance(InjectedPalettedContainer.class);
         injectedObject.delegated = (PalettedContainer) palettedContainer;
+        PlayerStonecutterRecipeSelectEvent
         return injectedObject;
     }
 

@@ -47,6 +47,7 @@ import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
+import net.momirealms.craftengine.core.util.VersionHelper;
 import net.momirealms.craftengine.core.world.InjectedWorldCallback;
 import net.momirealms.craftengine.core.world.WorldlyContainer;
 import net.momirealms.craftengine.core.world.chunk.InjectedStorage;
@@ -92,6 +93,10 @@ public final class FastNMSImpl extends FastNMS {
         LevelChunkSectionProxy.INSTANCE.setSpecialCollidingBlocks(newSection, LevelChunkSectionProxy.INSTANCE.getSpecialCollidingBlocks(section));
         LevelChunkSectionProxy.INSTANCE.setTickingBlocks(newSection, LevelChunkSectionProxy.INSTANCE.getTickingBlocks(section));
         LevelChunkSectionProxy.INSTANCE.setFluidCount(newSection, LevelChunkSectionProxy.INSTANCE.getFluidCount(section));
+        if (VersionHelper.hasUniverseSpigotPatch) {
+            LevelChunkSectionProxy.INSTANCE.setHasOnlyAir(newSection, LevelChunkSectionProxy.INSTANCE.hasOnlyAir(section));
+            LevelChunkSectionProxy.INSTANCE.setIsRandomlyTickingBlocksStatus(newSection, LevelChunkSectionProxy.INSTANCE.isRandomlyTickingBlocksStatus(section));
+        }
         return newSection;
     }
 
