@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.momirealms.craftengine.bukkit.nms.CollisionEntity;
+import net.momirealms.craftengine.core.util.VersionHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -31,10 +32,14 @@ public class CollisionInteraction extends Interaction implements CollisionEntity
 
     @Override
     public boolean save(@NotNull ValueOutput output) {
-        String encodeId = this.getEncodeId(false);
+        String encodeId = this.getEncodeId();
         if (encodeId != null) {
             output.putString("id", encodeId);
-            this.saveWithoutId(output, true, false, true);
+            if (VersionHelper.hasPaperPatch) {
+                this.saveWithoutId(output, true, false, true);
+            } else {
+                this.saveWithoutId(output);
+            }
             return true;
         } else {
             return false;

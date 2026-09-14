@@ -104,7 +104,6 @@ public final class FastNMSImpl extends FastNMS {
     public InjectedStorage.Palette createInjectedPalettedContainer(Object palettedContainer) {
         InjectedPalettedContainer injectedObject = SReflection.allocateInstance(InjectedPalettedContainer.class);
         injectedObject.delegated = (PalettedContainer) palettedContainer;
-        PlayerStonecutterRecipeSelectEvent
         return injectedObject;
     }
 
@@ -128,14 +127,18 @@ public final class FastNMSImpl extends FastNMS {
 
     @Override
     public CollisionEntity createCollisionBoat(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding) {
-        if (canCollide) return new CollisionBoat(EntityType.BOAT, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
-        else return new NonCollisionBoat(EntityType.BOAT, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+        if (canCollide)
+            return new CollisionBoat(EntityType.BOAT, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+        else
+            return new NonCollisionBoat(EntityType.BOAT, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
     }
 
     @Override
     public CollisionEntity createCollisionInteraction(Object world, Object aabb, double x, double y, double z, boolean canProjectileHit, boolean canCollide, boolean blocksBuilding) {
-        if (canCollide) return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
-        else return new NonCollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+        if (canCollide)
+            return new CollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
+        else
+            return new NonCollisionInteraction(EntityType.INTERACTION, (Level) world, x, y, z, (AABB) aabb, canProjectileHit, blocksBuilding);
     }
 
     @Override

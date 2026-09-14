@@ -38,10 +38,14 @@ public class CollisionBoat extends net.minecraft.world.entity.vehicle.boat.Boat 
 
     @Override
     public boolean save(@NotNull ValueOutput output) {
-        String encodeId = this.getEncodeId(false);
+        String encodeId = this.getEncodeId();
         if (encodeId != null) {
             output.putString("id", encodeId);
-            this.saveWithoutId(output, true, false, true);
+            if (VersionHelper.hasPaperPatch) {
+                this.saveWithoutId(output, true, false, true);
+            } else {
+                this.saveWithoutId(output);
+            }
             return true;
         } else {
             return false;
