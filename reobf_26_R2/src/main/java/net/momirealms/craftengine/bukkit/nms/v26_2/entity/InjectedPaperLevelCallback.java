@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v26_2.entity;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.LevelCallback;
@@ -17,7 +18,7 @@ public class InjectedPaperLevelCallback implements LevelCallback<Entity>, Inject
         for (Entity entity : entityLookup.getAll()) {
             if (entity instanceof CollisionEntity) {
                 callback.onTickingEnd(entity);
-                entity.moonrise$setTrackedEntity(null);
+                stopTracking(entity);
             } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
                 callback.onTickingEnd(entity);
             }
@@ -47,11 +48,15 @@ public class InjectedPaperLevelCallback implements LevelCallback<Entity>, Inject
 
     @Override
     public void onTrackingStart(@NotNull Entity entity) {
-        boolean isCollisionEntity = entity instanceof CollisionEntity;
         this.callback.onTrackingStart(entity);
-        if (isCollisionEntity) {
-            entity.moonrise$setTrackedEntity(null);
+        if (entity instanceof CollisionEntity) {
+            stopTracking(entity);
         }
+    }
+
+    private void stopTracking(Entity entity) {
+        // Untrack through ChunkMap so player pairings and all tracker references are cleared.
+        ((ServerLevel) entity.level()).getChunkSource().removeEntity(entity);
     }
 
     @Override

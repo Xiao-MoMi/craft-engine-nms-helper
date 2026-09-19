@@ -1,6 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms.v1_20_2.entity;
 
 import io.papermc.paper.chunk.system.entity.EntityLookup;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.LevelCallback;
@@ -11,16 +12,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class InjectedPaperLevelCallback implements LevelCallback<Entity>, InjectedWorldCallback {
     private final LevelCallback<Entity> callback;
-    private final EntityLookup entityLookup;
 
     public InjectedPaperLevelCallback(LevelCallback<Entity> callback, EntityLookup entityLookup) {
         this.callback = callback;
-        this.entityLookup = entityLookup;
         for (Entity entity : entityLookup.getAll()) {
             if (entity instanceof CollisionEntity) {
                 callback.onTickingEnd(entity);
-                entity.tracker = null;
-                entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
+                stopTracking(entity);
             } else if (entity instanceof Display.ItemDisplay && CraftEngineFurniture.isFurniture(entity.getBukkitEntity())) {
                 callback.onTickingEnd(entity);
             }
@@ -52,9 +50,13 @@ public class InjectedPaperLevelCallback implements LevelCallback<Entity>, Inject
     public void onTrackingStart(@NotNull Entity entity) {
         this.callback.onTrackingStart(entity);
         if (entity instanceof CollisionEntity) {
-            entity.tracker = null;
-            this.entityLookup.world.chunkSource.chunkMap.entityMap.remove(entity.getId());
+            stopTracking(entity);
         }
+    }
+
+    private void stopTracking(Entity entity) {
+        // Untrack through ChunkMap so player pairings and all tracker references are cleared.
+        ((ServerLevel) entity.level()).getChunkSource().removeEntity(entity);
     }
 
     @Override
