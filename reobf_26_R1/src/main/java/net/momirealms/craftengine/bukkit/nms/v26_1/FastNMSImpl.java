@@ -65,6 +65,24 @@ import java.util.stream.Stream;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public final class FastNMSImpl extends FastNMS {
+    private static final boolean HAS_LAVA_FLUID;
+    private static final boolean HAS_HAS_ONLY_AIR;
+    static {
+        boolean hasLava = false;
+        try {
+            LevelChunkSection.class.getDeclaredField("lavaFluids");
+            hasLava = true;
+        } catch (NoSuchFieldException ignored) {
+        }
+        HAS_LAVA_FLUID = hasLava;
+        boolean hasHaveOnlyAir = false;
+        try {
+            LevelChunkSection.class.getDeclaredField("hasOnlyAir");
+            hasHaveOnlyAir = true;
+        } catch (NoSuchFieldException ignored) {
+        }
+        HAS_HAS_ONLY_AIR = hasHaveOnlyAir;
+    }
 
     @Override
     public BukkitWorld createInjectedWorld(World world) {
@@ -93,8 +111,14 @@ public final class FastNMSImpl extends FastNMS {
         LevelChunkSectionProxy.INSTANCE.setSpecialCollidingBlocks(newSection, LevelChunkSectionProxy.INSTANCE.getSpecialCollidingBlocks(section));
         LevelChunkSectionProxy.INSTANCE.setTickingBlocks(newSection, LevelChunkSectionProxy.INSTANCE.getTickingBlocks(section));
         LevelChunkSectionProxy.INSTANCE.setFluidCount(newSection, LevelChunkSectionProxy.INSTANCE.getFluidCount(section));
-        if (VersionHelper.hasUniverseSpigotPatch) {
+        if (HAS_LAVA_FLUID) {
+            LevelChunkSectionProxy.INSTANCE.setLavaFluids(newSection, LevelChunkSectionProxy.INSTANCE.getLavaFluids(section));
+            LevelChunkSectionProxy.INSTANCE.setWaterFluids(newSection, LevelChunkSectionProxy.INSTANCE.getWaterFluids(section));
+        }
+        if (HAS_HAS_ONLY_AIR) {
             LevelChunkSectionProxy.INSTANCE.setHasOnlyAir(newSection, LevelChunkSectionProxy.INSTANCE.hasOnlyAir(section));
+        }
+        if (VersionHelper.hasUniverseSpigotPatch) {
             LevelChunkSectionProxy.INSTANCE.setIsRandomlyTickingBlocksStatus(newSection, LevelChunkSectionProxy.INSTANCE.isRandomlyTickingBlocksStatus(section));
         }
         return newSection;
