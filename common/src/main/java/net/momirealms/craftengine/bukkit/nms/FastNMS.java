@@ -103,6 +103,10 @@ public abstract class FastNMS {
 
     public abstract Object createShapelessRecipe(CustomShapelessRecipe recipe);
 
+    public Object createBrewingRecipe(CustomBrewingRecipe recipe) {
+        throw new UnsupportedOperationException("Brewing recipes require Minecraft 26.3 or newer");
+    }
+
     public abstract Object createSmokingRecipe(CustomSmokingRecipe recipe);
 
     public abstract Object createSmeltingRecipe(CustomSmeltingRecipe recipe);

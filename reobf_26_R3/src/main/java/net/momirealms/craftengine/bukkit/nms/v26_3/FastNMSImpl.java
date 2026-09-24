@@ -191,6 +191,11 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public Object createBrewingRecipe(CustomBrewingRecipe recipe) {
+        return InjectedBrewingRecipe.of(recipe);
+    }
+
+    @Override
     public Object createSmokingRecipe(CustomSmokingRecipe recipe) {
         return InjectedSmokingRecipe.of(recipe);
     }
