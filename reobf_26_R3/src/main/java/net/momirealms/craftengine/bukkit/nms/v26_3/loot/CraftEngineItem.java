@@ -2,11 +2,12 @@ package net.momirealms.craftengine.bukkit.nms.v26_3.loot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.SingleEntryContainerBase;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -17,25 +18,24 @@ import net.momirealms.craftengine.bukkit.util.KeyUtils;
 import net.momirealms.craftengine.core.item.ItemDefinition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class CraftEngineItem extends LootPoolSingletonContainer {
+public class CraftEngineItem extends SingleEntryContainerBase {
     public static final MapCodec<CraftEngineItem> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(Identifier.CODEC.fieldOf("name").forGetter(lootItem -> lootItem.name))
-                    .and(singletonFields(instance))
+                    .and(uniformFields(instance))
                     .apply(instance, CraftEngineItem::new)
     );
     private final Identifier name;
 
-    public CraftEngineItem(Identifier name, int weight, int quality, List<LootItemCondition> conditions, List<LootItemFunction> functions) {
-        super(weight, quality, conditions, functions);
+    public CraftEngineItem(Identifier name, int weight, int quality, Optional<Holder<LootItemCondition>> condition, Optional<Holder<LootItemFunction>> modifier) {
+        super(weight, quality, condition, modifier);
         this.name = name;
     }
 
     @Override
-    public @NotNull MapCodec<? extends LootPoolSingletonContainer> codec() {
+    public @NotNull MapCodec<? extends SingleEntryContainerBase> codec() {
         return CODEC;
     }
 
@@ -46,7 +46,7 @@ public class CraftEngineItem extends LootPoolSingletonContainer {
             return;
         }
         BukkitServerPlayer serverPlayer = null;
-        if (lootContext.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof Player player) {
+        if (lootContext.getOptional(LootContextParams.THIS_ENTITY) instanceof Player player) {
             serverPlayer = BukkitAdaptor.adapt((org.bukkit.entity.Player) player.getBukkitEntity());
         }
         consumer.accept((ItemStack) optionalItemDefinition.get().buildItem(serverPlayer).minecraftItem());

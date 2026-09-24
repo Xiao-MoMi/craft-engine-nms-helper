@@ -1,14 +1,16 @@
 package net.momirealms.craftengine.bukkit.nms.v26_3.worldgen;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.MossyCarpetBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
 import net.momirealms.craftengine.bukkit.util.BlockStateUtils;
 import net.momirealms.craftengine.bukkit.util.LocationUtils;
 import net.momirealms.craftengine.core.block.ImmutableBlockState;
@@ -16,21 +18,28 @@ import net.momirealms.craftengine.core.block.behavior.BlockBehavior;
 import net.momirealms.craftengine.core.plugin.CraftEngine;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Optional;
 
-public class CustomSimpleBlockFeature extends Feature<@NotNull SimpleBlockConfiguration> {
-    public static final CustomSimpleBlockFeature INSTANCE = new CustomSimpleBlockFeature();
+public class CustomSimpleBlockFeature implements Feature {
+    public static final MapCodec<CustomSimpleBlockFeature> CODEC = SimpleBlockFeature.CODEC.xmap(
+            CustomSimpleBlockFeature::new, feature -> feature.configuration);
+    private final SimpleBlockFeature configuration;
 
-    private CustomSimpleBlockFeature() {
-        super(SimpleBlockConfiguration.CODEC);
+    private CustomSimpleBlockFeature(SimpleBlockFeature configuration) {
+        this.configuration = configuration;
     }
 
     @Override
-    public boolean place(@NotNull FeaturePlaceContext<@NotNull SimpleBlockConfiguration> context) {
-        SimpleBlockConfiguration simpleBlockConfiguration = context.config();
-        WorldGenLevel worldGenLevel = context.level();
-        BlockPos blockPos = context.origin();
-        BlockState state = simpleBlockConfiguration.toPlace().getState(worldGenLevel, context.random(), blockPos);
+    public @NotNull MapCodec<CustomSimpleBlockFeature> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public boolean place(@NotNull WorldGenLevel worldGenLevel, @NotNull ChunkGenerator generator,
+                         @NotNull RandomSource random, @NotNull BlockPos blockPos) {
+        BlockState state = this.configuration.toPlace().value().getOptionalState(worldGenLevel, random, blockPos);
+        if (state == null) return false;
         if (state.canSurvive(worldGenLevel, blockPos)) {
             Optional<ImmutableBlockState> optionalCustomBlockState = BlockStateUtils.getOptionalCustomBlockState(state);
             if (optionalCustomBlockState.isPresent()) {
@@ -53,7 +62,8 @@ public class CustomSimpleBlockFeature extends Feature<@NotNull SimpleBlockConfig
                 }
             } else {
                 if (state.getBlock() instanceof DoublePlantBlock) {
-                    if (!worldGenLevel.isEmptyBlock(blockPos.above())) {
+                    BlockState aboveState = worldGenLevel.getBlockState(blockPos.above());
+                    if (!aboveState.isAir() && (!Objects.equals(state.getFluidState(), aboveState.getFluidState()) || !aboveState.canBeReplaced())) {
                         return false;
                     }
                     DoublePlantBlock.placeAt(worldGenLevel, state, blockPos, 2);
@@ -63,7 +73,7 @@ public class CustomSimpleBlockFeature extends Feature<@NotNull SimpleBlockConfig
                     worldGenLevel.setBlock(blockPos, state, 2);
                 }
             }
-            if (simpleBlockConfiguration.scheduleTick()) {
+            if (this.configuration.scheduleTick()) {
                 worldGenLevel.scheduleTick(blockPos, worldGenLevel.getBlockState(blockPos).getBlock(), 1);
             }
             return true;

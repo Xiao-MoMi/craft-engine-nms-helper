@@ -2,7 +2,6 @@ package net.momirealms.craftengine.bukkit.nms.v1_21_2;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.ConnectionProtocol;
@@ -23,7 +22,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;

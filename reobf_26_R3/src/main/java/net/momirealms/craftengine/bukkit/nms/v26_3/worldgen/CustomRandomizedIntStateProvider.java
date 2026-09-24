@@ -4,23 +4,22 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.IntProviders;
-import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import net.momirealms.craftengine.core.block.DelegatingBlockState;
 import net.momirealms.craftengine.core.block.ImmutableBlockState;
 import net.momirealms.craftengine.core.block.property.IntegerProperty;
-import net.momirealms.craftengine.core.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 @SuppressWarnings("unchecked")
-public class CustomRandomizedIntStateProvider extends BlockStateProvider {
+public class CustomRandomizedIntStateProvider implements BlockStateProvider {
     public static final MapCodec<CustomRandomizedIntStateProvider> CODEC = RecordCodecBuilder.mapCodec(
             instance ->
                     instance.group(
@@ -29,17 +28,7 @@ public class CustomRandomizedIntStateProvider extends BlockStateProvider {
                             IntProviders.CODEC.fieldOf("values").forGetter(provider -> provider.values)
                     ).apply(instance, CustomRandomizedIntStateProvider::new)
     );
-    public static final BlockStateProviderType<@NotNull CustomRandomizedIntStateProvider> TYPE;
-
-    static {
-        try {
-            TYPE = ReflectionUtils.setAccessible(BlockStateProviderType.class.getDeclaredConstructor(MapCodec.class)).newInstance(CODEC);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private final BlockStateProvider source;
+    private final Holder<BlockStateProvider> source;
     private final String propertyName;
     @Nullable
     private net.minecraft.world.level.block.state.properties.IntegerProperty property;
@@ -47,20 +36,20 @@ public class CustomRandomizedIntStateProvider extends BlockStateProvider {
     private IntegerProperty customProperty;
     private final IntProvider values;
 
-    private CustomRandomizedIntStateProvider(BlockStateProvider source, String propertyName, IntProvider values) {
+    private CustomRandomizedIntStateProvider(Holder<BlockStateProvider> source, String propertyName, IntProvider values) {
         this.source = source;
         this.propertyName = propertyName;
         this.values = values;
     }
 
     @Override
-    protected @NotNull BlockStateProviderType<?> type() {
-        return TYPE;
+    public @NotNull MapCodec<CustomRandomizedIntStateProvider> codec() {
+        return CODEC;
     }
 
     @Override
-    public @NotNull BlockState getState(@NotNull WorldGenLevel level, @NotNull RandomSource random, @NotNull BlockPos pos) {
-        BlockState state = this.source.getState(level, random, pos);
+    public @NotNull BlockState getState(@NotNull LevelAccessor level, @NotNull RandomSource random, @NotNull BlockPos pos) {
+        BlockState state = this.source.value().getState(level, random, pos);
         if (state instanceof DelegatingBlockState holder) {
             ImmutableBlockState immutableBlockState = holder.blockState();
             if (immutableBlockState == null || immutableBlockState.isEmpty()) return state;

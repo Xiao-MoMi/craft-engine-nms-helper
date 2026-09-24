@@ -134,27 +134,27 @@ public final class FastNMSImpl extends FastNMS {
 
     @Override
     public Object getCraftEngineCustomSimpleStateProviderType() {
-        return CustomSimpleStateProvider.TYPE;
+        return CustomSimpleStateProvider.CODEC;
     }
 
     @Override
     public Object getCraftEngineCustomWeightedStateProviderType() {
-        return CustomWeightedStateProvider.TYPE;
+        return CustomWeightedStateProvider.CODEC;
     }
 
     @Override
     public Object getCraftEngineCustomRotatedBlockProviderType() {
-        return CustomRotatedBlockProvider.TYPE;
+        return CustomRotatedBlockProvider.CODEC;
     }
 
     @Override
     public Object getCraftEngineCustomRandomizedIntStateProviderType() {
-        return CustomRandomizedIntStateProvider.TYPE;
+        return CustomRandomizedIntStateProvider.CODEC;
     }
 
     @Override
     public Object getCraftEngineCustomSimpleBlockFeature() {
-        return CustomSimpleBlockFeature.INSTANCE;
+        return CustomSimpleBlockFeature.CODEC;
     }
 
     @Override

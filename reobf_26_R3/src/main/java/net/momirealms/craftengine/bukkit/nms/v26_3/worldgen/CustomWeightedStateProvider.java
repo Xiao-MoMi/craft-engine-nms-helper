@@ -5,29 +5,17 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
-import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
-import net.momirealms.craftengine.core.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unchecked")
-public class CustomWeightedStateProvider extends BlockStateProvider {
+public class CustomWeightedStateProvider implements BlockStateProvider {
 
     public static final MapCodec<CustomWeightedStateProvider> CODEC = WeightedList.nonEmptyCodec(CustomSimpleStateProvider.DIRECT_CODEC)
             .comapFlatMap(CustomWeightedStateProvider::create, (provider) -> provider.weightedList)
             .fieldOf("entries");
-    public static final BlockStateProviderType<@NotNull CustomWeightedStateProvider> TYPE;
-
-    static {
-        try {
-            TYPE = ReflectionUtils.setAccessible(BlockStateProviderType.class.getDeclaredConstructor(MapCodec.class)).newInstance(CODEC);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private final WeightedList<CustomSimpleStateProvider> weightedList;
 
     private CustomWeightedStateProvider(WeightedList<CustomSimpleStateProvider> weightedList) {
@@ -39,12 +27,12 @@ public class CustomWeightedStateProvider extends BlockStateProvider {
     }
 
     @Override
-    protected @NotNull BlockStateProviderType<?> type() {
-        return TYPE;
+    public @NotNull MapCodec<CustomWeightedStateProvider> codec() {
+        return CODEC;
     }
 
     @Override
-    public @NotNull BlockState getState(@NotNull WorldGenLevel level, @NotNull RandomSource random, @NotNull BlockPos pos) {
+    public @NotNull BlockState getState(@NotNull LevelAccessor level, @NotNull RandomSource random, @NotNull BlockPos pos) {
         return this.weightedList.getRandomOrThrow(random).getState(level, random, pos);
     }
 }

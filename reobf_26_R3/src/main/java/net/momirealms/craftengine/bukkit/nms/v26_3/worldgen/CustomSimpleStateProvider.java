@@ -7,20 +7,18 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import net.momirealms.craftengine.core.block.BlockStateWrapper;
 import net.momirealms.craftengine.core.plugin.CraftEngine;
-import net.momirealms.craftengine.core.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class CustomSimpleStateProvider extends BlockStateProvider {
+public class CustomSimpleStateProvider implements BlockStateProvider {
     public static final Codec<CustomSimpleStateProvider> STRING_CODEC = ExtraCodecs.NON_EMPTY_STRING
             .xmap(CustomSimpleStateProvider::new, p -> p.name);
     public static final MapCodec<CustomSimpleStateProvider> MAP_CODEC = RecordCodecBuilder.mapCodec(
@@ -42,16 +40,6 @@ public class CustomSimpleStateProvider extends BlockStateProvider {
             provider -> provider.properties.isEmpty() ? Either.left(provider) : Either.right(provider)
     );
     public static final MapCodec<CustomSimpleStateProvider> CODEC = DIRECT_CODEC.fieldOf("state");
-    public static final BlockStateProviderType<@NotNull CustomSimpleStateProvider> TYPE;
-
-    static {
-        try {
-            TYPE = ReflectionUtils.setAccessible(BlockStateProviderType.class.getDeclaredConstructor(MapCodec.class)).newInstance(CODEC);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private final String name;
     private final Map<String, String> properties;
     private BlockStateWrapper cached;
@@ -67,12 +55,12 @@ public class CustomSimpleStateProvider extends BlockStateProvider {
     }
 
     @Override
-    protected @NotNull BlockStateProviderType<?> type() {
-        return TYPE;
+    public @NotNull MapCodec<CustomSimpleStateProvider> codec() {
+        return CODEC;
     }
 
     @Override
-    public @NotNull BlockState getState(@NotNull WorldGenLevel level, @NotNull RandomSource random, @NotNull BlockPos pos) {
+    public @NotNull BlockState getState(@NotNull LevelAccessor level, @NotNull RandomSource random, @NotNull BlockPos pos) {
         if (this.cached != null) return (BlockState) this.cached.minecraftState();
         BlockStateWrapper deserialized = CraftEngine.instance().blockManager().createBlockState(this.name);
         if (deserialized == null) return Blocks.STONE.defaultBlockState();

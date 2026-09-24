@@ -3,34 +3,22 @@ package net.momirealms.craftengine.bukkit.nms.v26_3.worldgen;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import net.momirealms.craftengine.core.block.DelegatingBlockState;
 import net.momirealms.craftengine.core.block.ImmutableBlockState;
 import net.momirealms.craftengine.core.block.property.Property;
 import net.momirealms.craftengine.core.util.Direction;
-import net.momirealms.craftengine.core.util.ReflectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unchecked")
-public class CustomRotatedBlockProvider extends BlockStateProvider {
+public class CustomRotatedBlockProvider implements BlockStateProvider {
     public static final MapCodec<CustomRotatedBlockProvider> CODEC = CustomSimpleStateProvider.CODEC.xmap(
             CustomRotatedBlockProvider::new,
             provider -> provider.provider
     );
-    public static final BlockStateProviderType<@NotNull CustomRotatedBlockProvider> TYPE;
-
-    static {
-        try {
-            TYPE = ReflectionUtils.setAccessible(BlockStateProviderType.class.getDeclaredConstructor(MapCodec.class)).newInstance(CODEC);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private final CustomSimpleStateProvider provider;
 
     private CustomRotatedBlockProvider(CustomSimpleStateProvider provider) {
@@ -38,12 +26,12 @@ public class CustomRotatedBlockProvider extends BlockStateProvider {
     }
 
     @Override
-    protected @NotNull BlockStateProviderType<?> type() {
-        return TYPE;
+    public @NotNull MapCodec<CustomRotatedBlockProvider> codec() {
+        return CODEC;
     }
 
     @Override
-    public @NotNull BlockState getState(@NotNull WorldGenLevel level, @NotNull RandomSource random, @NotNull BlockPos pos) {
+    public @NotNull BlockState getState(@NotNull LevelAccessor level, @NotNull RandomSource random, @NotNull BlockPos pos) {
         BlockState state = this.provider.getState(level, random, pos);
         if (state instanceof DelegatingBlockState holder) {
             ImmutableBlockState immutableBlockState = holder.blockState();

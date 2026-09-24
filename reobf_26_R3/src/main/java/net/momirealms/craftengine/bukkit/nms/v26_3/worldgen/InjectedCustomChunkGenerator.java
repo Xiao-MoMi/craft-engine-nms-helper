@@ -18,6 +18,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -66,34 +67,13 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
     }
 
     @Override
-    public void applyCarvers(@NotNull WorldGenRegion worldGenRegion,
-                             long seed,
-                             @NotNull RandomState randomState,
-                             @NotNull BiomeManager biomeManager,
-                             @NotNull StructureManager structureManager,
-                             @NotNull ChunkAccess chunkAccess) {
-        Runnable runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, ChunkGenerationStage.CARVER);
-        this.target.applyCarvers(worldGenRegion, seed, randomState, biomeManager, structureManager, chunkAccess);
-        if (runnable != null) {
-            runnable.run();
-        }
-    }
-
-    @Override
-    public void buildSurface(@NotNull WorldGenRegion worldGenRegion,
-                             @NotNull StructureManager structureManager,
-                             @NotNull RandomState randomState,
-                             @NotNull ChunkAccess chunkAccess) {
-        Runnable runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, ChunkGenerationStage.SURFACE);
-        this.target.buildSurface(worldGenRegion, structureManager, randomState, chunkAccess);
-        if (runnable != null) {
-            runnable.run();
-        }
-    }
-
-    @Override
     public void spawnOriginalMobs(@NotNull WorldGenRegion worldGenRegion) {
         this.target.spawnOriginalMobs(worldGenRegion);
+    }
+
+    @Override
+    public net.minecraft.world.level.@NotNull ChunkPos getOrigin(@NotNull RandomState randomState) {
+        return this.target.getOrigin(randomState);
     }
 
     @Override
@@ -102,19 +82,28 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
     }
 
     @Override
-    public @NotNull CompletableFuture<ChunkAccess> fillFromNoise(@NotNull Blender blender,
-                                                                 @NotNull RandomState randomState,
-                                                                 @NotNull StructureManager structureManager,
-                                                                 @NotNull ChunkAccess chunkAccess) {
-        Runnable runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, ChunkGenerationStage.NOISE);
-        CompletableFuture<ChunkAccess> fillFromNoise = this.target.fillFromNoise(blender, randomState, structureManager, chunkAccess);
-        if (runnable != null) {
-            return fillFromNoise.thenApply(it -> {
-                runnable.run();
-                return it;
-            });
+    public @NotNull CompletableFuture<ChunkAccess> buildTerrain(@NotNull ChunkAccess chunkAccess,
+                                                               @NotNull Blender blender,
+                                                               @NotNull RandomState randomState,
+                                                               @NotNull StructureManager structureManager,
+                                                               @NotNull BiomeManager biomeManager,
+                                                               @NotNull WorldGenRegion carverBiomeRegion,
+                                                               @NotNull Set<Holder<Biome>> possibleBiomes) {
+        // 26.3 combines noise, surface and carvers into one terrain generation stage.
+        Runnable runnable = null;
+        for (ChunkGenerationStage stage : List.of(ChunkGenerationStage.NOISE, ChunkGenerationStage.SURFACE, ChunkGenerationStage.CARVER)) {
+            if (stage.enabled()) {
+                runnable = BukkitWorldManager.instance().handleChunkGenerate(this.world, ChunkPos.of(chunkAccess.locX, chunkAccess.locZ), chunkAccess, stage);
+                break;
+            }
         }
-        return fillFromNoise;
+        CompletableFuture<ChunkAccess> terrain = this.target.buildTerrain(chunkAccess, blender, randomState, structureManager, biomeManager, carverBiomeRegion, possibleBiomes);
+        if (runnable == null) return terrain;
+        Runnable save = runnable;
+        return terrain.thenApply(chunk -> {
+            save.run();
+            return chunk;
+        });
     }
 
     @Override
@@ -147,8 +136,8 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
     @Override
     public void addDebugScreenInfo(@NotNull List<String> list,
                                    @NotNull RandomState randomState,
-                                   @NotNull BlockPos blockPos) {
-        this.target.addDebugScreenInfo(list, randomState, blockPos);
+                                   @NotNull BlockPos blockPos, @NotNull SamplerContext samplerContext) {
+        this.target.addDebugScreenInfo(list, randomState, blockPos, samplerContext);
     }
 
     @Override
@@ -290,10 +279,10 @@ public class InjectedCustomChunkGenerator extends ChunkGenerator implements Inje
     }
 
     @Override
-    public @NotNull WeightedList<MobSpawnSettings.SpawnerData> getMobsAt(@NotNull Holder<Biome> biome,
+    public @NotNull WeightedList<MobSpawnSettings.SpawnerData> getMobsAt(@NotNull Level level,
                                                                          @NotNull StructureManager structureManager,
                                                                          @NotNull MobCategory category,
                                                                          @NotNull BlockPos pos) {
-        return this.target.getMobsAt(biome, structureManager, category, pos);
+        return this.target.getMobsAt(level, structureManager, category, pos);
     }
 }
