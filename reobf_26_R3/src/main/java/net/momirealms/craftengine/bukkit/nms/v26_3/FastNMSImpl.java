@@ -1,7 +1,9 @@
 package net.momirealms.craftengine.bukkit.nms.v26_3;
 
 import ca.spottedleaf.moonrise.patches.chunk_system.level.entity.EntityLookup;
+import com.google.gson.JsonObject;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.predicates.PotionsPredicate;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.ProtocolInfo;
 import net.minecraft.network.protocol.configuration.ConfigurationProtocols;
@@ -39,10 +41,12 @@ import net.momirealms.craftengine.bukkit.nms.v26_3.inventory.CustomWorldlyContai
 import net.momirealms.craftengine.bukkit.nms.v26_3.loot.CraftEngineItem;
 import net.momirealms.craftengine.bukkit.nms.v26_3.recipe.*;
 import net.momirealms.craftengine.bukkit.nms.v26_3.worldgen.*;
+import net.momirealms.craftengine.bukkit.util.RegistryOps;
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.BukkitWorld;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
 import net.momirealms.craftengine.core.item.recipe.*;
+import net.momirealms.craftengine.core.item.recipe.predicate.DataComponentPredicate;
 import net.momirealms.craftengine.core.plugin.network.ConnectionState;
 import net.momirealms.craftengine.core.plugin.network.PacketFlow;
 import net.momirealms.craftengine.core.util.VersionHelper;
@@ -196,8 +200,8 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
-    public net.momirealms.craftengine.core.item.recipe.predicate.DataComponentPredicate parsePotionContentsPredicate(com.google.gson.JsonObject json) {
-        return new net.momirealms.craftengine.bukkit.nms.v26_3.recipe.BrewingPotionPredicate(net.minecraft.core.component.predicates.PotionsPredicate.CODEC.parse(net.momirealms.craftengine.bukkit.util.RegistryOps.JSON, json).getOrThrow());
+    public DataComponentPredicate parsePotionContentsPredicate(JsonObject json) {
+        return new BrewingPotionPredicate(PotionsPredicate.CODEC.parse(RegistryOps.JSON, json).getOrThrow());
     }
 
     @Override
