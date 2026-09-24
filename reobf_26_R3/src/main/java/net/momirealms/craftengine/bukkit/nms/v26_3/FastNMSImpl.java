@@ -196,6 +196,11 @@ public final class FastNMSImpl extends FastNMS {
     }
 
     @Override
+    public net.momirealms.craftengine.core.item.recipe.predicate.DataComponentPredicate parsePotionContentsPredicate(com.google.gson.JsonObject json) {
+        return new net.momirealms.craftengine.bukkit.nms.v26_3.recipe.BrewingPotionPredicate(net.minecraft.core.component.predicates.PotionsPredicate.CODEC.parse(net.momirealms.craftengine.bukkit.util.RegistryOps.JSON, json).getOrThrow());
+    }
+
+    @Override
     public Object createSmokingRecipe(CustomSmokingRecipe recipe) {
         return InjectedSmokingRecipe.of(recipe);
     }

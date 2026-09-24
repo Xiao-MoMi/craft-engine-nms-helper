@@ -24,10 +24,14 @@ public class InjectedBrewingRecipe extends BrewingRecipe {
     public static InjectedBrewingRecipe of(CustomBrewingRecipe recipe) {
         return new InjectedBrewingRecipe(
                 recipe,
-                new PotionIngredient(RecipeHelper.toMinecraft(recipe.container()), Optional.empty()),
-                new PotionIngredient(RecipeHelper.toMinecraft(recipe.ingredient()), Optional.empty()),
+                toPotionIngredient(recipe.container()),
+                toPotionIngredient(recipe.ingredient()),
                 ItemStackTemplate.fromNonEmptyStack((ItemStack) recipe.result(ItemBuildContext.empty()).minecraftItem())
         );
+    }
+
+    private static PotionIngredient toPotionIngredient(net.momirealms.craftengine.core.item.recipe.Ingredient ingredient) {
+        return new PotionIngredient(RecipeHelper.toMinecraft(ingredient), ingredient.predicate() instanceof BrewingPotionPredicate potions ? Optional.of(potions.predicate()) : Optional.empty());
     }
 
     @Override

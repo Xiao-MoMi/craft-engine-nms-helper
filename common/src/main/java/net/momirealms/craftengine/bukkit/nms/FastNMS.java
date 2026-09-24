@@ -1,5 +1,7 @@
 package net.momirealms.craftengine.bukkit.nms;
 
+import com.google.gson.JsonObject;
+import net.momirealms.craftengine.core.item.recipe.predicate.DataComponentPredicate;
 import net.momirealms.craftengine.bukkit.world.BukkitContainer;
 import net.momirealms.craftengine.bukkit.world.BukkitWorld;
 import net.momirealms.craftengine.bukkit.world.gen.InjectedChunkGenerator;
@@ -105,6 +107,10 @@ public abstract class FastNMS {
 
     public Object createBrewingRecipe(CustomBrewingRecipe recipe) {
         throw new UnsupportedOperationException("Brewing recipes require Minecraft 26.3 or newer");
+    }
+
+    public DataComponentPredicate parsePotionContentsPredicate(JsonObject json) {
+        throw new UnsupportedOperationException("Native brewing predicates require Minecraft 26.3 or newer");
     }
 
     public abstract Object createSmokingRecipe(CustomSmokingRecipe recipe);
